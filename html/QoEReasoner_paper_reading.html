@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QoEReasoner 中文文献解读</title>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <style>
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.72; color: #1f2937; background: #f8fafc; }
+    main { max-width: 980px; margin: 0 auto; padding: 42px 24px 80px; background: #fff; }
+    h1 { font-size: 2rem; line-height: 1.25; margin: 0 0 12px; color: #111827; }
+    h2 { font-size: 1.45rem; margin-top: 34px; border-bottom: 1px solid #e5e7eb; padding-bottom: 6px; color: #111827; }
+    h3 { font-size: 1.15rem; margin-top: 24px; color: #111827; }
+    p { margin: 12px 0; }
+    ul, ol { padding-left: 1.5rem; }
+    code { background: #eef2f7; padding: 0.12rem 0.28rem; border-radius: 4px; }
+    table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 0.94rem; }
+    th, td { border: 1px solid #d1d5db; padding: 8px 10px; text-align: left; vertical-align: top; }
+    th { background: #f3f4f6; }
+    td.num, th.num { text-align: right; }
+    .meta { color: #4b5563; margin-bottom: 26px; }
+    .callout { background: #f1f5f9; border-left: 4px solid #2563eb; padding: 12px 16px; margin: 18px 0; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>《QoEReasoner: An Agentic Reasoning Framework for Automated and Explainable QoE Diagnosis in RANs》中文文献解读</h1>
+  <p class="meta">论文：Qizhe Li 等，<em>QoEReasoner: An Agentic Reasoning Framework for Automated and Explainable QoE Diagnosis in RANs</em>，arXiv:2606.01925<br>方法名：<strong>QoEReasoner</strong><br>领域：Radio Access Networks / QoE diagnosis / Agentic AI</p>
+  <table>
+    <tr><th>资源</th><th>链接</th></tr>
+    <tr><td>论文页面</td><td><a href="https://arxiv.org/abs/2606.01925">arXiv:2606.01925</a></td></tr>
+    <tr><td>PDF</td><td><a href="https://arxiv.org/pdf/2606.01925">https://arxiv.org/pdf/2606.01925</a></td></tr>
+    <tr><td>TeX 源码</td><td><a href="https://arxiv.org/e-print/2606.01925">https://arxiv.org/e-print/2606.01925</a></td></tr>
+    <tr><td>代码与数据</td><td>论文称代码和文档将在发表后释放；当前未发现官方 GitHub/HF。真实运营 RAN 数据未提供公开下载。</td></tr>
+  </table>
+
+  <h2>1. 一句话总结</h2>
+  <p>QoEReasoner 不是让 LLM 直接读原始 RAN KPI 时间序列并“凭感觉诊断”，而是把 LLM 放在 planner / verifier / reporter 的位置，通过确定性工具、协议知识库和历史案例库，把 QoE 退化诊断拆成可控的 anomaly detection、fault causal chain reasoning 和 root-cause categorization 流程。</p>
+  <div class="callout">QoEReasoner = LLM planner + deterministic KPI tools + Knowledge Base constraints + Historical Bank retrieval + evidence-grounded report generation。</div>
+
+  <h2>2. 背景与任务定义</h2>
+  <p>RAN QoE 退化只是最终症状，真实原因可能隐藏在 PHY、MAC、RLC、PDCP 等多层协议 KPI 的时间动态中。论文提出系统必须满足 reliable numeric perception、causally grounded explanation 和 coherent cross-task reasoning。</p>
+  <p>输入是 session-level multivariate KPI telemetry：</p>
+  $$\mathbf{X}\in\mathbb{R}^{T\times M}$$
+  <p>其中 $T$ 是时间戳数量，$M$ 是 KPI 维度数。</p>
+  <p><strong>Anomaly Detection：</strong></p>
+  $$f_{\text{AD}}:\mathbf{X}\mapsto \hat{y}^{\mathrm{deg}},\qquad \hat{y}^{\mathrm{deg}}\in\{0,1\}$$
+  <p><strong>Fault Chain Reasoning：</strong></p>
+  $$\mathbf{c}:c_1\rightarrow c_2\rightarrow\cdots\rightarrow c_L$$
+  $$f_{\text{FCR}}:\mathbf{X}\mapsto \hat{\mathbf{c}}=(\hat{c}_1,\ldots,\hat{c}_{\hat{L}}),\qquad \hat{c}_i\in\mathcal{C}$$
+  <p><strong>Root-Cause Categorization：</strong></p>
+  $$f_{\text{RCC}}:\mathbf{X}\mapsto \hat{y}^{\mathrm{rc}},\qquad \hat{y}^{\mathrm{rc}}\in\{1,\ldots,K\}$$
+
+  <h2>3. 系统设计</h2>
+  <table>
+    <tr><th>模块</th><th>作用</th></tr>
+    <tr><td>Planner</td><td>维护共享 workflow state，选择下一步诊断动作，协调 AD、FCR、RCC 和 reporter。</td></tr>
+    <tr><td>KPI Perception</td><td>通过确定性工具把 raw KPI streams 转成 LLM 友好的 typed state objects。</td></tr>
+    <tr><td>FCR</td><td>检索历史候选链，按 KB 逐边验证，再融合相似度和验证分数排序。</td></tr>
+    <tr><td>Reporter</td><td>把 planner state、KPI 证据、候选链和替代假设组织成工程师可读报告。</td></tr>
+    <tr><td>Tool Pool</td><td>预处理、统计摘要、特征选择、CNN AD classifier、RCC classifier、encoder embedding。</td></tr>
+    <tr><td>Knowledge Base</td><td>定义 fault atom 层级、global causal graph、edge-level KPI manifestations 和专家规则。</td></tr>
+    <tr><td>Historical Bank</td><td>保存专家验证 KPI segment 与 fault causal chain，用作候选假设初始化。</td></tr>
+  </table>
+  <p>FCR 的三个阶段尤其关键：Retrieval 根据 root-cause prior 和 embedding similarity 检索 top-$n$ 候选链；Verifier 把链拆成相邻 atom pair 并查询 KB 验证 KPI 表现；Adjuster 融合 retrieval similarity 与 causal verification score，得到最终排序。</p>
+
+  <h2>4. Agent 视角拆解</h2>
+  <table>
+    <tr><th>Agent 要素</th><th>QoEReasoner 中的对应设计</th></tr>
+    <tr><td>State / workspace</td><td>shared workflow state，保存消息历史、AD 结果、规则判断、FCR 候选链、验证反馈、诊断证据</td></tr>
+    <tr><td>Policy / model</td><td>LLM planner 选择下一步诊断动作；verifier/reporter 承担结构化判断和生成</td></tr>
+    <tr><td>Action space</td><td>调用 KPI tools、AD/RCC classifiers、KB 查询、HB 检索、FCR verifier、reporter、stop</td></tr>
+    <tr><td>Memory / retrieval</td><td>Historical Bank 检索专家验证历史案例</td></tr>
+    <tr><td>Knowledge constraint</td><td>Knowledge Base 约束 fault atom 层级、global causal graph 和 edge-level KPI manifestations</td></tr>
+    <tr><td>Evaluation</td><td>AD、FCR、RCC 三类任务 + case study + domain expert user study</td></tr>
+  </table>
+
+  <h2>5. 实验设置</h2>
+  <table>
+    <tr><th>项目</th><th>数值</th></tr>
+    <tr><td>session 总数</td><td class="num">300</td></tr>
+    <tr><td>abnormal sessions</td><td class="num">130</td></tr>
+    <tr><td>normal sessions</td><td class="num">170</td></tr>
+    <tr><td>root-cause categories</td><td class="num">6</td></tr>
+    <tr><td>expert-validated fault-chain templates</td><td class="num">21</td></tr>
+  </table>
+  <p>AD 使用 Precision、Recall、FAR、F1；RCC 使用 top-1 accuracy、macro-F1、balanced accuracy；FCR 使用 node precision/recall、edge precision、exact chain match。</p>
+  $$\mathrm{F1}=\frac{2\cdot\mathrm{Precision}\cdot\mathrm{Recall}}{\mathrm{Precision}+\mathrm{Recall}}$$
+  $$\mathrm{macro\_F1}=\frac{1}{|\mathcal{C}|}\sum_{c\in\mathcal{C}}F1_c$$
+
+  <h2>6. 主要结果</h2>
+  <h3>6.1 Anomaly Detection</h3>
+  <table>
+    <tr><th>Backbone / Method</th><th class="num">Precision</th><th class="num">Recall</th><th class="num">FAR</th><th class="num">F1</th></tr>
+    <tr><td>Rule</td><td class="num">0.6833</td><td class="num">0.6496</td><td class="num">0.2883</td><td class="num">0.6520</td></tr>
+    <tr><td>DeepSeek-V3.2</td><td class="num">0.2452</td><td class="num"><strong>1.0000</strong></td><td class="num">1.0000</td><td class="num">0.3939</td></tr>
+    <tr><td>DeepSeek + QoEReasoner</td><td class="num"><strong>0.8600</strong></td><td class="num">0.8686</td><td class="num"><strong>0.1472</strong></td><td class="num"><strong>0.8500</strong></td></tr>
+    <tr><td>GPT-5.2</td><td class="num">0.3643</td><td class="num">0.6623</td><td class="num">0.3755</td><td class="num">0.4700</td></tr>
+    <tr><td>GPT-5.2 + QoEReasoner</td><td class="num"><strong>0.8600</strong></td><td class="num"><strong>0.8686</strong></td><td class="num"><strong>0.1472</strong></td><td class="num"><strong>0.8500</strong></td></tr>
+    <tr><td>Qwen3-14B</td><td class="num">0.2637</td><td class="num"><strong>0.9863</strong></td><td class="num">0.9095</td><td class="num">0.4162</td></tr>
+    <tr><td>Qwen3-14B + QoEReasoner</td><td class="num"><strong>0.8567</strong></td><td class="num">0.8686</td><td class="num"><strong>0.1534</strong></td><td class="num"><strong>0.8479</strong></td></tr>
+  </table>
+  <p>直接 LLM 的典型问题是 recall 很高但 FAR 极高；QoEReasoner 通过工具和状态化验证显著降低 false alarms。</p>
+
+  <h3>6.2 FCR 与 RCC</h3>
+  <table>
+    <tr><th>Method</th><th class="num">node_p</th><th class="num">node_r</th><th class="num">edge_p</th><th class="num">chain_em</th><th class="num">RCC top1</th></tr>
+    <tr><td>DeepSeek-V3.2</td><td class="num">0.1488</td><td class="num">0.1036</td><td class="num">0.0048</td><td class="num">0.0000</td><td class="num">0.0286</td></tr>
+    <tr><td>DeepSeek + QoEReasoner</td><td class="num"><strong>0.4271</strong></td><td class="num"><strong>0.4264</strong></td><td class="num"><strong>0.3095</strong></td><td class="num"><strong>0.2857</strong></td><td class="num"><strong>0.5714</strong></td></tr>
+    <tr><td>GPT-5.2</td><td class="num">0.3083</td><td class="num">0.2207</td><td class="num">0.0476</td><td class="num">0.0000</td><td class="num">0.3623</td></tr>
+    <tr><td>GPT-5.2 + QoEReasoner</td><td class="num"><strong>0.5414</strong></td><td class="num"><strong>0.5400</strong></td><td class="num"><strong>0.4286</strong></td><td class="num"><strong>0.4000</strong></td><td class="num"><strong>0.6714</strong></td></tr>
+    <tr><td>Qwen3-14B</td><td class="num">0.1738</td><td class="num">0.0879</td><td class="num">0.0143</td><td class="num">0.0000</td><td class="num">0.0000</td></tr>
+    <tr><td>Qwen3-14B + QoEReasoner</td><td class="num"><strong>0.4464</strong></td><td class="num"><strong>0.4429</strong></td><td class="num"><strong>0.3286</strong></td><td class="num"><strong>0.3000</strong></td><td class="num"><strong>0.6000</strong></td></tr>
+  </table>
+  <p>纯 LLM 的 chain exact match 基本为 0；QoEReasoner 借助 KB/HB 和 verifier，把 edge-level 与 chain-level 正确性显著拉高。</p>
+
+  <h3>6.3 模块分析与消融</h3>
+  <table>
+    <tr><th>Stage</th><th class="num">MRR</th><th class="num">AUC</th><th class="num">R@1</th><th class="num">R@3</th><th class="num">R@5</th></tr>
+    <tr><td>Retrieval</td><td class="num">0.6003</td><td class="num">3.1714</td><td class="num">0.3429</td><td class="num">0.6857</td><td class="num">0.8714</td></tr>
+    <tr><td>Verifier</td><td class="num">0.5817</td><td class="num">3.4143</td><td class="num">0.3426</td><td class="num">0.7429</td><td class="num">0.9000</td></tr>
+    <tr><td>Adjuster</td><td class="num"><strong>0.6206</strong></td><td class="num"><strong>3.5714</strong></td><td class="num"><strong>0.4000</strong></td><td class="num"><strong>0.7571</strong></td><td class="num"><strong>0.9142</strong></td></tr>
+  </table>
+  <table>
+    <tr><th>HB</th><th>KB</th><th class="num">node_p</th><th class="num">node_r</th><th class="num">edge_p</th><th class="num">chain_em</th></tr>
+    <tr><td>无</td><td>无</td><td class="num">0.3083</td><td class="num">0.2207</td><td class="num">0.0476</td><td class="num">0.0000</td></tr>
+    <tr><td>无</td><td>有</td><td class="num">0.4957</td><td class="num">0.5050</td><td class="num">0.3810</td><td class="num">0.3143</td></tr>
+    <tr><td>部分</td><td>有</td><td class="num">0.4550</td><td class="num">0.4514</td><td class="num">0.3476</td><td class="num">0.3143</td></tr>
+    <tr><td>有</td><td>无</td><td class="num">0.4286</td><td class="num">0.4257</td><td class="num">0.2762</td><td class="num">0.2429</td></tr>
+    <tr><td>有</td><td>有</td><td class="num"><strong>0.5414</strong></td><td class="num"><strong>0.5400</strong></td><td class="num"><strong>0.4286</strong></td><td class="num"><strong>0.4000</strong></td></tr>
+  </table>
+
+  <h2>7. Case study、贡献与局限</h2>
+  <p>论文展示了一个 uplink interference 诊断案例。单个 case end-to-end 诊断使用 166,375 tokens，API cost 约 0.02 美元。3 位领域专家评审 50 份报告，Correctness、Evidence Grounding、Knowledge Grounding、Interpretability 四项平均分都超过 4/5。QoEReasoner 通常约 3 分钟完成诊断，而人工专家分析通常需要 30-60 分钟。</p>
+  <p>主要贡献是把 RAN QoE 诊断从 prompt-only LLM 变成工具感知、知识约束、历史检索和状态化规划的闭环 agent。主要局限是数据集规模小且未公开，当前采用 single-dominant-chain 假设，而真实网络可能存在多条并发故障链。</p>
+  <div class="callout">实践启示：高维时间序列 + 严格领域规则 + 可解释报告这类工业诊断场景，更适合“LLM 编排 + 工具感知 + 知识约束 + 历史案例”的架构，而不是端到端 LLM 直接判断。</div>
+</main>
+</body>
+</html>

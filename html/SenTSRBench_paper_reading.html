@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SenTSR-Bench 中文文献解读</title>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <style>
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.72; color: #1f2937; background: #f8fafc; }
+    main { max-width: 980px; margin: 0 auto; padding: 42px 24px 80px; background: #fff; }
+    h1 { font-size: 2rem; line-height: 1.25; margin: 0 0 12px; color: #111827; }
+    h2 { font-size: 1.45rem; margin-top: 34px; border-bottom: 1px solid #e5e7eb; padding-bottom: 6px; color: #111827; }
+    h3 { font-size: 1.15rem; margin-top: 24px; color: #111827; }
+    p { margin: 12px 0; }
+    ul, ol { padding-left: 1.5rem; }
+    code { background: #eef2f7; padding: 0.12rem 0.28rem; border-radius: 4px; }
+    table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 0.94rem; }
+    th, td { border: 1px solid #d1d5db; padding: 8px 10px; text-align: left; vertical-align: top; }
+    th { background: #f3f4f6; }
+    td.num, th.num { text-align: right; }
+    .meta { color: #4b5563; margin-bottom: 26px; }
+    .callout { background: #f1f5f9; border-left: 4px solid #2563eb; padding: 12px 16px; margin: 18px 0; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>《SenTSR-Bench: Thinking with Injected Knowledge for Time-Series Reasoning》中文文献解读</h1>
+  <p class="meta">方法/基准：<strong>Knowledge Injection with RL-Honed Thinking / SenTSR-Bench</strong><br>作者：Zelin He 等，The Pennsylvania State University / AWS AI Labs / Amazon RME</p>
+
+  <table>
+    <tr><th>资源</th><th>链接</th></tr>
+    <tr><td>论文页面</td><td><a href="https://arxiv.org/abs/2602.19455">arXiv:2602.19455</a></td></tr>
+    <tr><td>PDF</td><td><a href="https://arxiv.org/pdf/2602.19455">https://arxiv.org/pdf/2602.19455</a></td></tr>
+    <tr><td>TeX 源码</td><td><a href="https://arxiv.org/e-print/2602.19455">https://arxiv.org/e-print/2602.19455</a></td></tr>
+    <tr><td>项目页</td><td><a href="https://zlhe0.github.io/SenTSR-Bench-Website/">SenTSR-Bench Website</a></td></tr>
+    <tr><td>代码 / HF</td><td>论文和项目页当前未给出可确认的官方 GitHub 或 Hugging Face 数据仓链接。</td></tr>
+  </table>
+
+  <h2>1. 一句话总结</h2>
+  <p>这篇论文提出一种“把时间序列专家模型的领域分析注入到通用推理模型思维链里”的框架，并发布 SenTSR-Bench：一个来自真实工业传感器场景、含多阶段诊断问题的多变量时间序列推理 benchmark。</p>
+
+  <h2>2. 问题背景</h2>
+  <p>真实工业维护中的时间序列诊断需要回答 <strong>What happened</strong>、<strong>How happened</strong> 和 <strong>Suggested fix</strong> 三类问题。论文指出，通用推理模型 GRLM 推理强但缺少传感器领域知识，时间序列专家模型 TSLM 更懂局部波形但复杂推理弱。因此，论文把 TSLM 的领域观察注入 GRLM 的 reasoning trace，让二者分工。</p>
+  <table>
+    <tr><th>模型类型</th><th>优点</th><th>缺点</th></tr>
+    <tr><td>GRLM</td><td>复杂推理、上下文整合能力强</td><td>容易误读时间序列模式</td></tr>
+    <tr><td>TSLM</td><td>更擅长识别趋势、异常、传感器模式</td><td>泛化推理和诊断链较弱</td></tr>
+  </table>
+
+  <h2>3. 任务定义</h2>
+  <p>文本问题和多变量时间序列分别写作：</p>
+  $$\mathbf{q}=(q_1,\ldots,q_n)\in V^*,\qquad
+\mathbf{X}=\{\mathbf{x}_t\}_{t=1}^{T},\quad \mathbf{x}_t\in\mathbb{R}^{D}$$
+  <p>推理模型先生成内部轨迹 $\mathbf{r}$，再生成答案 $\mathbf{y}$：</p>
+  $$\pi(\mathbf{r}\mid \mathbf{X},\mathbf{q})
+=\prod_{k=1}^{K}\pi(r_k\mid \mathbf{X},\mathbf{q},[\langle\mathrm{think}\rangle,\mathbf{r}_{<k}])$$
+  $$\pi(\mathbf{y}\mid \mathbf{X},\mathbf{q},[\langle\mathrm{think}\rangle,\mathbf{r},\langle/\mathrm{think}\rangle])
+=\prod_{j=1}^{M}\pi(y_j\mid \mathbf{X},\mathbf{q},[\langle\mathrm{think}\rangle,\mathbf{r},\langle/\mathrm{think}\rangle,\mathbf{y}_{<j}])$$
+  <p>这个形式把 reasoning trace 暴露成可注入对象，而不是把模型当成只能接受外部 prompt 的黑盒。</p>
+
+  <h2>4. Knowledge Injection</h2>
+  <p>框架包含冻结通用推理模型 $\pi^G$ 和时间序列专家模型 $\pi^T$。先基于问题和当前 GRLM 前缀构造专家查询：</p>
+  $$\tilde{\mathbf{q}}=\mathsf{Query}(\mathbf{q},\mathbf{r}^{G}_{\le k})$$
+  <p>TSLM 生成领域知识：</p>
+  $$\mathbf{K}^{T}\sim\pi^{T}(\cdot\mid \mathbf{X},\tilde{\mathbf{q}})$$
+  <p>再把这段知识插入 GRLM 推理轨迹：</p>
+  $$\mathbf{r}^{\mathrm{Inj}}_{\le k}
+=\mathsf{Inject}(\mathbf{r}^{G}_{\le k},\mathbf{K}^{T})$$
+  <p>GRLM 从注入后的轨迹继续生成：</p>
+  $$r^{G}_{j}\sim
+\pi^{G}(\cdot\mid \mathbf{X},\mathbf{q},[\langle\mathrm{think}\rangle,\mathbf{r}^{\mathrm{Inj}}_{<j}]),\qquad j\ge k$$
+
+  <h2>5. 注入策略</h2>
+  <table>
+    <tr><th>策略</th><th>插入位置</th><th>做法</th><th>结论</th></tr>
+    <tr><td>Early</td><td><code>&lt;think&gt;</code> 后</td><td>TSLM 先给时间序列观察，GRLM 继续反思推理</td><td>默认方案，整体最好</td></tr>
+    <tr><td>Intermediate</td><td>低置信步骤处</td><td>TSLM 校验或纠正某个低置信句子</td><td>有效但更复杂</td></tr>
+    <tr><td>Late</td><td>完整草稿后</td><td>TSLM 审阅完整 reasoning trace</td><td>有效但更容易偏离专家模型训练分布</td></tr>
+  </table>
+  <p>Early injection 写作：</p>
+  $$\mathbf{r}^{\mathrm{Inj}}_{\le 1}
+=\mathsf{Inject}_{reflect}(\emptyset,\mathbf{r}^{T})
+=[\mathbf{r}^{T},\mathbf{v}_{reflect}]$$
+
+  <h2>6. RL-Honed Thinking</h2>
+  <p>普通 TSLM 往往只会直接答题，而 knowledge injection 需要的是可注入的中间分析。论文用 RLVR 让 TSLM 学会先输出 thinking trace，再输出 answer。completion 写作：</p>
+  $$\mathbf{z}=[\mathbf{r},\mathbf{y}]$$
+  <p>GRPO 目标为：</p>
+  $$\max_{\theta}\;
+\mathbb{E}_{\{\mathbf{z}_i\}_{i=1}^{G}\sim\pi_{\theta}(\cdot\mid\mathbf{X},\mathbf{q})}
+\left[
+\mathcal{L}_{GRPO}\left(\theta,\{R(\mathbf{z}_i)\}_{i=1}^{G}\right)
+\right]$$
+  <p>奖励由格式和最终答案组成：</p>
+  $$R(\mathbf{z})=r_{\mathrm{fmt}}(\mathbf{z})+r_{\mathrm{hard}}(\mathbf{z})$$
+  <p>组内 advantage 标准化为：</p>
+  $$\hat{A}_i=\frac{r_i-\mu_r}{\sigma_r},\quad
+\mu_r=\frac{1}{G}\sum_{j=1}^{G}r_j,\quad
+\sigma_r=\sqrt{\frac{1}{G}\sum_{j=1}^{G}(r_j-\mu_r)^2+\gamma}$$
+  <p>这种训练不需要人工标注中间推理链，只需要输出格式和答案正确性可验证。</p>
+
+  <h2>7. SenTSR-Bench 数据集</h2>
+  <p>SenTSR-Bench 是 Sensor-based Time-Series Diagnostic Reasoning Benchmark，来自真实工业机器监控环境，包含 vibration acceleration、velocity、temperature 等多变量传感器信号。</p>
+  <table>
+    <tr><th>项目</th><th>数量 / 描述</th></tr>
+    <tr><td>初始候选样本</td><td>约 2,000 条多变量传感器序列</td></tr>
+    <tr><td>最终评测序列</td><td>110 条真实、去标识化 multivariate sensor streams</td></tr>
+    <tr><td>评测问题</td><td>330 道 MCQ</td></tr>
+    <tr><td>问题阶段</td><td>What happened / How happened / Suggested fix</td></tr>
+    <tr><td>标注</td><td>human-curated diagnostic annotations</td></tr>
+  </table>
+  <p>训练数据由 23 条去标识化 seed 序列出发，先让 VLM 写 Python simulator 模拟相似行为，再随机化参数生成 6,000 条 MCQ 训练样本。</p>
+
+  <h2>8. 公开评测数据</h2>
+  <table>
+    <tr><th>数据集</th><th>论文中使用方式</th><th>构成</th></tr>
+    <tr><td>TSEvol Dataset A</td><td>inductive、deductive、causal reasoning</td><td>525 个问题，覆盖 AIOps、meteorology、NAB、Oracle system metrics 等真实时间序列</td></tr>
+    <tr><td>TS&amp;Language MCQ2</td><td>两条时间序列之间的关系/比较推理</td><td>随机采样 100 个 diagnostic-style MCQ</td></tr>
+  </table>
+
+  <h2>9. 实验设置</h2>
+  <table>
+    <tr><th>组件</th><th>配置</th></tr>
+    <tr><td>GRLM</td><td>Claude3.7-Text/Vision、Qwen3-32B、DeepSeekR1-Distilled-Qwen-32B</td></tr>
+    <tr><td>TSLM</td><td>Qwen2.5-VL-3B；ChatTS-14B 用于注入策略分析</td></tr>
+    <tr><td>输入形式</td><td>图像折线图或 JSON-like 文本</td></tr>
+    <tr><td>SFT</td><td>cutoff 4096，LR $1\times10^{-5}$，8 GPUs effective batch 64</td></tr>
+    <tr><td>RL / GRPO</td><td>$\beta=0.001$，$G=8$，max length 512，clip 0.1，LR $1\times10^{-6}$</td></tr>
+  </table>
+
+  <h2>10. SenTSR-Bench 主结果</h2>
+  <h3>Claude3.7-Text</h3>
+  <table>
+    <tr><th>模型</th><th class="num">What</th><th class="num">How</th><th class="num">Fix</th><th class="num">Overall</th></tr>
+    <tr><td>TSLM SFT</td><td class="num">0.530</td><td class="num">0.567</td><td class="num">0.548</td><td class="num">0.549</td></tr>
+    <tr><td>GRLM zero-shot</td><td class="num">0.712</td><td class="num">0.409</td><td class="num">0.473</td><td class="num">0.531</td></tr>
+    <tr><td>SFT-Injection</td><td class="num">0.742</td><td class="num">0.603</td><td class="num"><strong>0.558</strong></td><td class="num">0.634</td></tr>
+    <tr><td><strong>RL-Injection</strong></td><td class="num"><strong>0.779</strong></td><td class="num"><strong>0.627</strong></td><td class="num">0.542</td><td class="num"><strong>0.650</strong></td></tr>
+  </table>
+  <h3>Claude3.7-Vision</h3>
+  <table>
+    <tr><th>模型</th><th class="num">What</th><th class="num">How</th><th class="num">Fix</th><th class="num">Overall</th></tr>
+    <tr><td>TSLM SFT</td><td class="num">0.530</td><td class="num">0.567</td><td class="num">0.548</td><td class="num">0.549</td></tr>
+    <tr><td>GRLM zero-shot</td><td class="num">0.764</td><td class="num">0.542</td><td class="num">0.555</td><td class="num">0.620</td></tr>
+    <tr><td>SFT-Injection</td><td class="num">0.756</td><td class="num">0.588</td><td class="num"><strong>0.649</strong></td><td class="num">0.665</td></tr>
+    <tr><td><strong>RL-Injection</strong></td><td class="num"><strong>0.827</strong></td><td class="num"><strong>0.661</strong></td><td class="num">0.597</td><td class="num"><strong>0.695</strong></td></tr>
+  </table>
+  <p>RL-Injection 在 Text setting 下相对 zero-shot GRLM 提升 22.4%，在 Vision setting 下提升 12.1%。</p>
+
+  <h2>11. 公开数据集结果</h2>
+  <table>
+    <tr><th>GRLM</th><th>方法</th><th class="num">Causal</th><th class="num">Deductive</th><th class="num">Inductive</th><th class="num">MCQ2</th><th class="num">Overall</th></tr>
+    <tr><td>Qwen3-32B</td><td>Zero-shot</td><td class="num">0.507</td><td class="num">0.473</td><td class="num"><strong>0.623</strong></td><td class="num">0.407</td><td class="num">0.502</td></tr>
+    <tr><td>Qwen3-32B</td><td><strong>RL-Injection</strong></td><td class="num"><strong>0.627</strong></td><td class="num">0.512</td><td class="num">0.588</td><td class="num">0.490</td><td class="num"><strong>0.554</strong></td></tr>
+    <tr><td>R1-Distilled-Qwen-32B</td><td>Zero-shot</td><td class="num">0.522</td><td class="num">0.550</td><td class="num">0.525</td><td class="num">0.483</td><td class="num">0.520</td></tr>
+    <tr><td>R1-Distilled-Qwen-32B</td><td><strong>RL-Injection</strong></td><td class="num"><strong>0.634</strong></td><td class="num">0.543</td><td class="num"><strong>0.532</strong></td><td class="num">0.537</td><td class="num"><strong>0.561</strong></td></tr>
+  </table>
+
+  <h2>12. 注入策略对比</h2>
+  <table>
+    <tr><th>GRLM</th><th>策略</th><th class="num">Inductive</th><th class="num">Deductive</th><th class="num">Causal</th><th class="num">MCQ2</th><th class="num">Overall</th></tr>
+    <tr><td>Claude3.7-Text</td><td>Intermediate</td><td class="num">0.805</td><td class="num">0.659</td><td class="num">0.645</td><td class="num"><strong>0.703</strong></td><td class="num">0.703</td></tr>
+    <tr><td>Claude3.7-Text</td><td>Late</td><td class="num">0.791</td><td class="num"><strong>0.667</strong></td><td class="num">0.703</td><td class="num">0.680</td><td class="num">0.710</td></tr>
+    <tr><td>Claude3.7-Text</td><td><strong>Early</strong></td><td class="num"><strong>0.824</strong></td><td class="num">0.643</td><td class="num">0.703</td><td class="num">0.690</td><td class="num"><strong>0.715</strong></td></tr>
+    <tr><td>Claude3.7-Vision</td><td><strong>Early</strong></td><td class="num"><strong>0.825</strong></td><td class="num">0.643</td><td class="num"><strong>0.746</strong></td><td class="num"><strong>0.730</strong></td><td class="num"><strong>0.736</strong></td></tr>
+  </table>
+
+  <h2>13. 消融与分析</h2>
+  <div class="callout">
+    <p><strong>完整注入需要保留原始时间序列。</strong> 只给 GRLM TSLM 文本摘要能带来约 7% 平均提升，但让 GRLM 同时访问原始时间序列和注入摘要可带来约 17% 平均提升。</p>
+  </div>
+  <p>论文还比较 prompting 与 injection：把 TSLM 分析作为外部 prompt 不如把它放入 reasoning trace。原因是后者更容易让 GRLM 在推理过程中持续使用和反思领域知识。</p>
+  <p>训练数据多样性实验显示，没有 synthetic data 时小 TSLM 接近随机；使用约 50% seed-generated 数据即可恢复大部分最终性能，超过 75% 后收益变小。RL objective 对比中，DAPO 等方法收敛更平滑，但最终 reward 接近 GRPO。</p>
+
+  <h2>14. 贡献与局限</h2>
+  <p>主要贡献包括：提出面向时间序列诊断的 knowledge injection 框架；用 RLVR 训练无需人工思维链标注的 analysis-first TSLM；发布真实工业传感器诊断 benchmark SenTSR-Bench；在 SenTSR-Bench、TSEvol、TS&amp;Language 上验证 injection 同时优于独立 TSLM 和独立 GRLM。</p>
+  <p>主要局限是：SenTSR-Bench 公开下载入口当前未确认；训练集依赖 VLM simulator，真实长尾故障覆盖仍需验证；闭源模型接口是否支持 assistant prefill 会影响落地；Suggested Fix 的收益不如 What/How 稳定，说明维修建议还需要更多外部知识和领域约束。</p>
+</main>
+</body>
+</html>
