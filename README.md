@@ -15,5 +15,4 @@ https://github.com/clsr1008/TSQualityAgent
   （Perception，Reasoning，Decision-Making可测试）
 - Time Series Reasoning via Process-Verifiable Thinking Data Synthesis and Scheduling for Tailored LLM Reasoning（COT数据，暂未开源，区分难易样本，关注过程数据）
 - TimeART: Towards Agentic Time Series Reasoning via Tool-Augmentation（包含工具调用的多轮对话数据集）
-- 
 ## Ensemble
