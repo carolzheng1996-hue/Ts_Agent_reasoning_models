@@ -5,7 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>《Can LLM Coding Agents Reason About Time Series?》中文文献解读</title>
   <script>
-    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] }, svg: { fontCache: 'global' } };
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      svg: { fontCache: 'global' }
+    };
   </script>
   <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
   <style>
@@ -18,6 +25,7 @@
     a:hover { text-decoration: underline; }
     code { background: #eef2f7; border-radius: 4px; padding: .12rem .3rem; }
     pre { background: #0f172a; color: #e5e7eb; padding: 16px; border-radius: 8px; overflow-x: auto; }
+    .math-block { margin: 1.1rem 0; overflow-x: auto; }
     table { border-collapse: collapse; width: 100%; margin: 1rem 0 1.4rem; font-size: .95rem; }
     th, td { border: 1px solid #d1d5db; padding: 8px 10px; vertical-align: top; }
     th { background: #f3f4f6; font-weight: 650; }
@@ -28,7 +36,7 @@
 <body>
 <main>
 <h1>《Can LLM Coding Agents Reason About Time Series?》中文文献解读</h1>
-<p><strong>论文</strong>：Filip Rechtorík, Ondřej Dušek, Zdeněk Kasner，*Can LLM Coding Agents Reason About Time Series?*  </p>
+<p><strong>论文</strong>：Filip Rechtorík, Ondřej Dušek, Zdeněk Kasner，<em>Can LLM Coding Agents Reason About Time Series?</em>  </p>
 <p><strong>时间</strong>：2026-06-15 arXiv 首发  </p>
 <p><strong>方法主题</strong>：LLM coding agents / time series understanding  </p>
 <p><strong>论文链接</strong>：<a href="https://arxiv.org/abs/2606.16545">arXiv:2606.16545</a> / <a href="https://arxiv.org/pdf/2606.16545">PDF</a> / <a href="https://arxiv.org/e-print/2606.16545">TeX</a>  </p>
@@ -38,25 +46,25 @@
 <p>论文系统评测 LLM 是否能通过 Python coding agent 理解时间序列：代码工具显著提升准确率，混合“原始数据 + 代码”最好，但即使最强 agent 仍有约 22% 到 34% 题目答错，主要问题是过度相信代码结果、阈值随意和忽略时间序列细节。</p>
 <h2>2. 问题定义</h2>
 <p>论文把时间序列理解建模为多选题。输入包含时间序列表示、自然语言问题 $Q$ 和候选答案：</p>
-<p>$$</p>
-<p>A=\{a_1,\dots,a_k\}.</p>
-<p>$$</p>
+<div class="math-block">$$
+A=\{a_1,\dots,a_k\}.
+$$</div>
 <p>目标是选择正确答案：</p>
-<p>$$</p>
-<p>a^*\in A.</p>
-<p>$$</p>
+<div class="math-block">$$
+a^*\in A.
+$$</div>
 <p>模型输出为：</p>
-<p>$$</p>
-<p>\mathcal{O}=(r,a),</p>
-<p>$$</p>
+<div class="math-block">$$
+\mathcal{O}=(r,a),
+$$</div>
 <p>其中 $r$ 是推理轨迹，$a$ 是最终答案。若是 coding agent，还包含代码 $c$ 及其执行结果。</p>
 <p>评价指标是 accuracy：</p>
-<p>$$</p>
-<p>\mathrm{Acc}</p>
-<p>=</p>
-<p>\frac{1}{N}\sum_{i=1}^{N}</p>
-<p>\mathbb{I}[\hat{a}_i=a_i^*].</p>
-<p>$$</p>
+<div class="math-block">$$
+\mathrm{Acc}
+=
+\frac{1}{N}\sum_{i=1}^{N}
+\mathbb{I}[\hat{a}_i=a_i^*].
+$$</div>
 <h2>3. 三种 Agent 设置</h2>
 <table><tbody>
 <tr><th>设置</th><th>输入</th><th>工具</th><th>直觉</th></tr>
@@ -65,10 +73,10 @@
 <tr><td>Hybrid $\mathcal{M}_{\mathrm{hybrid}}$</td><td>原始文本 + DataFrame</td><td>Python</td><td>同时保留粗读和精算</td></tr>
 </tbody></table>
 <p>coding agent 的 rollout 可以写成：</p>
-<p>$$</p>
-<p>\tau=</p>
-<p>(q,o_0,c_1,o_1,c_2,o_2,\ldots,a),</p>
-<p>$$</p>
+<div class="math-block">$$
+\tau=
+(q,o_0,c_1,o_1,c_2,o_2,\ldots,a),
+$$</div>
 <p>其中 $c_t$ 是模型生成的 Python，$o_t$ 是执行输出。模型可以多轮写代码，直到认为证据足够再输出答案。</p>
 <h2>4. 数据集</h2>
 <p>论文使用两个时间序列理解 benchmark：</p>
@@ -99,11 +107,11 @@
 <h2>7. LLM Judge 行为分析</h2>
 <p>论文构造 taxonomy，并用 LLM judge 分析完整输出。人工小样本标注的一致性为 Cohen's $\kappa=0.565$，最终选择 <code>gpt-oss-120b</code> judge，和人工标签最高一致率为 90.3%。</p>
 <p>Judge 输入可抽象为：</p>
-<p>$$</p>
-<p>J(\mathcal{O},a^*)</p>
-<p>\rightarrow</p>
-<p>\{\text{strategy},\text{method error},\text{code issue},\text{mismatch}\}.</p>
-<p>$$</p>
+<div class="math-block">$$
+J(\mathcal{O},a^*)
+\rightarrow
+\{\text{strategy},\text{method error},\text{code issue},\text{mismatch}\}.
+$$</div>
 <p>也就是不仅看答案对错，还看是否选错策略、是否误读统计量、代码是否失败、推理是否和工具输出矛盾。</p>
 <h2>8. 失败模式</h2>
 <p>论文给出几个关键比例：</p>
@@ -116,23 +124,23 @@
 <p>这些结果说明 coding agent 的主要问题不是不会写代码，而是会把一个不充分的统计代理量当成最终证据。例如只看 sign changes 判断方波周期，却忽略序列后半段模式改变；或使用任意阈值判断 stationarity / volatility。</p>
 <h2>9. 数学直觉：工具能降低哪类错误</h2>
 <p>对需要统计检验的问题，direct agent 相当于尝试从 token 序列估计：</p>
-<p>$$</p>
-<p>\hat{s}=g_{\mathrm{LLM}}(R_{\mathrm{raw}}(X)).</p>
-<p>$$</p>
+<div class="math-block">$$
+\hat{s}=g_{\mathrm{LLM}}(R_{\mathrm{raw}}(X)).
+$$</div>
 <p>coding agent 则可以执行确定性统计函数：</p>
-<p>$$</p>
-<p>\hat{s}=g_{\mathrm{code}}(X),</p>
-<p>$$</p>
+<div class="math-block">$$
+\hat{s}=g_{\mathrm{code}}(X),
+$$</div>
 <p>例如方差、ACF、ADF、相关系数、滚动均值、峰值计数。工具减少了数值计算误差，但没有自动解决“该算什么”的问题。真正瓶颈从 computation 转移到 methodology selection：</p>
-<p>$$</p>
-<p>\text{answer quality}</p>
-<p>\approx</p>
-<p>\text{correct strategy}</p>
-<p>\times</p>
-<p>\text{correct implementation}</p>
-<p>\times</p>
-<p>\text{correct interpretation}.</p>
-<p>$$</p>
+<div class="math-block">$$
+\text{answer quality}
+\approx
+\text{correct strategy}
+\times
+\text{correct implementation}
+\times
+\text{correct interpretation}.
+$$</div>
 <h2>10. 贡献与启发</h2>
 <p>论文的价值在于把“LLM 会不会时间序列推理”拆成了可诊断的行为层级。结论很务实：</p>
 <ul>
