@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>《TelcoAgent: A Scalable 5G Multi-KPM Forecasting With 3GPP-Grounded Explainability》来源核验与待补解读</title>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] }, svg: { fontCache: 'global' } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <style>
+    body { margin: 0; padding: 32px 18px; background: #f8fafc; color: #1f2937; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.72; }
+    main { max-width: 980px; margin: 0 auto; background: #fff; padding: 42px 52px; border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 10px 28px rgba(15,23,42,.06); }
+    h1, h2, h3, h4 { color: #111827; line-height: 1.28; }
+    h1 { font-size: 2rem; margin-top: 0; }
+    h2 { margin-top: 2.2rem; padding-bottom: .35rem; border-bottom: 1px solid #e5e7eb; }
+    a { color: #2563eb; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    code { background: #eef2f7; border-radius: 4px; padding: .12rem .3rem; }
+    pre { background: #0f172a; color: #e5e7eb; padding: 16px; border-radius: 8px; overflow-x: auto; }
+    table { border-collapse: collapse; width: 100%; margin: 1rem 0 1.4rem; font-size: .95rem; }
+    th, td { border: 1px solid #d1d5db; padding: 8px 10px; vertical-align: top; }
+    th { background: #f3f4f6; font-weight: 650; }
+    .callout { background: #f1f5f9; border-left: 4px solid #2563eb; padding: 12px 16px; border-radius: 6px; }
+    @media (max-width: 720px) { main { padding: 28px 20px; } table { display: block; overflow-x: auto; } }
+  </style>
+</head>
+<body>
+<main>
+<h1>《TelcoAgent: A Scalable 5G Multi-KPM Forecasting With 3GPP-Grounded Explainability》来源核验与待补解读</h1>
+<p><strong>论文题名</strong>：*TelcoAgent: A Scalable 5G Multi-KPM Forecasting With 3GPP-Grounded Explainability*  </p>
+<p><strong>当前状态</strong>：未找到可核验官方论文来源  </p>
+<p><strong>检索范围</strong>：arXiv、通用网页检索、题名精确检索、<code>TelcoAgent</code> + <code>3GPP</code> + <code>KPM</code> 组合检索  </p>
+<p><strong>本地 TeX 源码目录</strong>：未发现  </p>
+<p><strong>代码 / 数据</strong>：未发现官方 GitHub、Hugging Face 或项目页  </p>
+<h2>1. 核验结论</h2>
+<p>按照本项目规则，论文解读必须优先基于官方来源，尤其是 arXiv TeX、会议论文页、OpenReview、作者项目页或官方代码仓库。对该题名进行精确检索后，未找到可以确认的论文页面、PDF 或 TeX 源码。</p>
+<p>因此，本文件不编造作者、公式、实验结果、数据集或 3GPP 细节；这里只给出如果后续拿到官方论文源码后应如何补齐的解读框架。</p>
+<h2>2. 预期研究问题</h2>
+<p>从题名看，这篇论文应聚焦 5G 网络中的多 KPM 预测与解释：</p>
+<p>$$</p>
+<p>\hat{\mathbf{Y}}_{t+1:t+H}</p>
+<p>=</p>
+<p>f_\theta(\mathbf{X}_{t-L+1:t}, \mathcal{C}, \mathcal{G}_{3GPP}),</p>
+<p>$$</p>
+<p>其中 $\mathbf{X}_{t-L+1:t}$ 是历史 KPM 序列，$\hat{\mathbf{Y}}_{t+1:t+H}$ 是未来多指标预测，$\mathcal{C}$ 是小区、切片、负载、拓扑等上下文，$\mathcal{G}_{3GPP}$ 是 3GPP 规范或告警/性能管理知识。</p>
+<p>如果论文属实，关键应回答三个问题：</p>
+<ul>
+<li><strong>多 KPM 预测</strong>：吞吐、PRB 利用率、RSRP/RSRQ、SINR、掉话、切换失败、时延等指标是否联合建模？</li>
+<li><strong>可扩展性</strong>：是否支持多小区、多频段、多站点、多时间粒度？</li>
+<li><strong>3GPP-grounded explainability</strong>：解释是否能落到标准化 KPI/KPM 定义、告警链路和协议语义，而不是普通 attention heatmap？</li>
+</ul>
+<h2>3. 可能的任务形式</h2>
+<p>一个合理的多 KPM forecasting 任务可定义为：</p>
+<p>$$</p>
+<p>\mathbf{X}_t\in\mathbb{R}^{L\times N\times C},</p>
+<p>\quad</p>
+<p>\mathbf{Y}_t\in\mathbb{R}^{H\times N\times C'},</p>
+<p>$$</p>
+<p>其中 $L$ 是历史窗口，$H$ 是预测步长，$N$ 是 cell / sector 数量，$C$ 是输入 KPM 数，$C'$ 是预测 KPM 数。若建模空间依赖，还应包含邻接矩阵：</p>
+<p>$$</p>
+<p>\mathbf{A}_{ij} =</p>
+<p>\operatorname{sim}(\text{cell}_i,\text{cell}_j)</p>
+<p>\quad \text{或} \quad</p>
+<p>\mathbf{A}_{ij}=1[\text{handover/link relation}].</p>
+<p>$$</p>
+<p>预测损失通常可写作：</p>
+<p>$$</p>
+<p>\mathcal{L}_{\mathrm{pred}}</p>
+<p>=</p>
+<p>\sum_{h=1}^{H}\sum_{i=1}^{N}\sum_{c=1}^{C'}</p>
+<p>w_c</p>
+<p>\ell(\hat{y}_{t+h,i,c},y_{t+h,i,c}),</p>
+<p>$$</p>
+<p>其中 $w_c$ 控制不同 KPM 的业务优先级，$\ell$ 可以是 MAE、MSE、Huber 或 quantile loss。</p>
+<h2>4. Agent 视角下应检查的组件</h2>
+<p>若该论文确实是 TelcoAgent，而不是普通预测模型，独立解读时应核查：</p>
+<table><tbody>
+<tr><th>Agent 要素</th><th>应核验内容</th></tr>
+<tr><td>State / workspace</td><td>KPM 时间序列、拓扑、告警、配置、3GPP 定义</td></tr>
+<tr><td>Policy / model</td><td>LLM controller、TSFM、GNN、Transformer 或混合架构</td></tr>
+<tr><td>Action / tool space</td><td>指标查询、异常检测、因果链检索、3GPP 条款检索、预测模型调用</td></tr>
+<tr><td>Memory / retrieval</td><td>历史故障案例、KPM 模式库、规范知识库</td></tr>
+<tr><td>Explanation</td><td>是否引用 3GPP 定义、KPI 依赖、根因链路</td></tr>
+<tr><td>Evaluation</td><td>预测误差、解释准确率、专家一致性、延迟、扩展到多站点能力</td></tr>
+</tbody></table>
+<h2>5. 不应伪造的部分</h2>
+<p>在没有官方论文源码前，以下内容不能写成论文结论：</p>
+<ul>
+<li>作者、机构、发表时间；</li>
+<li>具体模型结构，例如是否使用 GNN、MoE、LLM agent；</li>
+<li>数据集规模，例如多少基站、多少天、多少 KPM；</li>
+<li>指标数值，例如 MAE、RMSE、MAPE、解释准确率；</li>
+<li>是否符合某个 3GPP TS/TR 文档；</li>
+<li>是否开源。</li>
+</ul>
+<h2>6. 后续补齐方式</h2>
+<p>拿到官方 arXiv ID、PDF、TeX 或项目页后，应按本项目格式补齐：</p>
+<p>1. 下载 TeX 源码并放入 <code>tex/TelcoAgent_A_Scalable_5G_Multi_KPM_Forecasting_With_3GPP_Grounded_Explainability/</code>。</p>
+<p>2. 从 TeX 中抽取方法公式、算法、实验表格和数据集信息。</p>
+<p>3. 将本文件替换为完整论文解读，至少包含多 KPM 任务定义、模型结构、3GPP-grounded 解释机制、实验结果和局限。</p>
+<p>目前最严谨的处理是保留这个独立条目，但明确标注“未核验官方来源”。这比生成看似完整但不可验证的解读更符合项目约束。</p>
+</main>
+</body>
+</html>

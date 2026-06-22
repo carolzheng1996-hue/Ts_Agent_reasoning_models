@@ -1,0 +1,261 @@
+# 《MedRLM: Recursive Multimodal Health Intelligence》中文文献解读
+
+**论文**：Aueaphum Aueawatthanaphisut，*MedRLM: Recursive Multimodal Health Intelligence for Long-Context Clinical Reasoning, Sensor-Guided Screening, Evidence-Grounded Decision Support, and Community-to-Tertiary Referral Optimization*  
+**时间**：2026-06-18 arXiv 首发  
+**方法名**：MedRLM  
+**论文链接**：[arXiv:2606.20164](https://arxiv.org/abs/2606.20164) / [PDF](https://arxiv.org/pdf/2606.20164) / [TeX](https://arxiv.org/e-print/2606.20164)  
+**代码 / 数据**：论文未给出可确认官方代码仓库；实验部分主要给出真实数据评估设计而非已完成 benchmark 结果。  
+**本地 TeX 源码目录**：`tex/MedRLM_Recursive_Multimodal_Health_Intelligence`
+
+## 1. 一句话总结
+
+MedRLM 把医疗 LLM 从“一次性回答病例问题”改造成递归临床工作流：患者数据被看作外部环境，系统按文本、EHR、影像、传感器、指南和转诊规则递归检索、分解、验证，并用证据图记忆和不确定性门控生成可审计的风险与转诊建议。
+
+## 2. 背景与动机
+
+真实临床决策很少是单轮问答。一个病例可能同时包含：
+
+- 症状和病程文本；
+- 长期 EHR 事件；
+- X-ray、手机图像或其他医学影像；
+- ECG、ICU vital signs、可穿戴传感器流；
+- 指南、文献证据和本地医疗资源约束。
+
+如果把这些信息硬塞进一个长 prompt，会出现长上下文退化、中间证据被忽略、引用不可追溯、转诊建议与真实资源约束脱节等问题。MedRLM 的核心选择是：不把病例压缩成 prompt，而是把病例作为可递归访问的临床环境。
+
+## 3. 临床环境定义
+
+对患者 $p$，MedRLM 定义外部临床环境：
+
+$$
+\mathcal{E}_p =
+\{X^{\mathrm{text}}_p,
+X^{\mathrm{ehr}}_p,
+X^{\mathrm{img}}_p,
+X^{\mathrm{sens}}_p,
+\mathcal{G},
+\mathcal{R},
+\mathcal{H}\}.
+$$
+
+其中 $X^{\mathrm{text}}_p$ 是症状、病历文本和叙述，$X^{\mathrm{ehr}}_p$ 是纵向 EHR，$X^{\mathrm{img}}_p$ 是医学或手机图像，$X^{\mathrm{sens}}_p$ 是传感器时间序列，$\mathcal{G}$ 是指南知识，$\mathcal{R}$ 是转诊规则，$\mathcal{H}$ 是本地医疗系统约束。
+
+系统输出为：
+
+$$
+Y_p=(\hat{y}_p,r_p,d_p,\mathcal{A}_p,U_p).
+$$
+
+这里 $\hat{y}_p$ 是临床解释，$r_p$ 是风险评分，$d_p$ 是推荐路径，$\mathcal{A}_p$ 是证据审计轨迹，$U_p$ 是不确定性与安全分数。论文强调它是 clinician-support tool，不是自动诊断权威。
+
+## 4. 递归控制器
+
+MedRLM 的递归控制器根据上下文复杂度决定直接回答还是分解子任务：
+
+$$
+\Phi(q,\mathcal{E}_p)=
+\begin{cases}
+M(q,\rho(q,\mathcal{E}_p)), & \kappa(q,\mathcal{E}_p)\le K, \\
+\Omega(\{\Phi(q_j,\mathcal{E}_{p,j})\}_{j=1}^k), & \kappa(q,\mathcal{E}_p)>K.
+\end{cases}
+$$
+
+$M$ 是基础医学 LLM/VLM，$\rho$ 是证据检索函数，$K$ 是安全上下文阈值，$q_j$ 是分解后的子问题，$\Omega$ 是综合算子。
+
+复杂度函数为：
+
+$$
+\kappa(q,\mathcal{E}_p)
+=
+\gamma_1 L(q,\mathcal{E}_p)
++\gamma_2 V(\mathcal{E}_p)
++\gamma_3 D(\mathcal{E}_p)
++\gamma_4 R_{\mathrm{risk}}(p)
++\gamma_5 C_{\mathrm{conflict}}(\mathcal{E}_p).
+$$
+
+它综合考虑上下文长度、模态多样性、证据分散程度、初始风险和证据冲突。直觉是：高风险、多模态、证据分散或互相矛盾的病例不应被一次性回答。
+
+## 5. 多 Agent 分解
+
+复杂问题被分解为：
+
+$$
+\mathcal{Q}_p=
+\{q^{\mathrm{text}},q^{\mathrm{ehr}},q^{\mathrm{img}},
+q^{\mathrm{sens}},q^{\mathrm{guide}},q^{\mathrm{ref}},q^{\mathrm{safety}}\}.
+$$
+
+每个模态由专门 agent 处理：
+
+$$
+z_p^m =
+F_m(X_p^m,q^m,\rho(q^m,\mathcal{E}_p)),
+\quad
+m\in\{\mathrm{text},\mathrm{ehr},\mathrm{img},\mathrm{sens},\mathrm{guide}\}.
+$$
+
+这对应真实医疗流程：先抽取症状，再检查长期病史和检查结果，再匹配指南和红旗征象，最后考虑是否转诊。
+
+## 6. Clinical Evidence Graph Memory
+
+MedRLM 构造证据图记忆：
+
+$$
+\mathcal{M}_p=(\mathcal{V}_p,\mathcal{E}^g_p).
+$$
+
+节点 $v_i$ 表示患者观察、临床实体、图像异常、传感器 biomarker、指南条款或转诊标准；边 $e_{ij}$ 表示时间、语义、因果或指南关系。
+
+每个证据节点是三元组：
+
+$$
+\tau_i=(o_i,s_i,\delta_i),
+$$
+
+其中 $o_i$ 是患者观察，$s_i$ 是支持来源，$\delta_i$ 是标准化定义。证据相关性评分为：
+
+$$
+S(e_i|q,p)
+=
+\lambda_1\mathrm{sim}(h_q,h_{e_i})
++\lambda_2\mathrm{rel}(e_i,p)
++\lambda_3\mathrm{cred}(e_i)
+-\lambda_4\mathrm{age}(e_i)
+-\lambda_5\mathrm{conflict}(e_i).
+$$
+
+然后用 softmax 权重形成检索表示：
+
+$$
+\alpha_i=
+\frac{\exp(S(e_i|q,p))}
+{\sum_{j=1}^{N}\exp(S(e_j|q,p))},
+\quad
+z_p^{\mathrm{rag}}=\sum_{i=1}^{N}\alpha_i h_{e_i}.
+$$
+
+这比普通 RAG 更强，因为它不只是检索段落，而是把患者特异观察、指南定义和转诊条件连成可审计图。
+
+## 7. 传感器触发递归筛查
+
+传感器流定义为：
+
+$$
+X^{\mathrm{sens}}_p=\{x_1,x_2,\ldots,x_T\}.
+$$
+
+窗口编码器提取 biomarker：
+
+$$
+b_t=G_\theta(x_{t-w:t}).
+$$
+
+异常度采用类似 Mahalanobis distance 的患者基线校正距离：
+
+$$
+a_t=(b_t-\mu_p)^T\Sigma_p^{-1}(b_t-\mu_p).
+$$
+
+如果超过阈值：
+
+$$
+q_t^{\mathrm{sens}}=\operatorname{Trigger}(a_t,\mathcal{G},\mathcal{R}),
+\quad \text{if } a_t>\epsilon.
+$$
+
+含义是：传感器异常不是直接给诊断，而是触发更深层病例重查，例如回看症状、EHR、影像、指南和转诊规则。
+
+## 8. 风险估计、不确定性和转诊优化
+
+多模态状态拼接为：
+
+$$
+Z_p=[
+z^{\mathrm{text}}_p\Vert z^{\mathrm{ehr}}_p
+\Vert z^{\mathrm{img}}_p
+\Vert z^{\mathrm{sens}}_p
+\Vert z^{\mathrm{rag}}_p].
+$$
+
+二分类风险：
+
+$$
+r_p=\sigma(W_rZ_p+b_r).
+$$
+
+多分类解释：
+
+$$
+P(y=c|p)=
+\frac{\exp(W_cZ_p+b_c)}
+{\sum_{c'=1}^{C}\exp(W_{c'}Z_p+b_{c'})},
+\quad
+\hat{y}_p=\arg\max_c P(y=c|p).
+$$
+
+不确定性门控为：
+
+$$
+U_p=
+\beta_1(1-\max_cP(y=c|p))
++\beta_2\operatorname{Var}(\{r_p^{(l)}\}_{l=1}^{L})
++\beta_3(1-\bar{c}_p)
++\beta_4\Gamma_p.
+$$
+
+如果 $U_p>\delta$，系统递归 refine 或转给医生复核。
+
+转诊决策空间为：
+
+$$
+\mathcal{D}=\{d_1,d_2,d_3,d_4\},
+$$
+
+对应自我护理、基层随访、专科远程会诊、三级医院转诊。最优决策：
+
+$$
+d_p^*=
+\arg\max_{d\in\mathcal{D}}
+\left[
+B(d,r_p,U_p,\mathcal{F}_p)
+-C(d,\mathcal{H})
+-\eta D(d,r_p)
+\right].
+$$
+
+这把医学收益、系统负担和延误高风险患者的惩罚放到同一个效用函数里。
+
+## 9. 训练目标
+
+总损失为：
+
+$$
+\mathcal{L}
+=
+\mathcal{L}_{\mathrm{cls}}
++\lambda_{\mathrm{ref}}\mathcal{L}_{\mathrm{ref}}
++\lambda_{\mathrm{rag}}\mathcal{L}_{\mathrm{rag}}
++\lambda_{\mathrm{align}}\mathcal{L}_{\mathrm{align}}
++\lambda_{\mathrm{unc}}\mathcal{L}_{\mathrm{unc}}
++\lambda_{\mathrm{safety}}\mathcal{L}_{\mathrm{safety}}.
+$$
+
+其中分类、转诊、证据检索、模态对齐、不确定性校准和安全一致性共同训练。安全损失包括：
+
+$$
+\mathcal{L}_{\mathrm{safety}}
+=
+\mathbb{I}[d_p\notin\mathcal{R}(q,p)]
++\xi\mathbb{I}[\mathcal{A}_p=\emptyset],
+$$
+
+即惩罚违反转诊规则或没有证据链的建议。
+
+## 10. 实验设计与局限
+
+论文给出真实数据评估设计，覆盖 MIMIC-IV、MIMIC-CXR-JPG、eICU-CRD、PTB-XL、PhysioNet/CinC 2012、CheXpert 等。任务包括长 EHR 风险推理、影像-报告 grounding、ECG/ICU 时间序列筛查、转诊代理决策和证据审计。
+
+需要注意：论文没有报告完整 MedRLM pipeline 在这些数据集上的最终性能，而是列出可评估路径和公开 benchmark anchor。因此不能把它解读成已经完成大规模临床验证的系统。
+
+实践价值在于框架设计：医疗时间序列 agent 必须具备证据图、异常触发、递归分解、不确定性门控和人工复核出口。否则长上下文医疗 LLM 容易变成不可审计的问答器。

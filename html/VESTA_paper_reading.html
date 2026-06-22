@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>《VESTA: Visual Exploration with Statistical Tool Agents》中文文献解读</title>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] }, svg: { fontCache: 'global' } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <style>
+    body { margin: 0; padding: 32px 18px; background: #f8fafc; color: #1f2937; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.72; }
+    main { max-width: 980px; margin: 0 auto; background: #fff; padding: 42px 52px; border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 10px 28px rgba(15,23,42,.06); }
+    h1, h2, h3, h4 { color: #111827; line-height: 1.28; }
+    h1 { font-size: 2rem; margin-top: 0; }
+    h2 { margin-top: 2.2rem; padding-bottom: .35rem; border-bottom: 1px solid #e5e7eb; }
+    a { color: #2563eb; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    code { background: #eef2f7; border-radius: 4px; padding: .12rem .3rem; }
+    pre { background: #0f172a; color: #e5e7eb; padding: 16px; border-radius: 8px; overflow-x: auto; }
+    table { border-collapse: collapse; width: 100%; margin: 1rem 0 1.4rem; font-size: .95rem; }
+    th, td { border: 1px solid #d1d5db; padding: 8px 10px; vertical-align: top; }
+    th { background: #f3f4f6; font-weight: 650; }
+    .callout { background: #f1f5f9; border-left: 4px solid #2563eb; padding: 12px 16px; border-radius: 6px; }
+    @media (max-width: 720px) { main { padding: 28px 20px; } table { display: block; overflow-x: auto; } }
+  </style>
+</head>
+<body>
+<main>
+<h1>《VESTA: Visual Exploration with Statistical Tool Agents》中文文献解读</h1>
+<p><strong>论文</strong>：William Rudman 等，*VESTA: Visual Exploration with Statistical Tool Agents*  </p>
+<p><strong>时间</strong>：2026-05-29 arXiv 首发  </p>
+<p><strong>方法名</strong>：VESTA，Visual Exploration with Statistical Tool Agents  </p>
+<p><strong>基准</strong>：DAWN，Dataset for Automated Workflows and Numerical Modeling  </p>
+<p><strong>论文链接</strong>：<a href="https://arxiv.org/abs/2606.00384">arXiv:2606.00384</a> / <a href="https://arxiv.org/pdf/2606.00384">PDF</a> / <a href="https://arxiv.org/e-print/2606.00384">TeX</a>  </p>
+<p><strong>代码</strong>：<a href="https://github.com/wrudman/VESTA">GitHub: wrudman/VESTA</a>  </p>
+<p><strong>本地 TeX 源码目录</strong>：<code>tex/VESTA_Visual_Exploration_with_Statistical_Tool_Agents</code></p>
+<h2>1. 一句话总结</h2>
+<p>VESTA 把“LLM/VLM 自动拟合统计模型”从单纯的反复自我批评，推进到可执行的视觉统计探索：agent 会选择或动态生成残差图、频谱图、自相关、Ljung-Box 检验、分布拟合诊断等工具，用可视化证据改进 PyMC 概率模型。</p>
+<h2>2. 背景与动机</h2>
+<p>论文关注的不是常规时间序列预测，而是更贴近科学建模的问题：给定观测数据，自动恢复一个合理的数据生成模型。已有 Box-LM、PyVision 一类系统可以让 LLM 生成 PyMC 模型或视觉分析代码，但困难样本上会出现两个瓶颈：</p>
+<ul>
+<li>只靠语言 critique 容易停留在“模型看起来不太对”，缺少可验证诊断。</li>
+<li>一次性生成的工具不会保留，无法在同一任务中形成逐步积累的统计探索流程。</li>
+</ul>
+<p>VESTA 的核心判断是：统计建模不是一次生成代码，而是一个带证据的循环：</p>
+<p>$$</p>
+<p>\text{提出模型} \rightarrow \text{诊断模型} \rightarrow \text{发现错配} \rightarrow \text{修正模型}.</p>
+<p>$$</p>
+<h2>3. 问题定义</h2>
+<p>论文设输入数据集为 $D$，真实数据生成过程为 $M(\theta)$，候选模型为 $\tilde{M}(\tilde{\theta})$。模型拟合质量由指标</p>
+<p>$$</p>
+<p>R(D,\tilde{M}(\tilde{\theta}))</p>
+<p>$$</p>
+<p>衡量。$R$ 可以是分布拟合中的 Jensen-Shannon divergence，也可以是时间序列建模中的 ELPD-LOO。VESTA 的新增对象是视觉诊断工具：</p>
+<p>$$</p>
+<p>\varepsilon(D,M,\theta).</p>
+<p>$$</p>
+<p>这里 $\varepsilon$ 是一个可执行 Python 函数，输入数据、当前模型和参数，输出图像、统计量或诊断摘要。关键点是这些工具进入注册表 $\mathcal{E}$，在同一次建模 run 中可复用。</p>
+<h2>4. Agent 框架</h2>
+<table><tbody>
+<tr><th>Agent 要素</th><th>VESTA 中的对应设计</th></tr>
+<tr><td>State / workspace</td><td>数据 $D$、当前 PyMC 模型、参数、历史摘要 $s_i$、工具注册表 $\mathcal{E}$</td></tr>
+<tr><td>Policy / model</td><td>LLM/VLM 组合，包含模型生成、工具管理、视觉 critic、summarizer</td></tr>
+<tr><td>Action space</td><td>选旧工具、生成新工具、执行工具、提出新 PyMC 模型、终止</td></tr>
+<tr><td>Tool space</td><td>分布诊断、残差分析、频域分析、自相关、统计检验、模型拟合可视化</td></tr>
+<tr><td>Trajectory</td><td>每轮产生 $(M_i,\theta_i,T_i,s_i)$</td></tr>
+<tr><td>Memory</td><td>当前 run 内的工具注册表和压缩历史摘要</td></tr>
+<tr><td>Update</td><td>用 $R$ 和工具输出选择下一轮最优候选模型</td></tr>
+</tbody></table>
+<p>算法可概括为：</p>
+<p>$$</p>
+<p>\varepsilon_i^*=\operatorname{ToolManager}(s_{i-1},D,\mathcal{E})</p>
+<p>$$</p>
+<p>$$</p>
+<p>T_i=\varepsilon_i^*(D,M_{i-1},\theta_{i-1})</p>
+<p>$$</p>
+<p>$$</p>
+<p>(M_i,\theta_i)=\operatorname{Critique}(T_i,s_{0:i-1},D)</p>
+<p>$$</p>
+<p>$$</p>
+<p>(M_{\mathrm{best}},\theta_{\mathrm{best}})</p>
+<p>=</p>
+<p>\arg\min_{(M,\theta)}</p>
+<p>R(D,M(\theta)).</p>
+<p>$$</p>
+<p>直觉上，ToolManager 决定“现在应该看什么证据”，工具输出 $T_i$ 把模型错配变成可见证据，Critique 再把证据翻译成新的 PyMC 结构。</p>
+<h2>5. 关键指标：ELPD-LOO</h2>
+<p>时间序列任务中，论文使用 Expected Log Predictive Density under Leave-One-Out：</p>
+<p>$$</p>
+<p>\mathrm{ELPD\text{-}LOO}</p>
+<p>=</p>
+<p>\sum_{i=1}^{n}</p>
+<p>\int p_t(\tilde{y}_i)</p>
+<p>\log p(\tilde{y}_i\mid y)</p>
+<p>d\tilde{y}_i .</p>
+<p>$$</p>
+<p>其中 $p_t(\tilde{y}_i)$ 表示真实数据生成分布的近似，$p(\tilde{y}_i\mid y)$ 是当前模型的后验预测分布。这个指标不是衡量点预测误差，而是衡量模型给留出观测分配的预测密度。值越高，说明模型作为概率生成模型越可信。</p>
+<h2>6. DAWN Benchmark</h2>
+<p>DAWN 包含两类任务：</p>
+<ul>
+<li>分布拟合：要求 agent 从样本中恢复分布结构，指标使用 JS divergence 等。</li>
+<li>时间序列建模：要求 agent 写出合适的 PyMC/GP 类模型，指标使用 ELPD-LOO、$R^2$、CRPS。</li>
+</ul>
+<p>数据难度分为 Easy、Hard、Astro。Astro 包含真实科学问题，例如初始质量函数和引力波 chirp 信号。</p>
+<h2>7. 实验结果</h2>
+<p>论文比较 VESTA 的三种配置：No-Toolkit、Dynamic-Toolkit、Expert-Toolkit，并与 PyVision、Box-LM 对比。</p>
+<p>时间序列平均结果中，Claude Sonnet 4.6 的表现如下：</p>
+<table><tbody>
+<tr><th>方法</th><th>Easy ELPD</th><th>Easy $R^2$</th><th>Astro ELPD</th><th>Astro $R^2$</th><th>Hard ELPD</th><th>Hard $R^2$</th></tr>
+<tr><td>VESTA No-Toolkit</td><td>30.2</td><td>0.870</td><td>10.1</td><td>0.675</td><td>-210.7</td><td>0.819</td></tr>
+<tr><td>VESTA Dynamic</td><td>55.9</td><td>0.965</td><td>23.3</td><td>0.842</td><td>-85.1</td><td>0.920</td></tr>
+<tr><td>VESTA Expert</td><td>82.7</td><td>0.981</td><td>42.3</td><td>0.909</td><td>-71.8</td><td>0.938</td></tr>
+<tr><td>PyVision</td><td>-62.5</td><td>约 0</td><td>-153.1</td><td>约 0</td><td>-335.9</td><td>约 0</td></tr>
+</tbody></table>
+<p>动态工具在 Hard 和 Astro 上提升尤其明显，说明复杂时序结构需要残差、频率、自相关、统计检验等多角度诊断。Expert 工具整体最强，但 Dynamic 工具强于已有自动工具系统，证明模型能生成有用的统计诊断工具。</p>
+<h2>8. 工具分析</h2>
+<p>VESTA 的动态工具与 PyVision 的差异不只是“也会画图”。论文显示，VESTA 更偏向 residual analysis 和 statistical tests。附录中提到，在时间序列工具类别覆盖上，VESTA 对残差分析的覆盖远高于 PyVision，并且会使用统计检验，而 PyVision 基本没有这一类工具。</p>
+<p>这点很关键：对于 GP kernel 或周期模型，原始曲线拟合看起来不错不代表残差独立。残差自相关、频谱峰和 Ljung-Box $p$ 值往往更能揭示模型是否漏掉了周期、状态切换或长程依赖。</p>
+<h2>9. 局限与启发</h2>
+<p>VESTA 仍受限于 VLM 对复杂多面板图的理解能力。动态工具常常生成丰富图像，但图越复杂，critic 越可能漏读关键证据。另一方面，跨任务长期积累工具的实验效果有限，说明当前工具记忆更适合同一问题内复用，而不是自动形成通用统计工具库。</p>
+<p>实践启发是：时间序列 agent 不应只允许“调用预测模型”，还应内置可审计诊断工具。一个可靠的 agent 需要能回答：</p>
+<p>$$</p>
+<p>\text{为什么当前模型错了？错在趋势、周期、残差、尾部、状态切换，还是噪声假设？}</p>
+<p>$$</p>
+<p>VESTA 的价值就在于把这个问题变成可执行的诊断循环。</p>
+</main>
+</body>
+</html>

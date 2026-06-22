@@ -4,11 +4,26 @@
 
 ## 汇总文档
 
-- [Reasoning 数据集汇总](reasoning_datasets.md) / [HTML](reasoning_datasets.html)
 - [七篇时间序列与 Agent 论文中文综合解读](md/Seven_Time_Series_Agent_Papers_Reading.md) / [HTML](html/Seven_Time_Series_Agent_Papers_Reading.html)
+
+## 七篇论文独立解读
+
+- [VESTA: Visual Exploration with Statistical Tool Agents](md/VESTA_paper_reading.md) / [HTML](html/VESTA_paper_reading.html)
+- [MedRLM: Recursive Multimodal Health Intelligence](md/MedRLM_paper_reading.md) / [HTML](html/MedRLM_paper_reading.html)
+- [TelcoAgent: A Scalable 5G Multi-KPM Forecasting With 3GPP-Grounded Explainability](md/TelcoAgent_paper_reading.md) / [HTML](html/TelcoAgent_paper_reading.html)
+- [FinSTaR: Towards Financial Reasoning with Time Series Reasoning Models](md/FinSTaR_paper_reading.md) / [HTML](html/FinSTaR_paper_reading.html)
+- [Evaluating Interactive 2D Visualization as a Sample Selection Strategy for Biomedical Time-Series Data Annotation](md/Interactive2DVisualization_paper_reading.md) / [HTML](html/Interactive2DVisualization_paper_reading.html)
+- [Can LLM Coding Agents Reason About Time Series?](md/CodingAgentsTimeSeries_paper_reading.md) / [HTML](html/CodingAgentsTimeSeries_paper_reading.html)
+- [TS-Memory: Plug-and-Play Memory for Time Series Foundation Models](md/TSMemory_paper_reading.md) / [HTML](html/TSMemory_paper_reading.html)
 
 | 论文 | 日期（arXiv 首发） | 方法/主题 | 论文链接 | 代码 / 数据 | Markdown 解读 | HTML 解读 |
 |---|---|---|---|---|---|---|
+| *VESTA: Visual Exploration with Statistical Tool Agents* | 2026-05-29 | VESTA / visual statistical tool agents / DAWN | [arXiv](https://arxiv.org/abs/2606.00384) / [PDF](https://arxiv.org/pdf/2606.00384) | [GitHub: wrudman/VESTA](https://github.com/wrudman/VESTA) | [VESTA_paper_reading.md](md/VESTA_paper_reading.md) | [VESTA_paper_reading.html](html/VESTA_paper_reading.html) |
+| *MedRLM: Recursive Multimodal Health Intelligence for Long-Context Clinical Reasoning, Sensor-Guided Screening, Evidence-Grounded Decision Support, and Community-to-Tertiary Referral Optimization* | 2026-06-18 | MedRLM / recursive multimodal clinical reasoning | [arXiv](https://arxiv.org/abs/2606.20164) / [PDF](https://arxiv.org/pdf/2606.20164) | 未见官方代码仓库；论文给出真实数据评估设计 | [MedRLM_paper_reading.md](md/MedRLM_paper_reading.md) | [MedRLM_paper_reading.html](html/MedRLM_paper_reading.html) |
+| *TelcoAgent: A Scalable 5G Multi-KPM Forecasting With 3GPP-Grounded Explainability* | 未核验 | TelcoAgent / 5G KPM forecasting / source not verified | 未找到可核验官方论文页或 PDF | 未找到官方代码、数据或 TeX 源码 | [TelcoAgent_paper_reading.md](md/TelcoAgent_paper_reading.md) | [TelcoAgent_paper_reading.html](html/TelcoAgent_paper_reading.html) |
+| *Evaluating Interactive 2D Visualization as a Sample Selection Strategy for Biomedical Time-Series Data Annotation* | 2026-03-27 | 2DV / TSExplorer / biomedical annotation | [arXiv](https://arxiv.org/abs/2603.26592) / [PDF](https://arxiv.org/pdf/2603.26592) | [GitHub: SPEECHCOG/TSExplorer](https://github.com/SPEECHCOG/TSExplorer) | [Interactive2DVisualization_paper_reading.md](md/Interactive2DVisualization_paper_reading.md) | [Interactive2DVisualization_paper_reading.html](html/Interactive2DVisualization_paper_reading.html) |
+| *Can LLM Coding Agents Reason About Time Series?* | 2026-06-15 | LLM coding agents / time-series understanding | [arXiv](https://arxiv.org/abs/2606.16545) / [PDF](https://arxiv.org/pdf/2606.16545) | [GitHub: DekuD2/can-llm-coding-agents-reason-about-time-series](https://github.com/DekuD2/can-llm-coding-agents-reason-about-time-series) | [CodingAgentsTimeSeries_paper_reading.md](md/CodingAgentsTimeSeries_paper_reading.md) | [CodingAgentsTimeSeries_paper_reading.html](html/CodingAgentsTimeSeries_paper_reading.html) |
+| *TS-Memory: Plug-and-Play Memory for Time Series Foundation Models* | 2026-02-12 | TS-Memory / parametric memory distillation | [arXiv](https://arxiv.org/abs/2602.11550) / [PDF](https://arxiv.org/pdf/2602.11550) | [GitHub: sisuolv/TS-Memory](https://github.com/sisuolv/TS-Memory) | [TSMemory_paper_reading.md](md/TSMemory_paper_reading.md) | [TSMemory_paper_reading.html](html/TSMemory_paper_reading.html) |
 | *TimeRouter: Efficient and Adaptive Routing of Time-Series Foundation Models* | 2026-06-10 | TimeRouter / TSFM routing | [arXiv](https://arxiv.org/abs/2606.11625) / [PDF](https://arxiv.org/pdf/2606.11625) | [GitHub: UConn-DSIS/TimeRouter](https://github.com/UConn-DSIS/TimeRouter) | [TimeRouter_paper_reading.md](md/TimeRouter_paper_reading.md) | [TimeRouter_paper_reading.html](html/TimeRouter_paper_reading.html) |
 | *GenAutoML: An Agentic Framework for Dynamic Architecture Generation and Optimization in Time-Series Analysis* | 2026-06-04 | GenAutoML / agentic neural architecture generation | [arXiv](https://arxiv.org/abs/2606.05860) / [PDF](https://arxiv.org/pdf/2606.05860) | 未见官方代码仓库或 Hugging Face 链接 | [GenAutoML_paper_reading.md](md/GenAutoML_paper_reading.md) | [GenAutoML_paper_reading.html](html/GenAutoML_paper_reading.html) |
 | *KairosAgent: Agentic Time Series Forecasting with Fused Semantic Reasoning* | 2026-05-28 | KairosAgent / T-STAR / fused semantic forecasting | [arXiv](https://arxiv.org/abs/2605.30002) / [PDF](https://arxiv.org/pdf/2605.30002) | 未见官方代码仓库或 Hugging Face 链接 | [KairosAgent_paper_reading.md](md/KairosAgent_paper_reading.md) | [KairosAgent_paper_reading.html](html/KairosAgent_paper_reading.html) |
