@@ -1,9 +1,0 @@
-E1. This time series records the electricity usage (in Watt, W) of Riverside Cottage 12. The readings were recorded from 2025-10-06 00:00:00 to 2025-10-19 19:00:00, and the recording frequency is hourly (H).
-
-E2. the owner started rennovation from 2025-10-12 18:00:00 to 2025-10-13 00:00:00 and did not stay at the unit
-
-E3. leading to low power usage of the first 169 readings
-
-E4. After the renovation finished on 2025-10-13 01:00:00, this household is fully occupied
-
-E5. leading to a permanent increase in electricity usage

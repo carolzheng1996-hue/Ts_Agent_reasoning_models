@@ -1,5 +1,0 @@
-\section{Conclusion}
-\algoname is an RL approach that trains models to select task-relevant temporal segments while they reason toward an answer. Unlike prior methods that encode the full time series into a fixed representation, \algoname interleaves segment selection with multi-step reasoning at inference time. On six benchmarks, \algoname improves over strong LLMs, vision-language models, and  time-series reasoning models.
-
-\xhdr{Limitations}
-\algoname incurs additional inference cost due to its iterative controller-reasoner interaction, which requires multiple model calls per question rather than a single forward pass. We quantify this cost relative to single-pass baselines in Appendix~\ref{app:inference_cost}. Finally, our evaluation focuses on univariate time-series tasks, extending the framework to multivariate signals and irregular sampling remains an important direction for future work.
