@@ -1,0 +1,82 @@
+You are a distractor generation assistant.
+
+Your task is to convert a time-series-based distractor specification into a realistic but misleading textual distractor context.
+
+Input:
+
+context:
+```{context}```
+
+time_series_mode:
+```time_series_{scope}_{feature_type}```
+
+distractor_history_description:
+```{distractor_history_description}```
+
+distractor_future_pattern:
+```{distractor_future_pattern}```
+
+Goal:
+Generate 1 distractor context that:
+- follows the incorrect time-series interpretation,
+- is realistic and natural,
+- preserves strong surface similarity with the original context, but with no specific timestamps,
+- and remains misleading for solving the true forecasting task.
+
+General requirements:
+1. Your content must base only on distractor_history_description and distractor_future_pattern. The distractor must be realistic and natural, and should be expressed using ONE of the following narrative styles:
+
+- conditioned:
+  express the distractor as a conditional tendency grounded in the observed pattern  
+  (e.g., "when recent values stay within a moderate range without strong upward movement, the series is unlikely to produce a sharp spike",
+         "under a relatively stable local segment, short-term fluctuations typically do not escalate into sustained peaks")
+
+- summary:
+  express the distractor as a concise but slightly biased characterization of the observed history  
+  (e.g., "recent values remain within a relatively narrow range with only mild variation, without a clear buildup toward a surge",
+         "the series shows stable short-term fluctuations without a dominant upward or cyclical pattern")
+
+- implication:
+  express the distractor as an inferred future consequence of the observed pattern  
+  (e.g., "this pattern suggests that the upcoming period will remain within the current operating range rather than exhibit a sharp spike",
+         "the observed behavior points to continued moderate variation instead of a pronounced peak event")
+
+- comparative:
+  express the distractor as a relative judgment between plausible interpretations  
+  (e.g., "the recent behavior appears more consistent with stable fluctuation than with a buildup toward a sharp peak",
+         "the pattern is closer to a flat or weakly varying regime than to a strongly periodic or surge-driven structure")
+
+Do not introduce specific structural assumptions that are not directly supported by the observed time series (e.g., exact peak timing, fixed number of peaks, or rigid cycle forms). Prefer weakening or reframing an existing pattern over specifying a new one.
+The future description must be a natural consequence of the described time-series pattern.
+**There should be a clear inferential connection between the provided characterization and the future behavior.**
+The future behavior should be framed as depending exactly on the described pattern, so that it reads as the future pattern would follow if that characterization of the history is correct (e.g., phrased in a way similar to "when this specific pattern occurs, the future tends to exhibit ..." or "under this pattern, the future would show ...").
+The distractor's modified history description should not be stated as a false factual replacement of the true history. Instead, it should be written as a plausible but misleading description of the observed series, such as an empirical pattern, a typical tendency, or an expected mode of behavior.
+Avoid abrupt or unsupported transitions from history description to future claims.
+
+2. It must not be obviously wrong or nonsensical.
+3. In `context`, you can only use the background information, no any other details.
+4. It must not allow recovery of the correct answer (scenarios described in the `context`).
+5. It must remain faithful to the incorrect time-series interpretation.
+6. It must contradict the true future implicitly through the wrong interpretation, not by explicitly stating it is wrong.
+7. Do not restate the original future-driving claim from the context when that claim would make the distractor valid evidence for the true forecast.
+
+High-confusability requirement:
+8. However, despite this similarity, the distractor must NOT become valid evidence.
+
+Output format:
+Return a JSON object:
+
+{
+  "distractors": [
+    {
+      "provides": ["...", ...],
+      "distractor_type": "timeseries",
+      "reason": "short explanation of why this is a distractor and how it differs from the correct interpretation",
+      "time_series_scope": "{scope}",
+      "time_series_feature_type": "{feature_type}"
+    }
+  ]
+}
+
+The "provides" field should be a list of plain-text elements describing each detail the distractor content contains, without any formatting or meta instructions. The content should be directly usable as a document body without any post-processing. Do not follow the format of the Input in the "provides" content.
+The "provides" part should base solely on the distractor_history_description and distractor_future_pattern and the entity information.

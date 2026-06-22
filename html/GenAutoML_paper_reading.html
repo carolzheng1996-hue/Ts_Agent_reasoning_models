@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GenAutoML 中文文献解读</title>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <style>
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.72; color: #1f2937; background: #f8fafc; }
+    main { max-width: 980px; margin: 0 auto; padding: 42px 24px 80px; background: #fff; }
+    h1 { font-size: 2rem; line-height: 1.25; margin: 0 0 12px; color: #111827; }
+    h2 { font-size: 1.45rem; margin-top: 34px; border-bottom: 1px solid #e5e7eb; padding-bottom: 6px; color: #111827; }
+    h3 { font-size: 1.15rem; margin-top: 24px; color: #111827; }
+    p { margin: 12px 0; }
+    ul, ol { padding-left: 1.5rem; }
+    code { background: #eef2f7; padding: 0.12rem 0.28rem; border-radius: 4px; }
+    pre { background: #0f172a; color: #e5e7eb; padding: 14px 16px; overflow-x: auto; border-radius: 6px; }
+    pre code { background: transparent; padding: 0; color: inherit; }
+    table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 0.94rem; }
+    th, td { border: 1px solid #d1d5db; padding: 8px 10px; text-align: left; vertical-align: top; }
+    th { background: #f3f4f6; }
+    .num { text-align: right; }
+    .math { overflow-x: auto; margin: 14px 0; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>《GenAutoML: An Agentic Framework for Dynamic Architecture Generation and Optimization in Time-Series Analysis》中文文献解读</h1>
+  <p>论文：<em>GenAutoML: An Agentic Framework for Dynamic Architecture Generation and Optimization in Time-Series Analysis</em>，arXiv:2606.05860 方法名：<strong>GenAutoML</strong> 本地 TeX 源码目录：<a href="GenAutoML_An_Agentic_Framework_for_Dynamic_Architecture_Generation_and_Optimization_in_Time_Series_Analysis/">GenAutoML_An_Agentic_Framework_for_Dynamic_Architecture_Generation_and_Optimization_in_Time_Series_Analysis</a></p>
+  <h2>1. 一句话总结</h2>
+  <p>GenAutoML 把时间序列模型设计从传统 AutoML/NAS 的“固定搜索空间里选结构”，改成 LLM agent 直接生成 PyTorch 架构代码，再用 sandbox forward pass 自动修错、JIT loader 注入 Optuna 搜索、Dyn-RevIN 做数值稳定保护。它的目标不是训练一个更大的 TSFM，而是自动合成轻量、可部署、低延迟的时间序列预测/异常检测模型。</p>
+  <p>可以写成：</p>
+  <div class="math">$$
+\text{GenAutoML}
+=
+\text{LLM neural architect}
++ \text{sandboxed reflection}
++ \text{JIT runtime injection}
++ \text{Dyn-RevIN guardrail}
++ \text{Optuna dynamic search}.
+$$</div>
+  <p>这篇论文的贡献偏工程系统：它证明 LLM 不只能调超参，还可以在受约束的运行时里生成、调试、注册和优化新的神经网络拓扑。</p>
+  <h2>2. 背景：传统 AutoML/NAS 的限制</h2>
+  <p>传统 AutoML 和 NAS 通常先定义一个静态搜索空间，例如卷积层数、hidden size、kernel size、attention head 数量，然后用搜索算法在空间里试组合。这种方法的问题是：</p>
+  <ol>
+    <li>搜索空间由人定义，新的 inductive bias 很难凭空出现。</li>
+    <li>时间序列数据强烈非平稳，不同数据集需要不同结构偏置。</li>
+    <li>Foundation models 虽然强，但参数量大、延迟高，不适合 edge/industrial IoT。</li>
+    <li>LLM 零样本生成代码常会出现 shape mismatch、forward signature 不匹配、维度投影错误。</li>
+  </ol>
+  <p>GenAutoML 的思路是把 LLM 放到一个受控工程环境中，让它担任 <strong>Neural Architect</strong>，但不信任它生成的代码。所有生成模型必须通过几层约束和验证，才能进入训练和超参优化。</p>
+  <h2>3. 总体流程</h2>
+  <p>GenAutoML 的工作流可以拆成六步：</p>
+  <ol>
+    <li>用户上传 multivariate time series 数据。</li>
+    <li>LangChain/Pandas DataFrame agent 做 EDA、统计分析和可视化。</li>
+    <li>用户提出架构需求，例如 “Design a Lightweight Inception model”。</li>
+    <li>LLM 生成 <code>torch.nn.Module</code> 代码。</li>
+    <li>Sandboxed Reflection Loop 用 dummy tensor 执行 forward pass，捕获 traceback 并让 LLM 修复。</li>
+    <li>通过验证的模型写入 dynamic registry，再由 JIT loader 加入 Optuna 搜索空间，与 DLinear、TCN、TimesNet 等 baseline 在同一训练管线中比较。</li>
+  </ol>
+  <p>它和一般 LLM code generation 的关键差异是：生成代码不是最终产物，<strong>可执行验证和训练反馈</strong>才决定模型是否被接纳。</p>
+  <h2>4. Structural Geometric Contract</h2>
+  <p>为了让 LLM 生成的任意结构能接入统一训练管线，论文定义了几何契约。</p>
+  <p>输入必须是：</p>
+  <div class="math">$$
+X\in\mathbb{R}^{B\times L\times D},
+$$</div>
+  <p>其中 $B$ 是 batch size，$L$ 是 lookback length，$D$ 是特征维度。</p>
+  <p>输出必须是：</p>
+  <div class="math">$$
+Y\in\mathbb{R}^{B\times H\times D},
+$$</div>
+  <p>其中 $H$ 是 forecasting horizon。</p>
+  <p>因此任意生成模型都要满足：</p>
+  <div class="math">$$
+\mathcal{M}_{gen}:
+\mathbb{R}^{B\times L\times D}
+\rightarrow
+\mathbb{R}^{B\times H\times D}.
+$$</div>
+  <p>这条 contract 很重要。没有它，LLM 可以生成看似合理但无法进入统一 forecasting/anomaly detection pipeline 的代码，例如输出 <code>[B, H]</code>、<code>[B, D, H]</code> 或 hidden representation 而不是预测张量。</p>
+  <h2>5. Sandboxed Reflection Loop</h2>
+  <p>LLM 生成模型后，GenAutoML 不直接训练，而是在 sandbox 中执行：</p>
+  <div class="math">$$
+X_{\text{dummy}}\in\mathbb{R}^{B\times L\times D}.
+$$</div>
+  <p>系统实例化 $\mathcal{M}_{gen}$，运行：</p>
+  <div class="math">$$
+\tilde{Y}=\mathcal{M}_{gen}(X_{\text{dummy}}),
+$$</div>
+  <p>并断言：</p>
+  <div class="math">$$
+\operatorname{shape}(\tilde{Y})=(B,H,D).
+$$</div>
+  <p>如果出现 Python traceback、channel mismatch、reshape 错误、linear input features 不匹配、forward 参数不一致，系统把错误信息回填给 LLM，要求它修复代码。这个循环持续到模型通过验证或达到最大迭代次数。</p>
+  <p>直观伪代码：</p>
+  <pre><code>for r in 1..R:
+    code = LLM(prompt, previous_error)
+    model = instantiate(code)
+    try:
+        y = model(x_dummy)
+        assert shape(y) == (B, H, D)
+        register(code)
+        break
+    except Exception as e:
+        previous_error = traceback(e)</code></pre>
+  <p>论文的 failure analysis 提到，WaveInterferenceNet 曾出现 Hadamard product broadcasting 错误：latent temporal tensor 为 <code>[B, 96, D]</code>，phase matrix 被错误转置成 <code>[D, 96]</code>；系统通过 traceback 引导 LLM 加入 permutation/projection 修复。ResNetBlock 也需要多轮修复 1D convolution channel matching 和 residual skip connection。</p>
+  <h2>6. JIT Dynamic Loader 与 runtime injection</h2>
+  <p>通过 sandbox 的代码会被写入 dynamic registry。训练管线随后通过 JIT loader：</p>
+  <ol>
+    <li>用 AST 解析新代码；</li>
+    <li>用 <code>inspect</code> 查找继承自 <code>torch.nn.Module</code> 的类；</li>
+    <li>用 <code>importlib.reload</code> 热更新模块缓存；</li>
+    <li>把新架构注册为 Optuna 搜索空间里的候选模型。</li>
+  </ol>
+  <p>这样可以做到 hot-swapping：系统不需要重启训练服务，就能把 LLM 新生成的模型放进同一个 optimization loop。</p>
+  <p>这一步是 GenAutoML 区别于“让 LLM 输出一段模型代码”的核心工程点。LLM 生成的架构不是孤立 demo，而是被动态加入一个活跃 AutoML runtime。</p>
+  <h2>7. Signature-Aware Invocation 与 Shape-Agnostic Projection</h2>
+  <p>LLM 生成的 <code>forward</code> 函数签名可能不标准，例如需要额外参数或返回 latent feature。GenAutoML 用 runtime introspection 匹配输入张量到 forward 的位置参数，并在初次调用失败时采用 fallback。</p>
+  <p>另一个问题是输出 hidden channel 不等于目标维度 $D$。因此论文加入 shape-agnostic projection：</p>
+  <div class="math">$$
+\hat{Y}
+=
+W_{\mathrm{proj}}\cdot \mathcal{M}_{gen}(\hat{X})
++ b_{\mathrm{proj}}.
+$$</div>
+  <p>这里 $\mathcal{M}_{gen}(\hat{X})$ 可以被看作 LLM 生成结构产生的 latent representation，$W_{\mathrm{proj}}$ 和 $b_{\mathrm{proj}}$ 把它投影到目标预测空间。这样系统不必因为最后一层维度不完美就丢弃一个可能有用的 feature extractor。</p>
+  <h2>8. Dyn-RevIN：给不可信架构加数值安全壳</h2>
+  <p>LLM 生成的模型常缺少合适归一化，面对 ETTh1/ETTm1 这类非平稳工业序列容易梯度爆炸。GenAutoML 用 Dynamic Reversible Instance Normalization 包裹任何生成架构。</p>
+  <p>给定输入：</p>
+  <div class="math">$$
+X\in\mathbb{R}^{B\times L\times D},
+$$</div>
+  <p>对每个 batch instance $i$ 和 feature $j$，沿时间维计算：</p>
+  <div class="math">$$
+\mu_{i,j}
+=
+\frac{1}{L}\sum_{k=1}^{L}X_{i,k,j},
+\qquad
+\sigma_{i,j}^2
+=
+\frac{1}{L}\sum_{k=1}^{L}
+(X_{i,k,j}-\mu_{i,j})^2.
+$$</div>
+  <p>先归一化：</p>
+  <div class="math">$$
+\hat{X}_{i,k,j}
+=
+\frac{X_{i,k,j}-\mu_{i,j}}
+{\sqrt{\sigma_{i,j}^2+\epsilon}}.
+$$</div>
+  <p>生成模型只在归一化流形上工作：</p>
+  <div class="math">$$
+\hat{Y}
+=
+\mathcal{M}_{gen}(\hat{X}).
+$$</div>
+  <p>最后反归一化：</p>
+  <div class="math">$$
+Y_{i,k,j}
+=
+\hat{Y}_{i,k,j}
+\cdot
+\sqrt{\sigma_{i,j}^2+\epsilon}
++\mu_{i,j}.
+$$</div>
+  <p>这个 wrapper 的意义不是提出新的 normalization，而是给 LLM 生成的不可信结构套一个统计稳定边界：结构负责表达，Dyn-RevIN 负责把输入/输出约束在合理尺度。</p>
+  <h2>9. Hybrid Search Strategy</h2>
+  <p>GenAutoML 的搜索空间是静态模型与动态生成模型的并集：</p>
+  <div class="math">$$
+S=S_{\mathrm{static}}\cup S_{\mathrm{dynamic}}.
+$$</div>
+  <p>其中 $S_{\mathrm{static}}$ 包含 DLinear、TCN、TimesNet、CrossFormer、iTransformer 等 baseline，$S_{\mathrm{dynamic}}$ 包含 LLM 生成并通过 sandbox 的模型，例如 ResNetBlockModel、LightweightInception、BiGRU、WaveInterferenceNet。</p>
+  <p>Optuna RandomSampler 从这个统一 categorical distribution 中采样。论文强调不把 micro-search 和 macro-search 分开，而是把“选择哪种模型拓扑”本身作为一个 categorical hyperparameter：</p>
+  <div class="math">$$
+a \sim \operatorname{Categorical}(S_{\mathrm{static}}\cup S_{\mathrm{dynamic}}).
+$$</div>
+  <p>不稳定或低性能的 hallucinated architectures 会在验证损失上被淘汰；高性能生成结构则会进入最终模型选择。</p>
+  <h2>10. 实验设置</h2>
+  <p>数据集：</p>
+  <table>
+    <tr><th class="">数据集</th><th class="">特点</th></tr>
+    <tr><td class="">ETTh1</td><td class="">小时级电力变压器温度，非平稳，工业场景</td></tr>
+    <tr><td class="">ETTm1</td><td class="">15 分钟级电力数据，高频相位偏移</td></tr>
+    <tr><td class="">Weather</td><td class="">10 分钟级天气，多变量、周期性更稳定</td></tr>
+  </table>
+  <p>任务设置：</p>
+  <table>
+    <tr><th class="">任务</th><th class=" num">Lookback</th><th class=" num">Horizon</th><th class="">目标</th></tr>
+    <tr><td class="">Forecasting</td><td class=" num">96</td><td class=" num">96</td><td class="">预测未来多变量序列</td></tr>
+    <tr><td class="">Anomaly Detection</td><td class=" num">60</td><td class=" num">10</td><td class="">自编码重构，比较 clean/anomalous MSE</td></tr>
+  </table>
+  <p>训练设置：</p>
+  <table>
+    <tr><th class="">项目</th><th class="">设置</th></tr>
+    <tr><td class="">Optimizer</td><td class="">Adam</td></tr>
+    <tr><td class="">Weight decay</td><td class="">$10^{-6}$</td></tr>
+    <tr><td class="">Initial LR</td><td class="">$10^{-3}$</td></tr>
+    <tr><td class="">Scheduler</td><td class="">ReduceLROnPlateau, factor 0.5, patience 3</td></tr>
+    <tr><td class="">Batch size</td><td class="">64</td></tr>
+    <tr><td class="">Early stopping</td><td class="">validation loss 5 epochs 无改善</td></tr>
+    <tr><td class="">Forecasting objective</td><td class="">MAE</td></tr>
+    <tr><td class="">Autoencoder objective</td><td class="">MSE</td></tr>
+  </table>
+  <h2>11. Forecasting 结果</h2>
+  <p>统一 long-sequence 预测设置下：</p>
+  <table>
+    <tr><th class="">Model</th><th class=" num">ETTh1 MAE</th><th class=" num">ETTm1 MAE</th><th class=" num">Weather MAE</th></tr>
+    <tr><td class="">Chronos-T5-Mini</td><td class=" num"><strong>0.166</strong></td><td class=" num">-</td><td class=" num">-</td></tr>
+    <tr><td class="">DLinear</td><td class=" num">0.989</td><td class=" num"><strong>0.515</strong></td><td class=" num"><strong>1.783</strong></td></tr>
+    <tr><td class="">CrossFormer</td><td class=" num">1.056</td><td class=" num">0.521</td><td class=" num">5.210</td></tr>
+    <tr><td class="">TimesNet</td><td class=" num">1.354</td><td class=" num">0.862</td><td class=" num">4.886</td></tr>
+    <tr><td class="">LSTM</td><td class=" num">3.075</td><td class=" num">1.054</td><td class=" num">7.084</td></tr>
+    <tr><td class="">Synthesized ResNet</td><td class=" num">1.156</td><td class=" num">0.532</td><td class=" num">2.696</td></tr>
+    <tr><td class="">Synthesized Inception</td><td class=" num">1.280</td><td class=" num">0.546</td><td class=" num">2.811</td></tr>
+    <tr><td class="">Synthesized BiGRU</td><td class=" num">1.307</td><td class=" num">0.585</td><td class=" num">3.556</td></tr>
+  </table>
+  <p>结果需要谨慎理解：GenAutoML 生成模型没有全面超过 DLinear 或 Chronos。论文真正想证明的是，LLM 生成结构能在统一管线中稳定运行，并在部分数据/任务上接近强 baseline，同时保持轻量和低延迟。</p>
+  <p>例如 ETTm1 上 synthesized ResNet 的 MAE 为 0.532，接近 DLinear 的 0.515，并优于 TimesNet 的 0.862。Weather 上 synthesized ResNet/Inception 明显优于 CrossFormer 和 TimesNet，但仍不如 DLinear。</p>
+  <h2>12. Anomaly Detection 结果</h2>
+  <p>异常检测用 discrimination gap：</p>
+  <div class="math">$$
+\mathrm{Gap}
+=
+\frac{\mathrm{MSE}_{\mathrm{anomalous}}}
+{\mathrm{MSE}_{\mathrm{clean}}}.
+$$</div>
+  <p>gap 越大，说明正常数据重构误差低、异常数据重构误差高，异常更容易分离。</p>
+  <table>
+    <tr><th class="">Model</th><th class=" num">ETTh1 Gap</th><th class=" num">ETTm1 Gap</th><th class=" num">Weather Gap</th></tr>
+    <tr><td class="">TimesNet</td><td class=" num">$\sim 33$x</td><td class=" num">$\sim 29000$x</td><td class=" num">$\sim 5000$x</td></tr>
+    <tr><td class="">TCN</td><td class=" num">$\sim 1100$x</td><td class=" num">$\sim 3100$x</td><td class=" num">$\sim 1800$x</td></tr>
+    <tr><td class="">DLinear</td><td class=" num">$\sim 8$x</td><td class=" num">$\sim 140$x</td><td class=" num">$\sim 22$x</td></tr>
+    <tr><td class="">Synthesized ResNetBlock</td><td class=" num">$\sim 270$x</td><td class=" num">$\sim 430$x</td><td class=" num">$\sim 920$x</td></tr>
+    <tr><td class="">Synthesized MultiScaleCNN</td><td class=" num">$\sim 85$x</td><td class=" num">$\sim 900$x</td><td class=" num">$\sim 550$x</td></tr>
+    <tr><td class="">Synthesized BiGRU</td><td class=" num">$\sim 1.8$x</td><td class=" num">$\sim 1200$x</td><td class=" num">$\sim 478$x</td></tr>
+  </table>
+  <p>这里的结论同样不是“生成模型全面第一”。TimesNet 在 ETTm1/Weather 的 gap 极高，但 ResNetBlock 在 ETTh1 上明显强于 TimesNet 和 DLinear。更重要的是，不同生成结构适合不同任务：BiGRU 可做预测，但 ETTh1 异常检测 gap 很弱；ResNetBlock 适合重构型异常检测，但不是最强预测器。</p>
+  <h2>13. WaveInterferenceNet 案例</h2>
+  <p>论文用一个 steerable synthesis case study 测试 LLM 是否能跳出常见 ResNet/LSTM/Inception 模板。作者要求 agent 基于“波干涉”物理类比设计架构，生成 WaveInterferenceNet，包含 trigonometric projections 和 Hadamard product mixing。</p>
+  <p>在 ETTh1 上：</p>
+  <table>
+    <tr><th class="">指标</th><th class=" num">WaveInterferenceNet</th></tr>
+    <tr><td class="">Forecasting MAE</td><td class=" num">1.137</td></tr>
+    <tr><td class="">Forecasting RMSE</td><td class=" num">1.463</td></tr>
+    <tr><td class="">Clean MSE</td><td class=" num">0.001409</td></tr>
+    <tr><td class="">Anomaly MSE</td><td class=" num">0.055843</td></tr>
+    <tr><td class="">Parameters</td><td class=" num">829K</td></tr>
+    <tr><td class="">Inference latency</td><td class=" num">$&lt;0.01$ ms</td></tr>
+  </table>
+  <p>效率对照：</p>
+  <table>
+    <tr><th class="">模型</th><th class=" num">Search Time</th><th class=" num">Inference</th><th class=" num">Params</th></tr>
+    <tr><td class="">DLinear</td><td class=" num">2m07s</td><td class=" num">$&lt;0.01$ ms</td><td class=" num">52K</td></tr>
+    <tr><td class="">Chronos-T5-Mini</td><td class=" num">zero-shot</td><td class=" num">987.93 ms</td><td class=" num">20M</td></tr>
+    <tr><td class="">WaveInterferenceNet</td><td class=" num">2m01s</td><td class=" num">$&lt;0.01$ ms</td><td class=" num">829K</td></tr>
+  </table>
+  <p>这个案例的价值在于展示“可控生成”：通过 prompt 施加低延迟、物理类比、形状约束，LLM 能生成一个非标准但可执行的架构，并通过 reflection loop 修复维度错误。</p>
+  <h2>14. Dyn-RevIN 消融</h2>
+  <p>Dyn-RevIN 不是总是有益，论文的 ablation 反而说明它应由动态搜索决定是否启用。</p>
+  <table>
+    <tr><th class="">Dataset</th><th class=" num">With Dyn-RevIN Forecast MAE</th><th class=" num">Without Dyn-RevIN Forecast MAE</th><th class=" num">With Dyn-RevIN AD Gap</th><th class=" num">Without Dyn-RevIN AD Gap</th></tr>
+    <tr><td class="">ETTh1</td><td class=" num"><strong>1.251</strong></td><td class=" num">2.435</td><td class=" num"><strong>$\sim 265.6$x</strong></td><td class=" num">$\sim 52.5$x</td></tr>
+    <tr><td class="">ETTm1</td><td class=" num"><strong>0.455</strong></td><td class=" num">2.541</td><td class=" num"><strong>$\sim 431.1$x</strong></td><td class=" num">$\sim 344.8$x</td></tr>
+    <tr><td class="">Weather</td><td class=" num">3.787</td><td class=" num"><strong>1.426</strong></td><td class=" num">$\sim 921.4$x</td><td class=" num"><strong>$\sim 1146.7$x</strong></td></tr>
+  </table>
+  <p>解释：</p>
+  <ul>
+    <li>ETTh1/ETTm1 非平稳强，RevIN 显著稳定训练；</li>
+    <li>Weather 周期和物理尺度更稳定，实例级归一化可能抹掉有用的绝对幅值信息；</li>
+    <li>因此 normalization 本身也应进入 AutoML 决策，而不是固定打开。</li>
+  </ul>
+  <h2>15. Agent 视角拆解</h2>
+  <table>
+    <tr><th class="">要素</th><th class="">GenAutoML 中的对应</th></tr>
+    <tr><td class="">State / workspace</td><td class="">用户上传数据、EDA 统计、任务设定、动态模型 registry</td></tr>
+    <tr><td class="">Policy / agent</td><td class="">LLM neural architect + Pandas DataFrame agent</td></tr>
+    <tr><td class="">Action space</td><td class="">生成 PyTorch 代码、修复代码、注册模型、触发 Optuna 搜索</td></tr>
+    <tr><td class="">Tool space</td><td class="">Python execution、dummy forward validation、AST parsing、JIT loader、Optuna</td></tr>
+    <tr><td class="">Feedback</td><td class="">Python traceback、shape assertion、validation loss</td></tr>
+    <tr><td class="">Memory / registry</td><td class="">$S_{\mathrm{dynamic}}$ 中已通过验证的模型类</td></tr>
+    <tr><td class="">Optimization</td><td class="">Adam 训练 + Optuna 选择静态/动态架构与超参</td></tr>
+    <tr><td class="">Evaluation</td><td class="">Forecasting MAE/RMSE；Anomaly clean/anom MSE 和 discrimination gap</td></tr>
+  </table>
+  <p>这比普通 AutoML 更 agentic，因为搜索空间不是预先写死，而是由 LLM 在运行过程中扩展；但它也比开放式代码 agent 更受控，因为所有模型必须通过几何契约和 sandbox。</p>
+  <h2>16. 贡献、局限与启示</h2>
+  <p>贡献：</p>
+  <ol>
+    <li>提出从自然语言约束到 PyTorch 架构代码的 agentic neural synthesis 管线。</li>
+    <li>用 Sandboxed Reflection Loop 把 LLM 代码生成接入可执行验证。</li>
+    <li>用 JIT dynamic loader 把生成模型热插入 Optuna 搜索空间。</li>
+    <li>用 Dyn-RevIN 为不可信生成架构提供数值稳定保护。</li>
+    <li>在 forecasting、anomaly detection 和低延迟 case study 中展示生成模型的可用性。</li>
+  </ol>
+  <p>局限：</p>
+  <ul>
+    <li>论文实验规模仍较小，主要是 ETTh1、ETTm1、Weather；</li>
+    <li>生成模型并未全面超过强基线，尤其 DLinear 在预测上仍很强；</li>
+    <li>依赖 LLM API，架构生成有 30-60s 级别额外延迟；</li>
+    <li>LLM 生成结构的理论可解释性有限；</li>
+    <li>当前主要支持数值时间序列，尚未充分利用维护日志、天气报告等多模态上下文。</li>
+  </ul>
+  <p>实践启示：</p>
+  <p>GenAutoML 最有价值的地方不是“让 LLM 一次写出最强模型”，而是构建了一个可控闭环：LLM 负责提出结构假设，sandbox 负责执行验证，Optuna 负责淘汰坏结构，Dyn-RevIN 负责数值稳定。这个模式比纯 prompt 生成代码更接近可落地的 agentic AutoML。</p>
+</main>
+</body>
+</html>

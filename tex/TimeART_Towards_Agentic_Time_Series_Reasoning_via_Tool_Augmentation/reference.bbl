@@ -1,0 +1,377 @@
+\begin{thebibliography}{75}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[The()]{TheC3}
+The claude 3 model family: Opus, sonnet, haiku.
+
+\bibitem[Achiam et~al.(2023)Achiam, Adler, Agarwal, Ahmad, Akkaya, Aleman, Almeida, Altenschmidt, Altman, Anadkat, et~al.]{achiam2023gpt}
+Achiam, J., Adler, S., Agarwal, S., Ahmad, L., Akkaya, I., Aleman, F.~L., Almeida, D., Altenschmidt, J., Altman, S., Anadkat, S., et~al.
+\newblock Gpt-4 technical report.
+\newblock \emph{arXiv preprint arXiv:2303.08774}, 2023.
+
+\bibitem[Badshah \& Sajjad(2025)Badshah and Sajjad]{badshah2025reference}
+Badshah, S. and Sajjad, H.
+\newblock Reference-guided verdict: Llms-as-judges in automatic evaluation of free-form qa.
+\newblock In \emph{Proceedings of the 9th Widening NLP Workshop}, pp.\  251--267, 2025.
+
+\bibitem[Cai et~al.(2024)Cai, Choudhry, Goswami, and Dubrawski]{cai2024timeseriesexam}
+Cai, Y., Choudhry, A., Goswami, M., and Dubrawski, A.
+\newblock Timeseriesexam: A time series understanding exam.
+\newblock \emph{arXiv preprint arXiv:2410.14752}, 2024.
+
+\bibitem[Cai et~al.(2025)Cai, Li, Goswami, Wili{\'n}ski, Welter, and Dubrawski]{cai2025timeseriesgym}
+Cai, Y., Li, X., Goswami, M., Wili{\'n}ski, M., Welter, G., and Dubrawski, A.
+\newblock Timeseriesgym: A scalable benchmark for(time series) machine learning engineering agents.
+\newblock 2025.
+
+\bibitem[Chen et~al.(2025{\natexlab{a}})Chen, Feng, Zhao, Garza, Nurbek, Qin, Maatouk, Tassiulas, Gao, and Ying]{chen2025mtbench}
+Chen, J., Feng, A., Zhao, Z., Garza, J., Nurbek, G., Qin, C., Maatouk, A., Tassiulas, L., Gao, Y., and Ying, R.
+\newblock Mtbench: A multimodal time series benchmark for temporal reasoning and question answering.
+\newblock \emph{arXiv preprint arXiv:2503.16858}, 2025{\natexlab{a}}.
+
+\bibitem[Chen et~al.(2025{\natexlab{b}})Chen, Huang, Cheng, Chen, Rao, Shu, Yang, Pan, and Guo]{AimTS}
+Chen, Y., Huang, S., Cheng, Y., Chen, P., Rao, Z., Shu, Y., Yang, B., Pan, L., and Guo, C.
+\newblock {AimTS}: Augmented series and image contrastive learning for time series classification.
+\newblock In \emph{ICDE}, 2025{\natexlab{b}}.
+
+\bibitem[Fang et~al.(2025)Fang, Zhang, Qian, Glass, and Zhu]{fang2025play2prompt}
+Fang, W., Zhang, Y., Qian, K., Glass, J., and Zhu, Y.
+\newblock Play2prompt: Zero-shot tool instruction optimization for llm agents via tool play.
+\newblock \emph{arXiv preprint arXiv:2503.14432}, 2025.
+
+\bibitem[Forootani(2025)]{forootani2025survey}
+Forootani, A.
+\newblock A survey on mathematical reasoning and optimization with large language models.
+\newblock \emph{arXiv preprint arXiv:2503.17726}, 2025.
+
+\bibitem[Gao et~al.(2025)Gao, Shen, Qiu, Xu, Yang, and Hu]{gao2025ssdts}
+Gao, H., Shen, W., Qiu, X., Xu, R., Yang, B., and Hu, J.
+\newblock Ssd-ts: Exploring the potential of linear state space models for diffusion models in time series imputation.
+\newblock In \emph{SIGKDD}, 2025.
+
+\bibitem[Gao et~al.(2024)Gao, Koker, Queen, Hartvigsen, Tsiligkaridis, and Zitnik]{units}
+Gao, S., Koker, T., Queen, O., Hartvigsen, T., Tsiligkaridis, T., and Zitnik, M.
+\newblock Units: A unified multi-task time series model.
+\newblock \emph{Advances in Neural Information Processing Systems}, 37:\penalty0 140589--140631, 2024.
+
+\bibitem[Gou et~al.(2023)Gou, Shao, Gong, Shen, Yang, Huang, Duan, and Chen]{gou2023tora}
+Gou, Z., Shao, Z., Gong, Y., Shen, Y., Yang, Y., Huang, M., Duan, N., and Chen, W.
+\newblock Tora: A tool-integrated reasoning agent for mathematical problem solving.
+\newblock \emph{arXiv preprint arXiv:2309.17452}, 2023.
+
+\bibitem[Gu et~al.(2024)Gu, Zhang, Ning, Zheng, Gou, Xue, Chang, Srivastava, Xie, Qi, et~al.]{gu2024your}
+Gu, Y., Zhang, K., Ning, Y., Zheng, B., Gou, B., Xue, T., Chang, C., Srivastava, S., Xie, Y., Qi, P., et~al.
+\newblock Is your llm secretly a world model of the internet? model-based planning for web agents.
+\newblock \emph{arXiv preprint arXiv:2411.06559}, 2024.
+
+\bibitem[Guan et~al.(2025)Guan, Meng, Li, Wang, Yang, Wen, Liu, Siniscalchi, Jin, and Pan]{guan2025timeomni1incentivizingcomplexreasoning}
+Guan, T., Meng, Z., Li, D., Wang, S., Yang, C.-H.~H., Wen, Q., Liu, Z., Siniscalchi, S.~M., Jin, M., and Pan, S.
+\newblock Timeomni-1: Incentivizing complex reasoning with time series in large language models, 2025.
+
+\bibitem[Hu et~al.()Hu, Wallis, Allen-Zhu, Li, Wang, Wang, Chen, et~al.]{hulora}
+Hu, E.~J., Wallis, P., Allen-Zhu, Z., Li, Y., Wang, S., Wang, L., Chen, W., et~al.
+\newblock Lora: Low-rank adaptation of large language models.
+\newblock In \emph{International Conference on Learning Representations}.
+
+\bibitem[Hurst et~al.(2024)Hurst, Lerer, Goucher, Perelman, Ramesh, Clark, Ostrow, Welihinda, Hayes, Radford, et~al.]{hurst2024gpt}
+Hurst, A., Lerer, A., Goucher, A.~P., Perelman, A., Ramesh, A., Clark, A., Ostrow, A., Welihinda, A., Hayes, A., Radford, A., et~al.
+\newblock Gpt-4o system card.
+\newblock \emph{arXiv preprint arXiv:2410.21276}, 2024.
+
+\bibitem[Jin et~al.(2024)Jin, Wang, Ma, Chu, Zhang, Shi, Chen, Liang, Li, Pan, and Wen]{timellm}
+Jin, M., Wang, S., Ma, L., Chu, Z., Zhang, J.~Y., Shi, X., Chen, P.-Y., Liang, Y., Li, Y.-F., Pan, S., and Wen, Q.
+\newblock {Time-LLM}: Time series forecasting by reprogramming large language models.
+\newblock In \emph{International Conference on Learning Representations (ICLR)}, 2024.
+
+\bibitem[Kong et~al.(2025)Kong, Yang, Hwang, Du, Zohren, Wang, Jin, and Wen]{TimeMQA}
+Kong, Y., Yang, Y., Hwang, Y., Du, W., Zohren, S., Wang, Z., Jin, M., and Wen, Q.
+\newblock Time-mqa: Time series multi-task question answering with context enhancement.
+\newblock \emph{arXiv preprint arXiv:2503.01875}, 2025.
+
+\bibitem[Lei et~al.()Lei, Song, Hao, Chen, Zhang, JIA, Li, et~al.]{leiitformer}
+Lei, P., Song, J., Hao, Y., Chen, T., Zhang, Y., JIA, L., Li, Y., et~al.
+\newblock Itformer: Bridging time series and natural language for multi-modal qa with large-scale multitask dataset.
+\newblock In \emph{Forty-second International Conference on Machine Learning}.
+
+\bibitem[Li et~al.(2025{\natexlab{a}})Li, Lu, Ren, and Kong]{li2025set}
+Li, L., Lu, S., Ren, Y., and Kong, A. W.-K.
+\newblock Set you straight: Auto-steering denoising trajectories to sidestep unwanted concepts.
+\newblock \emph{arXiv preprint arXiv:2504.12782}, 2025{\natexlab{a}}.
+
+\bibitem[Li et~al.(2025{\natexlab{b}})Li, Qiu, Chen, Wang, Cheng, Shu, Hu, Guo, Zhou, Jensen, and Yang]{li2025TSFM-Bench}
+Li, Z., Qiu, X., Chen, P., Wang, Y., Cheng, H., Shu, Y., Hu, J., Guo, C., Zhou, A., Jensen, C.~S., and Yang, B.
+\newblock {TSFM-Bench}: Comprehensive and unified benchmarking of foundation models for time series forecasting.
+\newblock In \emph{SIGKDD}, 2025{\natexlab{b}}.
+
+\bibitem[Liu et~al.(2024{\natexlab{a}})Liu, Feng, Xue, Wang, Wu, Lu, Zhao, Deng, Zhang, Ruan, et~al.]{liu2024deepseek}
+Liu, A., Feng, B., Xue, B., Wang, B., Wu, B., Lu, C., Zhao, C., Deng, C., Zhang, C., Ruan, C., et~al.
+\newblock Deepseek-v3 technical report.
+\newblock \emph{arXiv preprint arXiv:2412.19437}, 2024{\natexlab{a}}.
+
+\bibitem[Liu et~al.(2025{\natexlab{a}})Liu, Fons, Vyetrenko, Borrajo, Potluru, and Veloso]{liu2025tsagenttimeseriesreasoning}
+Liu, P., Fons, E., Vyetrenko, S., Borrajo, D., Potluru, V., and Veloso, M.
+\newblock Ts-agent: A time series reasoning agent with iterative statistical insight gathering, 2025{\natexlab{a}}.
+
+\bibitem[Liu et~al.(2025{\natexlab{b}})Liu, Guo, Dai, Li, Bao, Ren, Jiang, and Xia]{liu2025calf}
+Liu, P., Guo, H., Dai, T., Li, N., Bao, J., Ren, X., Jiang, Y., and Xia, S.-T.
+\newblock Calf: Aligning llms for time series forecasting via cross-modal fine-tuning.
+\newblock \emph{AAAI}, 39\penalty0 (18):\penalty0 18915--18923, 2025{\natexlab{b}}.
+
+\bibitem[Liu et~al.(2024{\natexlab{b}})Liu, Hu, Li, Diao, Liang, Hooi, and Zimmermann]{liu2024unitime}
+Liu, X., Hu, J., Li, Y., Diao, S., Liang, Y., Hooi, B., and Zimmermann, R.
+\newblock Unitime: A language-empowered unified model for cross-domain time series forecasting.
+\newblock In \emph{Proceedings of the ACM Web Conference 2024}, pp.\  4095--4106, 2024{\natexlab{b}}.
+
+\bibitem[Liu et~al.(2025{\natexlab{c}})Liu, Qiu, Cheng, Wu, Guo, Yang, and Hu]{liu2025astgi}
+Liu, X., Qiu, X., Cheng, H., Wu, X., Guo, C., Yang, B., and Hu, J.
+\newblock Astgi: Adaptive spatio-temporal graph interactions for irregular multivariate time series forecasting.
+\newblock \emph{arXiv preprint arXiv:2509.23313}, 2025{\natexlab{c}}.
+
+\bibitem[Liu et~al.(2026)Liu, Qiu, Wu, Li, Guo, Hu, and Yang]{liu2026apn}
+Liu, X., Qiu, X., Wu, X., Li, Z., Guo, C., Hu, J., and Yang, B.
+\newblock Rethinking irregular time series forecasting: A simple yet effective baseline.
+\newblock In \emph{AAAI}, 2026.
+
+\bibitem[Liu et~al.(2024{\natexlab{c}})Liu, Hu, Zhang, Wu, Wang, Ma, and Long]{liu2023itransformer}
+Liu, Y., Hu, T., Zhang, H., Wu, H., Wang, S., Ma, L., and Long, M.
+\newblock itransformer: Inverted transformers are effective for time series forecasting.
+\newblock In \emph{ICLR}, 2024{\natexlab{c}}.
+
+\bibitem[Lu et~al.(2025)Lu, Chen, Guo, Shu, Wang, and Yang]{lu2025towards}
+Lu, J., Chen, P., Guo, C., Shu, Y., Wang, M., and Yang, B.
+\newblock Towards non-stationary time series forecasting with temporal stabilization and frequency differencing.
+\newblock \emph{arXiv preprint arXiv:2511.08229}, 2025.
+
+\bibitem[Lu et~al.(2023)Lu, Liu, and Kong]{lu2023tf}
+Lu, S., Liu, Y., and Kong, A. W.-K.
+\newblock Tf-icon: Diffusion-based training-free cross-domain image composition.
+\newblock In \emph{ICCV}, pp.\  2294--2305, 2023.
+
+\bibitem[Lu et~al.(2024)Lu, Wang, Li, Liu, and Kong]{lu2024mace}
+Lu, S., Wang, Z., Li, L., Liu, Y., and Kong, A. W.-K.
+\newblock Mace: Mass concept erasure in diffusion models.
+\newblock In \emph{CVPR}, pp.\  6430--6440, 2024.
+
+\bibitem[Ning et~al.(2025)Ning, Liang, Jiang, Qu, Ding, Fan, Wei, Lin, Liu, Yu, et~al.]{ning2025survey}
+Ning, L., Liang, Z., Jiang, Z., Qu, H., Ding, Y., Fan, W., Wei, X.-y., Lin, S., Liu, H., Yu, P.~S., et~al.
+\newblock A survey of webagents: Towards next-generation ai agents for web automation with large foundation models.
+\newblock In \emph{Proceedings of the 31st ACM SIGKDD Conference on Knowledge Discovery and Data Mining V. 2}, pp.\  6140--6150, 2025.
+
+\bibitem[Qiu et~al.(2024)Qiu, Hu, Zhou, Wu, Du, Zhang, Guo, Zhou, Jensen, Sheng, and Yang]{qiu2024tfb}
+Qiu, X., Hu, J., Zhou, L., Wu, X., Du, J., Zhang, B., Guo, C., Zhou, A., Jensen, C.~S., Sheng, Z., and Yang, B.
+\newblock {TFB:} towards comprehensive and fair benchmarking of time series forecasting methods.
+\newblock \emph{Proc. {VLDB} Endow.}, 17\penalty0 (9):\penalty0 2363--2377, 2024.
+
+\bibitem[Qiu et~al.(2025{\natexlab{a}})Qiu, Cheng, Wu, Hu, and Guo]{qiu2025comprehensive}
+Qiu, X., Cheng, H., Wu, X., Hu, J., and Guo, C.
+\newblock A comprehensive survey of deep learning for multivariate time series forecasting: A channel strategy perspective.
+\newblock \emph{arXiv preprint arXiv:2502.10721}, 2025{\natexlab{a}}.
+
+\bibitem[Qiu et~al.(2025{\natexlab{b}})Qiu, Li, Pang, Pan, Wu, Yang, Hu, Shu, Lu, Yang, Guo, Zhou, Jensen, and Yang]{qiu2025easytime}
+Qiu, X., Li, X., Pang, R., Pan, Z., Wu, X., Yang, L., Hu, J., Shu, Y., Lu, X., Yang, C., Guo, C., Zhou, A., Jensen, C.~S., and Yang, B.
+\newblock Easytime: Time series forecasting made easy.
+\newblock In \emph{ICDE}, 2025{\natexlab{b}}.
+
+\bibitem[Qiu et~al.(2025{\natexlab{c}})Qiu, Li, Qiu, Hu, Zhou, Wu, Li, Guo, Zhou, Sheng, Hu, Jensen, and Yang]{qiu2025tab}
+Qiu, X., Li, Z., Qiu, W., Hu, S., Zhou, L., Wu, X., Li, Z., Guo, C., Zhou, A., Sheng, Z., Hu, J., Jensen, C.~S., and Yang, B.
+\newblock {TAB}: Unified benchmarking of time series anomaly detection methods.
+\newblock In \emph{Proc. {VLDB} Endow.}, 2025{\natexlab{c}}.
+
+\bibitem[Qiu et~al.(2025{\natexlab{d}})Qiu, Wu, Cheng, Liu, Guo, Hu, and Yang]{qiu2025DBLoss}
+Qiu, X., Wu, X., Cheng, H., Liu, X., Guo, C., Hu, J., and Yang, B.
+\newblock Dbloss: Decomposition-based loss function for time series forecasting.
+\newblock In \emph{NeurIPS}, 2025{\natexlab{d}}.
+
+\bibitem[Qiu et~al.(2025{\natexlab{e}})Qiu, Wu, Lin, Guo, Hu, and Yang]{qiu2025duet}
+Qiu, X., Wu, X., Lin, Y., Guo, C., Hu, J., and Yang, B.
+\newblock {DUET}: Dual clustering enhanced multivariate time series forecasting.
+\newblock In \emph{SIGKDD}, pp.\  1185--1196, 2025{\natexlab{e}}.
+
+\bibitem[Qiu et~al.(2025{\natexlab{f}})Qiu, Yang, Cheng, Wu, Wu, Zhang, Tu, Guo, Yang, Jensen, et~al.]{qiu2025multi}
+Qiu, X., Yang, L., Cheng, H., Wu, X., Wu, R., Zhang, Z., Tu, D., Guo, C., Yang, B., Jensen, C.~S., et~al.
+\newblock Multi-scale spatial-temporal hypergraph network with lead-lag structures for stock time series forecasting.
+\newblock \emph{arXiv preprint arXiv:2509.23668}, 2025{\natexlab{f}}.
+
+\bibitem[Qiu et~al.(2025{\natexlab{g}})Qiu, Zhu, Li, Cheng, Wu, Guo, Yang, and Hu]{qiu2025dag}
+Qiu, X., Zhu, Y., Li, Z., Cheng, H., Wu, X., Guo, C., Yang, B., and Hu, J.
+\newblock Dag: A dual causal network for time series forecasting with exogenous variables.
+\newblock \emph{arXiv preprint arXiv:2509.14933}, 2025{\natexlab{g}}.
+
+\bibitem[Reimers \& Gurevych(2019)Reimers and Gurevych]{reimers2019sentence}
+Reimers, N. and Gurevych, I.
+\newblock Sentence-bert: Sentence embeddings using siamese bert-networks.
+\newblock \emph{arXiv preprint arXiv:1908.10084}, 2019.
+
+\bibitem[Shao et~al.(2025)Shao, Fang, Chen, and Gao]{FOTraj}
+Shao, W., Fang, Z., Chen, L., and Gao, Y.
+\newblock Towards trajectory anomaly detection: a fine-grained and noise-resilient framework.
+\newblock In \emph{SIGKDD}, pp.\  2490--2501, 2025.
+
+\bibitem[Shentu et~al.(2024)Shentu, Li, Zhao, Shu, Rao, Pan, Yang, and Guo]{shentu2024towards}
+Shentu, Q., Li, B., Zhao, K., Shu, Y., Rao, Z., Pan, L., Yang, B., and Guo, C.
+\newblock Towards a general time series anomaly detector with adaptive bottlenecks and dual adversarial decoders.
+\newblock \emph{arXiv preprint arXiv:2405.15273}, 2024.
+
+\bibitem[Sui et~al.(2025)Sui, Xu, Chuang, Lai, and Hu]{sui2025training}
+Sui, S., Xu, Z., Chuang, Y.-N., Lai, K.-H., and Hu, X.
+\newblock Training-free time series classification via in-context reasoning with llm agents.
+\newblock \emph{arXiv preprint arXiv:2510.05950}, 2025.
+
+\bibitem[Sun et~al.(2025)Sun, Xie, Chen, Eldele, and Hu]{sun2025hierarchical}
+Sun, Y., Xie, Z., Chen, D., Eldele, E., and Hu, Q.
+\newblock Hierarchical classification auxiliary network for time series forecasting.
+\newblock In \emph{AAAI}, volume~39, pp.\  20743--20751, 2025.
+
+\bibitem[Tan et~al.(2024)Tan, Merrill, Gupta, Althoff, and Hartvigsen]{tan2024language}
+Tan, M., Merrill, M., Gupta, V., Althoff, T., and Hartvigsen, T.
+\newblock Are language models actually useful for time series forecasting?
+\newblock \emph{Advances in Neural Information Processing Systems}, 37:\penalty0 60162--60191, 2024.
+
+\bibitem[Tang et~al.(2025)Tang, Hu, Ye, Shao, Yin, Ouyang, Zhou, Lu, Zhang, Zhao, et~al.]{tang2025chemagent}
+Tang, X., Hu, T., Ye, M., Shao, Y., Yin, X., Ouyang, S., Zhou, W., Lu, P., Zhang, Z., Zhao, Y., et~al.
+\newblock Chemagent: Self-updating library in large language models improves chemical reasoning.
+\newblock \emph{arXiv preprint arXiv:2501.06590}, 2025.
+
+\bibitem[Team et~al.(2023)Team, Anil, Borgeaud, Alayrac, Yu, Soricut, Schalkwyk, Dai, Hauth, Millican, et~al.]{team2023gemini}
+Team, G., Anil, R., Borgeaud, S., Alayrac, J.-B., Yu, J., Soricut, R., Schalkwyk, J., Dai, A.~M., Hauth, A., Millican, K., et~al.
+\newblock Gemini: a family of highly capable multimodal models.
+\newblock \emph{arXiv preprint arXiv:2312.11805}, 2023.
+
+\bibitem[Wang et~al.(2025{\natexlab{a}})Wang, Qi, Wang, Sun, Zhuang, Wu, Zhang, and Liao]{wang2025chattime}
+Wang, C., Qi, Q., Wang, J., Sun, H., Zhuang, Z., Wu, J., Zhang, L., and Liao, J.
+\newblock Chattime: A unified multimodal time series foundation model bridging numerical and textual data.
+\newblock In \emph{Proceedings of the AAAI Conference on Artificial Intelligence}, volume~39, pp.\  12694--12702, 2025{\natexlab{a}}.
+
+\bibitem[Wang et~al.(2025{\natexlab{b}})Wang, Li, Shao, Yu, Fu, An, Xu, and Cheng]{wang2025aries}
+Wang, F., Li, Y., Shao, Z., Yu, C., Fu, Y., An, Z., Xu, Y., and Cheng, X.
+\newblock Aries: Relation assessment and model recommendation for deep time series forecasting.
+\newblock \emph{arXiv preprint arXiv:2509.06060}, 2025{\natexlab{b}}.
+
+\bibitem[Wang et~al.(2025{\natexlab{c}})Wang, Qiu, Shu, Rao, Pan, Yang, and Chenjuan]{wang2025lightgts}
+Wang, Y., Qiu, Y., Shu, Y., Rao, Z., Pan, L., Yang, B., and Chenjuan, G.
+\newblock Lightgts: A lightweight general time series forecasting model.
+\newblock In \emph{ICML}, 2025{\natexlab{c}}.
+
+\bibitem[Wu et~al.(2023)Wu, Hu, Liu, Zhou, Wang, and Long]{wu2022timesnet}
+Wu, H., Hu, T., Liu, Y., Zhou, H., Wang, J., and Long, M.
+\newblock Timesnet: Temporal 2d-variation modeling for general time series analysis.
+\newblock In \emph{ICLR}, 2023.
+
+\bibitem[Wu et~al.(2024)Wu, Wu, Yang, Zhou, Guo, Qiu, Hu, Sheng, and Jensen]{AutoCTS++}
+Wu, X., Wu, X., Yang, B., Zhou, L., Guo, C., Qiu, X., Hu, J., Sheng, Z., and Jensen, C.~S.
+\newblock {AutoCTS++}: zero-shot joint neural architecture and hyperparameter search for correlated time series forecasting.
+\newblock \emph{{VLDB} J.}, 33\penalty0 (5):\penalty0 1743--1770, 2024.
+
+\bibitem[Wu et~al.(2025{\natexlab{a}})Wu, Cheng, Qiu, Li, Hu, Guo, and Yang]{wu2025flame}
+Wu, X., Cheng, H., Qiu, X., Li, Z., Hu, J., Guo, C., and Yang, B.
+\newblock Flame: Flow enhanced legendre memory models for general time series forecasting.
+\newblock \emph{arXiv preprint arXiv:2512.14253}, 2025{\natexlab{a}}.
+
+\bibitem[Wu et~al.(2025{\natexlab{b}})Wu, Jin, Qiu, Chen, Shu, Yang, and Guo]{wu2025aurora}
+Wu, X., Jin, J., Qiu, W., Chen, P., Shu, Y., Yang, B., and Guo, C.
+\newblock Aurora: Towards universal generative multimodal time series forecasting.
+\newblock \emph{arXiv preprint arXiv:2509.22295}, 2025{\natexlab{b}}.
+
+\bibitem[Wu et~al.(2025{\natexlab{c}})Wu, Li, Cheng, Qiu, Hu, Guo, and Yang]{wu2025unlocking}
+Wu, X., Li, Z., Cheng, H., Qiu, X., Hu, J., Guo, C., and Yang, B.
+\newblock Unlocking the power of mixture-of-experts for task-aware time series analytics.
+\newblock \emph{arXiv preprint arXiv:2509.22279}, 2025{\natexlab{c}}.
+
+\bibitem[Wu et~al.(2025{\natexlab{d}})Wu, Qiu, Cheng, Li, Hu, Guo, and Yang]{wu2025srsnet}
+Wu, X., Qiu, X., Cheng, H., Li, Z., Hu, J., Guo, C., and Yang, B.
+\newblock Enhancing time series forecasting through selective representation spaces: A patch perspective.
+\newblock In \emph{NeurIPS}, 2025{\natexlab{d}}.
+
+\bibitem[Wu et~al.(2025{\natexlab{e}})Wu, Qiu, Gao, Hu, Yang, and Guo]{wu2025k2vae}
+Wu, X., Qiu, X., Gao, H., Hu, J., Yang, B., and Guo, C.
+\newblock {K${}^2$VAE}: A koopman-kalman enhanced variational autoencoder for probabilistic time series forecasting.
+\newblock In \emph{ICML}, 2025{\natexlab{e}}.
+
+\bibitem[Wu et~al.(2025{\natexlab{f}})Wu, Qiu, Li, Wang, Hu, Guo, Xiong, and Yang]{wu2024catch}
+Wu, X., Qiu, X., Li, Z., Wang, Y., Hu, J., Guo, C., Xiong, H., and Yang, B.
+\newblock {CATCH}: Channel-aware multivariate time series anomaly detection via frequency patching.
+\newblock In \emph{ICLR}, 2025{\natexlab{f}}.
+
+\bibitem[Wu et~al.(2025{\natexlab{g}})Wu, Wu, Zhang, Zhang, Guo, Yang, and Jensen]{wu2024fully}
+Wu, X., Wu, X., Zhang, D., Zhang, M., Guo, C., Yang, B., and Jensen, C.~S.
+\newblock Fully automated correlated time series forecasting in minutes.
+\newblock In \emph{Proc. {VLDB} Endow.}, volume~18, pp.\  144--157, 2025{\natexlab{g}}.
+
+\bibitem[Xie et~al.(2024)Xie, Li, He, Xu, Wen, Zhang, Chen, Shi, and Pei]{xie2024chatts}
+Xie, Z., Li, Z., He, X., Xu, L., Wen, X., Zhang, T., Chen, J., Shi, R., and Pei, D.
+\newblock Chatts: Aligning time series with llms via synthetic data for enhanced understanding and reasoning.
+\newblock \emph{arXiv preprint arXiv:2412.03104}, 2024.
+
+\bibitem[Yang et~al.(2025)Yang, Li, Yang, Zhang, Hui, Zheng, Yu, Gao, Huang, Lv, et~al.]{yang2025qwen3}
+Yang, A., Li, A., Yang, B., Zhang, B., Hui, B., Zheng, B., Yu, B., Gao, C., Huang, C., Lv, C., et~al.
+\newblock Qwen3 technical report.
+\newblock \emph{arXiv preprint arXiv:2505.09388}, 2025.
+
+\bibitem[Yang et~al.(2024)Yang, He, Tian, Chen, Wang, Shi, Heydarian, and Liu]{yang2024wcdt}
+Yang, C., He, Y., Tian, A.~X., Chen, D., Wang, J., Shi, T., Heydarian, A., and Liu, P.
+\newblock Wcdt: World-centric diffusion transformer for traffic scene generation.
+\newblock \emph{arXiv preprint arXiv:2404.02082}, 2024.
+
+\bibitem[Yao et~al.(2022)Yao, Zhao, Yu, Du, Shafran, Narasimhan, and Cao]{yao2022react}
+Yao, S., Zhao, J., Yu, D., Du, N., Shafran, I., Narasimhan, K.~R., and Cao, Y.
+\newblock React: Synergizing reasoning and acting in language models.
+\newblock In \emph{The eleventh international conference on learning representations}, 2022.
+
+\bibitem[Ye et~al.(2025)Ye, Zhang, Yang, Tang, Cao, Cai, and Liu]{ye2025beyond}
+Ye, W., Zhang, Y., Yang, W., Tang, L., Cao, D., Cai, J., and Liu, Y.
+\newblock Beyond forecasting: Compositional time series reasoning for end-to-end task execution, 2025.
+
+\bibitem[Zhang et~al.(2025{\natexlab{a}})Zhang, Kieu, Qiu, Guo, Hu, Zhou, Jensen, and Yang]{zhang2025encode}
+Zhang, B., Kieu, T., Qiu, X., Guo, C., Hu, J., Zhou, A., Jensen, C.~S., and Yang, B.
+\newblock An encode-then-decompose approach to unsupervised time series anomaly detection on contaminated training data--extended version.
+\newblock \emph{arXiv preprint arXiv:2510.18998}, 2025{\natexlab{a}}.
+
+\bibitem[Zhang et~al.(2024)Zhang, He, Qian, Li, Li, Qin, Kang, Ma, Liu, Lin, et~al.]{zhang2024large}
+Zhang, C., He, S., Qian, J., Li, B., Li, L., Qin, S., Kang, Y., Ma, M., Liu, G., Lin, Q., et~al.
+\newblock Large language model-brained gui agents: A survey.
+\newblock \emph{arXiv preprint arXiv:2411.18279}, 2024.
+
+\bibitem[Zhang et~al.()Zhang, Geng, Yu, Yin, Zhang, Tan, Zhou, Li, Xue, Li, et~al.]{zhang2509landscape}
+Zhang, G., Geng, H., Yu, X., Yin, Z., Zhang, Z., Tan, Z., Zhou, H., Li, Z., Xue, X., Li, Y., et~al.
+\newblock The landscape of agentic reinforcement learning for llms: A survey, 2025.
+\newblock \emph{URL https://arxiv. org/abs/2509.02547}.
+
+\bibitem[Zhang et~al.(2025{\natexlab{b}})Zhang, Chen, Liu, Xue, Liao, Liu, Wang, Ning, Chen, Fu, et~al.]{zhang2025agent}
+Zhang, K., Chen, X., Liu, B., Xue, T., Liao, Z., Liu, Z., Wang, X., Ning, Y., Chen, Z., Fu, X., et~al.
+\newblock Agent learning via early experience.
+\newblock \emph{arXiv preprint arXiv:2510.08558}, 2025{\natexlab{b}}.
+
+\bibitem[Zhao et~al.(2025)Zhao, Zhang, Wei, Xu, He, Sun, and You]{zhao2025timeseriesscientist}
+Zhao, H., Zhang, X., Wei, J., Xu, Y., He, Y., Sun, S., and You, C.
+\newblock Timeseriesscientist: A general-purpose ai agent for time series analysis.
+\newblock \emph{arXiv preprint arXiv:2510.01538}, 2025.
+
+\bibitem[Zheng et~al.(2024)Zheng, Zhang, Zhang, Ye, Luo, Feng, and Ma]{zheng2024llamafactoryunifiedefficientfinetuning}
+Zheng, Y., Zhang, R., Zhang, J., Ye, Y., Luo, Z., Feng, Z., and Ma, Y.
+\newblock Llamafactory: Unified efficient fine-tuning of 100+ language models, 2024.
+
+\bibitem[Zhong et~al.()Zhong, Ruan, Jin, Li, Wen, and Liang]{timevlm}
+Zhong, S., Ruan, W., Jin, M., Li, H., Wen, Q., and Liang, Y.
+\newblock Time-vlm: Exploring multimodal vision-language models for augmented time series forecasting.
+\newblock In \emph{Forty-second International Conference on Machine Learning}.
+
+\bibitem[Zhou et~al.(2025{\natexlab{a}})Zhou, Xuan, Ao, Wang, Fan, and Wang]{zhou2025merit}
+Zhou, S., Xuan, Y., Ao, Y., Wang, X., Fan, T., and Wang, H.
+\newblock Merit: Multi-agent collaboration for unsupervised time series representation learning.
+\newblock In \emph{Findings of the Association for Computational Linguistics: ACL 2025}, pp.\  24011--24028, 2025{\natexlab{a}}.
+
+\bibitem[Zhou et~al.(2025{\natexlab{b}})Zhou, He, Su, Han, Jang, Bertasius, Bansal, and Yao]{zhou2025reagent}
+Zhou, Y., He, Y., Su, Y., Han, S., Jang, J., Bertasius, G., Bansal, M., and Yao, H.
+\newblock Reagent-v: A reward-driven multi-agent framework for video understanding.
+\newblock \emph{arXiv preprint arXiv:2506.01300}, 2025{\natexlab{b}}.
+
+\bibitem[Zhou \& Yu(2024)Zhou and Yu]{zhou2024can}
+Zhou, Z. and Yu, R.
+\newblock Can llms understand time series anomalies?
+\newblock \emph{arXiv preprint arXiv:2410.05440}, 2024.
+
+\end{thebibliography}

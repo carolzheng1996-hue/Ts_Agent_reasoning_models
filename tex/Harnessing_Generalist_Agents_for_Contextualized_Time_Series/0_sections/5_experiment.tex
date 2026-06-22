@@ -1,0 +1,127 @@
+\section{Experiments}
+
+\input{tables/tsr_main.tex}
+
+
+We comprehensively evaluate \method on three recent benchmarks spanning diverse application domains, demonstrating its effectiveness across a wide range of open-ended contextualized time-series scenarios.
+
+
+\noindent\textbf{Benchmarks and Evaluation Focus.}
+We evaluate \method on three complementary benchmarks. Context-is-Key (CiK) \citep{DBLP:conf/icml/WilliamsAMZSRRL25} examines context utilization in context-aware time-series reasoning; TSRBench \citep{DBLP:journals/corr/abs-2601-18744} evaluates open-ended generalist capability through multi-task multimodal scenarios; and TSAIA \citep{DBLP:journals/corr/abs-2509-01822} focuses on practical domain-specific financial analysis. We provide details in Appendix \ref{ap:dataset_details}
+
+
+\noindent\textbf{Baselines.}
+We compare \method with a broad set of baselines spanning five families. 
+(a) \textit{Traditional time-series models}, including statistical forecasting methods ARIMA and ETS \citep{shchur2023autogluon}, as well as neural forecasting models DLinear \citep{DBLP:conf/aaai/ZengCZ023} and PatchTST \citep{DBLP:conf/iclr/NieNSK23}. 
+(b) \textit{Time-series foundation models}, including Chronos-family models \citep{DBLP:journals/tmlr/AnsariSTZMSSRPK24, DBLP:journals/corr/abs-2510-15821}, Lag-Llama \citep{rasul2023lag}, and Moirai-family models \citep{DBLP:conf/icml/WooLKXSS24}. 
+(c) \textit{LLMs and agents designed for time series}, including UniTime \citep{DBLP:conf/www/LiuHLDLHZ24}, Time-LLM \citep{DBLP:conf/iclr/0005WMCZSCLLPW24}, TS-Agent \citep{DBLP:journals/corr/abs-2510-07432}, and TSci \citep{DBLP:journals/corr/abs-2510-01538}.
+(d) \textit{Open-source LLMs}, such as LLaMA3-70B \citep{DBLP:journals/corr/abs-2407-21783}.
+(e) \textit{General agentic pipelines}, including direct prompting, chain-of-thought prompting \citep{DBLP:conf/nips/Wei0SBIXCLZ22}, ReAct \citep{DBLP:conf/iclr/YaoZYDSN023}, self-reflection \citep{DBLP:journals/corr/abs-2405-06682}, and multi-agent reflection \citep{DBLP:conf/icml/YuanX25}. 
+Additional details are provided in Appendix~\ref{ap:baselines}.
+
+
+
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/hyperparameter/cik_rcrps_vs_token.pdf}
+\caption{Performance-efficiency trade-off on CiK. Among methods with reported token usage, \method achieves the best RCRPS with substantially lower token consumption than the strongest multi-agent baseline.}
+\label{fig: teasing}
+\end{figure}
+
+
+\subsection{Context Matters for Time Series, and \method Uses It More Effectively}
+
+\noindent\textbf{Metrics.}
+RCRPS is the primary metric of CiK. It emphasizes context-relevant regions and penalizes violations of task-specific constraints. We additionally report sMAPE as a widely used metric in time series. We also report token usage when applicable. Detailed metric definitions are provided in Appendix~\ref{ap:metrics}.
+
+\noindent\textbf{Main Results.}
+Table~\ref{table:main-results} summarizes the results on the CiK benchmark. Overall, methods that can access and reason over contextual information generally outperform context-agnostic models. DLinear and PatchTST show large errors because they require the training length to exceed the prediction length, which can fail in open-ended tasks.
+\method achieves the best average RCRPS and sMAPE, improving average RCRPS by 11.5\% relative to the strongest baseline. \method obtains the best RCRPS in 4 out of 5 context categories and is nearly tied with the best baseline in the remaining one. Notably, \method achieves these gains efficiently. Compared with Multi-Agent Reflection, \method uses 43.6\% fewer tokens while achieving better average RCRPS and sMAPE. We provide additional domain-wise results in Table~\ref{tab:cik_resuls_domain}.
+
+
+\subsection{\method Improves Open-Ended Temporal Reasoning}
+
+
+We next evaluate \method on TSRBench~\citep{DBLP:journals/corr/abs-2601-18744}, a generalist multi-task multimodal benchmark spanning perception, reasoning, prediction, and decision making. Numerical-only time-series models cannot handle end-to-end scenarios.
+
+Table~\ref{tab:tsrbench_nano_main} compares \method with representative agentic frameworks, all using GPT-5-nano as the base model. \method achieves the best average accuracy with a 15.8\% relative improvement while using the fewest tokens.
+Across task categories, \method achieves the best performance except for ranking second on perception. This suggests that although serialization can encode sufficient information under a large context window, agents may still struggle to decode it into actionable insights. With agent harness, \method yields strong gains on reasoning and prediction, where time-series-specific analysis is more critical.
+
+\input{tables/tsr_main_open.tex}
+
+We further compare \method with various open-source models, including general LLMs, multimodal vision-language models (VLMs), and time-series LLMs (TSLLMs). Time series are represented as textual numerical sequences for LLMs, plots for VLMs, and projector-based embeddings for TSLLMs.
+As shown in Table~\ref{tab:tsrbench_nano_open}, \method achieves the best performance across all task categories, outperforming larger open-source models with up to 235B parameters with GPT-5-nano. 
+
+
+\subsection{\method Applicable in Practice}
+
+
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/tsaia_mc_accuracy_bar_purple.pdf}
+\caption{
+Performance on TSAIA. 
+\method substantially outperforms both general agentic baselines and finance-specific agents, demonstrating its practical applicability in financial time-series analysis.
+}
+\label{fig:tsaia_mc_accuracy}
+\end{figure}
+
+
+We finally evaluate whether \method remains effective in a practical domain-specific setting. 
+We use TSAIA~\citep{DBLP:journals/corr/abs-2509-01822}, a financial time-series analysis benchmark.
+In addition to general agentic baselines, we include three finance-specific agent systems: FinCon~\citep{DBLP:conf/nips/YuYLDJCCSCLXZSX24}, FinTeam~\citep{DBLP:conf/nlpcc/WuWLYLZLCZW25}, and TradingAgents~\citep{DBLP:journals/corr/abs-2412-20138}. 
+
+\noindent\textbf{Main Results.}
+Figure~\ref{fig:tsaia_mc_accuracy} reports the multiple-choice accuracy on TSAIA. Notably, through the capability-evolution loop in Section~\ref{sec:evolve}, \method autonomously evolves three reusable routines from bank-building trajectories: \texttt{portfolio\_var}, \texttt{portfolio\_sharpe}, and \texttt{capm\_regression}. 
+Equipped with these evolved routines, \method substantially outperforms all baselines by 38.9\% relative improvement. demonstrating that \method can acquire practical domain capabilities from experience.
+
+
+\subsection{Ablation Study}
+
+We conduct ablation studies to examine the effects of memory retrieval, backbone models, and framework components. 
+As shown in Figure~\ref{fig:ablation_study}(a), enabling episodic memory retrieval improves both sMAPE and RCRPS, and larger retrieval sizes further improve performance. This shows that relevant past reasoning trajectories provide useful guidance for new contextualized time-series tasks.
+Figure~\ref{fig:ablation_study}(b) shows that \method benefits from stronger LLM backbones, suggesting that time-series-native support complements general reasoning ability. 
+Finally, Figure~\ref{fig:ablation_study}(c) shows that removing the tool harness, capability evolution, or memory all degrades performance, confirming that each part contributes to the final result. Due to page limitations, we provide further ablation studies in Appendix \ref{ap:full_experiments}, including memory bank size ablation and model family compatibility ablation.
+
+
+\subsection{Case Study}
+
+We provide detailed case studies in Appendix~\ref{ap:case_study} to illustrate how \method works on concrete tasks. 
+These examples show how \method leverages textual context under identical numerical histories, uses retrieved memory to guide causal reasoning, and evolves reusable tools from prior trajectories. 
+They qualitatively demonstrate that the gains of \method come from interpretable uses of context, memory, and experience-driven capability evolution.
+
+
+
+\begin{figure*}[t]
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{figures/hyperparameter/k_sensitivity.pdf}
+    \caption{Retrieval Size Ablation.}
+  \end{subfigure}\hfill
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{figures/hyperparameter/cik_model_ablation.pdf}
+    \caption{Backbone Model Ablation.}
+  \end{subfigure}\hfill
+  \begin{subfigure}[t]{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{figures/hyperparameter/tsaia_ablation.pdf}
+    \caption{Component Ablation.}
+  \end{subfigure}\\[4pt]
+
+\caption{
+Ablation studies of \method. 
+\textbf{(a)} Retrieval size ablation shows the benefit of enabling memory retrieval. 
+\textbf{(b)} Backbone model ablation shows that \method consistently benefits from stronger LLM backbones. 
+\textbf{(c)} Component ablation verifies the contributions of the tool harness, capability evolution, and memory. 
+}
+\label{fig:ablation_study}
+\end{figure*}
+
+
+
+
+
+

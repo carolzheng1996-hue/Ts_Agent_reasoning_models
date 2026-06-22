@@ -1,0 +1,79 @@
+You are auditing the final exported benchmark supporting documents before forecasting.
+
+Goal:
+Find supporting documents that contain likely invalid, leaked, over-specific, or internally inconsistent numeric claims, and prepare a human-reviewable correction plan. Do not modify files unless explicitly asked later.
+
+Scope:
+- Inspect the exported benchmark tasks and documents under:
+  env_generation/exports/final_v1/reasoning_hops_4/public
+- Focus on supporting documents, not distractors.
+- Check all tasks, not only a sample.
+- Do not use model forecasting results or downstream performance to decide whether a document is valid.
+
+What to Look For:
+1. Leakage: documents that reveal exact future target values, exact forecast trajectories, deterministic equations, or formulas that trivially determine the target.
+2. Scale inconsistency: numeric claims that conflict with the actual observed history, future values, task metadata, or unit scale.
+3. Impossible or implausible values: wrong baselines, wrong units, impossible timestamps, inconsistent rates, or trend magnitudes that are materially incompatible with the time series.
+4. Over-specificity: semantically valid documents whose numeric details are too precise, wrong, or unnecessary for the intended event.
+5. Context risks: supporting documents that could mislead a forecaster or give a DR agent an invalid shortcut.
+
+Important distinction:
+- Do not flag a document merely because it discusses a future event or qualitative future direction. Supporting documents are allowed to contain forecast-relevant context.
+- Flag it when it gives exact target values, target-window trajectories, deterministic formulas, or numeric claims that are materially inconsistent with the realized time-series scale.
+- Be pragmatic: do not over-police harmless qualitative claims. Flag only issues that could materially affect forecasting or benchmark validity.
+
+Audit Method:
+For each task:
+- Read the task context, `series.history_timestamps`, `series.history_values`, `series.future_timestamps`, `series.future_values`, ROI if available, and all supporting documents.
+- Do not rely only on the natural-language context; compare document claims against the actual time-series values.
+- If a document mentions specific values, rates, baselines, formulas, timestamps, or expected future behavior, normalize units where needed and verify consistency with the observed history/future value scale.
+- Check whether the document leaks exact future target values or makes the forecast mechanically recoverable.
+- Flag a major issue when a supporting document gives absolute target values, ranges, baselines, or formulas that are materially outside the realized time-series scale or imply a different forecast trajectory, even if the document is semantically aligned with the task context.
+- Flag a minor issue when the document is semantically valid but includes unnecessary numeric precision that should be softened to qualitative wording.
+
+Severity:
+Use one of:
+- Major: likely affects benchmark validity, leaks target values, gives deterministic forecast information, or conflicts materially with the time-series scale.
+- Minor: wording is over-specific or slightly risky, but the intended event remains valid and the issue is unlikely to change results substantially.
+- Needs human judgment: ambiguous cases where the document may be valid, but the numeric claim should be reviewed.
+
+Output Requirements:
+Produce a concise human-review report. For each flagged task, include:
+- benchmark_id
+- source task id if available
+- severity
+- problematic supporting document IDs
+- short description of the issue
+- why it is a real problem
+- minimal recommended edit
+- whether forecasting/deep-research results should be rerun after the edit
+
+Correction Style:
+Recommend minimal edits only. Prefer converting bad numeric claims into qualitative descriptions while preserving the intended event semantics.
+Examples:
+- Replace exact future values with "stable post-update baseline"
+- Replace exact slope/formula with "steady linear deceleration"
+- Replace incorrect baseline percentages with "normal operating baseline"
+- Remove deterministic equations or target-window forecasts
+- Replace overly precise timestamps with coarse event timing if exact timing is unnecessary
+
+Do Not:
+- Do not rewrite unrelated documents.
+- Do not change time series values.
+- Do not change task metadata.
+- Do not change distractors unless they are mislabeled as supporting.
+- Do not make large stylistic rewrites.
+- Do not silently patch files.
+- Do not optimize based on model performance.
+- Do not use forecasting results to decide whether a document is valid.
+
+Verification / Rerun Guidance:
+After proposing fixes, identify which downstream artifacts would need rerun:
+- forecasting runs for affected task/context modes
+- deep research caches if supporting documents were already used
+- review-server-visible cached contexts if applicable
+- any exported benchmark bundle or metadata index containing the edited documents
+
+Final Deliverable:
+A structured list of flagged tasks and minimal fixes, ready for human approval before any file changes.
+If no issues are found, report that explicitly and briefly describe the checks performed.

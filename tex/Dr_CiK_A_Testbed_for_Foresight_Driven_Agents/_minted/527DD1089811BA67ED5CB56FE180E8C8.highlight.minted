@@ -1,0 +1,89 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{g+gu}{\PYGZsh{}\PYGZsh{} No Context (None)}
+
+\PYG{l+s+sb}{```}
+\PYG{l+s+sb}{```}
+
+
+\PYGZhy{}\PYGZhy{}\PYGZhy{}
+
+\PYG{g+gu}{\PYGZsh{}\PYGZsh{} Background (Bg.)}
+
+\PYG{l+s+sb}{```}
+\PYG{l+s+sb}{This time series records the electricity usage (in Watt, W) of a household.}
+\PYG{l+s+sb}{```}
+
+\PYGZhy{}\PYGZhy{}\PYGZhy{}
+
+\PYG{g+gu}{\PYGZsh{}\PYGZsh{} Original Context (Orig.)}
+
+\PYG{l+s+sb}{```}
+\PYG{l+s+sb}{This time series records the electricity usage (in Watt, W) of a household. The readings were recorded from 2025\PYGZhy{}10\PYGZhy{}06 00:00:00 to 2025\PYGZhy{}10\PYGZhy{}19 19:00:00, and the recording frequency is hourly (H). Initially, the owner started renovation from 2025\PYGZhy{}10\PYGZhy{}12 18:00:00 to 2025\PYGZhy{}10\PYGZhy{}13 00:00:00 and did not stay at the unit, leading to low power usage of the first 169 readings. After the renovation finished on 2025\PYGZhy{}10\PYGZhy{}13 01:00:00, the house is fully occupied, leading to a permanent increase in electricity usage.}
+\PYG{l+s+sb}{Scenario: Forecast the future electricity usage of this household in the next 180 hours, from 2025\PYGZhy{}10\PYGZhy{}19 20:00:00 to 2025\PYGZhy{}10\PYGZhy{}27 07:00:00.}
+\PYG{l+s+sb}{```}
+
+\PYGZhy{}\PYGZhy{}\PYGZhy{}
+
+\PYG{g+gu}{\PYGZsh{}\PYGZsh{} Rewritten Context (Rewrite)}
+
+
+\PYG{l+s+sb}{```}
+\PYG{l+s+sb}{This time series records the electricity usage (in Watt, W) of Riverside Cottage 12. The readings were recorded from 2025\PYGZhy{}10\PYGZhy{}06 00:00:00 to 2025\PYGZhy{}10\PYGZhy{}19 19:00:00, and the recording frequency is hourly (H). Initially, the owner started renovation from 2025\PYGZhy{}10\PYGZhy{}12 18:00:00 to 2025\PYGZhy{}10\PYGZhy{}13 00:00:00 and did not stay at the unit, leading to low power usage of the first 169 readings. After the renovation finished on 2025\PYGZhy{}10\PYGZhy{}13 01:00:00, this household is fully occupied, leading to a permanent increase in electricity usage.}
+\PYG{l+s+sb}{Scenario: Forecast the future electricity usage of Riverside Cottage 12 in the next 180 hours, from 2025\PYGZhy{}10\PYGZhy{}19 20:00:00 to 2025\PYGZhy{}10\PYGZhy{}27 07:00:00.}
+\PYG{l+s+sb}{```}
+
+\PYGZhy{}\PYGZhy{}\PYGZhy{}
+
+\PYG{g+gu}{\PYGZsh{}\PYGZsh{} Supporting Evidence (Evidence)}
+
+\PYG{l+s+sb}{```}
+\PYG{l+s+sb}{1. This time series records the electricity usage (in Watt, W) of a household. The readings were recorded from 2025\PYGZhy{}10\PYGZhy{}06 00:00:00 to 2025\PYGZhy{}10\PYGZhy{}19 19:00:00, and the recording frequency is hourly (H).}
+\PYG{l+s+sb}{2. the owner started rennovation from 2025\PYGZhy{}10\PYGZhy{}12 18:00:00 to 2025\PYGZhy{}10\PYGZhy{}13 00:00:00 and did not stay at the unit}
+\PYG{l+s+sb}{3. leading to low power usage of the first 169 readings}
+\PYG{l+s+sb}{4. After the renovation finished on 2025\PYGZhy{}10\PYGZhy{}13 01:00:00, this household is fully occupied}
+\PYG{l+s+sb}{5. leading to a permanent increase in electricity usage}
+\PYG{l+s+sb}{```}
+
+\PYGZhy{}\PYGZhy{}\PYGZhy{}
+
+\PYG{g+gu}{\PYGZsh{}\PYGZsh{} Supporting Documents (Supp. docs)}
+
+The full mode concatenates all 14 supporting documents (about 25k characters total). 
+
+
+\PYGZhy{}\PYGZhy{}\PYGZhy{}
+
+\PYG{g+gu}{\PYGZsh{}\PYGZsh{} DR\PYGZhy{}synthesized evidence (DR)}
+
+\PYG{l+s+sb}{```}
+\PYG{l+s+sb}{This time series records the electricity usage (in Watt, W) of the household Riverside Cottage 12.}
+
+\PYG{l+s+sb}{\PYGZhy{} Riverside Cottage 12 electricity usage is documented as Watt\PYGZhy{}based household power consumption, with specific focus on October 2025 load behavior and occupancy\PYGZhy{}driven baseline changes. (doc\PYGZus{}7245, doc\PYGZus{}7271)}
+\PYG{l+s+sb}{\PYGZhy{} During the renovation and heavy\PYGZhy{}labor phase, the owner was not occupying the premises and major appliances and climate\PYGZhy{}control systems were deactivated, resulting in Wattage reductions due to a lack of human activity. (doc\PYGZus{}7236, doc\PYGZus{}7238)}
+\PYG{l+s+sb}{\PYGZhy{} Construction concluded on October 13, at which point living quarters became available and the household reached full occupancy; this elevated post\PYGZhy{}handover baseline persisted through at least October 19. (doc\PYGZus{}7241, doc\PYGZus{}7242, doc\PYGZus{}7243, doc\PYGZus{}7246)}
+\PYG{l+s+sb}{\PYGZhy{} Full occupancy is the primary driver of ongoing electricity use, linked to continuous environmental support, active residential services, and the simultaneous operation of essential systems that were formerly inactive. (doc\PYGZus{}7244, doc\PYGZus{}7245)}
+\PYG{l+s+sb}{\PYGZhy{} Post\PYGZhy{}occupancy electricity use in Cottage 12 is rising, characterized by a drifting higher daily baseline and usage scaling through steady upward momentum. (doc\PYGZus{}7259, doc\PYGZus{}7260, doc\PYGZus{}7261, doc\PYGZus{}7274, doc\PYGZus{}7275)}
+\PYG{l+s+sb}{\PYGZhy{} A smart billing meter was installed on October 9, coinciding with a change in utility provider, followed by a safety inspection on October 15 after equipment updates. (doc\PYGZus{}7250)}
+\PYG{l+s+sb}{\PYGZhy{} A smart\PYGZhy{}meter calibration window from October 10 to October 15 caused temporary reporting\PYGZhy{}metric shifts and recorded spikes attributed to automated diagnostics rather than occupancy. (doc\PYGZus{}7262)}
+\PYG{l+s+sb}{\PYGZhy{} A localized storm and regional grid fluctuations between October 8 and October 14 caused abnormal high readings while surge protectors remained active. (doc\PYGZus{}7263)}
+\PYG{l+s+sb}{\PYGZhy{} Security and lighting installation from October 7 to October 12 introduced transient peak consumption due to high\PYGZhy{}frequency motion sensors and testing\PYGZhy{}related loads. (doc\PYGZus{}7264)}
+\PYG{l+s+sb}{\PYGZhy{} A strict energy quota system was implemented months before October 2025 to regulate peak demand and localized grid capacity, which may constrain extreme usage even under full occupancy. (doc\PYGZus{}7258)}
+\PYG{l+s+sb}{\PYGZhy{} Localized environmental monitoring from October 10 to October 14 recorded humidity variation, changing cloud cover, low nighttime light, and the presence of a reflective roof system designed to reduce heat gain. (doc\PYGZus{}7251)}
+\PYG{l+s+sb}{\PYGZhy{} The cottage features smart\PYGZhy{}home controls for temperature, lighting, security, media, and whole\PYGZhy{}home audio, which allows occupied behavior to affect both standby and active domestic electrical loads. (doc\PYGZus{}7267)}
+\PYG{l+s+sb}{\PYGZhy{} Logistics records for furniture and staging are inconsistent, with one document scheduling a curated furniture package for October 18 and another listing deliveries for late October. (doc\PYGZus{}7252, doc\PYGZus{}7265)}
+\PYG{l+s+sb}{\PYGZhy{} There is conflicting evidence regarding usage trends: one report suggests usage is gradually declining after a post\PYGZhy{}renovation surge, while others describe sustained upward momentum after full occupancy. (doc\PYGZus{}7276, doc\PYGZus{}7259, doc\PYGZus{}7260, doc\PYGZus{}7275)}
+\PYG{l+s+sb}{\PYGZhy{} Some documents describe a stable low\PYGZhy{}energy or flat profile with no October occupancy changes, contradicting reports of a post\PYGZhy{}October\PYGZhy{}13 elevated baseline following handover. (doc\PYGZus{}7271, doc\PYGZus{}7272, doc\PYGZus{}7273, doc\PYGZus{}7241, doc\PYGZus{}7246)}
+\PYG{l+s+sb}{\PYGZhy{} Several documents with matching date ranges refer to other properties (Meadowview Cabin 4, Willow Creek Suite 22, Lakeview Cabin 4, Suite 8, and Meadow View Studio 2) rather than Riverside Cottage 12. (doc\PYGZus{}7253, doc\PYGZus{}7254, doc\PYGZus{}7268, doc\PYGZus{}7269, doc\PYGZus{}7270)}
+\PYG{l+s+sb}{\PYGZhy{} Evidence supports modeling a structural break in electricity usage from renovation/vacancy conditions to a fully occupied residential baseline following the October 13 handover. (doc\PYGZus{}7238, doc\PYGZus{}7241, doc\PYGZus{}7242, doc\PYGZus{}7246)}
+\PYG{l+s+sb}{\PYGZhy{} Within the occupied regime, the directional signal indicates a higher and potentially rising baseline driven by residents\PYGZsq{} domestic routines and concurrent essential\PYGZhy{}system operation. (doc\PYGZus{}7244, doc\PYGZus{}7245, doc\PYGZus{}7259, doc\PYGZus{}7275)}
+\PYG{l+s+sb}{\PYGZhy{} Short\PYGZhy{}lived drivers such as meter diagnostics, storms, security testing, and logistics introduce uncertainty into the operational records. (doc\PYGZus{}7262, doc\PYGZus{}7263, doc\PYGZus{}7264, doc\PYGZus{}7252, doc\PYGZus{}7265)}
+\PYG{l+s+sb}{```}
+
+\PYGZhy{}\PYGZhy{}\PYGZhy{}
+
+\PYG{g+gu}{\PYGZsh{}\PYGZsh{} Verified DR (Verif. DR)}
+
+\PYG{l+s+sb}{```}
+\PYG{l+s+sb}{(After verification, no Codex\PYGZhy{}synthesized evidence remains.)}
+\PYG{l+s+sb}{```}
+\end{MintedVerbatim}

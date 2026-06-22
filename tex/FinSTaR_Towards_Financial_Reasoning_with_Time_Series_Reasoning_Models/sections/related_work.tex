@@ -1,0 +1,29 @@
+\section{Related Work}
+\textbf{Time series reasoning models (TSRMs).}
+Recent work extends LLMs beyond forecasting toward TS reasoning.
+TimeOmni-1~\cite{timeomni1} introduces TSR-Suite with human-annotated CoT but focuses on non-financial domains.
+%(precipitation, taxi, electricity).
+Thoth~\cite{thoth2026} proposes mid-training for TS understanding,
+%but evaluates on only 300 samples.
+PATRA~\cite{patra2026} addresses pattern-aware alignment, and SenTSR-Bench~\cite{sentsr2026} injects domain knowledge for TS reasoning.
+Merrill et al.~\cite{merrill2024towards} formalize TS reasoning as QA over numerical sequences, while S2TS-LLM~\cite{s2tsllm2025} uses spectral symbolization to bridge TS and language representations.
+More recent work explores tool-augmented TSRMs and RL-based reasoning~\cite{timeart2025, timer1_2025}, as well as cross-domain temporal reasoning benchmarks~\cite{mtbench2025}.
+However, \textit{all existing TSRMs target general domains} and none has been designed for financial TS, which require distinct reasoning about market-specific phenomena. 
+%(e.g., volatility clustering, momentum, and cross-asset dynamics).
+
+% \textbf{Financial TS with LLMs.}
+\textbf{LLMs in financial domain.}
+FinTSB~\cite{liu2025fintsb} benchmarks forecasting on stocks but lacks reasoning tasks.
+FinBen~\cite{finben2024} evaluates LLMs across financial NLP datasets but targets text-based tasks rather than raw price TS.
+News-to-Forecast~\cite{newforecast2024} integrates event analysis with reflection and CausalStock~\cite{causalstock2024} leverages LLMs as denoised news encoders, but both require textual inputs rather than reasoning from raw prices.
+No existing work combines \textit{raw financial TS} with \textit{reasoning QA} and \textit{CoT supervision}, the gap that FinSTaR addresses.
+Recent work on
+financial verbal reasoning~\cite{fin_rl_reason2025} and multimodal TS reasoning~\cite{vta2025} explores complementary directions but does not address the assessment--prediction distinction central to our approach.
+A comparison with related work is shown in Table~\ref{tab:comparison}.
+
+\textbf{CoT for structured data.}
+CoT~\cite{wei2022chain} improves LLM reasoning on math~\cite{cobbe2021gsm8k} and science tasks, and STaR~\cite{star2022} bootstraps reasoning from self-generated rationales.
+Program-of-Thought (PoT)~\cite{pot2023} executes code for arithmetic faithfulness, and verifiable-reward RL approaches~\cite{counts2025} use outcome correctness as training signal.
+For TS reasoning, \textit{existing CoT methods rely on human annotation~\cite{timeomni1} or GPT-generated rationales}, which are difficult to scale.
+Our Compute-in-CoT similarly ensures arithmetic correctness but within text-based reasoning chains without requiring a code execution environment, making it compatible with standard LLM inference.
+Scenario-Aware CoT further extends CoT to stochastic prediction by reasoning over multiple scenarios, a direction not explored by PoT or verifiable-reward methods which focus on deterministic correctness.

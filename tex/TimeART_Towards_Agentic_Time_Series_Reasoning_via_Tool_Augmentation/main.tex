@@ -1,0 +1,194 @@
+%%%%%%%% ICML 2026 EXAMPLE LATEX SUBMISSION FILE %%%%%%%%%%%%%%%%%
+
+\documentclass{article}
+
+% Recommended, but optional, packages for figures and better typesetting:
+\usepackage{microtype}
+\usepackage{subcaption}
+\usepackage{booktabs} % for professional tables
+
+% hyperref makes hyperlinks in the resulting PDF.
+% If your build breaks (sometimes temporarily if a hyperlink spans a page)
+% please comment out the following usepackage line and replace
+% \usepackage{icml2026} with \usepackage[nohyperref]{icml2026} above.
+\usepackage{hyperref}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[normalem]{ulem}
+\usepackage{dsfont}
+\usepackage{url}
+\usepackage[listings,most]{tcolorbox}
+\usepackage{graphicx}
+\usepackage{xspace}
+\usepackage{makecell}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{multirow}
+\usepackage{subcaption}
+\usepackage{tabularx}
+\usepackage{color}
+\usepackage{pifont}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{CJKutf8}
+\usepackage{enumitem}
+\usepackage{diagbox}
+\usepackage{listings}
+\usepackage[flushleft]{threeparttable}
+\usepackage{booktabs}
+\usepackage{wrapfig}
+
+
+\newcommand{\icon}{\raisebox{-4.1pt}{\includegraphics[width=1.3em]{Figures/logo.png}}\xspace}
+
+% \setlength{\tabcolsep}{1mm}
+\newcommand{\emoji}[2][1em]{\raisebox{-0.2\height}{\includegraphics[height=#1]{#2}}}
+\definecolor{fbApp}{HTML}{ffe4e3}
+\definecolor{mydarkblue}{rgb}{0,0.3,0.9}
+
+\newcommand{\rowcr}{\rowcolor{fbApp}}
+\newcommand{\ccr}{\cellcolor{fbApp}}
+
+\newcommand{\ccb}{\cellcolor{CadetBlue!10}}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{\node[shape=circle,fill,inner sep=0.5pt] (char) {\textcolor{white}{\small \bf #1}};}}
+
+
+\newcommand{\rowcb}{\rowcolor{CadetBlue!10}} 
+\newcommand{\rowcg}{\rowcolor{gray!10}}
+
+\newcommand{\first}[1]{\textcolor{red}{\textbf{#1}}}
+\newcommand{\second}[1]{\textcolor{blue}{\underline{#1}}}
+
+% Attempt to make hyperref and algorithmic work together better:
+
+% Use the following line for the initial blind version submitted for review:
+\usepackage[accepted]{icml2026}
+
+% If accepted, instead use the following line for the camera-ready submission:
+% \usepackage[accepted]{icml2026}
+
+% For theorems and such
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{amsthm}
+
+% if you use cleveref..
+\usepackage[capitalize,noabbrev]{cleveref}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% THEOREMS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{assumption}[theorem]{Assumption}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% Todonotes is useful during development; simply uncomment the next line
+%    and comment out the line below the next line to turn off comments
+%\usepackage[disable,textsize=tiny]{todonotes}
+\usepackage[textsize=tiny]{todonotes}
+
+
+% The \icmltitle you define below is probably too long as a header.
+% Therefore, a short form for the running title is supplied here:
+\icmltitlerunning{TimeART: Towards Agentic Time Series Reasoning via Tool-Augmentation}
+
+\begin{document}
+
+\twocolumn[
+\icmltitle{\icon TimeART: Towards Agentic Time Series Reasoning via Tool-Augmentation}
+
+% It is OKAY to include author information, even for blind
+% submissions: the style file will automatically remove it for you
+% unless you've provided the [accepted] option to the icml2026
+% package.
+
+% List of affiliations: The first argument should be a (short)
+% identifier you will use later to specify author affiliations
+% Academic affiliations should list Department, University, City, Region, Country
+% Industry affiliations should list Company, City, Region, Country
+
+% You can specify symbols, otherwise they are numbered in order.
+% Ideally, you should not use this facility. Affiliations will be numbered
+% in order of appearance and this is the preferred way.
+
+\begin{icmlauthorlist}
+\icmlauthor{Xingjian Wu}{yyy}
+\icmlauthor{Junkai Lu}{yyy}
+\icmlauthor{Zhengyu Li}{yyy}
+\icmlauthor{Xiangfei Qiu}{yyy} 
+\icmlauthor{Jilin Hu}{yyy} \\
+\icmlauthor{Chenjuan Guo}{yyy}
+\icmlauthor{Christian S. Jensen}{xxx}
+\icmlauthor{Bin Yang}{yyy}
+
+\end{icmlauthorlist}
+
+\icmlaffiliation{yyy}{East China Normal University, Shanghai, China}
+\icmlaffiliation{xxx}{Aalborg University, Aalborg, Denmark}
+
+\icmlcorrespondingauthor{Bin Yang}{byang@dase.ecnu.edu.cn}
+
+
+% You may provide any keywords that you
+% find helpful for describing your paper; these are used to populate
+% the "keywords" metadata in the PDF but will not be shown in the document
+\icmlkeywords{Machine Learning, ICML}
+
+\vskip 0.3in
+]
+
+% this must go after the closing bracket ] following \twocolumn[ ...
+
+% This command actually creates the footnote in the first column
+% listing the affiliations and the copyright notice.
+% The command takes one argument, which is text to display at the start of the footnote.
+% The \icmlEqualContribution command is standard text for equal contribution.
+% Remove it (just {}) if you do not need this facility.
+
+%\printAffiliationsAndNotice{}  % leave blank if no need to mention equal contribution
+\printAffiliationsAndNotice{} % otherwise use the standard text.
+
+\begin{abstract}
+Time series data widely exist in real-world cyber-physical systems. Though analyzing and interpreting them contributes to significant values, e.g, disaster prediction and financial risk control, current workflows mainly rely on human data scientists, which requires significant labor costs and lacks automation. To tackle this, we introduce TimeART, a framework fusing the analytical capability of strong out-of-the-box tools and the reasoning capability of Large Language Models (LLMs), which serves as a fully agentic data scientist for Time Series Question Answering (TSQA). To teach the LLM-based Time Series Reasoning Models (TSRMs) strategic tool-use, we also collect a \textit{100k} expert trajectory corpus called TimeToolBench. To enhance TSRMs' generalization capability, we then devise a four-stage training strategy, which boosts TSRMs through learning from their own early experiences and self-reflections. Experimentally, we train an 8B TSRM on TimeToolBench and equip it with the TimeART framework, and it achieves consistent state-of-the-art performance on multiple TSQA tasks, which pioneers a novel approach towards agentic time series reasoning.
+
+\end{abstract}
+
+
+\input{Sections/Introduction}
+
+\input{Sections/Methodology}
+
+\input{Sections/Experiments}
+
+\input{Sections/Related-Works}
+
+\input{Sections/Conclusion}
+
+% In the unusual situation where you want a paper to appear in the
+% references without citing it in the main text, use \nocite
+%\nocite{langley00}
+
+
+\bibliography{reference}
+\bibliographystyle{icml2026}
+
+\clearpage
+\appendix
+\input{Sections/Appendix}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% APPENDIX
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\end{document}
+

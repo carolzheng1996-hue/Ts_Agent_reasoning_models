@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TimeSage-MT 中文文献解读</title>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <style>
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.72; color: #1f2937; background: #f8fafc; }
+    main { max-width: 980px; margin: 0 auto; padding: 42px 24px 80px; background: #fff; }
+    h1 { font-size: 2rem; line-height: 1.25; margin: 0 0 12px; color: #111827; }
+    h2 { font-size: 1.45rem; margin-top: 34px; border-bottom: 1px solid #e5e7eb; padding-bottom: 6px; color: #111827; }
+    h3 { font-size: 1.15rem; margin-top: 24px; color: #111827; }
+    p { margin: 12px 0; }
+    ul, ol { padding-left: 1.5rem; }
+    code { background: #eef2f7; padding: 0.12rem 0.28rem; border-radius: 4px; }
+    pre { background: #0f172a; color: #e5e7eb; padding: 14px 16px; overflow-x: auto; border-radius: 6px; }
+    pre code { background: transparent; padding: 0; color: inherit; }
+    table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 0.94rem; }
+    th, td { border: 1px solid #d1d5db; padding: 8px 10px; text-align: left; vertical-align: top; }
+    th { background: #f3f4f6; }
+    .num { text-align: right; }
+    .math { overflow-x: auto; margin: 14px 0; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>《TimeSage-MT: A Multi-Turn Benchmark for Evaluating Agentic Time Series Reasoning》中文文献解读</h1>
+  <p><strong>论文</strong>：TimeSage-MT: A Multi-Turn Benchmark for Evaluating Agentic Time Series Reasoning <strong>论文链接</strong>：<a href="https://arxiv.org/abs/2606.01498">arXiv:2606.01498</a> / <a href="https://arxiv.org/pdf/2606.01498">PDF</a> / <a href="https://arxiv.org/e-print/2606.01498">TeX</a> <strong>项目/数据</strong>：<a href="https://github.com/TimeSage-Series/TimeSage-MT">GitHub: TimeSage-Series/TimeSage-MT</a> / <a href="https://huggingface.co/datasets/TimeSage-Series/TimeSage-MT">Hugging Face: TimeSage-Series/TimeSage-MT</a></p>
+  <h2>1. 一句话总结</h2>
+  <p>TimeSage-MT 是一个面向<strong>时间序列分析 Agent</strong> 的多轮 benchmark。它不再只问模型一个 forecasting、classification 或 anomaly detection 问题，而是模拟真实分析工作流：用户连续追问，Agent 需要读数据、选方法、写代码、记住前文、串联分析、纠正误导、评估不确定性，并最终给出有领域依据的建议或决策。</p>
+  <p>论文同时提出了一个结构化时间序列 Agent 系统 <strong>TimeSage</strong>，配备 226 个分析技能、36 个技能类别，并用 TimeSage-MT 对 direct answering、code-enabled reasoning、skill-guided reasoning 和完整 agentic pipeline 进行比较。</p>
+  <h2>2. 这篇论文解决的问题</h2>
+  <p>传统时间序列 benchmark 大多是单步任务：</p>
+  <table>
+    <tr><th class="">任务类型</th><th class="">典型输入输出</th></tr>
+    <tr><td class="">Forecasting</td><td class="">给历史序列，预测未来值</td></tr>
+    <tr><td class="">Anomaly Detection</td><td class="">给序列，找异常点</td></tr>
+    <tr><td class="">Classification</td><td class="">给序列，判断类别</td></tr>
+    <tr><td class="">Imputation</td><td class="">给缺失序列，补全缺失值</td></tr>
+  </table>
+  <p>这些 benchmark 适合比较模型在固定任务上的性能，但无法评估真实分析流程。现实中，一个分析师通常不会只做一次预测，而是经历以下过程：</p>
+  <ol>
+    <li>检查数据质量、频率、缺失值、异常点、趋势和季节性。</li>
+    <li>根据数据属性选择方法，例如分解、预测、异常检测、变点检测或因果分析。</li>
+    <li>设置方法参数，例如 forecast horizon、seasonal period、异常阈值、训练测试切分。</li>
+    <li>把上一轮结论带入下一轮分析。</li>
+    <li>当用户改变目标或提出错误假设时，基于证据调整分析。</li>
+    <li>在最终答案中给出风险、不确定性、领域解释和决策建议。</li>
+  </ol>
+  <p>TimeSage-MT 的核心目标就是评测这整个过程，而不是只评测一个终点任务。</p>
+  <h2>3. Benchmark 规模</h2>
+  <p>TimeSage-MT 的基本规模如下：</p>
+  <table>
+    <tr><th class="">项目</th><th class=" num">数值</th></tr>
+    <tr><td class="">任务数</td><td class=" num">240</td></tr>
+    <tr><td class="">对话轮数</td><td class=" num">2,680</td></tr>
+    <tr><td class="">难度/复杂度层级</td><td class=" num">4</td></tr>
+    <tr><td class="">真实领域</td><td class=" num">8</td></tr>
+    <tr><td class="">每个层级任务数</td><td class=" num">60</td></tr>
+    <tr><td class="">数据源</td><td class=" num">65 个白名单真实时间序列来源</td></tr>
+    <tr><td class="">技能库</td><td class=" num">226 个技能，36 类</td></tr>
+    <tr><td class="">污染风险标记</td><td class=" num">15/65 个源、65/240 个任务带 contamination-risk metadata</td></tr>
+  </table>
+  <p>8 个领域包括 healthcare、energy、manufacturing、climate、finance、telecommunications、transportation、retail。</p>
+  <p>数据时间粒度覆盖很广，包括 100 Hz、逐样本、逐连接、1 分钟、5 分钟、15 分钟、小时、日、月以及不规则事件流。</p>
+  <h2>4. 四个复杂度层级 L1-L4</h2>
+  <p>TimeSage-MT 不是简单把 prompt 写得更难，而是把真实分析流程拆成 4 个阶段。</p>
+  <table>
+    <tr><th class="">层级</th><th class="">名称</th><th class=" num">对话长度</th><th class="">Reasoning graph</th><th class="">主要测试内容</th></tr>
+    <tr><td class="">L1</td><td class="">Open Exploration</td><td class=" num">3-10 轮</td><td class="">无深层分析链</td><td class="">数据画像、开放探索、基础统计总结</td></tr>
+    <tr><td class="">L2</td><td class="">Multi-skill Analysis</td><td class=" num">5-12 轮</td><td class="">2-4 个分析节点，至少一个依赖</td><td class="">多技能串联、跨轮发现、依赖跟踪</td></tr>
+    <tr><td class="">L3</td><td class="">Grounded Synthesis</td><td class=" num">8-15 轮</td><td class="">4-6 个领域相关分析节点</td><td class="">跨方法证据整合、领域化总结</td></tr>
+    <tr><td class="">L4</td><td class="">Full Decision Path</td><td class=" num">12-20 轮</td><td class="">6-10 个分析节点，最终是 decision node</td><td class="">推荐、理由、置信度、风险、结构化决策</td></tr>
+  </table>
+  <p>L1-L2 是 general-purpose tasks；L3-L4 是 domain-grounded tasks。也就是说，越往后越接近真实场景里的“分析支持决策”，而不是单纯把题目变长。</p>
+  <p>论文还设计了三类用户风格：</p>
+  <table>
+    <tr><th class="">用户风格</th><th class="">含义</th></tr>
+    <tr><td class="">Open</td><td class="">用户自然提问，不暗示答案</td></tr>
+    <tr><td class="">Guided-correct</td><td class="">用户给出有帮助的正确方向</td></tr>
+    <tr><td class="">Guided-wrong</td><td class="">用户给出看似合理但错误的建议，要求 Agent 能基于证据反驳</td></tr>
+  </table>
+  <p>这个 guided-wrong 设计很关键，因为真实用户经常会带着错误假设来问问题。一个可靠 Agent 不能只是顺从用户，而要能解释为什么某个方向不成立。</p>
+  <h2>5. 九个能力 C1-C9</h2>
+  <p>TimeSage-MT 的诊断性来自 9 个 capability 维度。每个能力不是抽象标签，而是可以从对话、代码、工具调用和最终输出中评分的可观察行为。</p>
+  <table>
+    <tr><th class="">ID</th><th class="">能力</th><th class="">家族</th><th class="">操作定义</th></tr>
+    <tr><td class="">C1</td><td class="">Read</td><td class="">Basic</td><td class="">识别频率、长度、平稳性、季节性、缺失、异常、趋势等数据属性，不编造数值</td></tr>
+    <tr><td class="">C2</td><td class="">Select</td><td class="">Basic</td><td class="">根据数据画像和任务，从 226 个技能中选择合适方法</td></tr>
+    <tr><td class="">C3</td><td class="">Configure</td><td class="">Basic</td><td class="">正确设置 forecast horizon、seasonal period、异常阈值、train/test split 等参数</td></tr>
+    <tr><td class="">C4</td><td class="">Remember</td><td class="">Reasoning</td><td class="">使用前文结果、决策或中间产物，不自相矛盾</td></tr>
+    <tr><td class="">C5</td><td class="">Chain</td><td class="">Reasoning</td><td class="">按 gold reasoning graph 的依赖边组织分析顺序</td></tr>
+    <tr><td class="">C6</td><td class="">Adapt</td><td class="">Reasoning</td><td class="">面对用户重定向、新证据或误导性建议时能恢复和调整</td></tr>
+    <tr><td class="">C7</td><td class="">Decide</td><td class="">Action</td><td class="">把分析转化成连贯、可执行的决策</td></tr>
+    <tr><td class="">C8</td><td class="">Calibrate</td><td class="">Action</td><td class="">报告合理的不确定性、置信度、区间或保守措辞</td></tr>
+    <tr><td class="">C9</td><td class="">Ground</td><td class="">Action</td><td class="">在领域任务中应用行业惯例、阈值、监管或业务知识</td></tr>
+  </table>
+  <p>这个 taxonomy 的价值是：它能区分不同失败类型。比如总分低可能来自 C1 读数据失败，也可能来自 C3 参数配置失败，还可能来自 C8 不确定性校准失败。单一 accuracy 无法提供这种诊断。</p>
+  <h2>6. 数据生成与质控流程</h2>
+  <p>TimeSage-MT 的构造流程分成生成阶段和质控阶段。</p>
+  <h3>6.1 生成阶段</h3>
+  <table>
+    <tr><th class="">阶段</th><th class="">类型</th><th class="">作用</th></tr>
+    <tr><td class="">S1 Data Selection</td><td class="">deterministic</td><td class="">从 65 个白名单真实数据源中筛选，检查 license、格式、长度和时间轴</td></tr>
+    <tr><td class="">S2 Profiling</td><td class="">deterministic</td><td class="">做 80/20 visible/held-out split，并计算频率、维度、平稳性、季节性、缺失、复杂度等 11 类 profile</td></tr>
+    <tr><td class="">S3 Task Assignment</td><td class="">deterministic</td><td class="">分配层级、长度、用户风格、领域、任务家族，保证每层 60 个任务</td></tr>
+    <tr><td class="">S4 Reasoning Path</td><td class="">deterministic</td><td class="">构建 typed analytical DAG，定义分析节点、依赖边和预期输出</td></tr>
+    <tr><td class="">S5 Dialogue Generation</td><td class="">LLM-powered</td><td class="">用 Claude Opus 4.6 根据 profile、reasoning graph、数据预览和技能注册表生成多轮对话</td></tr>
+  </table>
+  <p>最重要的设计是：<strong>对话文本可以由 LLM 生成，但 gold target 不来自 LLM</strong>。可验证答案由 deterministic extractor 运行 reference code 产生，且 reference code 和 gold target 不暴露给被测 Agent。</p>
+  <h3>6.2 80/20 visible/held-out split</h3>
+  <p>S2 会把每个数据源切成：</p>
+  <ul>
+    <li>前 80%：visible slice，用于构造任务和给 Agent 看；</li>
+    <li>后 20%：held-out slice，用于 gold extraction 和最终评分。</li>
+  </ul>
+  <p>这使 benchmark 能评估 forecast、decision、held-out verification 等任务，同时减少对话中泄漏目标答案的风险。</p>
+  <h3>6.3 Reasoning graph</h3>
+  <p>S4 把任务转成 typed DAG：</p>
+  <div class="math">$$
+G=(V,E,\tau_V,\tau_E,\alpha)
+$$</div>
+  <p>其中 $V$ 是分析节点，$E$ 是依赖边，$\tau_V$ 是节点类型，$\tau_E$ 是边类型，$\alpha$ 存储用于生成和评估的属性。</p>
+  <p>节点类型包括 profile、transform、forecast、anomaly、classification、regression、imputation、change-point、causal、counterfactual、uncertainty、synthesis、decision 等。边类型包括 data-preparation、parameter dependence、evidence dependence、comparison、correction、synthesis、decision-support。</p>
+  <p>这个 graph 不只是生成对话用的脚本，也用于 capability scoring，尤其是 C5 Chain 和跨轮依赖检查。</p>
+  <h3>6.4 质控阶段</h3>
+  <table>
+    <tr><th class="">阶段</th><th class="">作用</th></tr>
+    <tr><td class="">P2 Reproducibility Audit</td><td class="">46 个 deterministic checks，覆盖数据完整性、split、assignment、graph、reference code、gold provenance 等</td></tr>
+    <tr><td class="">P3 LLM Cross-Family Review</td><td class="">用不同模型家族做审核，检查事实漂移、held-out 泄漏、训练记忆痕迹、open-loop evaluability</td></tr>
+    <tr><td class="">P4 Human Review</td><td class="">人工 dashboard 审核 source data、dialogue、reasoning graph、reference code、gold fields</td></tr>
+    <tr><td class="">P5 Final Check</td><td class="">重新跑 P2 audit，在干净 sandbox 中重跑 reference code，确认 gold target 稳定</td></tr>
+  </table>
+  <p>这套管线比普通“LLM 生成题目 + 人工抽查”严得多，尤其强调可复现和可审计。</p>
+  <h2>7. 评测协议</h2>
+  <p>TimeSage-MT 有两条评分线：Outcome scoring 和 Capability scoring。</p>
+  <h3>7.1 Outcome scoring</h3>
+  <p>Outcome track 看 Agent 最终和中间输出是否正确。它有 5 个维度：</p>
+  <table>
+    <tr><th class="">维度</th><th class="">缩写</th><th class="">评分方式</th></tr>
+    <tr><td class="">Numerical Accuracy</td><td class="">NA</td><td class="">deterministic，比对数值、forecast、anomaly F1、change-point F1、causal edge F1 等</td></tr>
+    <tr><td class="">Factual Verification</td><td class="">FV</td><td class="">deterministic，比对数据属性和关键事实</td></tr>
+    <tr><td class="">Analytical Quality</td><td class="">AQ</td><td class="">LLM judge，评估事实正确性、分析深度、结论可靠性</td></tr>
+    <tr><td class="">Decision Making / Quality</td><td class="">DM</td><td class="">LLM judge，仅 L4 适用</td></tr>
+    <tr><td class="">Code Correctness</td><td class="">CC</td><td class="">sandbox 运行 Agent 代码并比对输出</td></tr>
+  </table>
+  <p>每个任务的 outcome score 是适用维度的平均值：</p>
+  <div class="math">$$
+\mathrm{Outcome}(t)=
+\begin{cases}
+|M(t)|^{-1}\sum_{m\in M(t)}s_m(t), &amp; |M(t)|&gt;0\\
+\mathrm{N/A}, &amp; |M(t)|=0
+\end{cases}
+$$</div>
+  <p>其中 $M(t)$ 是任务 $t$ 中非空且适用的 outcome components。</p>
+  <h3>7.2 Capability scoring</h3>
+  <p>Capability track 看过程行为是否符合预期。C1-C9 共 28 个 sub-check，其中 26 个是 deterministic 或局部 embedding check，只有 C7 Decide 和 C9 Ground 的部分判断使用 LLM judge。</p>
+  <p>能力分数定义为：</p>
+  <div class="math">$$
+\mathrm{Cap}_c(t)=
+\begin{cases}
+|S_c(t)|^{-1}\sum_{s\in S_c(t)}s(t), &amp; |S_c(t)|&gt;0\\
+\mathrm{N/A}, &amp; |S_c(t)|=0
+\end{cases}
+$$</div>
+  <p>Capability score 不是 leaderboard 结论，而是诊断工具。比如一个系统 C5 高但 C1 低，说明它分析链条顺序没错，但开头读错了数据。</p>
+  <h3>7.3 LLM judge</h3>
+  <p>论文使用 GPT-5.4 作为 judge。需要注意的是，论文强调所有 reference targets 都由 executable code 产生，而不是由 judge 产生。LLM judge 只用于 free-form analytical quality、decision quality、C7 和 C9 中较难 rule-based 的部分。</p>
+  <h2>8. 被评测系统</h2>
+  <p>论文比较了四种系统设置：</p>
+  <table>
+    <tr><th class="">设置</th><th class="">说明</th></tr>
+    <tr><td class="">Direct Answering</td><td class="">模型直接回答，无计算工具</td></tr>
+    <tr><td class="">Code-Enabled Reasoning</td><td class="">模型可访问执行环境，写代码、算统计量、跑分析</td></tr>
+    <tr><td class="">Skill-Guided Code Reasoning</td><td class="">模型可调用 TimeSage 技能库中的模板和说明，也可自己写代码</td></tr>
+    <tr><td class="">TimeSage</td><td class="">完整结构化 agent pipeline：Planner、Validator、Profiler、Executor、Evaluator、Reporter</td></tr>
+  </table>
+  <p>TimeSage 的 6 个阶段中，Planner 和 Reporter 使用 LLM，Validator、Profiler、Executor、Evaluator 是 deterministic。它的设计思想是把“规划、执行、验证、汇报”拆开，降低模型随意编数字或跳步的风险。</p>
+  <h2>9. TimeSage 技能库</h2>
+  <p>TimeSage 技能库包含 226 个技能，覆盖 36 类分析能力。部分技能类别如下：</p>
+  <table>
+    <tr><th class="">类别</th><th class=" num">数量</th><th class="">类别</th><th class=" num">数量</th></tr>
+    <tr><td class="">anomaly detection</td><td class=" num">15</td><td class="">imputation</td><td class=" num">15</td></tr>
+    <tr><td class="">classification</td><td class=" num">13</td><td class="">deep-learning forecasting</td><td class=" num">33</td></tr>
+    <tr><td class="">foundation-model forecasting</td><td class=" num">10</td><td class="">statistical forecasting</td><td class=" num">8</td></tr>
+    <tr><td class="">causal and change-point detection</td><td class=" num">6</td><td class="">uncertainty</td><td class=" num">5</td></tr>
+    <tr><td class="">decomposition</td><td class=" num">5</td><td class="">volatility</td><td class=" num">5</td></tr>
+    <tr><td class="">preprocessing</td><td class=" num">7</td><td class="">evaluation</td><td class=" num">6</td></tr>
+    <tr><td class="">symbolic</td><td class=" num">6</td><td class="">numerical</td><td class=" num">8</td></tr>
+  </table>
+  <p>技能库的作用不是替代模型，而是给模型可复用的分析例程和代码模板。实验表明，技能库是否有效取决于 backbone 是否能正确选择、配置和整合技能结果。</p>
+  <h2>10. 主实验结果</h2>
+  <p>论文在 Code-Enabled Reasoning 设置下评测 6 个 frontier LLM。</p>
+  <table>
+    <tr><th class="">模型</th><th class=" num">L1</th><th class=" num">L2</th><th class=" num">L3</th><th class=" num">L4</th><th class=" num">Overall</th></tr>
+    <tr><td class="">GLM-5.1</td><td class=" num">49.11</td><td class=" num">37.50</td><td class=" num"><strong>36.50</strong></td><td class=" num"><strong>38.87</strong></td><td class=" num"><strong>40.50</strong></td></tr>
+    <tr><td class="">Claude-Sonnet-4.6</td><td class=" num"><strong>49.61</strong></td><td class=" num"><strong>38.30</strong></td><td class=" num">35.89</td><td class=" num">37.96</td><td class=" num">40.44</td></tr>
+    <tr><td class="">GPT-5.3-Codex</td><td class=" num">48.86</td><td class=" num">34.96</td><td class=" num">36.47</td><td class=" num">37.69</td><td class=" num">39.49</td></tr>
+    <tr><td class="">Qwen-3.5-122B-A10B</td><td class=" num">47.18</td><td class=" num">33.63</td><td class=" num">32.41</td><td class=" num">36.13</td><td class=" num">37.34</td></tr>
+    <tr><td class="">MiniMax-M2.7</td><td class=" num">45.29</td><td class=" num">33.42</td><td class=" num">31.62</td><td class=" num">35.44</td><td class=" num">36.44</td></tr>
+    <tr><td class="">Gemini-3-Flash-Preview</td><td class=" num">44.08</td><td class=" num">31.74</td><td class=" num">31.58</td><td class=" num">33.45</td><td class=" num">35.21</td></tr>
+  </table>
+  <p>主结论有三个：</p>
+  <ol>
+    <li><strong>对话深度增加后性能明显下降</strong>。所有模型在 L1 最好，到 L2 下降约 10-15 分，说明多轮、多技能依赖很快暴露问题。</li>
+    <li><strong>前沿模型差距很小</strong>。GLM-5.1、Claude-Sonnet-4.6、GPT-5.3-Codex 的 overall 都在 39-41 左右，没有模型明显解决 benchmark。</li>
+    <li><strong>更高成本不等于更高质量</strong>。论文指出，在有成本统计的模型中，推理花费差异接近 5 倍，但分数只差几个点。</li>
+  </ol>
+  <h2>11. 细粒度能力结果</h2>
+  <p>Capability scores 暴露了一个有意思的结构：</p>
+  <table>
+    <tr><th class="">模型</th><th class=" num">C1 Read</th><th class=" num">C2 Select</th><th class=" num">C3 Configure</th><th class=" num">C4 Remember</th><th class=" num">C5 Chain</th><th class=" num">C8 Calibrate</th></tr>
+    <tr><td class="">Claude-Sonnet-4.6</td><td class=" num">26.60</td><td class=" num">44.19</td><td class=" num">19.77</td><td class=" num">88.81</td><td class=" num">99.54</td><td class=" num"><strong>44.59</strong></td></tr>
+    <tr><td class="">GLM-5.1</td><td class=" num"><strong>27.49</strong></td><td class=" num">48.48</td><td class=" num"><strong>20.05</strong></td><td class=" num">84.76</td><td class=" num">99.47</td><td class=" num">42.34</td></tr>
+    <tr><td class="">GPT-5.3-Codex</td><td class=" num">25.32</td><td class=" num">42.90</td><td class=" num">19.89</td><td class=" num">80.51</td><td class=" num">98.54</td><td class=" num">42.34</td></tr>
+    <tr><td class="">Qwen-3.5-122B-A10B</td><td class=" num">22.46</td><td class=" num"><strong>53.05</strong></td><td class=" num">19.38</td><td class=" num"><strong>88.83</strong></td><td class=" num">99.52</td><td class=" num">42.62</td></tr>
+  </table>
+  <p>模型在 C4 Remember 和 C5 Chain 上很高，说明它们能保持一定多轮记忆，也能按依赖链推进。但 C1 Read 和 C3 Configure 很低，说明更基础的时序分析能力仍不稳定：</p>
+  <ul>
+    <li>读不准频率、趋势、缺失、异常和数据属性；</li>
+    <li>选了方法但参数设置不对；</li>
+    <li>代码能跑，但分析前提和配置可能错；</li>
+    <li>不确定性校准和领域决策仍然弱。</li>
+  </ul>
+  <p>论文的重要判断是：<strong>代码执行不是瓶颈，可靠分析才是瓶颈。</strong></p>
+  <h2>12. Observation 1：代码执行显著优于直接回答</h2>
+  <p>在 100-task paired subset 上，Code-Enabled Reasoning 明显优于 Direct Answering。</p>
+  <table>
+    <tr><th class="">模型</th><th class=" num">Direct Overall</th><th class=" num">Code-Enabled Overall</th></tr>
+    <tr><td class="">GPT-5.3-Codex</td><td class=" num">15</td><td class=" num"><strong>39</strong></td></tr>
+    <tr><td class="">Qwen-3.5-122B-A10B</td><td class=" num">18</td><td class=" num"><strong>37</strong></td></tr>
+  </table>
+  <p>Direct Answering 没有 executable evidence，Code Correctness 为 0，容易编造数值和统计结论。时间序列分析里，小的数值错误可能改变趋势判断、隐藏异常或反转决策，因此代码执行几乎是必要条件。</p>
+  <h2>13. Observation 2：技能库有帮助，但依赖模型能否用好</h2>
+  <p>Skill-Guided Code Reasoning 和普通 Code-Enabled Reasoning 的对比如下：</p>
+  <table>
+    <tr><th class="">模型</th><th class=" num">Code-Enabled Overall</th><th class=" num">Skill-Guided Overall</th><th class="">主要变化</th></tr>
+    <tr><td class="">GPT-5.3-Codex</td><td class=" num">39</td><td class=" num"><strong>45</strong></td><td class="">AQ 从 35 到 61，DM 从 63 到 76</td></tr>
+    <tr><td class="">Qwen-3.5-122B-A10B</td><td class=" num">37</td><td class=" num"><strong>38</strong></td><td class="">只小幅提升</td></tr>
+  </table>
+  <p>这说明技能库不是万能插件。它对 GPT-5.3-Codex 帮助明显，因为模型能较好选择技能、理解输出并组织分析。但对 Qwen-3.5-122B，技能访问并没有自动转化为高质量分析。</p>
+  <h2>14. Observation 3：完整 TimeSage pipeline 有取舍</h2>
+  <p>论文进一步比较 Skill-Guided Code Reasoning 和完整 TimeSage pipeline。</p>
+  <table>
+    <tr><th class="">模型</th><th class=" num">Skill-Guided Overall</th><th class=" num">TimeSage Overall</th><th class=" num">变化</th></tr>
+    <tr><td class="">GPT-5.3-Codex</td><td class=" num">44.94</td><td class=" num">41.50</td><td class=" num">-3.45</td></tr>
+    <tr><td class="">Qwen-3.5-122B-A10B</td><td class=" num">37.58</td><td class=" num">38.23</td><td class=" num">+0.65</td></tr>
+  </table>
+  <p>对 Qwen-3.5-122B，TimeSage 提升 Numerical Accuracy、Factual Verification、Analytical Quality，但降低 Decision Making 和 Code Correctness。对 GPT-5.3-Codex，TimeSage 降低总体表现，尤其伤害 Analytical Quality 和 Decision Making。</p>
+  <p>论文的解释是：结构化 pipeline 可以帮助较弱 backbone 保持 grounded，但对已经有较强 agentic harness 的模型，额外编排可能引入规划冲突，限制模型自己的表达和推理能力。</p>
+  <p>这个结论很务实：<strong>更多 agent pipeline 不一定更好。关键不是堆阶段，而是找到合适的 orchestration 强度。</strong></p>
+  <h2>15. 与 TSRBench 的关系</h2>
+  <p>TimeSage-MT 和 TSRBench 都关注时间序列推理，但评测对象不同。</p>
+  <table>
+    <tr><th class="">维度</th><th class="">TSRBench</th><th class="">TimeSage-MT</th></tr>
+    <tr><td class="">核心问题</td><td class="">模型能否解时间序列推理题</td><td class="">Agent 能否完成多轮时间序列分析流程</td></tr>
+    <tr><td class="">交互形式</td><td class="">主要是单题问答</td><td class="">多轮对话</td></tr>
+    <tr><td class="">能力重点</td><td class="">Perception, Reasoning, Prediction, Decision-Making</td><td class="">Read, Select, Configure, Remember, Chain, Adapt, Decide, Calibrate, Ground</td></tr>
+    <tr><td class="">评测粒度</td><td class="">任务级 accuracy</td><td class="">outcome + capability + per-turn trace</td></tr>
+    <tr><td class="">工具使用</td><td class="">辅助消融</td><td class="">核心评测对象</td></tr>
+    <tr><td class="">适用场景</td><td class="">测试模型的题目级时间序列推理能力</td><td class="">测试真实分析 Agent 的工作流可靠性</td></tr>
+  </table>
+  <p>可以把 TSRBench 理解为“题目级 reasoning benchmark”，把 TimeSage-MT 理解为“工作流级 agent benchmark”。</p>
+  <h2>16. 论文贡献</h2>
+  <p>TimeSage-MT 的主要贡献有三点：</p>
+  <ol>
+    <li><strong>提出第一个面向 agentic time series reasoning 的多轮 benchmark</strong>。它覆盖 240 个任务、2,680 个对话轮、8 个真实领域和 4 个复杂度层级。</li>
+    <li><strong>建立可诊断的 C1-C9 能力体系</strong>。它能定位模型失败在读数据、选方法、参数配置、记忆、链式推理、适应、决策、不确定性还是领域 grounding。</li>
+    <li><strong>提供可复现的构造与评测协议</strong>。包括 reference code、held-out gold extraction、46 个 deterministic checks、LLM cross-family review、human dashboard、public leaderboard 和 226-skill library。</li>
+  </ol>
+  <h2>17. 局限</h2>
+  <p>论文也有明显边界：</p>
+  <ul>
+    <li>对话仍是 scripted conversation，无法完全覆盖真实长期协作中的开放目标变化。</li>
+    <li>任务规模 240 个，适合评测和诊断，不一定足够作为训练数据。</li>
+    <li>Analytical Quality、Decision Quality、C7、C9 仍部分依赖 LLM judge，存在 judge bias 风险。</li>
+    <li>公开数据源无法覆盖大量高风险场景中的私有数据、监管约束、机构政策和稀有事件。</li>
+    <li>TimeSage pipeline 显示结构化编排有副作用，但论文还没有给出自适应 orchestration 的完整方案。</li>
+  </ul>
+  <h2>18. 总体评价</h2>
+  <p>TimeSage-MT 的价值不在于又做了一个时间序列排行榜，而在于把“时间序列 Agent 是否可靠”拆成了可测、可复现、可诊断的问题。它说明当前模型的短板不是单纯不会预测，也不是不会写代码，而是完整工作流中的多处失稳：读数据不准、参数配置不稳、证据 grounding 不够、不确定性处理弱、领域决策缺少闭环。</p>
+  <p>这篇论文对后续研究的启发很直接：可靠的时间序列 Agent 不能只靠更强 LLM，也不能简单堆工具和 pipeline。更关键的是让 Agent 在合适的时刻使用合适的技能，能验证中间结果，能保留跨轮状态，能校准不确定性，并且能把数值证据转化为领域可执行的决策。</p>
+</main>
+</body>
+</html>

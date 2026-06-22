@@ -1,0 +1,1026 @@
+%%%%%%%% ICML 2026 EXAMPLE LATEX SUBMISSION FILE %%%%%%%%%%%%%%%%%
+
+\documentclass{article}
+
+% Recommended, but optional, packages for figures and better typesetting:
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{booktabs} 
+\usepackage{hyperref}
+
+% Attempt to make hyperref and algorithmic work together better:
+\newcommand{\theHalgorithm}{\arabic{algorithm}}
+
+\usepackage[accepted]{icml2026}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage[most]{tcolorbox}
+\newtcolorbox{mybox}[1][]{%
+  colback=gray!5!white,   
+  colframe=gray!75!black, 
+  boxrule=0.8pt,
+  arc=2mm,
+  left=4mm, right=4mm, top=2mm, bottom=2mm,
+  enhanced,
+  fonttitle=\bfseries\large, 
+  fontupper=\large,        
+  title={#1}
+}
+
+\usepackage[capitalize,noabbrev]{cleveref}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% THEOREMS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{assumption}[theorem]{Assumption}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\usepackage[disable,textsize=tiny]{todonotes}
+\let\algorithmic\relax
+\let\endalgorithmic\relax
+%\usepackage{hyperref}
+\usepackage{url}
+\usepackage{capt-of}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{multirow}
+\usepackage{subcaption}
+\usepackage{pifont}
+\usetikzlibrary{arrows.meta}
+\usepackage{tikz}
+\newcommand{\causalGraph}[1]{%
+    \begin{tikzpicture}[baseline=-0.5ex, scale=0.75, transform shape]
+        \tikzset{node style/.style={circle, draw, solid, thin, inner sep=1pt, minimum size=0.5cm, font=\bfseries\tiny}}
+        \tikzset{edge style/.style={-Stealth, thin}}
+        \foreach \i in {1,...,5} {
+            \node[node style] (\i) at ({90 - (\i-1)*360/5}:1.2cm) {\i};
+        }
+        #1
+    \end{tikzpicture}%
+}
+
+\usepackage{algpseudocodex}
+\usepackage{amsmath}
+\usepackage{bbm}
+\usepackage{textcomp}
+\usepackage{stfloats}
+\usepackage{mathabx}
+\usepackage{amsthm}
+\usepackage{enumitem}
+\setlist{leftmargin=5mm}
+\usepackage{wrapfig}
+\usepackage{makecell}
+\usepackage{lipsum}
+\usepackage{amsmath, amssymb, graphicx, xcolor, xspace}
+\usepackage{booktabs}
+\usepackage{tcolorbox}  
+\usepackage{float}
+\usepackage[table]{xcolor}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage[most]{tcolorbox}
+
+\definecolor{correctgreen}{RGB}{0, 153, 0}
+\definecolor{wrongred}{RGB}{204, 0, 0}
+
+
+\tcbuselibrary{breakable} 
+
+
+\newtcolorbox{ReasoningBox}[1][]{
+    enhanced,
+    breakable, 
+    colback=white,
+    colframe=black,
+    coltitle=white,
+    fonttitle=\bfseries,
+    title=Reasoning Process Error,
+    sharp corners,
+    boxrule=1pt,
+    attach boxed title to top left={xshift=0mm, yshift=0mm},
+    boxed title style={
+        sharp corners, 
+        colback=black, 
+        colframe=black, 
+        boxrule=1pt,
+        right=2mm, left=2mm
+    },
+    top=1.5em,
+    #1
+}
+
+\usepackage{tikz}
+\makeatletter
+\newcommand{\DrawLine}{%
+  \begin{tikzpicture}
+  \path[use as bounding box] (0,0) -- (\linewidth,0);
+  \draw[color=black,dashed,dash phase=2pt]
+        (0-\kvtcb@leftlower-\kvtcb@boxsep,0)--
+        (\linewidth+\kvtcb@rightlower+\kvtcb@boxsep,0);
+  \end{tikzpicture}%
+  }
+\definecolor{violet}{RGB}{138, 43, 226}
+
+\makeatother
+
+\definecolor{citecol}{HTML}{2DDC0E}
+\definecolor{tableofcontent}{HTML}{E63E15}
+\definecolor{urlcol}{HTML}{2470D8}
+\definecolor{myorange}{RGB}{2, 142, 2}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=red,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    citecolor=myorange,
+}
+
+\usepackage[most]{tcolorbox}
+\tcbset{
+  colback=gray!5!white,    % 
+  colframe=black,          % 
+  boxrule=0.5pt,           % 
+  arc=2pt,                 % 
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  fonttitle=\bfseries,
+  coltitle=black
+}
+
+\newcommand{\xhdr}[1]{{\vspace{1pt}\noindent\bfseries #1}.}
+\newcommand{\ie}{\textit{i.e., }}
+\newcommand{\eg}{\textit{e.g., }}
+\newcommand{\etal}{\textit{et al.}}
+\newcommand{\st}{\textit{s.t. }}
+\newcommand{\etc}{\textit{etc.}}
+\newcommand{\wrt}{\textit{w.r.t. }}
+\newcommand{\cf}{\textit{cf. }}
+\newcommand{\aka}{\textit{aka. }}
+\newcommand{\shirley}[1]{\textcolor{purple}{(\textit{Shirley: #1})}}
+\newcommand{\shir}[1]{\textcolor{purple}{#1}}
+\newcommand{\mdf}[1]{\textcolor{red}{#1}}
+\newcommand{\rex}[1]{\textcolor{magenta}{(Rex: #1)}}
+\newcommand{\abhijit}[1]{\textcolor{orange}{(Abhijit: #1)}}
+\newcommand{\CITE}{\textcolor{blue}{(CITE)}}
+\newcommand{\rmkang}{\textcolor{brown}}
+
+\newcommand{\cmark}{\textcolor{green!70!black}{\checkmark}} 
+
+\newcommand{\lmark}{\textcolor{orange!90!black}{\checkmark}} 
+\newcommand{\modT}{\textbf{T}}       % 
+\newcommand{\modV}{\textbf{V}}       % 
+\newcommand{\modTV}{\textbf{T+V}}    % 
+\newcommand{\xmark}{\textcolor{red}{$\times$}}
+\NewDocumentCommand{\shibo}{ mO{} }
+{\textcolor{pink}{\textsuperscript{\textit{Shibo}}\textsf{\textbf{\small[#1]}}}}
+\newcommand\ours{\textsc{TSRBench}\xspace}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% THEOREMS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\theoremstyle{plain}
+
+\icmltitlerunning{\ours: A Comprehensive Multi-task Multi-modal Time Series Reasoning Benchmark for Generalist Models}
+
+\begin{document}
+
+
+\twocolumn[
+\icmltitle{
+\raisebox{-0.05em}{\includegraphics[height=1.2em]{figures/logo.pdf}}
+\ours: A Comprehensive Multi-task Multi-modal Time Series Reasoning Benchmark for Generalist Models
+}
+
+\icmlsetsymbol{equal}{*}
+
+\begin{icmlauthorlist}
+\icmlauthor{Fangxu Yu}{yyy}
+\icmlauthor{Xingang Guo}{xxx}
+\icmlauthor{Lingzhi Yuan}{yyy}
+\icmlauthor{Haoqiang Kang}{zzz}
+\icmlauthor{Hongyu Zhao}{yyy}\\
+\icmlauthor{Lianhui Qin}{zzz}
+\icmlauthor{Furong Huang}{yyy}
+\icmlauthor{Bin Hu}{xxx}
+\icmlauthor{Tianyi Zhou}{aaa}
+\end{icmlauthorlist}
+\icmlaffiliation{aaa}{Mohamed bin Zayed University of Artificial Intelligence}
+\icmlaffiliation{xxx}{University of Illinois at Urbana–Champaign}
+\icmlaffiliation{yyy}{University of Maryland, College Park}
+\icmlaffiliation{zzz}{University of California, San Diego}
+
+\icmlcorrespondingauthor{Tianyi Zhou}{tianyi.zhou@mbzuai.ac.ae}
+\icmlsetsymbol{dag}{\dag}
+
+\icmlkeywords{Machine Learning, ICML}
+\vskip 0.3in
+]
+
+\printAffiliationsAndNotice{}  
+\begin{abstract}
+Time series are ubiquitous in real-world scenarios and crucial for applications ranging from energy management to traffic control. Consequently, the ability to reason over time series is a fundamental skill for generalist models to solve complex problems. However, current benchmarks for generalist models largely overlook this dimension.
+To bridge this gap, we introduce \ours, a comprehensive multi-modal benchmark designed to stress-test the full spectrum of time series reasoning capabilities. \ours features: i) a diverse set of 4125 problems from 14 domains, and is categorized into 4 major dimensions: Perception, Reasoning, Prediction, and Decision-Making. ii) 15 tasks from the 4 dimensions evaluating essential reasoning capabilities (e.g., numerical reasoning).
+Through extensive experiments, we evaluate over 30 leading proprietary and open-source LLMs, VLMs, and TSLLMs within \ours. Our findings reveal that: i) scaling laws hold for perception and reasoning but break down for prediction; ii) strong reasoning does not guarantee accurate context-aware forecasting, indicating a decoupling between semantic understanding and numerical prediction; and iii) despite the complementary nature of textual and visual forms of time series as inputs, current multimodal models fail to effectively fuse them for reciprocal performance gains. \ours provides a standardized evaluation platform that not only highlights existing challenges but also offers valuable insights to advance generalist models. Our code and dataset are available at \href{https://tsrbench.github.io/}{https://tsrbench.github.io/}.
+\end{abstract}
+
+\section{Introduction}
+\label{sec:intro}
+Time series pervade real-world environments and underpin decision-making across high-stakes domains, including finance~\citep{dong2024fnspid}, healthcare~\citep{morid2023time}, and industrial systems~\citep{yan2024comprehensive}. Since a substantial portion of real-world information is inherently temporal, reasoning on time series becomes a core capability for building generalist models that can reliably solve practical problems. Equipping models with such reasoning abilities enables automated systems to interpret temporal signals in context, supporting downstream applications such as education~\citep{mao2024time}, clinical management~\citep{matowe2003interrupted}, disaster forecasting~\citep{hakim2024flood}, and scientific discovery~\citep{yu2025physics}.
+
+Given the critical importance of time series reasoning, there is a pressing need for standardized and automated evaluation frameworks that enable comprehensive assessment and comparison. However, existing work remains largely anchored in traditional time series analysis, which adopts a reductive view by treating time series as isolated numerical sequences—thereby stripping away the causal structure and semantic context essential for real-world problem-solving. Recent benchmarks have begun to integrate context~\citep{williams2024context, liu2024time, cai2024timeseriesexam, kong2025time, wu2025scits}, yet they predominantly target surface-level pattern understanding, which is insufficient for complex problem-solving. Other initiatives that attempt to probe reasoning capabilities~\citep{chen2025mtbench, wang2025itformer, guan2025timeomni} often remain confined to narrow domains or restricted task scopes. This systemic limitation underscores the urgent demand for a comprehensive, multi-dimensional benchmark specifically designed to stress-test the full spectrum of time series reasoning.
+
+In this paper, we introduce \ours, a large-scale and comprehensive benchmark curated to assess the time series problem-solving capability of generalist models across multiple domains and tasks. \ours extensively collects, selects, and synthesizes problems from 14 domains. This extensive collection has culminated in a benchmark comprising 4125 problems. We categorize the problems into 4 major dimensions of time series abilities-Perception, Reasoning, Prediction, and Decision-Making, which comprise 15 tasks for different abilities (See Figure~\ref{fig: example} for examples).  Additionally, it supports four modalities of time series for generalist models: text, image, text-image interleaved, and time series embeddings, providing a comprehensive evaluation and comparison that modern AI systems could handle.
+
+To facilitate the evaluation of Large Language Models (LLMs) and Multimodal Large Language Models (MLLMs), we design a unified evaluation setup. Time series are transformed into textual sequences of numbers for LLMs, plots for VLMs, and embeddings for Time Series LLMs. For proprietary models, we evaluate text-form (T), vision-form (V), and a combined (T+V) representation to test modality fusion. Based on \ours, we evaluate 6 leading proprietary models (e.g., GPT-5~\citep{OpenAI2025GPT5}), 13 open-source LLMs (e.g., Qwen3~\citep{yang2025qwen3}), 13 open-source VLMs (e.g., InternVL3.5~\citep{wang2025internvl3}), and 4 open-source TSLLMs (e.g., TS-Reasoner~\citep{yu2025ts}). Our evaluation yields four key findings: i) While current generalist models demonstrate strong performance on time series perception, they struggle significantly with complex reasoning, forecasting, and decision-making tasks. ii) The scaling law holds for most time series reasoning tasks on both LLMs and VLMs, with the notable exception of time series prediction. iii) Time Series Prediction tasks have weak relationships with other tasks.
+iv) Textual and visual representations of time series are strongly complementary, often solving different sets of problems, yet current models struggle to leverage both modalities simultaneously for improved performance. 
+Additionally, our ablation studies provide practical insights into model design, particularly regarding the impact of visualization resolution, tool augmentation, and inference-time reasoning effort. These findings and analyses highlight key bottlenecks of current generalist models and provide valuable insights for the design of future time series reasoning models and methods.
+\begin{figure*}[t]   
+	
+\centering
+
+\includegraphics[width=\textwidth]{figures/main_arch.pdf}
+
+\caption{Overview of \ours. \ours evaluates generalist models across four core capabilities: Perception, Reasoning, Prediction, and Decision-Making.}
+
+\vspace{-10pt}
+\label{fig: example}
+
+\end{figure*}
+
+\begin{table*}[t]
+\centering
+\caption{Comparison with Representative Time Series Benchmarks. \textit{Modality} denotes the input format, where \modT and \modV represent textual and visual time series, respectively.
+}
+\label{tab:comparison}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccccccc}
+\toprule
+\multirow{2}{*}{\textbf{Benchmark}} 
+& \multicolumn{4}{c}{\textbf{Scale \& Diversity}} 
+& \multicolumn{4}{c}{\textbf{Reasoning Capabilities}} 
+& \multirow{2}{*}{\textbf{Modality}} \\ 
+\cmidrule(lr){2-5} \cmidrule(lr){6-9}
+ & \textbf{\# Domains} 
+ & \textbf{\# Tasks} 
+ & \textbf{\# Questions} 
+ & \textbf{Multivariate}
+ & \textbf{Perc.} 
+ & \textbf{Reas.} 
+ & \textbf{Pred.} 
+ & \textbf{Dec.} 
+ & \\ 
+\midrule
+\multicolumn{10}{l}{\textit{Forecasting-Centric}} \\
+TimeMMD \citep{liu2024time} & 9 & 1 & 16K & \cmark & \xmark & \xmark & \cmark & \xmark & \modT \\
+CiK \citep{williams2024context} & 8 & 1 & 0.3K & \xmark & \xmark & \xmark & \cmark & \xmark & \modT \\ 
+\midrule
+
+\multicolumn{10}{l}{\textit{Analysis-Centric}} \\
+TimeSeriesExam \citep{cai2024timeseriesexam} & 1 & 5 & 0.7K & \xmark & \cmark & \xmark & \xmark & \xmark & $\textbf{T},\textbf{V}$ \\
+MTBench \citep{chen2025mtbench} & 2 & 4 & 2.4K & \xmark & \xmark & \cmark & \xmark & \xmark & \modT \\
+EngineMT-QA~\citep{wang2025itformer} & 1 & 4 & 11K & \cmark & \cmark & \cmark & \xmark & \cmark & \textbf{V} \\
+SciTS \citep{wu2025scits} & 12 & 7 & 51K & \cmark & \cmark & \xmark & \cmark & \xmark & \modT \\
+TimeMQA \citep{kong2025time} & 12 & 5 & 200K & \xmark & \cmark  & \xmark & \xmark & \xmark & \modT \\
+TSR-SUITE~\citep{guan2025timeomni} & 9 & 4 & 4K & \xmark & \xmark & \cmark & \cmark & \cmark & \textbf{T} \\
+\midrule
+
+\textbf{TSRBench (Ours)} 
+& \textbf{14} & \textbf{15} & 4.1K & \cmark 
+& \cmark & \cmark & \cmark & \cmark 
+& $\textbf{T},\textbf{V}$, \modTV \\ 
+
+\bottomrule
+\end{tabular}%
+}
+\end{table*}
+
+\section{Related Work}
+\textbf{Time Series Benchmarks.} 
+Time series has long been studied. In the long run, existing benchmarks primarily focus on time series analysis tasks, including forecasting~\citep{godahewa2021monash, bauer2021libra, qiu2024tfb, wang2024deep, li2025tsfm, hu2025fintsb}, classification~\citep{ismail2019deep, ruiz2020benchmarking}, imputation~\citep{du2024tsi, kazijevs2023deep}, and anomaly detection~\citep{lai2021revisiting, wenig2022timeeval, zhou2024can}. Recent works begin to explore whether LLMs/MLLMs can understand the time series~\citep{tan2024language, merrill2024language}. TimeSeriesExam~\citep{cai2024timeseriesexam} evaluates the time series understanding of LLMs and VLMs through synthetic data, but only focuses on holistic perception. MTBench~\citep{chen2025mtbench} combines news reports with time series to assess models’ reasoning capabilities, but is restricted to narrow domains such as finance and weather. TimeMMD~\citep{liu2024time} and CiK~\citep{williams2024context} focus on the time series forecasting task with the aid of contextual events or background. TSR-SUITE~\citep{guan2025timeomni} and EngineMT-QA~\citep{wang2025itformer} only cover narrow reasoning tasks, and TimeMQA~\citep{kong2025time} evaluates LLMs mainly on traditional time series analysis.
+
+\textbf{General Reasoning Benchmarks.} Numerous benchmarks have been developed to evaluate the
+general reasoning and problem-solving capabilities of generalist models. 
+Notable examples include MMMU~\citep{yue2024mmmu} and
+MMMU-Pro~\citep{yue2025mmmu}, GPQA~\citep{rein2024gpqa}, which assess knowledge across a wide range of subjects. Benchmarks in science domains~\citep{zhao2025prism, wang2025physunibench, he2024olympiadbench, xu2025ugmathbench, zou2024dynamath}, and engineering domains~\citep{syed2024benchmarking, kevian2024capabilities, guo2025toward} evaluate problem-solving ability. In addition, benchmarking in social scenarios~\citep{le2019revisiting, kim2023fantom, yu2025persuasivetom} evaluates the ability to understand human minds. In multimodal domains, benchmarks range from scientific domains~\citep{lu2023mathvista, wang2024measuring} to embodied reasoning~\citep{yang2025embodiedbench, du2024embspatial} and video reasoning~\citep{li2024videovista, cheng2025video}. While general reasoning benchmarks may sporadically incorporate time series-related tasks, they lack a comprehensive and systematic evaluation framework dedicated to temporal dynamics. We introduce \ours to fill this critical gap.
+\section{\ours}
+\subsection{Overview of \ours}
+We introduce \ours, a comprehensive benchmark comprising 4125 instances and 15250 time series channels across 14 domains to assess generalist models on 4 key dimensions in time series reasoning: \textbf{Perception}, \textbf{Reasoning}, \textbf{Prediction}, and \textbf{Decision-Making}. Figure~\ref{fig: statistics} provides a visual overview of our taxonomy and task distribution. See domain distribution in Figure~\ref{fig: distribution} and \S~\ref{sec: question cases} for more cases.
+
+\begin{figure}[t]   
+\centering
+\includegraphics[width=1.0\columnwidth]{figures/statistics.pdf}
+
+\caption{Statistics of tasks in \ours.}
+
+\label{fig: statistics}
+\vspace{-10pt}
+\end{figure}
+
+\subsection{Time Series Perception}
+This dimension evaluates models on recognizing fundamental temporal patterns and properties of time series, covering four tasks: i) \textbf{\textit{Pattern Recognition}} ii) \textbf{\textit{Noise Understanding}} iii) \textbf{\textit{Anomaly Detection}}, and iv) \textbf{\textit{Comparative Analysis}}.
+
+\textbf{\textit{Pattern Recognition (PR)}} evaluates the model's ability to discern fundamental time series properties, encompassing structural characteristics such as trend, cyclicity, stationarity, and core statistical attributes like the series mean. \textbf{\textit{Noise Understanding (NU)}} challenges the model to quantify and characterize the scale and magnitude of stochastic noise inherent in the data. \textbf{\textit{Anomaly Detection (AD)}} probes the model's capacity to identify and classify out-of-distribution observations; this extends beyond mere localization (e.g., start, middle, end) to include the characterization of anomaly types (e.g., pattern cutoffs, signal flips) and the conceptual grasp of the underlying pattern without the perturbation. Finally, \textbf{\textit{Comparative Analysis (CA)}} assesses the model's proficiency in comparative reasoning between two or more series, determining shared patterns, congruent statistical properties (e.g., variance or noise profiles), commonality in underlying data distributions, or coherence in trend direction.
+\subsection{Time Series Reasoning}
+This dimension evaluates the ability to derive conclusions from temporal patterns and prior knowledge, covering seven tasks:
+i) \textbf{\textit{Etiological Reasoning}}, 
+ii) \textbf{\textit{Causal Discovery}}, 
+iii) \textbf{\textit{Abductive Reasoning}}, 
+iv) \textbf{\textit{Temporal Relation Reasoning}}, 
+v) \textbf{\textit{Numerical Reasoning}}, 
+vi) \textbf{\textit{Deductive Reasoning}}, 
+vii) \textbf{\textit{Inductive Reasoning}}.
+
+\textbf{\textit{Etiological Reasoning (ER)}} involves inferring the generative sources or underlying causal factors responsible for an observed time series. Questions in this task require both time series perception and commonsense reasoning ability. 
+\textbf{\textit{Causal Discovery (CD)}} focuses on determining the existence and direction of causal relationships between multiple time series. The causal relationship is determined by both the patterns of time series and contextual backgrounds. 
+\textbf{\textit{Abductive Reasoning (AR)}} evaluates a model’s ability to infer the most plausible latent event that explains a change in the time series, given both historical and future observations. This task requires the model not only to localize the timestamp at which the event occurs, but also to detect the resulting change in the series and generate a reasonable explanatory hypothesis for it.
+\textbf{\textit{Temporal Relation Reasoning (TR)}} challenges the model to determine the order of events based on the observations on time series. This task evaluates the localization of events on time series and establishes the correct chronological sequence of events embedded within a time series. \textbf{\textit{Numerical Reasoning (NR)}} challenges the model's ability to perform quantitative calculations that require a contextual understanding of the time series domains. \textbf{\textit{Deductive Reasoning (DR)}} requires the model to derive logically consistent conclusions from predefined rules, which requires the model to accurately apply the rules to the time series to draw the final conclusion. 
+\textbf{\textit{Inductive Reasoning (IR)}} evaluates the model's ability to infer principles or rules (e.g., periodicity) and patterns based on historical observations and domain knowledge. After that, the model needs to apply the inferred rules to predict future events at a specific time. Unlike standard forecasting, which prioritizes minimizing numerical error through curve-fitting, IR requires models to abstract the underlying rules to predict specific future events. These seven tasks comprehensively assess the model's capacity to interpret complex temporal dynamics, infer underlying causal structures, and apply logical principles to time series data beyond pattern recognition. 
+
+\subsection{Time Series Prediction}
+We evaluate predictive capabilities through two tasks: i) \textbf{\textit{Time Series Forecasting}} and ii) \textbf{\textit{Event Prediction}}.
+
+\textbf{\textit{Time Series Forecasting (TSF)}} evaluates the prediction of future numerical values conditioned on both historical observations and contextual events. This challenges the model to reason about the interaction dynamics between the continuous series and the discrete events. To reduce the difficulty of directly predicting numerical series for generalist models~\citep{tan2024language}, we formulate the forecasting tasks as multiple-choice questions.
+\textbf{\textit{Event Prediction (EP)}} involves anticipating future discrete events given the historical time series. This requires synthesizing pattern analysis with commonsense or domain-specific reasoning to predict what events will happen in the future.
+
+\subsection{Time Series Decision-Making}  
+This dimension assesses the ability of models to make decisions based on the understanding of both time series and context. We assess this through two aspects: i) \textbf{\textit{Qualitative Decision-Making}} and ii) \textbf{\textit{Quantitative Decision-Making}}.
+
+\textbf{\textit{Qualitative Decision-Making (QualDM)}} requires the model to leverage pattern analysis within time series and contextual knowledge to inform decisions. This task assesses the model's ability to make correct decisions under complex time series and knowledge.
+\textbf{\textit{Quantitative Decision-Making (QuantDM)}} challenges the model to determine an optimal course of action by evaluating the outcomes of multiple possible operational procedures. This task assesses the model's ability to accurately simulate the application of distinct sets of rules and environmental constraints to a given time series. It requires the model to quantitatively compare the resulting performance metrics from each procedure and identify the single procedure that yields the optimal result.
+
+\subsection{Data Collection Principles for \ours}
+To accomplish a high-quality dataset, we have the following considerations when collecting data: 
+(1) \textbf{High Text-Timeseries Alignment}. The context should be highly aligned with the time series and complement the information, and be indispensable for reasoning. 
+(2) \textbf{Domain Diversity and Generalizability}. The data should be sourced from a wide array of domains to ensure the benchmark tests for general reasoning capabilities and prevent models from succeeding via domain-specific overfitting.
+(3) \textbf{Verifiable and Unambiguous Ground Truth}. To ensure correctness, we employ two strategies for answer generation: i) using high-fidelity simulations (e.g., Python code) where the ground-truth is unambiguously determined, and ii) retrieving and extracting from the time series or its contexts. 
+(4) \textbf{Synthetic Data for Quantitative Reasoning}. While real-world data provides essential complexity, it often lacks the high-precision ground truth required for rigorous quantitative evaluation. To bridge this gap, we incorporate synthetic data via simulations (e.g., chaotic physical systems and algorithmic trading backtesting). This approach ensures that the underlying data-generating processes are unambiguously determined, providing a verifiable and noise-free platform to stress-test a model's capacity for precise numerical reasoning and deductive logic.
+More details of data construction are provided in Appendix~\ref{appendix: data collection}.
+
+\section{Experiments}
+
+\subsection{Experimental Setups.} We evaluate both open-source and proprietary LLMs, VLMs, and Time Series LLMs, including 6 proprietary models, and 30 SOTA open-source models. For proprietary models, we evaluate DeepSeek-V3.2~\citep{guo2025deepseek}, Gemini-2.5-Flash~\citep{comanici2025gemini}, Claude-4.5-Haiku~\citep{Anthropic2025Claude3.7Sonnet}, o4-mini, GPT-5-mini, and GPT-5. Open-source LLMs include Qwen2.5 (3B / 7B / 72B), Qwen3 (1.7B / 8B / 32B / 235B-A22B)~\citep{yang2025qwen3}, Gemma3 (12B / 27B)~\citep{team2025gemma}, InternLM3 (8B)~\citep{cai2024internlm2}, GPT-OSS (20B / 120B)~\citep{agarwal2025gpt}, and TimeOmni-1-7B~\citep{guan2025timeomni}. 
+Open-source VLMs include Llama-4-Scout-17B-16E-Instruct~\citep{Meta2025Llama4Multimodal}, Qwen2.5-VL (3B / 7B / 72B)~\citep{bai2025qwen2}, Qwen3-VL (8B / 32B / 235B-A22B)~\citep{yang2025qwen3}, Phi4-Multimodal-8B~\citep{abouelenin2025phi}, InternVL3.5 (1B / 8B / 38B)~\citep{wang2025internvl3}, MiniCPM-V-4.5 (8B)~\citep{yao2024minicpm}, and MiMo-VL-7B-RL~\citep{coreteam2025mimovltechnicalreport}. For TSLLMs, we evaluate two OpenTSLM~\citep{langer2025opentslm} variants trained for time series QA, as well as TS-Reasoner (7B)~\citep{yu2025ts} and ChatTS (14B)~\citep{xie2024chatts}. We enable reasoning for all the models. Time series are transformed into textual sequences of numbers for LLMs, plots via code for VLMs, and embeddings via model projectors for TSLLMs. Specifically, we render each time series as a line chart, where single-series samples occupy one figure and multivariate samples are stacked as vertical subplots sharing a common time axis. Each subplot has grid lines always enabled and is annotated with its series name. Based on our ablation study (\S~\ref{sec: resolution}), we fix the resolution at 100 PPI to balance token efficiency with feature visibility.
+For proprietary models, we evaluate them using textual, visualized, and combined (T+V) inputs.
+We use accuracy as the primary metric in our experiments.  
+
+\begin{table*}[t]
+\caption{
+Model performance on \ours. Backgrounds indicate proprietary ({\color{blue!50}blue}) or open-source ({\color{green!40}green}) models. For proprietary models, "T" denotes inputting textual time series, "V" denotes visualized time series, and "T+V" denotes using both. o4-mini and GPT-5(-mini) default to low-reasoning; the "-high" suffix denotes high-reasoning. Bold indicates best results.
+}
+% \vspace{-5pt}
+\centering
+% \small
+\scriptsize
+\resizebox{1.0\textwidth}{!}{
+\begin{tabular}{l|cccc|ccccccc|cc|cc|c} 
+\toprule
+\multicolumn{1}{l|}{\textbf{Model}} & \multicolumn{4}{c|}{\textbf{Perception}} & \multicolumn{7}{c|}{\textbf{Reasoning}} & \multicolumn{2}{c|}{\textbf{Prediction}} & \multicolumn{2}{c|}{\textbf{Decision}} & \multicolumn{1}{c}{\textbf{Overall}}\\ \midrule
+ & PR & NU & AD & CA & ER & CD & AR & TR & NR & DR & IR & TSF & EP & \multicolumn{1}{c}{QualDM} & \multicolumn{1}{c|}{QuantDM} & \\ 
+\midrule
+\rowcolor{gray!20} \multicolumn{17}{c}{\textit{Textual Time Series as Input}} \\\midrule
+\rowcolor{blue!10}
+DeepSeek-V3.2 (T) & 67.7 & 56.3 & 57.4 & 64.6 & 32.0 & 35.7 & 70.7 & 19.4 & 27.3 & 47.6 & 24.0 & 26.5 & 47.2 & 33.1 & 28.3 & 39.1 \\
+\rowcolor{blue!10}
+o4-mini (T) & 73.1 & 65.5 & 61.2 & 71.7 & 42.6 & 39.0 & 58.0 & 34.4 & 64.7 & 42.0 & 43.0 & 33.1 & 73.3 & 30.4 & 36.0 & 47.7\\
+\rowcolor{blue!10}
+GPT-5-mini (T) & 72.2 & 59.8 & 63.6 & 69.9 & 45.1 & 27.7 & 62.7 & 39.4 & 65.2 & 41.3 & 50.0 & 23.5 & 67.8 & \textbf{35.5} & 30.3 & 46.6 \\
+\rowcolor{blue!10}
+GPT-5 (T) & 75.7 & 62.1 & 61.2 & 69.0 & 42.3 & 55.3 & 85.3 & \textbf{68.8} & \textbf{72.2} & \textbf{50.0} & \textbf{62.0} & 37.8 & \textbf{79.7} & 31.9 & 32.0 & 55.5 \\
+\rowcolor{green!10}
+Qwen2.5-3B & 46.4 & 51.7 & 33.3 & 51.3 & 20.0 & 25.0 & 38.0 & 21.2 & 34.8 & 29.2 & 19.0 & 31.4 & 58.3 & 22.7 & 24.0 & 33.2 \\
+\rowcolor{green!10}
+Qwen2.5-7B & 50.7 & 50.6 & 41.1 & 54.9 & 15.1 & 32.3 & 46.0 & 28.1 & 33.2 & 24.0 & 28.0 & 33.5 & 37.5 & 31.0 & 25.7 & 33.7 \\
+\rowcolor{green!10}
+Qwen2.5-72B & 55.3 & 55.2 & 47.3 & 66.4 & 20.9 & 58.0 & 62.0 & 33.8 & 38.2 & 36.8 & 40.0 & 30.7 & 70.3 & 34.0 & 30.3 & 42.4 \\
+\rowcolor{green!10}
+Qwen3-1.7B  & 45.8 & 59.8 & 38.0 & 51.3 & 18.3 & 30.1 & 48.7 & 30.0 & 27.0 & 28.4 & 20.0 & 39.2 & 67.8 & 31.3 & 24.7 & 36.8 \\
+\rowcolor{green!10}
+Qwen3-8B & 51.8 & 56.3 & 48.8 & 56.6 & 14.0 & 29.3 & 57.3 & 23.1 & 36.5 & 23.6 & 33.0 & 46.7 & 48.9 & 34.9 & 28.7 & 38.3 \\
+\rowcolor{green!10}
+Qwen3-32B & 54.7 & 52.9 & 50.4 & 62.8 & 22.6 & 35.9 & 66.0 & 27.5 & 37.5 & 34.4 & 36.0 & 31.1 & 46.1 & 34.9 & 31.7 & 38.6 \\
+\rowcolor{green!10}
+Qwen3-235B-A22B & 66.0 & 56.3 & 59.7 & 67.3 & 22.6 & 34.7 & 86.7 & 28.1 & 44.8 & 49.2 & 39.0 & 29.0 & 48.9 & 34.8 & 30.0 & 42.2 \\
+\rowcolor{green!10}
+Gemma3-12B-it & 51.5 & 59.8 & 48.9 & 65.5 & 21.1 & 34.7 & 42.0 & 23.7 & 33.2 & 28.0 & 41.0 & 39.4 & 34.2 & 34.3 & 31.3 & 37.2\\
+\rowcolor{green!10}
+Gemma3-27B-it & 56.1 & 59.8 & 48.1 & 68.1 & 22.3 & 37.0 & 66.7 & 21.9 & 36.0 & 29.3 & 35.0 & 36.1 & 42.8 & 33.1 & 30.3 & 38.6\\
+\rowcolor{green!10}
+InternLM3-8B & 51.2 & 42.5 & 35.7 & 54.0 & 23.4 & 24.7 & 48.0 & 23.8 & 30.0 & 28.7 & 31.0 & 36.6 & 66.4 & 33.7 & 26.7 & 37.0 \\
+\rowcolor{green!10}
+GPT-OSS-20B & 64.2 & 58.6 & 50.4 & 69.0 & 31.4 & 32.0 & 48.7 & 17.5 & 43.3 & 20.7 & 43.0 & 27.4 & 37.2 & 34.9 & 32.7 & 38.1\\
+\rowcolor{green!10}
+GPT-OSS-120B & 66.8 & 56.3 & 59.8 & 69.0 & 39.1 & 26.3 & 58.7 & 31.3 & 48.5 & 28.0 & 40.0 & 31.1 & 59.7 & 33.7 & 31.0 & 42.0\\
+\rowcolor{green!10}
+TimeOmni-1-7B & 55.0 & 59.8 & 41.9 &64.6 & 28.0 & 35.3 & 46.7 & 24.4 & 31.5 & 22.8 & 34.0 & 30.0 & 49.4 &34.0 & 30.3 & 36.7 \\
+
+\midrule
+\rowcolor{gray!20} \multicolumn{17}{c}{\textit{Visual Time Series as Input}} \\\midrule
+\rowcolor{blue!10}
+o4-mini (V) & 77.4 & 72.4 & 66.7 & 73.5 & 29.7 & 30.7 & 55.3 & 39.4 & 56.2 & 32.8 & 51.0 & 29.4 & 73.6 & 29.9 & 42.3 & 46.6 \\
+\rowcolor{blue!10}
+GPT-5-mini (V) & 78.7 & 69.0 & 69.0 & 69.0 & 36.0 & 41.0 & 58.7 & 41.9 & 54.5 & 39.6 & 51.0 & 27.5 & 66.1 & 26.0 & 28.3 & 46.0 \\
+\rowcolor{blue!10}
+GPT-5 (V) & 83.6 & 72.4 & \textbf{69.8} & 73.5 & 34.6 & 37.0 & 81.3 & 68.1 & 64.0 & 48.0 & 57.0 & 38.8 & 71.9 & 26.9 & 30.0 & 52.4 \\
+\rowcolor{green!10}
+Qwen2.5-VL-3B & 44.2 & 50.6 & 41.9 & 53.1 & 23.4 & 24.0 & 42.0 & 25.6 & 30.2 & 27.6 & 25.0 & 24.2 & 44.2 & 31.0 & 20.0 & 31.3 \\
+\rowcolor{green!10}
+Qwen2.5-VL-7B & 48.2 & 55.2 & 42.6 & 60.2 & 21.7 & 25.3 & 57.3 & 26.9 & 30.8 & 26.0 & 32.0 & 30.7 & 46.7 & 33.7 & 26.3 & 34.7 \\
+\rowcolor{green!10}
+Qwen2.5-VL-72B & 60.9 & 55.2 & 55.8 & 77.0 & 30.6 & 52.0 & 58.0 & 30.6 & 34.0 & 35.6 & 32.0 & 22.6 & 46.1 & 29.3 & 31.7 & 39.1 \\
+\rowcolor{green!10}
+Qwen3-VL-8B & 60.4 & 58.6 & 51.9 & 61.1 & 27.7 & 38.8 & 50.0 & 24.4 & 39.9 & 27.6 & 38.0 & \textbf{50.7} & 23.9 & 33.4 & 29.7 & 40.2 \\
+\rowcolor{green!10}
+Qwen3-VL-32B & 73.9 & 59.8 & 59.7 & 76.1 & 31.7 & 44.7 & 69.3 & 39.4 & 56.6 & 41.7 & 45.0 & 37.4 & 24.4 & 33.7 & 35.7 & 44.9 \\
+\rowcolor{green!10}
+Qwen3-VL-235B-A22B & 65.8 & 65.5 & 61.2 & 71.7 & 39.7 & 47.7 & 84.7 & 25.0 & 43.0 & 42.8 & 31.0 & 25.3 & 26.4 & 32.5 & 28.7 & 41.0 \\
+\rowcolor{green!10}
+Phi4-Multimodal-8B & 52.3 & 46.0 & 41.9 & 48.7 & 24.6 & 22.3 & 28.7 & 23.1 & 30.5 & 25.2 & 26.0 & 32.1 & 25.8 & 34.9 & 29.0 & 31.9 \\
+\rowcolor{green!10}
+Llama-4-Scout-17B-16E  & 41.5 & 44.8 & 38.8 & 46.9 & 25.1 & 53.0 & 75.3 & 28.1 & 41.5 & 30.0 & 23.0 & 39.7 & 78.0 & 33.7 & 33.3 & 42.3 \\
+\rowcolor{green!10}
+InternVL3.5-1B & 47.2 & 49.4 & 38.8 & 46.9 & 25.7 & 24.3 & 46.7 & 24.4 & 29.2 & 24.0 & 27.0 & 34.7 & 46.4 & 34.3 & 21.3 & 33.8 \\
+\rowcolor{green!10}
+InternVL3.5-8B & 60.9 & 55.2 & 52.7 & 64.6 & 25.7 & 38.3 & 60.0 & 27.5 & 40.5 & 31.6 & 29.0 & 38.2 & 41.9 & 33.4 & 22.3 & 39.5 \\
+\rowcolor{green!10}
+InternVL3.5-38B & 58.8 & 60.9 & 55.8 & 69.9 & 30.9 & 43.0 & 52.7 & 31.2 & 43.8 & 30.4 & 34.0 & 32.2 & 32.5 & 35.2 & 29.0 & 39.4 \\
+\rowcolor{green!10}
+MiniCPM-V-4.5-8B & 63.6 & 56.3 & 56.6 & 62.8 & 22.3 & 24.3 & 54.7 & 20.6 & 26.5 & 22.8 & 24.0 & 44.6 & 27.8 & 26.3 & 29.7 & 35.9 \\
+\rowcolor{green!10}
+MiMo-VL-7B-RL & 58.2 & 64.4 & 52.7 & 65.5 & 23.7 & 34.7 & 65.3 & 30.6 & 33.0 & 25.6 & 36.0 & 35.0 & 29.7 & 29.0 & 33.0 & 37.2 \\
+\midrule
+\rowcolor{gray!20} \multicolumn{17}{c}{\textit{Both Visual \& Textual Time Series as Input}} \\\midrule
+\rowcolor{blue!10}
+Claude-4.5-Haiku (T+V) & 57.1 & 41.4 & 48.8 & 55.8 & 24.0 & 19.7 & 78.0 & 32.5 & 50.0 & 45.2 & 52.0 & 22.2 & 48.3 & 18.1 & 28.0 & 37.1 \\
+\rowcolor{blue!10}
+Gemini-2.5-Flash (T+V) & 75.2 & 73.6 & 69.0 & \textbf{79.6} & 36.0 & 31.0 & 86.7 & 35.6 & 39.8 & 36.8 & 43.0 & 26.7 & 66.7 & 34.3 & \textbf{49.7} & 46.5 \\
+\rowcolor{blue!10}
+o4-mini (T+V) & 79.0 & 70.1 & 65.1 & 76.1 & 37.4 & 38.0 & 64.0 & 35.0 & 66.8 & 24.8 & 51.0 & 29.3 & 74.4 & 29.9 & 36.0 & 48.2 \\
+\rowcolor{blue!10}
+o4-mini-high (T+V) & 82.5 & 71.3 & 64.3 & 76.1 & 44.0 & 66.3 & 76.7 & 55.0 & 70.8 & 30.8 & 53.0 & 33.6 & 71.9 & 25.4 & 24.3 & 52.5 \\
+\rowcolor{blue!10}
+GPT-5-mini (T+V) & 78.4 & 65.5 & 63.6 & 72.6 & 38.9 & 36.3 & 76.0 & 33.1 & 66.2 & 30.0 & 54.0 & 24.4 & 65.6 & 34.3 & 29.7 & 46.9 \\
+\rowcolor{blue!10}
+GPT-5-mini-high (T+V) & 80.3 & \textbf{75.9} & 63.6 & 75.2 & \textbf{47.4} & \textbf{69.0} & 82.0 & 56.2 & 71.8 & 42.0 & 57.0 & 32.5 & 68.9 & 32.8 & 24.3 & 54.1 \\
+\rowcolor{blue!10}
+GPT-5 (T+V) & \textbf{84.9} & 72.4 & 61.2 & 70.8 & 38.9 & 50.3 & \textbf{93.3} & \textbf{68.8} & 72.0 & 44.0 & 58.0 & 37.8 & 78.1 & 31.9 & 34.3 & \textbf{55.6} \\
+\midrule
+\rowcolor{gray!20} \multicolumn{17}{c}{\textit{Embedded Time Series as Input}} \\\midrule
+\rowcolor{green!10}
+OpenTSLM-tsqa-sp-3B & 39.9 & 40.2 & 35.7 & 43.4 & 20.3 & 32.3 & 33.3 & 28.1 & 24.5 & 26.0 & 32.0 & 32.5 & 35.6 & 28.4 & 28.7 & 31.0 \\
+\rowcolor{green!10}
+OpenTSLM-tsqa-flamingo-3B & 41.2 & 41.4 & 34.1 & 38.9 & 22.9 & 30.3 & 36.0 & 21.2 & 22.5 & 28.8 & 29.0 & 28.1 & 45.6 & 25.4 & 29.7 & 30.7\\
+\rowcolor{green!10}
+ChatTS-14B & 50.7 & 50.6 & 46.5 & 55.8 & 21.7 & 34.3 & 51.3 & 24.4 & 30.5 & 23.6 & 25.0 & 19.2 & 52.2 & 29.3 & 27.7 & 33.5 \\
+\rowcolor{green!10}
+TS-Reasoner-7B & 53.1 & 56.3 & 48.1 & 50.4 & 28.9 & 24.3 & 57.3 & 26.9 & 37.2 & 23.6 & 24.0 & 31.7 & 55.0 & 32.8 & 21.7 & 36.4 \\
+\bottomrule
+\end{tabular}
+}
+\label{tab: main result_percent}
+% \vspace{-5pt}
+\end{table*}
+
+\subsection{Main Results}
+Table~\ref{tab: main result_percent} summarizes the results for all tasks. Overall, current generalist models demonstrate strong performance on time series perception but struggle with reasoning, prediction, and decision-making tasks.
+Among proprietary models, we observe that GPT-5 (T+V), which uses both textual and visual time series, achieves the highest overall accuracy (55.6\%). For open-source LLMs, Qwen2.5-72B delivers the strongest overall performance (42.4\%). For open-source VLMs, Qwen3-VL-32B achieves the highest overall accuracy (44.9\%). Time series LLMs perform competitively with similar-sized LLMs and VLMs, yet still have a large gap from advanced models.
+Additionally, reasoning efforts significantly improve performance, as evidenced by the overall accuracy increases for o4-mini-high (+4.3\%) and GPT-5-mini-high (+7.2\%) compared to their respective baseline (T+V) models. Nevertheless, a substantial performance gap remains between the top proprietary model (GPT-5 (T+V) at 55.6\%) and the best-performing open-source models (Qwen3-VL-32B at 44.9\%).
+
+\begin{figure}[t]   
+	
+\centering
+
+\includegraphics[width=1.0\columnwidth]{figures/scaling_law.pdf}
+
+\caption{The scatter plots related to overall accuracy and model sizes. Each plot illustrates the
+relationship between the log-scaled number of parameters and the performance across all models. The left corresponds to LLMs and the right is VLMs.}
+
+\label{fig: scaling law}
+% \vspace{-10pt}
+\end{figure}
+
+\begin{figure}[t]   
+	
+\centering
+
+\includegraphics[width=1.0\columnwidth]{figures/task_correlation.pdf}
+
+\caption{Spearman's rank correlation ($\rho$) between tasks. "(*)" marks correlations with p-values $\leq$ 0.05.}
+
+\label{fig: task correlation}
+% \vspace{-20pt}
+\end{figure}
+
+\begin{table}[t]
+\caption{Spearman's rank correlation ($\rho$) between LLM and VLM performances and model size on main dimensions. "(*)" marks correlations with p-values $\leq$ 0.05.}
+\label{tab: main correlation}
+\centering
+\resizebox{1.0\columnwidth}{!}{%
+\begin{tabular}{l|ccccc}
+\toprule
+\textbf{$\rho$} & \textbf{Overall} & \textbf{Perception} & \textbf{Reasoning} & \textbf{Prediction} & \textbf{Decision-Making} \\ 
+\midrule
+LLM & 0.9248 (*) & 0.8929 (*) & 0.9795 (*) & -0.2415 & 0.7380 (*) \\
+VLM & 0.6436 (*) & 0.8301 (*) & 0.6389 (*) & -0.2612 & 0.5596 \\
+\bottomrule
+\end{tabular}%
+}
+% \vspace{-10pt}
+\end{table}
+\subsection{Further Findings}
+\begin{tcolorbox}
+\textbf{Finding 1.} The scaling law still holds for most of the time series reasoning tasks on both LLMs and VLMs, except for time series prediction.
+\end{tcolorbox}
+
+We quantitatively analyze the relationship between model scale and performance on time series reasoning tasks by calculating Spearman's rank correlation for both i) LLMs and ii) VLMs. Figure~\ref{fig: scaling law} illustrates the performance trends across model families, revealing a clear positive correlation between overall accuracy and model size. To provide deeper insight, we further investigate this correlation across individual capability dimensions. As detailed in Table~\ref{tab: main correlation}, while Perception, Reasoning, and Decision-Making exhibit strong positive correlations with model size, Prediction tasks notably diverge from this trend for both LLMs and VLMs. This discrepancy indicates that current generalist models, even when scaled and provided with context, continue to struggle with effective forecasting~\citep{tan2024language}. See Appendix~\ref{sec: fine-grained correlation} on correlations for each task.
+
+
+
+\begin{tcolorbox}
+    \textbf{Finding 2.} Perception, Reasoning, and Decision are highly correlated, and have weak correlation with the Prediction task.
+\end{tcolorbox}
+
+To investigate the correlation between tasks, we compute Spearman's rank correlation between four main dimensions, and the results are shown in Figure~\ref{fig: task correlation}. We found that both LLMs and VLMs show a strong correlation within perception, reasoning, and decision-making tasks, but a weak correlation with prediction tasks. This indicates that even though the model can effectively understand and reason on the time series, it still falls short in forecasting the numerical time series and events.
+
+\begin{tcolorbox}
+    \textbf{Finding 3.} Although the textual and visual representations of time series achieve similar performance, they are strongly complementary. 
+\end{tcolorbox}
+
+We investigate the impact of different time series modalities, textual versus visual, using o4-mini, GPT-5-mini, and GPT-5. Our results reveal two key findings regarding modality performance and complementarity.
+
+First, although textual and visual modalities achieve comparable overall accuracy, their strengths diverge across tasks. As shown in Table~\ref{tab: main result_percent}, visual representations outperform textual ones in Perception tasks, but this advantage diminishes in Reasoning, Prediction, and Decision-Making tasks that require fine-grained information extraction. This motivates an analysis of whether the two modalities capture complementary features. Specifically, we investigate the proportion of instances correctly solved by both representations (intersection) versus those solved by at least one (union). As shown in Figure~\ref{fig: intersection} (left), the intersection yields low accuracy while the union yields high accuracy. This indicates that textual and visual representations are successful on different subsets of samples, with neither approach being dominant.
+However, enabling models to jointly process textual and visual time series (T+V) does not yield significant gains over single-modality inputs (Table~\ref{tab: main result_percent}). As shown in Figure~\ref{fig: intersection} (right), T+V solutions largely overlap with those already solved by either modality alone, suggesting that current models fail to effectively fuse cross-modal information.
+
+\begin{figure}[t]   
+	
+\centering
+
+\includegraphics[width=1.0\columnwidth]{figures/intersection.pdf}
+
+\caption{\textbf{Analysis of modality complementarity.} \textbf{Left:} Comparison between textual and visual time series representations. \textbf{Right:} Ratio of model (T+V) answers identical to model (T) or model (V).}
+
+\label{fig: intersection}
+% \vspace{-10pt}
+\end{figure}
+
+\begin{table*}[t]
+\caption{
+Performance changes of models with tool augmentation. $\Delta$ indicates the performance difference after enabling tool-augmented reasoning.
+}
+\centering
+\resizebox{\textwidth}{!}{
+\begin{tabular}{l|cccc|ccccccc|cc|cc|c} 
+\toprule
+\multicolumn{1}{l|}{\textbf{Model}} & \multicolumn{4}{c|}{\textbf{Perception}} & \multicolumn{7}{c|}{\textbf{Reasoning}} & \multicolumn{2}{c|}{\textbf{Prediction}} & \multicolumn{2}{c|}{\textbf{Decision}} & \multicolumn{1}{c}{\textbf{Overall}} \\ \midrule
+ & PR & NU & AD & CA & ER & CD & AR & TR & NR & DR & IR & TSF & EP & \multicolumn{1}{c}{QualDM} & \multicolumn{1}{c|}{QuantDM} & \\ 
+\midrule
+\rowcolor{gray!20} \multicolumn{17}{c}{\textit{Proprietary models}} \\\midrule
+o4-mini (T+V) $\Delta$ & -1.6 & 0.0 & +1.6 & -2.6 & -1.7 & +1.3 & +5.3 & +4.4 & -1.8 & +0.8 & -3.0 & +4.6 & -3.3 & +4.7 & +5.3 & +1.2 \\\midrule
+GPT-5-mini (T+V) $\Delta$ & -0.5 & +1.2 & +2.3 & -0.9 & +0.2 & -2.6 & -4.0 & +1.3 & +1.3 & -1.6 & -3.0 & +2.1 & -1.2 & +1.5 & +5.0 & +0.5 \\\midrule
+GPT-5 (T+V) $\Delta$ & -2.2 & -3.4 & +3.1 & -0.9 & +1.1 & -3.3 & -2.6 & +1.2 & +2.5 & +14.0 & +4.0 & +1.4 & -0.9 & -3.2 & -1.3 & +0.6 \\ 
+\bottomrule
+\end{tabular}
+}
+\label{tab: tool}
+% \vspace{-10pt}
+\end{table*}
+
+\begin{tcolorbox}
+    \textbf{Finding 4. } 
+    Tasks with high variance, highlighted in red in Figure~\ref{fig: variance}, indicate that poorer-performing models can be improved through distillation from stronger ones, while low-accuracy, low-variance tasks shown in blue reveal shared weaknesses requiring better training data.
+\end{tcolorbox}
+
+A closer examination of the performance distribution in Figure~\ref{fig: variance} reveals two distinct regimes of task difficulty. To characterize these regimes, we compute the mean accuracy and variance for each task by aggregating results across all models and input time-series representations (e.g., text and vision) reported in Table~\ref{tab: main result_percent}.
+On the one hand, tasks with high variance (red in Figure~\ref{fig: variance}), such as Abductive Reasoning and Event Prediction, show that specific models handle them well while others struggle. This gap suggests that weaker models could likely improve their reasoning skills through knowledge distillation from the stronger ones. 
+On the other hand, low-accuracy, low-variance tasks (blue in Figure~\ref{fig: variance}), including Quantitative Decision-Making and Time Series Forecasting, show uniformly poor performance across all models. This reveals a shared weakness in current generalist models, where progress will likely require data-centric pre-training with richer quantitative and temporal supervision.
+
+\begin{figure}[t]   
+	
+\centering
+
+\includegraphics[width=1.0\columnwidth]{figures/variance.pdf}
+% \vspace{-20pt}
+\caption{Performance distribution of evaluated models across \ours tasks. High and low inter-model variance tasks are highlighted in red and blue, respectively.}
+
+\label{fig: variance}
+% \vspace{-10pt}
+\end{figure}
+
+\subsection{Further Investigation}
+
+\textbf{Does Time Series Analysis Tool-use Help?} To investigate whether generalist models fail due to their weaknesses in understanding the time series, we enrich the understanding of temporal patterns by extracting a comprehensive set of statistical, structural, and frequency-domain features from each time series. These include summary statistics (e.g., mean, variance), trend and seasonality measures, temporal dependencies, local extrema and change points, similarity metrics, and outlier indicators. This enriched representation is appended to each prompt to provide the model with explicit temporal context.
+We conduct experiments on o4-mini, GPT-5-mini, and GPT-5. The results in Table~\ref{tab: tool} show that the additional features yield a modest overall improvement, though gains vary considerably across tasks. This suggests that explicit time series statistics can partially compensate for models' weaknesses in temporal understanding, but are not sufficient to address them in all settings. Further details and the specific analysis functions used are provided in Appendix~\ref{appendix:timeseries-analysis}.
+\begin{figure*}[t]   
+\centering
+\includegraphics[width=1.0\textwidth]{figures/reasoning_effort.pdf}
+\caption{Performance of GPT-5 (T+V) (\textbf{left}), Qwen3-32B (\textbf{middle}), Qwen3-VL-32B (\textbf{right}), with (non-) reasoning modes.}
+
+\label{fig: reasoning effort}
+% \vspace{-10pt}
+\end{figure*}
+
+\begin{figure}[t]   
+\centering
+\includegraphics[width=1.0\columnwidth]{figures/resolution.pdf}
+\caption{Impact of visual resolution on performance for Visual-only (\textbf{left}) and Text+Visual (\textbf{right}) as inputs.}
+\label{fig:resolution}
+\vspace{-10pt}
+\end{figure}
+
+\textbf{Impact of Resolutions for visual time series.}
+\label{sec: resolution}
+We investigate the effect of five visualization resolutions on performance. Our results, shown in Figure~\ref{fig:resolution}, indicate that mid-range resolutions (100 PPI) achieve better results compared to both lower (10 PPI, 50 PPI) and higher (200 PPI, 400 PPI) resolutions. While low-resolution images may lack the fine-grained details necessary for understanding and reasoning, excessively high resolutions can introduce unnecessary complexity, making it harder for models to focus on relevant information or capture global patterns for reasoning. Notably, the performance degradation at low resolutions is mitigated when a textual time series is provided alongside visualizations. This suggests that textual time series can partially compensate for visual information loss, providing a degree of cross-modal redundancy. These results highlight the importance of selecting an appropriate resolution for visualized time series reasoning. 
+
+\textbf{Impact of Inference-Time Scaling. }
+We investigate the impact of inference-time computation on performance by evaluating GPT-5, Qwen3-32B, and Qwen3-VL-32B in both reasoning and non-reasoning modes. As illustrated in Figure~\ref{fig: reasoning effort}, a clear performance divergence emerges: while Perception tasks remain robust to reduced compute, Reasoning, Prediction, and Decision-Making tasks suffer a sharp degradation. These results suggest that while generalist models can intuitively "perceive" temporal patterns through fast, heuristic processing, deriving logical conclusions from those patterns is a computationally intensive process that necessitates deliberative reasoning.
+\begin{figure}[t]   
+	
+\centering
+
+\includegraphics[width=1.0\columnwidth]{figures/error_analysis.pdf}
+
+\caption{Error type distribution of three models on \ours.}
+
+\label{fig: error analysis}
+\vspace{-10pt}
+\end{figure}
+\subsection{Error Analysis}
+To systematically diagnose failure mechanisms, we conducted a fine-grained error analysis on GPT-5 (T+V), Gemini-2.5-Flash (T+V), and Claude-4.5-Haiku (T+V). We randomly sampled 150 failure instances (10 per task subset) and categorized them into a four-tier taxonomy: Reasoning, Perception, Question Understanding, and Domain Knowledge. Our quantitative analysis reveals that Reasoning and Perception errors are the predominant failure modes across all models, whereas errors stemming from Question Understanding or Domain Knowledge misapplication are marginal. This distribution pinpoints the critical bottleneck: current models are limited not by a lack of knowledge or linguistic comprehension, but by deficiencies in perceiving temporal patterns and performing rigorous reasoning based on those perceptions. See Appendix~\ref{sec:error cases} for error cases.
+
+\section{Conclusion}
+We introduce \ours, a comprehensive benchmark for systematically evaluating the time-series understanding and reasoning capabilities of generalist models across diverse tasks and domains. Our extensive empirical study reveals several fundamental challenges, which highlight critical limitations of current generalist models. We hope \ours will inspire and guide future research toward building more capable time series reasoning approaches and models.
+
+\section*{Impact Statement}
+\ours aims to provide a comprehensive benchmark for complex reasoning on time series in future research. Time series plays a critical role in real-world applications; therefore, enhancing the temporal reasoning capabilities of generalist models has profound implications for high-stakes domains such as healthcare, finance, and industrial systems. By providing a standardized platform to evaluate perception, reasoning, prediction, and decision-making, our work contributes to identifying the blind spots in current AI systems and provides potential research directions on time series reasoning.
+\bibliography{example_paper}
+\bibliographystyle{icml2026}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% APPENDIX
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\appendix
+\onecolumn
+\section{Additional Related Work}
+\subsection{MLLM/LLM Reasoning.} 
+Recent advances in Large Language Models (LLMs) and Multimodal LLMs (MLLMs) have catalyzed a shift from pattern matching to deliberate problem-solving. Initial efforts focused on prompt engineering to induce intermediate reasoning steps~\citep{wei2022chain, khot2022decomposed, zhou2022least, zheng2023ddcot, zhang2023multimodal, gao2024cantor, ho2025arcmemo, chen2025pandora, liang2025rover}, though these approaches remain heavily dependent on heuristic human design. To mitigate this dependency, subsequent research has explored scaling test-time compute to enhance reasoning depth. This includes parallel sampling strategies~\citep{brown2024large, snell2024scaling, karan2025reasoning, wang2022self, aggarwal2023let}, sequential refinement frameworks~\citep{yao2022react, yang2023mm, gou2023critic, zhang2024small, zhang2023cumulative}, and hybrid search architectures~\citep{yao2023tree, besta2024graph, hao2023reasoning, ding2024everything}. Most recently, a paradigm shift towards internalized reasoning has emerged, where models explicitly learn reasoning behaviors via Reinforcement Learning~\citep{guo2025deepseek, yu2024flow, xie2025logic, zhou2025r1, huang2025vision, yu2026arrowgev}. This trajectory has culminated in advanced reasoning models such as the Qwen3-series~\citep{yang2025qwen3}, which demonstrate remarkable proficiency in textual and multimodal tasks. However, the adaptation of these reasoning paradigms to the time series domain remains significantly underexplored, presenting a critical avenue for future investigation.
+
+\subsection{Benchmarks for Generalist Models.}
+A variety of benchmarks assess generalist model reasoning and their problem-solving capabilities. In the early stages of generalist models, benchmarks such as GLUE~\citep{wang2018glue}, BERTScore~\citep{zhang2019bertscore}, and SuperGLUE~\citep{wang2019superglue} primarily focused on natural language understanding through small-scale, single-task evaluations. As generalist models rapidly scale up in size and begin to exhibit emergent generalization abilities, a new wave of benchmarks has emerged, such as MMMU~\citep{yue2024mmmu}, BIG-bench~\citep{srivastava2023beyond}, Q-Bench~\citep{wu2023q}, and Seed-Bench~\citep{li2023seed}. These benchmarks aim to assess a wider range of capabilities, including reasoning, factual knowledge, and visual recognition. To more comprehensively evaluate specific abilities, research works subdivide the aspects of evaluation, such as science reasoning~\citep{cobbe2021training, xu2025ugphysics, lu2023mathvista, zhang2024mathverse, zhong2025benchmarking}, social reasoning~\citep{guha2023legalbench, zhang2024cpsycoun, kim2023fantom}, and engineering reasoning~\citep{chen2021evaluating, jimenez2023swe, yu2018spider, guo2025toward, chen2025mvi, guo2025beyond}. These diverse benchmarks highlight the broad coverage yet increasing specialization of reasoning evaluations, reflecting a shift from coarse-grained language understanding toward fine-grained, domain-specific, and comprehensive assessments of complex reasoning abilities in modern generalist models.
+
+\section{Future Research Directions}
+While \textsc{TSRBench} represents a significant step forward in
+evaluating generalist models on time series understanding
+and reasoning, several challenges remain, offering rich
+opportunities for future research. Below, we outline potential research directions:
+
+\begin{itemize}
+    \item \textbf{Multi-view Time Series Understanding:}
+    Current models struggle to fuse textual and visual
+    representations despite their strong complementarity.
+    Future research should focus on developing alignment
+    techniques that effectively fuse high-resolution visual
+    patterns with a semantic textual context to enhance
+    holistic understanding.
+
+    \item \textbf{Large-scale Pretrained Time Series Models:}
+    Given the collective blind spots in quantitative
+    forecasting observed across generalist models, there is
+    a critical need to develop foundation models
+    pre-trained specifically on a massive-scale, diverse time
+    series corpora. This data-centric approach is essential
+    to bridge the gap between semantic reasoning and
+    precise numerical extrapolation.
+
+    \item \textbf{Multi-agent Time Series Systems:}
+    Complex time series problems often require distinct
+    capabilities ranging from pattern recognition to logical
+    deduction and domain knowledge retrieval. A multi-agent framework could decompose these tasks,
+    employing specialized agents to collaborate on and
+    verify predictions, thereby overcoming the limitations
+    of single-model reasoning.
+
+    \item \textbf{Test-time Scaling Approaches:}
+    Our ablation studies reveal that reasoning-intensive tasks suffer significantly without sufficient
+    inference-time computation. In addition, we show on
+    o4-mini and GPT-5-mini that increased reasoning
+    efforts substantially benefit reasoning performance.
+    Future work should explore adaptive reasoning
+    strategies, including advanced prompting techniques, structured reasoning, and
+    self-verification.
+\end{itemize}
+
+
+
+\section{Model Versions}
+Table~\ref{tab:model_list} lists the versions of the models and their official links used in our experiments. We accessed proprietary models through the API calls and open-source models via local deployment using \textsc{vLLM}~\citep{kwon2023efficient}.
+
+\begin{table*}[t]
+\centering
+\caption{Model list and URL.}
+\label{tab:model_list}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{ll}
+\toprule
+Model Name & URL \\
+\midrule
+\multicolumn{2}{c}{\textbf{Proprietary Models}} \\
+\midrule
+DeepSeek-V3.2-Exp & \url{https://huggingface.co/deepseek-ai/DeepSeek-V3.2-Exp} \\
+o4-mini & \url{https://platform.openai.com/docs/models/o4-mini} \\
+GPT-5-mini & \url{https://platform.openai.com/docs/models/gpt-5-mini} \\
+GPT-5 & \url{https://platform.openai.com/docs/models/gpt-5} \\
+Claude-4.5-Haiku & \url{https://www.anthropic.com/claude/haiku} \\
+Gemini-2.5-Flash & \url{https://cloud.google.com/vertex-ai/generative-ai/docs/models/gemini/2-5-flash} \\
+% 
+\midrule
+\multicolumn{2}{c}{\textbf{Open Source Large Language Models}} \\
+\midrule
+% DeepSeek-R1 & \url{https://huggingface.co/deepseek-ai/DeepSeek-R1} \\
+% Llama-4-Maverick-17B-128E-Instruct & \url{https://huggingface.co/meta-llama/Llama-4-Maverick-17B-128E-Instruct} \\
+Qwen3-1.7B & \url{https://huggingface.co/Qwen/Qwen3-1.7B} \\
+Qwen3-8B & \url{https://huggingface.co/Qwen/Qwen3-8B} \\
+Qwen3-32B & \url{https://huggingface.co/Qwen/Qwen3-32B} \\
+Qwen3-235B-A22B &\url{https://huggingface.co/Qwen/Qwen3-235B-A22B-Instruct-2507} \\
+Qwen2.5-3B & \url{https://huggingface.co/Qwen/Qwen2.5-3B-Instruct} \\
+Qwen2.5-7B & \url{https://huggingface.co/Qwen/Qwen2.5-7B-Instruct} \\
+Qwen2.5-72B & \url{https://huggingface.co/Qwen/Qwen2.5-72B-Instruct} \\
+Gemma-3-12B-it & \url{https://huggingface.co/google/gemma-3-12b-it} \\
+Gemma-3-27B-it & \url{https://huggingface.co/google/gemma-3-27b-it} \\
+InternLM3-8B & \url{https://huggingface.co/internlm/internlm3-8b-instruct} \\
+GPT-OSS-20B & \url{https://huggingface.co/openai/gpt-oss-20b} \\
+GPT-OSS-120B & \url{https://huggingface.co/openai/gpt-oss-120b} \\
+TimeOmni-1-7B & \url{https://huggingface.co/anton-hugging/TimeOmni-1-7B} \\
+\midrule
+\multicolumn{2}{c}{\textbf{Vision Language Models}} \\
+\midrule 
+Qwen2.5-VL-3B & \url{https://huggingface.co/Qwen/Qwen2.5-VL-3B-Instruct} \\
+Qwen2.5-VL-7B & \url{https://huggingface.co/Qwen/Qwen2.5-VL-7B-Instruct} \\
+Qwen2.5-VL-72B & \url{https://huggingface.co/Qwen/Qwen2.5-VL-72B-Instruct} \\
+Qwen3-VL-8B & \url{https://huggingface.co/Qwen/Qwen3-VL-8B-Instruct} \\
+Qwen3-VL-32B & \url{https://huggingface.co/Qwen/Qwen3-VL-32B-Instruct} \\
+Qwen3-VL-235B-A22B & \url{https://huggingface.co/Qwen/Qwen3-VL-235B-A22B-Instruct} \\
+Phi4-Multimodal-8B & \url{https://huggingface.co/microsoft/Phi-4-multimodal-instruct} \\
+Llama-4-Scout-17B-16E & \url{https://huggingface.co/meta-llama/Llama-4-Scout-17B-16E-Instruct}\\
+InternVL3.5-1B & \url{https://huggingface.co/OpenGVLab/InternVL3_5-1B} \\
+InternVL3.5-8B & \url{https://huggingface.co/OpenGVLab/InternVL3_5-8B} \\
+InternVL3.5-38B & \url{https://huggingface.co/OpenGVLab/InternVL3_5-38B} \\
+MiniCPM-V-4.5-8B & \url{https://huggingface.co/openbmb/MiniCPM-V-4_5} \\
+MiMo-VL-7B-RL & \url{https://huggingface.co/XiaomiMiMo/MiMo-VL-7B-RL}\\
+\midrule
+\multicolumn{2}{c}{\textbf{Time Series Large Language Models}} \\
+\midrule
+ChatTS-14B & \url{https://huggingface.co/bytedance-research/ChatTS-14B} \\
+TS-Reasoner-7B & \url{https://huggingface.co/ParadiseYu/TS-Reasoner-7B}\\
+OpenTSLM-tsqa-sp-3B & \url{https://huggingface.co/OpenTSLM/llama-3.2-3b-tsqa-sp}\\
+OpenTSLM-tsqa-flamingo-3B & \url{https://huggingface.co/OpenTSLM/llama-3.2-3b-tsqa-flamingo}\\
+\bottomrule
+\end{tabular}
+}
+% \vspace{-20pt}
+\end{table*}
+
+\begin{figure*}[t]   
+	
+\centering
+
+\includegraphics[width=\textwidth]{figures/data_collection.pdf}
+% \vspace{-10pt}
+\caption{Pipeline of data collection in \ours.}
+\label{fig: data construction}
+\vspace{-18pt}
+\end{figure*}
+
+\section{Data Collection}
+\label{appendix: data collection}
+% We perform \ours research from multiple sources, including website sources, publicly available datasets and benchmarks, and code synthesis. The detailed sources are included in Table~\ref{tab:data_sources}. For numerical reasoning, deductive reasoning, and quantitative decision-making tasks, we leverage code generation to synthesize time series data. Here we detail the data generation process.
+We first introduce the key challenges in constructing \ours, followed by the construction pipeline. We then detail each component of the pipeline with corresponding data quality verification. Finally, we discuss considerations for fairness and data release.
+
+\textbf{Challenges}. Creating a high-quality, multi-domain numerical-text series dataset presents significant challenges, encompassing the effective gathering, filtering, and alignment of useful textual data. First, textual sources are sparse. Unlike numerical data, typically provided by a packaged source, textual data are collected from a variety of dispersed sources, such as reports and news articles, necessitating extensive individual collection efforts. Second, textual information is noisy. Raw textual data often contains large portions of irrelevant information and potential data contamination, such as expert predictions in reports, requiring rigorous filtering processes to ensure data quality. Third, textual data requires precise alignment. It is essential to achieve temporal alignment between textual and numerical data by synchronizing reported times with numerical time steps (e.g., the time step where text is posted) and ensuring that the effective duration of textual information matches the relevant time frames at various granularities (e.g., a seasonal report should correspond to 12 time steps in a weekly time series). Additionally, the dataset faces challenges regarding ease of use, maintenance, and regular updates to remain relevant and useful for ongoing research and applications.
+
+\textbf{Pipeline Overview.} We propose a comprehensive pipeline for constructing \ours. As illustrated in Figure~\ref{fig: data construction}, the construction process is divided into three key steps: (1) \textit{Raw data collection.} We gather time series from reputable sources or code synthesis to ensure reliability and accuracy. (2) \textit{Question Generation}. Questions are created by humans for each reasoning task to ensure that there is no ambiguity in the question. After that, we use either code or a rule-based extractor to generate ground-truth from the data. (3) \textit{Verification.} For each data source, we examine whether the context is highly correlated to the time series, and further use code and rules to verify the quality of the answer to ensure the correctness.
+
+\subsection{Data Acquisition}
+To address the challenges of data scarcity and noise, we employ a dual-stream strategy for raw data acquisition, ensuring both diversity and precision.
+
+\textbf{Synthetic Data Collection.}
+For domains or tasks (e.g., numerical reasoning) where real-world data is sparse or difficult to isolate (e.g., complex physical simulations or specific medical scenarios), we utilize a synthesis approach. We select diverse \textit{Seed Domains} such as chemistry and seismology. Leveraging domain knowledge, we design Python generation functions (\texttt{synthesize\_ts}) to simulate realistic time series data. This approach allows us to precisely control the underlying variables, ensuring the data is clean and the parameters are known.
+
+\textbf{Web Data Collection.}
+To capture real-world complexity, we aggregate massive datasets from reputable public repositories. We employ human annotators to rigorously verify the alignment between texts and time series. Crucially, we enforce strict temporal alignment to ensure that textual reports (e.g., news events) accurately correspond to numerical changes in the time series. To minimize the risk of data leakage, we process the raw data by anonymizing specific entities (e.g., replacing \textit{Lakers} with \textit{Team A}, \textit{James Harden} with \textit{Player 1}). 
+Please refer to Table~\ref{tab:data_sources} for an overview of the data sources.
+
+\subsection{Question \& Answer Generation}
+Once the raw data is collected, we generate reasoning tasks designed to test specific analytical capabilities. To avoid the ambiguity often associated with automated generation, we manually design the question templates. We then generate answers via two methods:
+(1) \textit{Code-Based Calculation:} For synthetic data, answers are derived programmatically using the underlying physical formulas or logic rules defined during generation.
+(2) \textit{Rule-Based Extraction:} For web data, we use rule-based extractors to derive the correct answers directly from the data source, or retrieve them from associated metadata, time series values, or textual contexts.
+
+\subsection{Answer Verification}
+To ensure \ours serves as a rigorous benchmark, we implement a strict two-stage verification mechanism before any data is accepted.
+For synthetic tasks, we employ a \textbf{Code Verifier} that re-executes the generation logic to ensure the answer aligns precisely with the simulation parameters. For web-based tasks, we utilize a \textbf{Fact Verifier} to cross-reference generated answers against ground-truth records. Furthermore, we rigorously construct distractors for multiple-choice questions to ensure validity. We generate these either through algorithmic manipulation (e.g., reversing the ground-truth time series) to guarantee the choice is incorrect or by retrieving semantically distinct options validated by LLMs.
+
+\begin{figure*}
+\centering
+\includegraphics[width=0.7\textwidth]{figures/domain.png}
+\caption{Domain distribution of \ours. \textit{Domain-Agnostic} indicates time series that are not associated with any specific domain.}
+
+\vspace{-10pt}
+\label{fig: distribution}
+% \vspace{-18pt}
+\end{figure*}
+
+\begin{table*}[h]
+\centering
+\caption{Data sources for each task.}
+\resizebox{\textwidth}{!}{\begin{tabular}{l|l}
+\toprule
+\textbf{Category} & \textbf{Data Source} \\
+\midrule
+Pattern Recognition & TimeSeriesExam~\citep{cai2024timeseriesexam} \\
+Noise Understanding & TimeSeriesExam~\citep{cai2024timeseriesexam} \\
+Anomaly Detection  & TimeSeriesExam~\citep{cai2024timeseriesexam}\\
+Comparative Analysis & TimeSeriesExam~\citep{cai2024timeseriesexam}\\
+Etiological Reasoning  & LEAVES~\citep{fei2024leaves}, Human Activity Recognition~\citep{kwapisz2011activity, bachlin2009potentials}\\
+Causal Discovery   & CausalRiver~\citep{stein2025causalrivers} \\
+Abductive Reasoning & GAMETIME~\citep{tan2025inferring} \\
+Temporal Relation Reasoning     & Time-IMM~\citep{chang2025time} \\
+Numerical Reasoning & Synthetic Data \\
+Deductive Reasoning & Synthetic Data \\
+Inductive Reasoning & Kaggle: \href{https://www.kaggle.com/datasets/denvermagtibay/philippines-monthly-typhoon-trend-2014-2024}{Philippines Typhoon Trend (2014–2024)}, \href{https://www.kaggle.com/datasets/robervalt/sunspots}{Sunspots Dataset} \\
+Time Series Forecasting & CAMFE~\citep{zhang2025camef} \\
+Event Prediction & TimeCAP~\citep{lee2025timecap} \\
+Qualitative Decision-Making & ECG-QA~\citep{oh2023ecg}, PTB-XL~\citep{wagner2020ptb}\\
+Quantitative Decision-Making & Synthetic Data\\\bottomrule
+\end{tabular}
+}
+\label{tab:data_sources}
+\end{table*}
+
+\subsection{Data Contamination \& Quality Control}
+\begin{wraptable}{r}{0.33\linewidth} 
+    \centering
+    \vspace{-20pt} 
+    \caption{The proportion (in \%) of data leakage detection for \ours.}
+    \label{tab: leakage}
+    \begin{tabular}{lc}
+        \toprule
+        \textbf{Model} & \textbf{N-gram Accuracy (\%)}  \\
+        \midrule
+        o4-mini & 0.3\%\\
+        GPT-5-mini & 0.1\%  \\
+        GPT-5 & 0.4\% \\
+        \bottomrule
+    \end{tabular}
+    \vspace{-10pt} 
+\end{wraptable}
+
+We perform data leakage detection to alleviate the potential data contamination in \ours. Following \citep{xu2024benchmarking}, we utilize n-gram accuracy to detect any data leakage within different LLMs. Concretely, we combined each problem, the textual time series, and its solution in the dataset and randomly chose $K=20$ positions for extracting 5-grams. A sample is considered contaminated if the 5-grams predicted by the model match the actual 5-grams from the dataset. We perform on the best-performing models, o4-mini, GPT-5-mini, GPT-5. The results are presented in Table~\ref{tab: leakage}. It is shown that most of models exhibit low N-gram accuracy, indicating a low data leakage.
+
+\section{Time Series Analysis Tools}
+\label{appendix:timeseries-analysis}
+
+To enhance the reasoning capabilities of the models regarding numerical data, we integrated a deterministic analysis module. This module processes raw time series input $X = \{x_1, x_2, \dots, x_n\}$ and injects structured statistical summaries into the model's context window alongside the raw time series. The analysis pipeline consists of five core components: statistical profiling, trend detection, extremum identification, change point detection, and series comparison.
+
+\subsection{Data Preprocessing}
+Prior to analysis, all input series are sanitized. Non-numeric artifacts (e.g., formatting commas) are removed, and the series is converted to a floating-point array.
+
+\subsection{Descriptive Statistics}
+We compute the fundamental statistical moments and distribution properties to provide the model with a global view of the data scale and shape. The computed metrics include the mean ($\mu$), standard deviation ($\sigma$), range ($x_{max} - x_{min}$), median, and variance ($\sigma^2$). Additionally, we calculate the skewness and kurtosis to describe the asymmetry and tailedness of the distribution, respectively, utilizing the \texttt{scipy.stats} library.
+
+\subsection{Trend Analysis}
+To formally quantify the trajectory of the time series, we utilize Ordinary Least Squares (OLS) linear regression. We model the series as $x_t = \beta_1 t + \beta_0 + \epsilon$, where $t$ is the time index. The tool outputs:
+\begin{itemize}
+    \item \textbf{Slope ($\beta_1$):} Indicates the direction and magnitude of the trend (increasing if $\beta_1 > 0$, decreasing if $\beta_1 < 0$).
+    \item \textbf{Coefficient of Determination ($R^2$):} Measures the proportion of variance in the dependent variable predictable from the independent variable.
+    \item \textbf{Trend Strength:} We categorize strength based on the Pearson correlation coefficient $r$. A trend is classified as ``strong'' if $|r| > 0.7$, ``moderate'' if $0.4 < |r| \le 0.7$, and ``weak'' otherwise.
+\end{itemize}
+
+\subsection{Peak and Valley Detection}
+Local extrema are identified to highlight turning points in the data. We employ a signal processing approach (via \texttt{scipy.signal.find\_peaks}) to find indices $t$ such that $x_t$ is a local maximum (peak) or minimum (valley). To filter out noise, we apply a prominence threshold $P$. By default, $P$ is dynamic:
+\begin{equation}
+    P = 0.5 \cdot \sigma_X
+\end{equation}
+where $\sigma_X$ is the standard deviation of the series. This ensures that only significant structural peaks are reported to the LLM, reducing context noise.
+
+\subsection{Change Point Detection}
+To detect sudden shifts or volatility clustering, we analyze the first-order difference of the series, defined as $\Delta x_t = x_t - x_{t-1}$. A time step $t$ is flagged as a change point if the magnitude of the change exceeds a statistical threshold $\theta$:
+\begin{equation}
+    |\Delta x_t| > \theta, \quad \text{where } \theta = 2 \cdot \text{std}(\Delta X)
+\end{equation}
+This method effectively captures sudden shocks or regime changes in the time series that may be difficult for the LLM to infer from raw tokens alone.
+
+\subsection{Multivariate Comparison}
+When the input contains multiple time series ($X$ and $Y$), the agent performs pairwise comparisons to determine their relationship.
+\begin{enumerate}
+    \item \textbf{Pearson Correlation:} We calculate the coefficient $\rho_{X,Y}$ and the associated p-value to test for linear correlation.
+    \item \textbf{Cross-Correlation and Lag:} We compute the normalized cross-correlation function to identify the optimal lag $\tau$ that maximizes similarity:
+    \begin{equation}
+        \tau_{\text{best}} = \operatorname*{argmax}_{\tau} (X \star Y)(\tau)
+    \end{equation}
+    \item \textbf{Statistical Difference:} A Welch's t-test is performed to determine if the means of the two series are significantly different (p-value $< 0.05$).
+\end{enumerate}
+
+\section{Additional Results}
+
+\subsection{Multivariate Coverage across Tasks}
+We report the proportion of multivariate\footnote{We use ``multivariate'' to denote any instance with more than one time series channel presented jointly to the model.} samples per task in Table~\ref{tab: multivariate}. Overall, $58.1\%$ samples in \ours consist of multivariate instances, ensuring that the benchmark substantially covers reasoning over multi-channel signals in addition to univariate ones.
+\subsection{Fine-grained Correlation Results}
+\label{sec: fine-grained correlation}
+Table~\ref{tab:vlm_correlation} provides a detailed correlation analysis between model size and performance on individual tasks. The results indicate that for both LLMs and VLMs, model size positively correlates with performance on most perception, reasoning, and decision-making tasks, but not on prediction tasks.
+
+    \subsection{MCQ Format Faithfully Reflects Numerical Forecasting Ability}
+
+\begin{wraptable}{r}{0.34\linewidth}
+\vspace{-20pt}
+\centering
+\caption{Spearman's $\rho$ between model size and forecasting performance under the MCQ and open-ended settings.}
+\label{tab:mcq_vs_openended}
+\small
+\begin{tabular}{lcc}
+\toprule
+\textbf{$\rho$} & \textbf{MCQ} & \textbf{Numerical Forecasting} \\
+\midrule
+LLMs & -0.55 & -0.61 \\
+VLMs & \phantom{-}0.03  & -0.05 \\
+\bottomrule
+\end{tabular}
+
+\end{wraptable}
+
+To investigate whether the multiple-choice formulation of Time Series Forecasting reflects the true numerical forecasting ability of large models, we evaluate all LLMs and VLMs in an \emph{open-ended} numerical forecasting setting, where models are required to generate the predicted values directly, and we use nMAE as the metric. We then compute Spearman's rank correlation between model size and forecasting performance, and contrast it with the MCQ-based correlation. The results shown in Table~\ref{tab:mcq_vs_openended} indicate that the two formats produce highly consistent trends, suggesting that the accuracy of the MCQ faithfully reflects the quality of open-ended forecasting.
+
+\begin{table*}[t]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\caption{Proportion of samples containing multi-variate time series in each task.}
+\label{tab: multivariate}
+\begin{tabular}{cccc|ccccccc|cc|cc|c}
+\toprule
+\multicolumn{4}{c|}{\textbf{Perception}} & \multicolumn{7}{c|}{\textbf{Reasoning}} & \multicolumn{2}{c|}{\textbf{Prediction}} & \multicolumn{2}{c|}{\textbf{Decision}} & \textbf{Overall} \\
+\cmidrule(lr){1-4} \cmidrule(lr){5-11} \cmidrule(lr){12-13} \cmidrule(lr){14-15} \cmidrule(lr){16-16}
+PR & NU & AD & CA & ER & CD & AR & TR & NR & DR & IR & TSF & EP & QualDM & QuantDM & Overall \\
+\midrule
+3.8\% & 14.9\% & 31.0\% & 100\% & 57.1\% & 100\% & 0\% & 0\% & 62.5\% & 0\% & 50.0\% & 100\% & 100\% & 100\% & 0\% & 58.1\% \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{table*}[t]
+\caption{Spearman's rank correlation ($\rho$) between LLM, VLM performance and model size.  We mark correlations with p-values $\le 0.05$ using (*).}
+\label{tab:vlm_correlation}
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l|cccc|ccccccc|cc|cc} 
+\toprule
+\multicolumn{1}{l|}{\textbf{Metric}} & \multicolumn{4}{c|}{\textbf{Perception}} & \multicolumn{7}{c|}{\textbf{Reasoning}} & \multicolumn{2}{c|}{\textbf{Prediction}} & \multicolumn{2}{c}{\textbf{Decision}} \\ 
+\cmidrule(lr){2-5} \cmidrule(lr){6-12} \cmidrule(lr){13-14} \cmidrule(lr){15-16}
+ & PR & NU & AD & CA & ER & CD & AR & TR & NR & DR & IR & TSF & EP & QualDM & QuantDM \\ 
+\midrule
+$\rho$ (LLM) & 0.9021 (*) & 0.1221 & 0.7352 (*) & 0.8558 (*) & 0.6469 (*) & 0.4601 & 0.6986 (*) & 0.2733 & 0.8037 (*) & 0.2831 & 0.7671 (*) & -0.5525 & -0.0046 & 0.5092 & 0.7626 (*) \\
+$\rho$ (VLM)& 0.7502 (*) & 0.3812 & 0.7537 (*) & 0.7835 (*) & 0.6707 (*) & 0.7268 (*) & 0.3498 & 0.4544 & 0.6482 (*) & 0.6193 (*) & 0.3763 & 0.0280 & -0.3684 & 0.0726 & 0.5880 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}
+
+\section{Cases}
+\subsection{Question Cases}
+\label{sec: question cases}
+\input{blocks/sample_cases/pattern}
+\input{blocks/sample_cases/anomaly}
+\input{blocks/sample_cases/noise}
+\input{blocks/sample_cases/similarity}
+\input{blocks/sample_cases/etiological}
+\input{blocks/sample_cases/numerical}
+\input{blocks/sample_cases/temporal}
+\input{blocks/sample_cases/abductive}
+\input{blocks/sample_cases/deductive}
+\input{blocks/sample_cases/inductive}
+\input{blocks/sample_cases/causal}
+\input{blocks/sample_cases/forecasting}
+\input{blocks/sample_cases/event}
+\input{blocks/sample_cases/qualitative_decision}
+\input{blocks/sample_cases/quantitative}
+
+\subsection{Error Cases}
+\label{sec:error cases}
+\input{blocks/error_cases/perception_error}
+\input{blocks/error_cases/reasoning_error}
+\input{blocks/error_cases/domain_knowledge_error}
+\input{blocks/error_cases/question_error}
+\end{document}

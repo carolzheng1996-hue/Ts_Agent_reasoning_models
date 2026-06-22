@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Last-mile Forecasting 中文文献解读</title>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <style>
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.72; color: #1f2937; background: #f8fafc; }
+    main { max-width: 980px; margin: 0 auto; padding: 42px 24px 80px; background: #fff; }
+    h1 { font-size: 2rem; line-height: 1.25; margin: 0 0 12px; color: #111827; }
+    h2 { font-size: 1.45rem; margin-top: 34px; border-bottom: 1px solid #e5e7eb; padding-bottom: 6px; color: #111827; }
+    h3 { font-size: 1.15rem; margin-top: 24px; color: #111827; }
+    p { margin: 12px 0; }
+    ul, ol { padding-left: 1.5rem; }
+    code { background: #eef2f7; padding: 0.12rem 0.28rem; border-radius: 4px; }
+    pre { background: #0f172a; color: #e5e7eb; padding: 14px 16px; border-radius: 6px; overflow-x: auto; line-height: 1.55; }
+    table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 0.94rem; }
+    th, td { border: 1px solid #d1d5db; padding: 8px 10px; text-align: left; vertical-align: top; }
+    th { background: #f3f4f6; }
+    td.num, th.num { text-align: right; }
+    .meta { color: #4b5563; margin-bottom: 26px; }
+    .callout { background: #f1f5f9; border-left: 4px solid #2563eb; padding: 12px 16px; margin: 18px 0; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>《Bridging the Last Mile of Time Series Forecasting with LLM Agents》中文文献解读</h1>
+  <p class="meta">论文：Yuhua Liao, Zetian Wang, Qiangqiang Nie, Zhenhua Zhang. <em>Bridging the Last Mile of Time Series Forecasting with LLM Agents</em>. arXiv:2606.02497<br>机构：Trip.com Group, Shanghai, China<br>方法主题：<strong>Last-mile forecasting / LLM forecast-revision agent</strong></p>
+  <table>
+    <tr><th>资源</th><th>链接</th></tr>
+    <tr><td>论文页面</td><td><a href="https://arxiv.org/abs/2606.02497">arXiv:2606.02497</a></td></tr>
+    <tr><td>PDF</td><td><a href="https://arxiv.org/pdf/2606.02497">https://arxiv.org/pdf/2606.02497</a></td></tr>
+    <tr><td>TeX 源码</td><td><a href="https://arxiv.org/e-print/2606.02497">https://arxiv.org/e-print/2606.02497</a></td></tr>
+    <tr><td>代码与数据</td><td>论文 TeX 中未发现官方代码仓库、Hugging Face 或公开数据下载链接；实现基于 <a href="https://github.com/huggingface/smolagents">smolagents</a>，baseline 使用 TimesFM。</td></tr>
+  </table>
+
+  <h2>1. 一句话总结</h2>
+  <p>这篇论文把“统计模型给出预测之后，业务人员还要根据节假日、活动、历史类比和反馈做最后修正”的环节定义为 <strong>last-mile forecasting</strong>，并提出一个 LLM agent 框架：它不直接替代预测模型，而是在受约束的 forecast workspace 上调用工具、收集证据、执行可审计的 forecast revision action，最终把 baseline forecast 改成更符合业务上下文的决策级预测。</p>
+  <div class="callout">核心思想：让 foundation forecasting model 负责数值外推，让 LLM agent 负责上下文解释、证据检索和受控修正。</div>
+
+  <h2>2. 研究背景：为什么需要 last-mile forecasting</h2>
+  <p>传统时间序列预测通常把任务写成：</p>
+  $$X_{1:T}=(x_1,x_2,\ldots,x_T),\qquad \hat{Y}_{T+1:T+H}=\mathcal{F}(X_{1:T})$$
+  <p>这里 $\mathcal{F}$ 是 Prophet、TimesFM、Chronos、Lag-Llama 等预测模型，输入历史序列 $X_{1:T}$，输出未来 $H$ 步预测。</p>
+  <p>但真实业务里“统计上合理的预测”通常不是最终可用预测。预测进入计划、排班、库存或资源分配之前，经常还要考虑节假日和调休日历、促销活动、历史类比、专家反馈，以及可解释、可恢复、可审计等组织要求。</p>
+  <p>如果让 LLM 直接吐出一串替换后的数值，问题会很难控制：它可能改动历史观测、覆盖 baseline、重复叠加修正，或者无法说明某个数值为什么被改。因此论文把这个阶段单独抽象为“基线预测之后的受控修正问题”。</p>
+
+  <h2>3. 问题定义：从 baseline 到 final forecast</h2>
+  <p>预测骨干先产生 baseline：</p>
+  $$F_{\text{base}}=\mathcal{F}(X_{1:T})\in\mathbb{R}^{H}$$
+  <p>然后 agent 利用上下文集合：</p>
+  $$C=\{c_i\}_{i=1}^{m}$$
+  <p>其中 $c_i$ 可以是用户指令、日历事件、历史类比、外部信号、专家反馈或工具观察。目标不是重新生成预测，而是在可检查的步骤中把 $F_{\text{base}}$ 改成 $F_{\text{final}}$。</p>
+  <p>论文把每一步的状态写成：</p>
+  $$W_t=(X_{1:T},F_{\text{base}},F_t,E_t,A_t)$$
+  <table>
+    <tr><th>符号</th><th>含义</th></tr>
+    <tr><td>$X_{1:T}$</td><td>历史真实观测，不允许 agent 修改</td></tr>
+    <tr><td>$F_{\text{base}}$</td><td>预测模型给出的 baseline，不允许覆盖</td></tr>
+    <tr><td>$F_t$</td><td>第 $t$ 步当前可编辑预测</td></tr>
+    <tr><td>$E_t$</td><td>已收集的结构化证据，比如节假日、历史同期值、记忆检索结果</td></tr>
+    <tr><td>$A_t$</td><td>已执行的 action trace</td></tr>
+  </table>
+  <p>初始状态为：</p>
+  $$F_0=F_{\text{base}},\qquad E_0=\emptyset,\qquad A_0=\emptyset$$
+  <p>每一步 agent 只能从有效动作集合中选择动作：</p>
+  $$a_t\in\mathcal{A}_{\text{valid}}(W_t)\subseteq \mathcal{A}_{\text{tool}}\cup\mathcal{A}_{\text{revise}}\cup\{\text{stop}\}$$
+  <p>动作会触发状态转移：</p>
+  $$W_{t+1}=\mathcal{T}(W_t,a_t)$$
+  <p>过程在 agent 选择 <code>stop</code> 或达到步数预算 $t^\star$ 时结束，输出：</p>
+  $$(F_{\text{final}},A),\qquad F_{\text{final}}=F_{t^\star},\quad A=A_{t^\star}$$
+
+  <h2>4. 框架结构</h2>
+  <h3>4.1 统一 forecast workspace</h3>
+  <table>
+    <tr><th>字段</th><th>说明</th><th>是否可变</th></tr>
+    <tr><td><code>ds</code></td><td>timestamp / 日期</td><td>不可变</td></tr>
+    <tr><td><code>y</code></td><td>historical actual value</td><td>不可变</td></tr>
+    <tr><td><code>y_baseline</code></td><td>baseline forecast</td><td>不可变</td></tr>
+    <tr><td><code>y_final</code></td><td>editable revised forecast</td><td>可通过受控 action 修改</td></tr>
+  </table>
+  <p>这种设计把“观测值”“原始预测”“最终修正预测”放到同一时间索引中，agent 可以比较三者，但只能改 <code>y_final</code>。这样可以避免 LLM 把历史事实和预测混在一起，也保留了 baseline 用于事后对比。</p>
+
+  <h3>4.2 受约束的 revision action</h3>
+  <table>
+    <tr><th>Action</th><th>Workspace effect</th><th>适用场景</th></tr>
+    <tr><td>Initialize</td><td>从 <code>y_baseline</code> 初始化 <code>y_final</code></td><td>开始修正前建立可编辑目标</td></tr>
+    <tr><td>Range transform</td><td>对日期区间做 multiply、add 或 clip</td><td>节假日、促销、扰动</td></tr>
+    <tr><td>Point override</td><td>替换指定日期的 forecast value</td><td>峰值、谷值、逐日类比</td></tr>
+    <tr><td>Revisions merge</td><td>应用一组 revision actions</td><td>长周期预测中的 map-reduce 合并</td></tr>
+  </table>
+  <p>验证规则包括不能编辑历史 <code>y</code>、不能覆盖 <code>y_baseline</code>、修正日期必须落在预测 horizon 内、重复或冲突 edits 可以被拒绝，以及每个已接受 revision 需要 evidence 和 confidence。</p>
+
+  <h3>4.3 工具增强证据获取</h3>
+  <table>
+    <tr><th>工具</th><th>作用</th></tr>
+    <tr><td>Forecasting tool</td><td>调用 time-series backbone 得到 baseline forecast</td></tr>
+    <tr><td>Historical retrieval</td><td>从当前序列中检索历史窗口</td></tr>
+    <tr><td>Holiday lookup</td><td>查询未来事件窗口的日历信息</td></tr>
+    <tr><td>Memory query</td><td>检索历史 reflection entries 和近期经验</td></tr>
+    <tr><td>Map-reduce planner</td><td>将长 horizon 拆成多个局部 forecasting intervals</td></tr>
+  </table>
+
+  <h3>4.4 长周期预测：map-reduce decomposition</h3>
+  <p>长 horizon 中可能有多个节假日或事件，如果一次性让 LLM 处理完整区间，很容易混淆局部证据。论文使用 map-reduce：主 agent 识别事件窗口，每个窗口派发给 local reasoner，local reasoner 只读 workspace 和相关证据并输出 JSON revision envelope，最终由主 agent 汇总后通过同一 action interface 和 validation 进入 <code>y_final</code>。</p>
+  <p>local reasoner 的证据优先级为：</p>
+  $$\text{realized multipliers from reflection}>\text{memory critiques}>\text{historical same-period ratios}>\text{user instructions}$$
+
+  <h3>4.5 记忆与自我改进</h3>
+  <p>当前 forecast window 的真实值出来后，系统比较 baseline forecast、agent revised forecast 和 actual realized values。如果某次 revision 变差，系统会生成结构化经验写入 memory bank。后续 forecasting session 中，agent 在做 revision 前先 query memory bank，把检索到的经验当成 empirical prior。这个机制不需要重新训练 TimesFM，只是在 agent 层面积累可检索经验。</p>
+
+  <h2>5. 实验设置</h2>
+  <h3>5.1 数据</h3>
+  <table>
+    <tr><th>项目</th><th>说明</th></tr>
+    <tr><td>数据</td><td>一条中国热门国内航线的每日票务销售序列</td></tr>
+    <tr><td>时间范围</td><td>2024-01-01 至 2026-05-05</td></tr>
+    <tr><td>长度</td><td>856 个 daily values</td></tr>
+    <tr><td>特征</td><td>周季节性、年季节性、中国农历节假日响应</td></tr>
+    <tr><td>匿名化</td><td>数值按未公开正比例常数线性缩放，日历日期保留</td></tr>
+    <tr><td>公开性</td><td>论文说已匿名化，但 TeX 中未发现官方公开下载链接</td></tr>
+  </table>
+  <h3>5.2 对比方法和指标</h3>
+  <p>论文比较 Prophet、TimesFM 和 Ours。指标为 MAE 与 MAPE：</p>
+  $$\mathrm{MAE}=\frac{1}{n}\sum_{i=1}^{n}|y_i-\hat{y}_i|$$
+  $$\mathrm{MAPE}=\frac{100\%}{n}\sum_{i=1}^{n}\left|\frac{y_i-\hat{y}_i}{y_i}\right|$$
+
+  <h2>6. 主要结果</h2>
+  <h3>6.1 Case 1：Spring Festival holiday-aware revision</h3>
+  <table>
+    <tr><th>Method</th><th class="num">Full MAE</th><th class="num">Full MAPE</th><th class="num">Holiday MAE</th><th class="num">Holiday MAPE</th></tr>
+    <tr><td>Prophet</td><td class="num">342.45</td><td class="num">82.66%</td><td class="num">507.28</td><td class="num">155.95%</td></tr>
+    <tr><td>TimesFM</td><td class="num">530.25</td><td class="num">131.06%</td><td class="num">857.28</td><td class="num">262.76%</td></tr>
+    <tr><td>Ours</td><td class="num"><strong>119.17</strong></td><td class="num"><strong>22.33%</strong></td><td class="num"><strong>101.59</strong></td><td class="num"><strong>32.84%</strong></td></tr>
+  </table>
+  <p>在春节窗口内，agent 框架相对 Prophet 降低 MAE 80.0%，相对 TimesFM 降低 MAE 88.2%。原因是 agent 基于上一年农历对齐窗口做了 pre-CNY demand rundown 和 Spring Festival holiday suppression 两段 override。</p>
+
+  <h3>6.2 Case 2：长 horizon 多节假日预测</h3>
+  <table>
+    <tr><th>Method</th><th class="num">Full MAE</th><th class="num">Full MAPE</th><th>New Year</th><th>Spring Festival</th><th>Qingming</th><th>Labor Day</th></tr>
+    <tr><td>Prophet</td><td class="num"><strong>182.92</strong></td><td class="num">27.3%</td><td>240.65 / 38.7%</td><td>508.63 / 167.5%</td><td>199.37 / 31.4%</td><td>188.31 / 37.6%</td></tr>
+    <tr><td>TimesFM</td><td class="num">259.81</td><td class="num">38.1%</td><td>304.36 / 51.5%</td><td>742.70 / 241.9%</td><td>324.18 / 52.8%</td><td>516.39 / 103.2%</td></tr>
+    <tr><td>Ours</td><td class="num">185.72</td><td class="num"><strong>18.91%</strong></td><td><strong>28.42 / 4.65%</strong></td><td><strong>89.28 / 29.79%</strong></td><td><strong>169.32 / 28.68%</strong></td><td><strong>58.96 / 12.15%</strong></td></tr>
+  </table>
+  <p>Ours 的 full MAE 与 Prophet 接近，但 full MAPE 最低，而且在四个 event windows 上全部取得最低误差。map-reduce 让元旦、春节、清明、劳动节各自拥有独立 revision record，因此不会把 126 天 horizon 当成一个全局修正对象。</p>
+
+  <h3>6.3 Case 3：memory self-improvement</h3>
+  <table>
+    <tr><th>Window</th><th class="num">no-memory MAE</th><th class="num">no-memory MAPE</th><th class="num">with-memory MAE</th><th class="num">with-memory MAPE</th></tr>
+    <tr><td>W1</td><td class="num">33.85</td><td class="num">2.62%</td><td class="num">--</td><td class="num">--</td></tr>
+    <tr><td>W2</td><td class="num"><strong>172.03</strong></td><td class="num"><strong>12.35%</strong></td><td class="num">176.19</td><td class="num">13.15%</td></tr>
+    <tr><td>W3</td><td class="num">92.94</td><td class="num">7.96%</td><td class="num"><strong>60.10</strong></td><td class="num"><strong>5.23%</strong></td></tr>
+  </table>
+  <p>W3 的 with-memory 明显改善。附录中的 memory entries 显示 actual-to-baseline ratio 从 1.025 升到 1.181，说明 baseline 近期持续低估；agent 检索到这类经验后，把上调校准作为方向性 prior。</p>
+  <pre><code>entry 1:
+  event: recent_calibration
+  range: 2026-01-05 ~ 2026-01-11
+  mode: multiply, value: 1.025
+  mean_baseline=1235.22, mean_actual=1265.71
+
+entry 2:
+  event: recent_calibration
+  range: 2026-01-12 ~ 2026-01-18
+  mode: multiply, value: 1.181
+  mean_baseline=1123.90, mean_actual=1327.35</code></pre>
+
+  <h2>7. Agent 视角拆解</h2>
+  <table>
+    <tr><th>Agent 要素</th><th>论文中的对应设计</th></tr>
+    <tr><td>State / workspace</td><td>$W_t=(X_{1:T},F_{\text{base}},F_t,E_t,A_t)$；实现为 <code>ds,y,y_baseline,y_final</code> dataframe</td></tr>
+    <tr><td>Policy / model</td><td>code-executing LLM agent，基于 prompt、工具观察和 workspace 状态选择 action</td></tr>
+    <tr><td>Action space</td><td>tool actions、revision actions、<code>stop</code></td></tr>
+    <tr><td>Tools</td><td>forecasting、historical retrieval、holiday lookup、memory query、map-reduce planner</td></tr>
+    <tr><td>Rollout / trajectory</td><td>多步 <code>tool -&gt; evidence -&gt; proposal -&gt; validated revision</code>，累计为 action trace $A_t$</td></tr>
+    <tr><td>Memory</td><td>realized forecast outcome 触发 reflection，写入 persistent memory bank</td></tr>
+    <tr><td>Update mechanism</td><td>不更新 forecasting backbone；通过记忆检索改善后续 revision</td></tr>
+    <tr><td>Evaluation</td><td>MAE/MAPE，full horizon 和 event window 双层评估，并检查 adjustment log</td></tr>
+  </table>
+
+  <h2>8. 贡献、局限与实践启示</h2>
+  <p>论文的主要贡献是定义 last-mile forecasting，提出 action-centric LLM agent，将上下文证据、工具调用、forecast edit 和 action trace 统一起来，并用 map-reduce 与 post-hoc memory 支持长 horizon 和跨 session 改进。</p>
+  <p>局限也很清楚：实验以 case study 为主，没有大规模 benchmark；行业数据未给出官方公开下载入口；当前上下文主要是文本和日历信息，复杂 multimodal context 和高风险场景下的人类确认仍需进一步设计。</p>
+  <div class="callout">实践上，这篇论文最有价值的地方是把 LLM 放在“预测系统最后一公里”的正确位置：不要让 LLM 替代数值预测器，而是让它做证据获取、业务解释、受控编辑和审计记录。</div>
+</main>
+</body>
+</html>

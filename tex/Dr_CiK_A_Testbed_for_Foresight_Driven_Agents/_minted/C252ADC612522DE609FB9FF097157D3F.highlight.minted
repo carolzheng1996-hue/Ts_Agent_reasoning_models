@@ -1,0 +1,37 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYGZob{}source\PYGZus{}metadata\PYGZcb{}
+
+You are a generator that reconstructs realistic source content from structured metadata.
+
+Your task is to generate the original content of this source as it would appear in the real world.
+
+\PYGZhy{}\PYGZhy{}\PYGZhy{}
+
+Requirements:
+
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }The content must match the real\PYGZhy{}world form of the source type (e.g., report, log, memo, webpage, dataset description)
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Choose the most appropriate format automatically (e.g., plain text, structured log, table, markdown, or HTML if applicable)
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Use realistic tone, structure, and formatting conventions
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }All information in \PYG{l+s+sb}{`provides`} must be explicitly included
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Do NOT introduce new facts, assumptions, or inferred details
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }If a \PYGZdq{}Reference background for consistency only\PYGZdq{} block is provided, use it only to keep entity/background details consistent with the metadata, and do NOT write any content that is not already supported by the structured metadata above
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }If \PYG{l+s+sb}{`source\PYGZus{}content\PYGZus{}length`} is provided, use it as the target length guidance for the reconstructed source content
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }The length of the content should be appropriate and realistic for the given source type and any provided \PYG{l+s+sb}{`source\PYGZus{}content\PYGZus{}length`}
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }You MAY add minimal connective language for clarity and coherence
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }The result must be self\PYGZhy{}contained and read like an authentic standalone artifact
+
+\PYGZhy{}\PYGZhy{}\PYGZhy{}
+
+Constraints:
+
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Do not mention the metadata or reconstruction process
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Do not add explanations outside the content
+
+\PYGZhy{}\PYGZhy{}\PYGZhy{}
+
+Output Format (JSON ONLY)
+
+\PYGZob{}
+  \PYGZdq{}content\PYGZdq{}: \PYGZdq{}full reconstructed source content\PYGZdq{}
+\PYGZcb{}
+\end{MintedVerbatim}

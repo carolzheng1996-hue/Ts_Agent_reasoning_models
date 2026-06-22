@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TimeClaw 论文中文解读</title>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <style>
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.72; color: #1f2937; background: #f8fafc; }
+    main { max-width: 980px; margin: 0 auto; padding: 42px 24px 80px; background: #fff; }
+    h1 { font-size: 2rem; line-height: 1.25; margin: 0 0 12px; color: #111827; }
+    h2 { font-size: 1.45rem; margin-top: 34px; border-bottom: 1px solid #e5e7eb; padding-bottom: 6px; color: #111827; }
+    h3 { font-size: 1.15rem; margin-top: 24px; color: #111827; }
+    p { margin: 12px 0; }
+    ul, ol { padding-left: 1.5rem; }
+    code { background: #eef2f7; padding: 0.12rem 0.28rem; border-radius: 4px; }
+    table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 0.94rem; }
+    th, td { border: 1px solid #d1d5db; padding: 8px 10px; text-align: left; }
+    th { background: #f3f4f6; }
+    td.num, th.num { text-align: right; }
+    .meta { color: #4b5563; margin-bottom: 26px; }
+    .callout { background: #f1f5f9; border-left: 4px solid #2563eb; padding: 12px 16px; margin: 18px 0; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>《Harnessing Generalist Agents for Contextualized Time Series》中文文献解读</h1>
+  <p class="meta">论文：Zihao Li 等，<em>Harnessing Generalist Agents for Contextualized Time Series</em>，arXiv:2606.05404<br>方法名：<strong>TimeClaw</strong></p>
+  <table>
+    <tr><th>资源</th><th>链接</th></tr>
+    <tr><td>论文页面</td><td><a href="https://arxiv.org/abs/2606.05404">arXiv:2606.05404</a></td></tr>
+    <tr><td>PDF</td><td><a href="https://arxiv.org/pdf/2606.05404">https://arxiv.org/pdf/2606.05404</a></td></tr>
+    <tr><td>TeX 源码</td><td><a href="https://arxiv.org/e-print/2606.05404">https://arxiv.org/e-print/2606.05404</a></td></tr>
+    <tr><td>代码仓库</td><td><a href="https://github.com/iDEA-iSAIL-Lab-UIUC/TimeClaw">iDEA-iSAIL-Lab-UIUC/TimeClaw</a></td></tr>
+    <tr><td>Hugging Face</td><td>未在论文 arXiv 页面或官方信息中发现明确公开链接</td></tr>
+  </table>
+
+  <h2>1. 一句话总结</h2>
+  <p>这篇论文的核心不是再训练一个新的时间序列预测模型，而是给冻结的通用 LLM agent 外面加一层“时间序列原生 harness”。TimeClaw 让 LLM 不必把长数值序列当普通文本硬读，而是通过结构化 workspace、可执行时间序列工具、可演化工具库和多模态记忆来完成开放式时间序列推理。</p>
+  <div class="callout">$$\text{TimeClaw} = \text{LLM policy} + \text{时间序列运行时} + \text{工具} + \text{经验记忆} + \text{能力演化}$$</div>
+
+  <h2>2. 方法背景：为什么普通 LLM 不适合直接读时间序列</h2>
+  <p>论文讨论的对象是“带上下文的时间序列”，即数值信号不再孤立存在，而是和自然语言场景、约束、外部事件、领域知识一起出现。例如能源负荷预测中，历史用电曲线之外还可能给出“未来有暴雪”；金融分析中，价格序列之外还会给出投资组合权重、无风险利率或市场指数。</p>
+  <p>论文先定义数值时间序列：</p>
+  <p>$$\mathbf{X}_{1:T} = [\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_T] \in \mathbb{R}^{N \times T},$$</p>
+  <p>其中 $T$ 是时间长度，$N$ 是变量数，$\mathbf{x}_t \in \mathbb{R}^N$ 是第 $t$ 个时间点的观测。时间切片定义为：</p>
+  <p>$$\mathbf{X}_{a:b} = [\mathbf{x}_a, \mathbf{x}_{a+1}, \ldots, \mathbf{x}_b].$$</p>
+  <p>带上下文的时间序列被写成：</p>
+  <p>$$\mathcal{X} = (\mathbf{X}_{1:T}, \mathcal{C}),$$</p>
+  <p>其中 $\mathcal{C}$ 是文本描述、元数据、约束、因果知识等上下文。</p>
+  <p>传统时间序列模型通常处理固定任务，比如预测 $\mathbf{X}_{1:T} \mapsto \mathbf{X}_{T+1:T+H}$ 或分类 $\mathbf{X}_{1:T} \mapsto y$。但真实业务里任务更开放：可能要求预测、解释、找异常、做投资组合比较、判断因果方向、输出行动建议。论文因此定义开放式上下文时间序列推理任务：</p>
+  <p>$$\tau = (q, \mathcal{X}, \mathcal{Y}, y^\star, \ell),$$</p>
+  <p>其中 $q$ 是自然语言任务指令，$\mathcal{Y}$ 是输出空间，$y^\star$ 是目标答案，$\ell$ 是评估函数。目标是：</p>
+  <p>$$\hat{y}=f(q,\mathcal{X})\in\arg\min_{y\in\mathcal{Y}}\ell(y,y^\star).$$</p>
+
+  <h2>3. 论文动机：两类 misalignment</h2>
+  <p>现有 LLM agent 常见做法是把数值序列和上下文序列化成文本：</p>
+  <p>$$s_\mathcal{X}=\sigma(\mathcal{X}),$$</p>
+  <p>然后 token 化：</p>
+  <p>$$\mathbf{z}_{1:L}=\operatorname{Tokenize}([q;s_{\mathcal{X}}]).$$</p>
+  <p>论文认为这会带来两类错配。</p>
+  <p><strong>Datatype misalignment</strong>：时间序列的趋势、周期、频谱、局部异常、长程依赖等结构，在转成 token 后会失真。设 tokenizer 表示为 $\eta:\mathbb{R}\rightarrow\mathcal{V}^*$。一般情况下，token 编辑距离或 embedding 距离不保持数值距离的顺序，即可能存在：</p>
+  <p>$$|x_1-x_2| < |x_1-x_3|,$$</p>
+  <p>但</p>
+  <p>$$d_{\mathrm{tok}}(\eta(x_1),\eta(x_2)) > d_{\mathrm{tok}}(\eta(x_1),\eta(x_3)).$$</p>
+  <p><strong>Agentic process misalignment</strong>：ReAct、CoT、reflection 等 agent 流程多围绕文本推理设计。对时间序列来说，自然操作应是切片、聚合、平滑、频谱分析、自相关、预测、异常定位等，而不是让 LLM 在文本里凭眼睛读一串数字。</p>
+  <p>论文还指出 next-token prediction 不是 next-value prediction。LLM 训练目标是：</p>
+  <p>$$\mathcal{L}_{\mathrm{tok}}(p)=\mathbb{E}\left[-\log p(Z_{t+1}\mid Z_{1:t})\right],$$</p>
+  <p>而数值预测目标更接近：</p>
+  <p>$$\mathcal{L}_{\mathrm{num}}(g)=\mathbb{E}\left[d_{\mathrm{num}}(g(X_{1:t}),X_{t+1})^2\right].$$</p>
+  <p>前者的 Bayes 最优解是 token 条件分布，后者的 Bayes 最优解是数值条件期望：</p>
+  <p>$$p^\star(z\mid Z_{1:t})=\mathbb{P}(Z_{t+1}=z\mid Z_{1:t}), \qquad g^\star(X_{1:t})=\mathbb{E}[X_{t+1}\mid X_{1:t}].$$</p>
+  <p>两者活在不同空间，因此不能假设会自然等价。</p>
+  <p>长上下文还会导致时间证据稀释。自注意力输出为：</p>
+  <p>$$\mathbf{h}_i=\sum_{j=1}^{L}\alpha_{ij}\mathbf{v}_j,\quad \sum_{j=1}^{L}\alpha_{ij}=1,\quad \alpha_{ij}\geq 0.$$</p>
+  <p>若任务相关位置集合 $\mathcal{R}$ 获得的注意力质量 $A_i(\mathcal{R})=\sum_{j\in\mathcal{R}}\alpha_{ij}\leq \epsilon$，则相关证据对 $\mathbf{h}_i$ 的贡献最多只有 $\epsilon$ 级别。</p>
+
+  <h2>4. TimeClaw 总体框架</h2>
+  <p>TimeClaw 把一个冻结的 LLM policy $\pi_\theta$ 放进时间序列原生 harness：</p>
+  <p>$$\mathcal{H} = (\mathcal{T}, \mathcal{E}, \mathcal{M}),$$</p>
+  <p>其中 $\mathcal{T}$ 是可执行时间序列工具集合，$\mathcal{E}$ 是经验驱动的能力演化机制，$\mathcal{M}$ 是存储过往成功轨迹的多模态记忆。</p>
+  <p>对每个任务 $\tau=(q,\mathcal{X},\mathcal{Y},y^\star,\ell)$，TimeClaw 把 $\mathbf{X}_{1:T}$ 加载到任务本地 workspace $\mathcal{W}$，保留完整数值精度。LLM 不直接接收完整数值序列，而是通过工具调用访问 $\mathcal{W}$。</p>
+  <p>一次 agent rollout 写成：</p>
+  <p>$$\zeta=(a_1,o_1,\ldots,a_K,o_K,\hat{y}),$$</p>
+  <p>其中 $a_r$ 是第 $r$ 步动作，可以是工具调用或推理步骤；$o_r$ 是对应 observation。策略选择动作为：</p>
+  <p>$$a_r\sim\pi_\theta(\cdot\mid q,\mathcal{C},o_{1:r-1}).$$</p>
+
+  <h2>5. 组件一：Runtime-native temporal tools</h2>
+  <p>TimeClaw 的工具不通过 prompt 传输长数组，而是直接在 workspace $\mathcal{W}$ 上执行。默认工具包括 <code>list_channels</code>、<code>series_overview</code>、<code>channel_stats</code>、<code>channel_values</code>、<code>compute_acf</code>、<code>detect_periodicity</code>、<code>find_peaks</code>、<code>arima_forecast</code>。工具返回 compact structured observation。</p>
+  <p>论文强调每个数值判断都应由工具 observation 支撑，而不是 LLM 自由生成。这样 rollout 中每个工具动作对 $(a_r,o_r)$ 都形成可审计证据链，也能被后续记忆和能力演化复用。</p>
+
+  <h2>6. 组件二：Experience-driven capability evolution</h2>
+  <p>初始工具只能覆盖通用操作，但真实任务中会出现重复的领域子流程。TimeClaw 用能力演化算子 $\mathcal{E}$ 从成功轨迹中抽象新工具，并把它们加入 $\mathcal{T}$。流程包括收集成功轨迹、抽象重复分析流程、生成 typed signature/docstring/实现、在 held-out 相似任务上验证，以及超过阈值后注册工具。</p>
+  <p>论文实验里的阈值为 $\gamma = 0.7$。</p>
+  <p>这里的 $\gamma$ 是<strong>新工具进入工具库的准入门槛</strong>，不是判断某个单独答案是否正确的阈值。能力演化会从成功轨迹中抽象候选工具，但候选工具不能一生成就直接注册，否则可能把错误、过拟合或不稳定的代码加入长期工具箱。因此 TimeClaw 会把候选工具放到一组相似但未参与生成的 held-out 任务上执行验证：</p>
+  <p>$$\text{held-out success rate} > \gamma.$$</p>
+  <p>超过阈值后，这个工具才会被注册进 $\mathcal{T}$，未来 rollout 才能调用它。论文里的 $\gamma=0.7$ 表示候选工具至少要在 held-out 相似任务上达到 70% 成功率。</p>
+  <p>所谓 “held-out 相似任务” 可以理解为：和生成该工具的轨迹属于同一类/同一簇、需要同一种重复分析子流程，但没有参与候选工具归纳和代码生成的任务。例如 <code>capm_regression</code> 来自 TSAIA 金融任务中反复出现的市场因子回归流程，那么验证任务也应是未参与工具生成的 CAPM、beta 或 market-factor 类金融问题，而不是天气预测或异常检测任务。这个验证集的目的，是检验候选工具是否真的概括了一类可复用计算过程，而不是只适配了生成轨迹。</p>
+  <p>金融 TSAIA 任务中，TimeClaw 自动演化出三个复合金融工具：<code>portfolio_var</code>、<code>portfolio_sharpe</code>、<code>capm_regression</code>。</p>
+
+  <h2>7. 组件三：Episodic multimodal memory</h2>
+  <p>每条记忆记录为：</p>
+  <p>$$m = (\tau, \phi, \psi, \zeta, \rho),$$</p>
+  <p>其中 $\tau$ 是原任务，$\phi$ 是文本上下文 key，$\psi$ 是时间序列 fingerprint，$\zeta$ 是成功 rollout 轨迹，$\rho$ 是可迁移 rationale。</p>
+  <h3>7.1 文本 key</h3>
+  <p>任务文本 descriptor $c_\tau$ 由任务背景、场景、约束、问题、channel 名称等字段拼接而成。文本 embedding 为：</p>
+  <p>$$\phi = \Phi(c_\tau) \in \mathbb{R}^{d_\phi}.$$</p>
+  <p>论文使用 <code>text-embedding-3-small</code>，维度 $d_\phi = 1536$。</p>
+  <h3>7.2 时间序列 fingerprint</h3>
+  <p>时间序列 key 是：</p>
+  <p>$$\psi = \Psi(\mathbf{X}_{1:T}) \in \mathbb{R}^{20}.$$</p>
+  <p>这 20 维包括结构、统计、趋势、自相关、频谱、变点、多变量耦合和异常比例等特征。核心统计包括：</p>
+  <p>$$\mu_i = \frac{1}{n_i}\sum_t x^{(i)}_t,\quad \sigma_i = \sqrt{\frac{1}{n_i-1}\sum_t (x^{(i)}_t - \mu_i)^2},\quad z^{(i)}_t = \frac{x^{(i)}_t - \mu_i}{\sigma_i}.$$</p>
+  <p>高阶矩：</p>
+  <p>$$\mathrm{skew}_i = \frac{1}{n_i}\sum_t (z^{(i)}_t)^3,\quad \mathrm{kurt}_i = \frac{1}{n_i}\sum_t (z^{(i)}_t)^4 - 3.$$</p>
+  <p>线性趋势拟合：</p>
+  <p>$$(a_i, b_i) = \arg\min_{a, b} \sum_t \big(x^{(i)}_t - a u_t - b\big)^2,$$</p>
+  <p>并记录 $\mathrm{slope}_i = a_i/(\sigma_i + \epsilon)$ 和</p>
+  <p>$$R^2_i = 1 - \frac{\sum_t (x^{(i)}_t - a_i u_t - b_i)^2}{\sum_t (x^{(i)}_t - \mu_i)^2 + \epsilon}.$$</p>
+  <p>自相关：</p>
+  <p>$$\rho^{(i)}(\ell)= \frac{\sum_{t=1}^{n_i-\ell} c^{(i)}_t c^{(i)}_{t+\ell}}{\sum_t (c^{(i)}_t)^2 + \epsilon}.$$</p>
+  <p>频谱特征通过 rFFT 得到：</p>
+  <p>$$\widehat{S}^{(i)}_k = \big| \mathrm{rFFT}(c^{(i)})_k \big|^2.$$</p>
+  <p>多变量耦合用 channel pair 的平均绝对 Pearson 相关：</p>
+  <p>$$\overline{|\rho|}= \frac{2}{N''(N''-1)} \sum_{i<j} |\rho_{ij}|.$$</p>
+  <p>为了避免不同 fingerprint 维度尺度差异支配距离，论文用记忆库级别 z-score：</p>
+  <p>$$\tilde\psi = (\psi - \boldsymbol{\mu}_\psi) \oslash \boldsymbol{\sigma}_\psi.$$</p>
+  <p>这里的“记忆库级别 z-score”意思是：标准化参数来自整个 memory bank，而不是来自单条时间序列自身。TimeClaw 先在所有历史记忆记录的 fingerprint 上逐维计算均值和标准差，再把当前查询和历史样本都映射成“偏离记忆库平均水平多少个标准差”。这样做是为了让 20 个 fingerprint 维度在距离计算中更公平；否则方差大的维度，例如 kurtosis，可能支配原始 L2 距离。若某个维度在记忆库中几乎是常数，论文把其标准差下限设为 $10^{-9}$，低于这个值就视为常数维度，使它标准化后不影响检索。</p>
+  <h3>7.3 两阶段检索</h3>
+  <p>给定 query task $\tau_q$，先用文本 embedding 做候选池：</p>
+  <p>$$\mathcal{N}(\phi_q)= \operatorname*{Top}_{N,\,m \in \mathcal{M}^\phi}\phi_q^\top \phi_m.$$</p>
+  <p>默认 $N=20$。然后在候选池中按时间序列 fingerprint 距离重排：</p>
+  <p>$$\mathrm{Retrieve}(\tau_q;\, k)= \operatorname*{Top}_{k,\,m \in \mathcal{N}(\phi_q)}-\big\| \tilde\psi_q - \tilde\psi_m \big\|_2.$$</p>
+  <p>默认 $k=3$。这个设计的含义是：先保证任务语义相关，再保证数值动态结构相近。</p>
+  <p>Episodic multimodal memory 的检索发生在<strong>新任务开始推理之前</strong>。当前任务 $\tau_q$ 到来后，TimeClaw 先构造文本 key $\phi_q$ 和时间序列 key $\psi_q$，从 memory bank 中检索 top-$k$ 相似历史轨迹，再把这些轨迹压缩成可迁移的 reasoning trace 或 rationale，注入当前 prompt 的参考区域。随后 agent 才开始当前任务的工具调用和推理。</p>
+  <p>因此它通常不是每一次工具调用后都重新检索，而是作为当前 rollout 的初始化上下文增强。论文 case study 中，开启 memory retrieval 时 agent 先得到相似历史轨迹中的 upstream-to-downstream 因果推理模式，只用 7 次工具调用就答对；关闭记忆检索，即 $k=0$ 时，agent 做了 22 次泛化探索仍选错。这说明 memory 的作用是让 agent 在分析前获得“同类问题以前怎么解”的经验，减少从零探索。</p>
+
+  <h2>8. 实验设置</h2>
+  <p>论文在三个 benchmark 上评估：Context-is-Key (CiK)、TSRBench、TSAIA Finance。baseline 覆盖传统模型、时间序列 foundation model、时间序列 LLM/agent、通用 agent pipeline、开源 LLM/VLM/TSLLM 等。实现上，TimeClaw 使用 LangChain 做 LLM agent loop，使用 MCP/FastMCP 提供每个任务隔离的 in-memory workspace。主实验 backbone 是 <code>gpt-5-nano</code>。</p>
+
+  <h2>9. 评价指标</h2>
+  <p>CiK 的主指标是 RCRPS，越低越好：</p>
+  <p>$$\ell_{\mathrm{CiK}}(\widehat{\mathcal{P}}_{\tau}, \bm{y}^{\star}_{\tau})=\mathrm{RCRPS}_{\tau}(\widehat{\mathcal{P}}_{\tau}, \bm{y}^{\star}_{\tau}).$$</p>
+  <p>RCRPS 结合上下文相关区域的预测误差和约束违反惩罚：</p>
+  <p>$$\mathrm{RCRPS}_{\tau}=\alpha_{\tau}\mathcal{E}_{\tau}+\mathcal{V}_{\tau}(\beta).$$</p>
+  <p>确定性预测还报告 sMAPE：</p>
+  <p>$$\mathrm{sMAPE}_{\tau}=\frac{1}{H}\sum_{h=1}^{H}\frac{2|y^{\star}_{\tau,h}-\widehat{y}_{\tau,h}|}{\max(|y^{\star}_{\tau,h}|+|\widehat{y}_{\tau,h}|,\varepsilon)}.$$</p>
+
+  <h2>10. 主要实验结果</h2>
+  <h3>10.1 CiK：上下文利用能力</h3>
+  <table>
+    <tr><th>方法</th><th class="num">Avg. RCRPS ↓</th><th class="num">Avg. sMAPE ↓</th><th class="num">Avg. token ↓</th></tr>
+    <tr><td>TS-Agent</td><td class="num">0.1421</td><td class="num">61.2980</td><td class="num">47,455.6</td></tr>
+    <tr><td>TSci</td><td class="num">0.1448</td><td class="num">69.9068</td><td class="num">47,905.1</td></tr>
+    <tr><td>Direct Prompt</td><td class="num">0.1703</td><td class="num">60.4407</td><td class="num">24,861.3</td></tr>
+    <tr><td>ReAct</td><td class="num">0.1514</td><td class="num">66.2284</td><td class="num">25,503.0</td></tr>
+    <tr><td>Multi-Agent Reflection</td><td class="num">0.1294</td><td class="num">55.5704</td><td class="num">63,033.0</td></tr>
+    <tr><td><strong>TimeClaw</strong></td><td class="num"><strong>0.1145</strong></td><td class="num"><strong>52.4542</strong></td><td class="num"><strong>35,553.2</strong></td></tr>
+  </table>
+  <p>相对最强 baseline Multi-Agent Reflection，RCRPS 从 0.1294 降到 0.1145，论文报告相对提升约 11.5%。同时 token 使用从 63,033 降到 35,553，约少 43.6%。</p>
+  <h3>10.2 TSRBench：开放式时间序列推理</h3>
+  <table>
+    <tr><th>方法</th><th class="num">Perception</th><th class="num">Reasoning</th><th class="num">Prediction</th><th class="num">Decision</th><th class="num">Avg. Acc.</th><th class="num">Avg. token</th></tr>
+    <tr><td>CoT</td><td class="num">48.57</td><td class="num">36.84</td><td class="num">46.30</td><td class="num">28.57</td><td class="num">40.05</td><td class="num">22,274</td></tr>
+    <tr><td>ReAct</td><td class="num">55.71</td><td class="num">36.26</td><td class="num">43.52</td><td class="num">31.75</td><td class="num">40.78</td><td class="num">25,165</td></tr>
+    <tr><td>Self-Reflection</td><td class="num">50.00</td><td class="num">40.93</td><td class="num">38.89</td><td class="num">30.16</td><td class="num">40.29</td><td class="num">25,799</td></tr>
+    <tr><td>Multi-Agent Reflection</td><td class="num">62.85</td><td class="num">33.92</td><td class="num">54.63</td><td class="num">25.40</td><td class="num">42.96</td><td class="num">45,279</td></tr>
+    <tr><td>TSci</td><td class="num">65.71</td><td class="num">33.33</td><td class="num">43.52</td><td class="num">26.98</td><td class="num">40.53</td><td class="num">51,273</td></tr>
+    <tr><td><strong>TimeClaw</strong></td><td class="num"><strong>64.29</strong></td><td class="num"><strong>43.86</strong></td><td class="num"><strong>59.26</strong></td><td class="num"><strong>33.33</strong></td><td class="num"><strong>49.76</strong></td><td class="num"><strong>15,979</strong></td></tr>
+  </table>
+  <p>TimeClaw 在 perception 上略低于 TSci，但在 reasoning、prediction、decision making 上领先。说明序列化或画图可能足够支持一部分感知题，但涉及因果、预测和决策时，时间序列原生工具和记忆更重要。</p>
+  <h3>10.3 TSAIA：金融实用性</h3>
+  <p>TSAIA 是金融时间序列分析 benchmark。论文强调 TimeClaw 通过能力演化生成了 <code>portfolio_var</code>、<code>portfolio_sharpe</code>、<code>capm_regression</code> 三个工具，并在多选准确率上显著超过通用 agent 和金融专用 agent。论文报告相对提升 38.9%。</p>
+
+  <h2>11. 消融实验与案例</h2>
+  <p>消融结果显示，去掉 tool harness、capability evolution 或 memory retrieval 都会降低性能。检索记忆的 top-$k$ 越大，CiK 上 sMAPE 和 RCRPS 整体更好；换更强 backbone 也能继续提升，说明 TimeClaw 和 LLM 能力是互补关系。</p>
+  <p>案例一是 CiK 中的 SVAR 任务。两个任务有完全相同的历史序列和 ground truth，区别只是文本上下文是否给出显式 SVAR 方程。给出方程时，agent 通过工具读取近期值，再按方程递推，sMAPE 约 0.44%；只有定性 parent list 时，agent 无法把 $X_0$ 的跳变转成 $X_1$ 的幅度变化，sMAPE 约 124%。</p>
+  <p>案例二是 TSRBench 河流水位因果推理。没有记忆时，agent 做了 22 次工具调用仍选错因果方向；有 top-3 记忆时，检索到“上游到下游级联”的相似推理轨迹，只做 7 次有针对性的自相关检验就选对结构。</p>
+
+  <h2>12. 主要贡献、局限与启发</h2>
+  <ul>
+    <li>明确指出通用 LLM 直接处理时间序列有 datatype misalignment 和 agentic process misalignment。</li>
+    <li>提出 TimeClaw：冻结 LLM policy 外挂时间序列原生 harness。</li>
+    <li>把完整数值序列保存在 workspace，通过工具返回可审计证据，避免长数值序列塞进 prompt。</li>
+    <li>设计文本 embedding + 时间序列 fingerprint 的两阶段记忆检索。</li>
+    <li>通过能力演化把重复分析流程升级成可执行工具。</li>
+    <li>在 CiK、TSRBench、TSAIA 上证明性能和 token efficiency 同时提升。</li>
+  </ul>
+  <p>局限主要在于：TimeClaw 依赖工具设计、轨迹质量和记忆库建设；能力演化中用 LLM 生成工具，仍需要执行验证和安全约束；fingerprint 是人工设计的 20 维统计特征，可能不足以覆盖复杂时序结构；主实验使用闭源 API backbone 和 embedding，复现成本取决于 API 可用性。</p>
+  <p>但它的启发很明确：时间序列任务不一定要把 LLM 变成时间序列模型。更稳妥的路径是让 LLM 负责规划、解释、选择工具和整合上下文，让数值计算留在原生运行时中完成。</p>
+</main>
+</body>
+</html>

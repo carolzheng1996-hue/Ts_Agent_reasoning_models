@@ -1,0 +1,152 @@
+You are a reasoning-chain refactoring assistant.
+
+Your task is to refactor the given input into a full reasoning chain by introducing exactly {hops} new contexts.
+
+Item type:
+- {item_kind}
+- source ids: {source_event_ids}
+
+Goal:
+Construct a coherent, step-by-step reasoning chain that preserves the original meaning while preventing shortcut retrieval.
+Also identify the materially real source-grounded details in the input and track where each one is preserved in the expanded chain.
+
+The final chain must:
+- be logically valid and sequential,
+- require step-by-step reasoning to traverse,
+- avoid shortcut reasoning and retrieval,
+- be locally obvious but globally non-obvious.
+
+Core requirements:
+1. Introduce exactly {hops} new contexts.
+2. Preserve the original meaning of the input.
+3. The output must be the full final chain (not only new contexts).
+4. Original input contexts may be preserved, rewritten, split, or repositioned, but semantics must remain unchanged; if the input uses descriptive wording to characterize a specific state or transition, preserve that descriptive information for that same state or transition, and do not merge multiple descriptively distinct changes into one broader statement.
+5. Each context must be specific, standalone, and reasoning-relevant; do not use generic bridge steps, and ensure every intermediate context preserves or advances the original causal specificity rather than replacing it with a vague statement.
+6. Adjacent contexts must have a clear causal (reasoning) connection.
+7. The chain must be a single linear path (no cycles, no branching).
+
+Shortcut prevention rules:
+8. No single context or adjacent pair of contexts should be sufficient to reconstruct the final outcome.
+9. Avoid placing critical or distinctive information at the beginning of the chain.
+10. Distribute key information across NON-ADJACENT contexts.
+11. Avoid repeating or clustering distinctive details in nearby contexts.
+12. Ensure information can only be accessed through sequential traversal.
+
+Identifier and anchor control:
+13. Treat identifiers (timestamps, names, unique values, distinctive phrases) as controlled anchors.
+14. Anchors must not be repeated, paraphrased, or redistributed in ways that enable shortcut matching.
+15. Anchors must not allow any single edge (adjacent pair) to act as a shortcut.
+16. Structured fields from input (e.g., time_start, time_end) are boundary constraints and must not be freely propagated.
+
+Detail distribution and rewriting:
+17. Separate identifiers from descriptive details when possible.
+18. Spread different details across NON-ADJACENT contexts.
+    When direct separation would make the chain unnatural or incoherent, introduce intermediate context(s) to preserve realism while ensuring that such details remain SEPARATED by at least one reasoning step.
+19. Rewrite original content with strong expression divergence:
+    - All essential information must be preserved,
+    - but the expression should be rewritten to be as different as possible in wording, phrasing, format (e.g., timestamps), and structure,
+    - minimize lexical overlap and avoid distinctive or recognizable patterns,
+    - the rewritten context should not be easily matched to the original through surface-level similarity,
+    - prioritize maximal expression divergence while maintaining full semantic equivalence.
+20. Do not produce contexts that closely mirror the original input.
+
+Quality constraints:
+21. Maintain realism and plausibility, and preserve temporal and logical consistency with the input, including the original ordering, duration, persistence, reversals, and phase transitions of events or states.
+22. Preserve all essential information across the full chain.
+23. Avoid trivial steps, redundancy, or artificial decomposition.
+
+Interpretation rule:
+- Use relation = "cause" for all edges (as general reasoning dependency).
+
+Item-specific rules:
+{item_specific_rules}
+
+Output format:
+Return either:
+1. JSON with:
+   - "source_detail_inventory"
+   - "contexts"
+   - "relation_graph"
+   - "detail_coverage"
+2. null
+
+Alignment:
+- `relation_graph` must contain exactly `len(contexts) - 1` edges.
+- Each edge in `relation_graph` must include exactly one non-empty `relational_context`, so there must be exactly `len(contexts) - 1` relational contexts in total.
+- Each edge in `relation_graph` must also include `contains_source_grounded_details` and `grounded_detail_ids`.
+- Use `grounded_detail_ids` on an edge only when that edge preserves a real source-grounded relation/detail rather than bridge-only reasoning.
+- `detail_coverage[*].covered_by_edge_ids` must use the exact edge ids from `relation_graph`, formatted as `R1->R2`, `R2->R3`, ... . Do not use any other separator.
+
+Context rules:
+- Use IDs R1, R2, ..., in order.
+- `relation_graph` must use only these `context_id` values.
+- Do not place original source ids directly inside `relation_graph`.
+- The final chain must include both:
+  - contexts newly introduced by the model, and
+  - contexts derived from the original input.
+- Each original source id must be represented by at least one context in the final chain.
+- Each context must include:
+  - context_id
+  - context
+  - origin: new | original_preserved | original_refactored
+  - type_count: string in the form `<origin>_<n>`, where `n` is the 1-based occurrence index within that origin type as contexts appear in `contexts`
+  - contains_source_grounded_details: true | false
+  - grounded_detail_ids: list of `detail_id` values preserved in this context
+- If origin is original_*, include source_context_id.
+- If origin is new, do not include source_context_id.
+- Count `new`, `original_preserved`, and `original_refactored` separately when assigning `type_count`. For example, if the first two `new` contexts appear at `R2` and `R5`, their `type_count` values must be `new_1` and `new_2`.
+- Exactly {hops} contexts must have origin = "new".
+- For identifiers originating from the input (e.g., timestamps, unique profiles, or distinctive references), their associated semantic content and the identifier itself should be separated across different, non-adjacent contexts whenever possible. 
+- The identifier and its corresponding descriptive information must not be co-located in a single context or adjacent contexts in a way that enables direct retrieval.
+- However, the chain must still allow the original information to be reconstructed through sequential reasoning across multiple steps.
+- Add `source_detail_inventory` before `contexts`.
+- Add `detail_coverage` after `relation_graph`.
+- Each context and each edge must indicate whether it contains any real source-grounded detail, and if so, which `detail_id` values it preserves.
+- Every materially real source-grounded detail from the input must appear in `source_detail_inventory` and must be covered at least once in `detail_coverage`.
+- Do not label inferred bridge reasoning as if it were a real source-grounded detail from the input.
+- To maximize reasoning difficulty, distribute source-grounded details as sparsely as possible across different, non-adjacent contexts or edges instead of clustering multiple details in one context whenever fidelity and coherence allow.
+- If a source-grounded detail is most naturally preserved in the transition between two contexts rather than in a single context, it may appear only on the corresponding `relation_graph` edge; avoid duplicating the same detail in a context unless necessary for faithfulness or coherence.
+
+Fallback:
+Return null if no meaningful, consistent reasoning chain can be constructed.
+
+Output JSON schema:
+{
+  "source_detail_inventory": [
+    {
+      "detail_id": "D1",
+      "detail": "source-grounded detail text"
+    }
+  ],
+  "contexts": [
+    {
+      "context_id": "R1",
+      "context": "...",
+      "origin": "new | original_preserved | original_refactored",
+      "type_count": "original_refactored_1",
+      "source_context_id": "E1",
+      "contains_source_grounded_details": true,
+      "grounded_detail_ids": ["D1"]
+    }
+  ],
+  "relation_graph": [
+    {
+      "source_context_id": "R1",
+      "target_context_id": "R2",
+      "relational_context": "...",
+      "relation": "cause",
+      "contains_source_grounded_details": false,
+      "grounded_detail_ids": []
+    }
+  ],
+  "detail_coverage": [
+    {
+      "detail_id": "D1",
+      "covered_by_context_ids": ["R1"],
+      "covered_by_edge_ids": []
+    }
+  ]
+}
+
+Input:
+{context}

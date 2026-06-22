@@ -1,0 +1,48 @@
+
+\vspace{-0.06in}
+\section{Experiments}
+\vspace{0.04in}
+\subsection{Experimental Setup}
+
+
+
+\paragraph{Datasets and Evaluation Metrics.}
+
+To ensure comprehensive evaluation across diverse scenarios, we conduct experiments on nine datasets from multiple domains with distinct temporal characteristics (Table~\ref{tab:data_statistics}). These include ETT \citep{zhou2021informer} for 2016--2018 electricity load records, Exchange \citep{lai2018modeling} for 1990--2016 foreign exchange rates, Wind \citep{lai2018modeling} for 2020--2021 wind measurements, AQ \citep{zhang2017cautionary} for four-year air quality records, and NASDAQ \citep{feng2019temporal} for stock market series including prices and trading volumes.
+We report MSE between predictions and ground truth under a 96-step forecasting horizon for all datasets, except NASDAQ, which uses a 36-step horizon.
+
+% To ensure comprehensive evaluation across diverse scenarios, we conduct experiments in nine datasets spanning multiple domains with distinct temporal characteristics and data attributes (detailed in Table  \ref{tab:data_statistics}). These include: the ETT dataset \citep{zhou2021informer} capturing 2016-2018 electricity load records, Exchange \citep{lai2018modeling} tracking 1990-2016 foreign exchange rates, Wind \citep{lai2018modeling} with 2020-2021 wind measurements captured, AQ \citep{zhang2017cautionary} providing four-year air quality data, NASDAQ \citep{feng2019temporal} provides complete stock market series including opening/closing prices, trading volumes, and daily high-low values.
+% All datasets were evaluated using Mean Squared Error (MSE) under a 96-step prediction setting, except NASDAQ which uses a 36-step configuration, with results reported as the MSE between predictions and ground truth.
+
+
+
+\paragraph{Baselines.}
+
+Our representative baselines include various competitive methods:
+Autoformer \citep{wu2021autoformer}, PatchTST \citep{nie2022time}, DLinear \citep{zeng2023transformers}, iTransformer \citep{liu2023itransformer}, TimeXer \citep{wang2024timexer}, TimeMixer \citep{wang2024timemixer}, 
+WPMixer \citep{murad2025wpmixer}, Moment \citep{goswami2024moment}, TimesFM-2.5 \citep{das2024decoder} and Chronos-2 \citep{ansari2025chronos}. For recent LLM-based approaches, we include CrossTimeNet \citep{crossTimeNet}, GPT4TS \citep{zhou2023one}, TimeLLM \citep{jin2023time}, and DeepSeek-R1 \citep{deepseekR1} for zero-shot inference.
+
+
+
+\paragraph{Implementation Details.}
+% For baseline methods, we use Adam \citep{kingma2014adam} as the default optimizer across all the experiments.
+% All the experiments are implemented by PyTorch \citep{paszke2019pytorch} and are conducted for three runs with a fixed random seed on a single NVIDIA RTX 4090D 24GB GPU.
+% Unlike traditional TSF methods that often require normalization, we conduct experiments in the original numerical space.
+% Unlike traditional TSF methods, we conduct experiments in the original numerical space to preserve physical magnitudes essential for LLM reasoning and zero-shot generalization.
+% For Time-R1, we keep the time-series values in their original numerical scale as model inputs and outputs, so that the LLM can access physically meaningful magnitudes during reasoning. For baseline forecasting models, we follow their standard or recommended preprocessing protocols, including normalization when applicable, and report all metrics after mapping predictions back to the original scale.
+% Please refer to Appendix F for the results regarding the normalized evaluation. 
+% For \Ours, we use Qwen2.5-7B-Instruct as the backbone. In SFT, we train on 3000 synthetic samples with a learning rate of 5e-5 for one epoch. In RL, we implement GRIP using the Verl framework \citep{verl} with vLLM for generation, $\epsilon=0.2$ and $\beta=0.04$; group size $G=16$, $k=3$. The batch size is 16, learning rate is 1e-6, policy temperature is 1, and max completion length is 8000. Both stages are run on a 4-GPU A800 cluster. For DeepSeek-R1, we apply its prompt directly to time series prediction without training. 
+% Time-R1 is trained only on ETTh1 and generalized to other datasets without fine-tuning, whereas baseline methods require separate models per dataset.
+
+
+% For Time-R1, we keep the time-series values in their original numerical scale as model inputs and outputs, so that the LLM can access physically meaningful magnitudes during reasoning. For baseline forecasting models, we follow their standard or recommended preprocessing protocols, including normalization when applicable, and report all metrics after mapping predictions back to the original scale.
+
+Tables~\ref{tab:main_results_mse} and~\ref{tab:main_results_mae} report MSE and MAE on each dataset's original scale, with all results averaged over three runs using different random seeds. Baselines follow their official or commonly adopted experimental configurations, with predictions inverse-transformed before evaluation when normalization is used. For \Ours, we keep the model-facing time-series values in the original numerical scale as both inputs and outputs, allowing the LLM to access physically meaningful magnitudes during reasoning.
+
+For \Ours, we use Qwen2.5-7B-Instruct as the backbone. In SFT, we train on 3000 synthetic samples with a learning rate of 5e-5 for one epoch. In RL, we implement GRIP using the VeRL framework \citep{verl} with vLLM for generation, $\epsilon=0.2$ and $\beta=0.04$; group size $G=16$, $k=3$. The batch size is 16, learning rate is 1e-6, policy temperature is 1, and max completion length is 8000. Both stages are run on a 4-GPU A800 cluster. For DeepSeek-R1, we apply its prompt directly to time series prediction without training. 
+
+
+\input{table/1_data_statistics}
+
+\input{images/3_compare}
+\input{table/5_ablation_study}

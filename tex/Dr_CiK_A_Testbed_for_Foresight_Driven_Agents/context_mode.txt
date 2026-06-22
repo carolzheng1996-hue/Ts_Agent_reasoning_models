@@ -1,0 +1,87 @@
+## No Context (None)
+
+```
+```
+
+
+---
+
+## Background (Bg.)
+
+```
+This time series records the electricity usage (in Watt, W) of a household.
+```
+
+---
+
+## Original Context (Orig.)
+
+```
+This time series records the electricity usage (in Watt, W) of a household. The readings were recorded from 2025-10-06 00:00:00 to 2025-10-19 19:00:00, and the recording frequency is hourly (H). Initially, the owner started renovation from 2025-10-12 18:00:00 to 2025-10-13 00:00:00 and did not stay at the unit, leading to low power usage of the first 169 readings. After the renovation finished on 2025-10-13 01:00:00, the house is fully occupied, leading to a permanent increase in electricity usage.
+Scenario: Forecast the future electricity usage of this household in the next 180 hours, from 2025-10-19 20:00:00 to 2025-10-27 07:00:00.
+```
+
+---
+
+## Rewritten Context (Rewrite)
+
+
+```
+This time series records the electricity usage (in Watt, W) of Riverside Cottage 12. The readings were recorded from 2025-10-06 00:00:00 to 2025-10-19 19:00:00, and the recording frequency is hourly (H). Initially, the owner started renovation from 2025-10-12 18:00:00 to 2025-10-13 00:00:00 and did not stay at the unit, leading to low power usage of the first 169 readings. After the renovation finished on 2025-10-13 01:00:00, this household is fully occupied, leading to a permanent increase in electricity usage.
+Scenario: Forecast the future electricity usage of Riverside Cottage 12 in the next 180 hours, from 2025-10-19 20:00:00 to 2025-10-27 07:00:00.
+```
+
+---
+
+## Supporting Evidence (Evidence)
+
+```
+1. This time series records the electricity usage (in Watt, W) of a household. The readings were recorded from 2025-10-06 00:00:00 to 2025-10-19 19:00:00, and the recording frequency is hourly (H).
+2. the owner started rennovation from 2025-10-12 18:00:00 to 2025-10-13 00:00:00 and did not stay at the unit
+3. leading to low power usage of the first 169 readings
+4. After the renovation finished on 2025-10-13 01:00:00, this household is fully occupied
+5. leading to a permanent increase in electricity usage
+```
+
+---
+
+## Supporting Documents (Supp. docs)
+
+The full mode concatenates all 14 supporting documents (about 25k characters total). 
+
+
+---
+
+## DR-synthesized evidence (DR)
+
+```
+This time series records the electricity usage (in Watt, W) of the household Riverside Cottage 12.
+
+- Riverside Cottage 12 electricity usage is documented as Watt-based household power consumption, with specific focus on October 2025 load behavior and occupancy-driven baseline changes. (doc_7245, doc_7271)
+- During the renovation and heavy-labor phase, the owner was not occupying the premises and major appliances and climate-control systems were deactivated, resulting in Wattage reductions due to a lack of human activity. (doc_7236, doc_7238)
+- Construction concluded on October 13, at which point living quarters became available and the household reached full occupancy; this elevated post-handover baseline persisted through at least October 19. (doc_7241, doc_7242, doc_7243, doc_7246)
+- Full occupancy is the primary driver of ongoing electricity use, linked to continuous environmental support, active residential services, and the simultaneous operation of essential systems that were formerly inactive. (doc_7244, doc_7245)
+- Post-occupancy electricity use in Cottage 12 is rising, characterized by a drifting higher daily baseline and usage scaling through steady upward momentum. (doc_7259, doc_7260, doc_7261, doc_7274, doc_7275)
+- A smart billing meter was installed on October 9, coinciding with a change in utility provider, followed by a safety inspection on October 15 after equipment updates. (doc_7250)
+- A smart-meter calibration window from October 10 to October 15 caused temporary reporting-metric shifts and recorded spikes attributed to automated diagnostics rather than occupancy. (doc_7262)
+- A localized storm and regional grid fluctuations between October 8 and October 14 caused abnormal high readings while surge protectors remained active. (doc_7263)
+- Security and lighting installation from October 7 to October 12 introduced transient peak consumption due to high-frequency motion sensors and testing-related loads. (doc_7264)
+- A strict energy quota system was implemented months before October 2025 to regulate peak demand and localized grid capacity, which may constrain extreme usage even under full occupancy. (doc_7258)
+- Localized environmental monitoring from October 10 to October 14 recorded humidity variation, changing cloud cover, low nighttime light, and the presence of a reflective roof system designed to reduce heat gain. (doc_7251)
+- The cottage features smart-home controls for temperature, lighting, security, media, and whole-home audio, which allows occupied behavior to affect both standby and active domestic electrical loads. (doc_7267)
+- Logistics records for furniture and staging are inconsistent, with one document scheduling a curated furniture package for October 18 and another listing deliveries for late October. (doc_7252, doc_7265)
+- There is conflicting evidence regarding usage trends: one report suggests usage is gradually declining after a post-renovation surge, while others describe sustained upward momentum after full occupancy. (doc_7276, doc_7259, doc_7260, doc_7275)
+- Some documents describe a stable low-energy or flat profile with no October occupancy changes, contradicting reports of a post-October-13 elevated baseline following handover. (doc_7271, doc_7272, doc_7273, doc_7241, doc_7246)
+- Several documents with matching date ranges refer to other properties (Meadowview Cabin 4, Willow Creek Suite 22, Lakeview Cabin 4, Suite 8, and Meadow View Studio 2) rather than Riverside Cottage 12. (doc_7253, doc_7254, doc_7268, doc_7269, doc_7270)
+- Evidence supports modeling a structural break in electricity usage from renovation/vacancy conditions to a fully occupied residential baseline following the October 13 handover. (doc_7238, doc_7241, doc_7242, doc_7246)
+- Within the occupied regime, the directional signal indicates a higher and potentially rising baseline driven by residents' domestic routines and concurrent essential-system operation. (doc_7244, doc_7245, doc_7259, doc_7275)
+- Short-lived drivers such as meter diagnostics, storms, security testing, and logistics introduce uncertainty into the operational records. (doc_7262, doc_7263, doc_7264, doc_7252, doc_7265)
+```
+
+---
+
+## Verified DR (Verif. DR)
+
+```
+(After verification, no Codex-synthesized evidence remains.)
+```

@@ -1,0 +1,94 @@
+
+\begin{table*}[!p]
+\begin{center}
+\caption{Full end-to-end inference time breakdown (s) for Origin, online retrieval baselines, LoRA, and TS-Memory on ChronosBolt. We report retrieval time (Retr), forward time (Fwd), total latency (Total), and retrieval fraction (Frac). $\Delta$ denotes the relative change (\%) of Avg compared to Origin. We use the same protocol as in Table~\ref{tab:ts_plugmem_full}.}
+\begin{small}
+\setlength\tabcolsep{3pt}
+\scalebox{0.88}{
+\begin{tabular}{c|c|cccc|cccc|cccc|cccc|cccc}
+\toprule
+
+\multicolumn{2}{c|}{Dataset} &
+\multicolumn{4}{c|}{Origin} &
+\multicolumn{4}{c|}{RAFT} &
+\multicolumn{4}{c|}{TS-RAG} &
+\multicolumn{4}{c|}{LoRA} &
+\multicolumn{4}{c}{TS-Memory} \\
+\midrule
+\multicolumn{2}{c|}{Metric} &
+Retr & Fwd & Total & Frac &
+Retr & Fwd & Total & Frac &
+Retr & Fwd & Total & Frac &
+Retr & Fwd & Total & Frac &
+Retr & Fwd & Total & Frac \\
+\midrule
+\multirow{6}{*}{\rotatebox{90}{ETTh1}} & 96 & 0 & 14.5 & 14.5 & 0\% & 4.2 & \textbf{14.3} & 18.5 & 22.7\% & 18.1 & \underline{14.7} & 32.9 & 55.2\% & \underline{0} & 18.3 & \underline{18.3} & \underline{0\%} & \textbf{0} & 15.6 & \textbf{15.6} & \textbf{0\%} \\
+ & 192 & 0 & 21.8 & 21.8 & 0\% & 5.2 & \textbf{21.7} & 27.0 & 19.4\% & 25.1 & \underline{21.8} & 46.9 & 53.6\% & \underline{0} & 24.8 & \underline{24.8} & \underline{0\%} & \textbf{0} & 23.5 & \textbf{23.5} & \textbf{0\%} \\
+ & 336 & 0 & 46.9 & 46.9 & 0\% & 13.5 & \textbf{45.1} & 58.5 & 23.0\% & 45.7 & \underline{44.9} & 90.6 & 50.4\% & \underline{0} & 54.0 & \underline{54.0} & \underline{0\%} & \textbf{0} & 49.3 & \textbf{49.3} & \textbf{0\%} \\
+ & 720 & 0 & 97.7 & 97.7 & 0\% & 16.2 & \underline{92.3} & 108.5 & 14.9\% & 74.4 & \textbf{90.6} & 165.0 & 45.1\% & \underline{0} & 107.9 & \underline{107.9} & \underline{0\%} & \textbf{0} & 101.3 & \textbf{101.3} & \textbf{0\%} \\
+\cmidrule{2-22}
+ & Avg & 0 & 45.2 & 45.2 & 0\% & 9.8 & \underline{43.4} & 53.1 & 20.0\% & 40.8 & \textbf{43.0} & 83.8 & 51.1\% & \underline{0} & 51.2 & \underline{51.2} & \underline{0\%} & \textbf{0} & 47.4 & \textbf{47.4} & \textbf{0\%} \\
+ & $\Delta$ & -- & -- & -- & -- & -- & -4.2\% & +17.4\% & -- & -- & -5.0\% & +85.3\% & -- & -- & +13.4\% & +13.4\% & -- & -- & +4.8\% & +4.8\% & -- \\
+\midrule
+\multirow{6}{*}{\rotatebox{90}{ETTh2}} & 96 & 0 & 14.5 & 14.5 & 0\% & 4.0 & \textbf{14.3} & \textbf{18.3} & 21.8\% & 17.4 & \underline{14.7} & 32.1 & 54.3\% & \underline{0} & 19.1 & 19.1 & \underline{0\%} & \textbf{0} & 15.3 & \underline{15.3} & \textbf{0\%} \\
+ & 192 & 0 & 21.8 & 21.8 & 0\% & 5.9 & \textbf{22.2} & 28.1 & 21.0\% & 24.7 & \underline{21.9} & 46.6 & 53.1\% & \underline{0} & 24.4 & \underline{24.4} & \underline{0\%} & \textbf{0} & 23.0 & \textbf{23.0} & \textbf{0\%} \\
+ & 336 & 0 & 46.9 & 46.9 & 0\% & 11.4 & \underline{45.2} & 56.6 & 20.2\% & 46.2 & \textbf{45.0} & 91.2 & 50.6\% & \underline{0} & 53.6 & \underline{53.6} & \underline{0\%} & \textbf{0} & 48.9 & \textbf{48.9} & \textbf{0\%} \\
+ & 720 & 0 & 97.4 & 97.4 & 0\% & 17.3 & \underline{91.0} & 108.3 & 16.0\% & 73.6 & \textbf{91.5} & 165.1 & 44.6\% & \underline{0} & 107.8 & \underline{107.8} & \underline{0\%} & \textbf{0} & 100.8 & \textbf{100.8} & \textbf{0\%} \\
+\cmidrule{2-22}
+ & Avg & 0 & 45.2 & 45.2 & 0\% & 9.7 & \underline{43.2} & 52.8 & 19.7\% & 40.5 & \textbf{43.3} & 83.8 & 50.6\% & \underline{0} & 51.3 & \underline{51.3} & \underline{0\%} & \textbf{0} & 47.0 & \textbf{47.0} & \textbf{0\%} \\
+ & $\Delta$ & -- & -- & -- & -- & -- & -4.4\% & +17.0\% & -- & -- & -4.2\% & +85.4\% & -- & -- & +13.6\% & +13.6\% & -- & -- & +4.0\% & +4.0\% & -- \\
+\midrule
+\multirow{6}{*}{\rotatebox{90}{ETTm1}} & 96 & 0 & 69.2 & 69.2 & 0\% & 68.6 & \underline{74.6} & 143.2 & 47.9\% & 166.8 & 74.4 & 241.2 & 69.2\% & \underline{0} & 87.8 & \underline{87.8} & \underline{0\%} & \textbf{0} & \textbf{73.3} & \textbf{73.3} & \textbf{0\%} \\
+ & 192 & 0 & 108.7 & 108.7 & 0\% & 100.9 & \underline{117.3} & 218.2 & 46.2\% & 248.0 & 116.7 & 364.8 & 68.0\% & \underline{0} & 132.0 & \underline{132.0} & \underline{0\%} & \textbf{0} & \textbf{115.6} & \textbf{115.6} & \textbf{0\%} \\
+ & 336 & 0 & 247.4 & 247.4 & 0\% & 199.4 & \underline{258.6} & 458.0 & 43.5\% & 490.9 & 258.5 & 749.4 & 65.5\% & \underline{0} & 332.2 & \underline{332.2} & \underline{0\%} & \textbf{0} & \textbf{256.6} & \textbf{256.6} & \textbf{0\%} \\
+ & 720 & 0 & 608.1 & 608.1 & 0\% & 385.9 & \underline{637.5} & 1023.4 & 37.7\% & 954.5 & 636.9 & 1591.4 & 60.0\% & \underline{0} & 677.1 & \underline{677.1} & \underline{0\%} & \textbf{0} & \textbf{629.9} & \textbf{629.9} & \textbf{0\%} \\
+\cmidrule{2-22}
+ & Avg & 0 & 258.3 & 258.3 & 0\% & 188.7 & \underline{272.0} & 460.7 & 43.9\% & 465.1 & 271.6 & 736.7 & 65.7\% & \underline{0} & 307.3 & \underline{307.3} & \underline{0\%} & \textbf{0} & \textbf{268.9} & \textbf{268.9} & \textbf{0\%} \\
+ & $\Delta$ & -- & -- & -- & -- & -- & +5.3\% & +78.3\% & -- & -- & +5.2\% & +185.2\% & -- & -- & +19.0\% & +19.0\% & -- & -- & +4.1\% & +4.1\% & -- \\
+\midrule
+\multirow{6}{*}{\rotatebox{90}{ETTm2}} & 96 & 0 & 70.3 & 70.3 & 0\% & 69.3 & \underline{74.8} & 144.1 & 48.1\% & 167.9 & 74.8 & 242.7 & 69.2\% & \underline{0} & 88.3 & \underline{88.3} & \underline{0\%} & \textbf{0} & \textbf{73.0} & \textbf{73.0} & \textbf{0\%} \\
+ & 192 & 0 & 109.1 & 109.1 & 0\% & 99.2 & \underline{116.9} & 216.1 & 45.9\% & 248.4 & 117.2 & 365.6 & 67.9\% & \underline{0} & 131.2 & \underline{131.2} & \underline{0\%} & \textbf{0} & \textbf{114.5} & \textbf{114.5} & \textbf{0\%} \\
+ & 336 & 0 & 246.0 & 246.0 & 0\% & 199.4 & \underline{258.4} & 457.8 & 43.6\% & 491.3 & 259.6 & 751.0 & 65.4\% & \underline{0} & 330.1 & \underline{330.1} & \underline{0\%} & \textbf{0} & \textbf{256.4} & \textbf{256.4} & \textbf{0\%} \\
+ & 720 & 0 & 607.6 & 607.6 & 0\% & 358.7 & \underline{636.8} & 995.5 & 36.0\% & 947.1 & 638.5 & 1585.7 & 59.7\% & \underline{0} & 680.5 & \underline{680.5} & \underline{0\%} & \textbf{0} & \textbf{629.6} & \textbf{629.6} & \textbf{0\%} \\
+\cmidrule{2-22}
+ & Avg & 0 & 258.3 & 258.3 & 0\% & 181.6 & \underline{271.7} & 453.4 & 43.4\% & 463.7 & 272.5 & 736.2 & 65.6\% & \underline{0} & 307.3 & \underline{307.3} & \underline{0\%} & \textbf{0} & \textbf{268.4} & \textbf{268.4} & \textbf{0\%} \\
+ & $\Delta$ & -- & -- & -- & -- & -- & +5.2\% & +75.5\% & -- & -- & +5.5\% & +185.1\% & -- & -- & +19.0\% & +19.0\% & -- & -- & +3.9\% & +3.9\% & -- \\
+\midrule
+\multirow{6}{*}{\rotatebox{90}{Electricity}} & 96 & 0 & 1346.0 & 1346.0 & 0\% & 885.0 & \underline{1647.1} & 2532.1 & 35.0\% & 2668.5 & 1651.5 & 4320.0 & 61.8\% & \underline{0} & 1531.3 & \underline{1531.3} & \underline{0\%} & \textbf{0} & \textbf{1413.3} & \textbf{1413.3} & \textbf{0\%} \\
+ & 192 & 0 & 2084.8 & 2084.8 & 0\% & 1302.7 & \underline{2553.6} & 3856.3 & 33.8\% & 3924.1 & 2560.2 & 6484.3 & 60.5\% & \underline{0} & 2180.5 & \underline{2180.5} & \underline{0\%} & \textbf{0} & \textbf{2190.3} & \textbf{2190.3} & \textbf{0\%} \\
+ & 336 & 0 & 4651.7 & 4651.7 & 0\% & 2472.2 & \underline{5571.0} & 8043.2 & 30.7\% & 7608.4 & 5582.9 & 13191.2 & 57.7\% & \underline{0} & 4784.7 & \underline{4784.7} & \underline{0\%} & \textbf{0} & \textbf{4829.3} & \textbf{4829.3} & \textbf{0\%} \\
+ & 720 & 0 & 10894.4 & 10894.4 & 0\% & 4427.4 & \underline{13135.0} & 17562.4 & 25.2\% & 13946.0 & 13156.2 & 27102.2 & 51.5\% & \underline{0} & 11924.0 & \underline{11924.0} & \underline{0\%} & \textbf{0} & \textbf{11269.0} & \textbf{11269.0} & \textbf{0\%} \\
+\cmidrule{2-22}
+ & Avg & 0 & 4744.2 & 4744.2 & 0\% & 2271.8 & \underline{5726.7} & 7998.5 & 31.2\% & 7036.7 & 5737.7 & 12774.4 & 57.9\% & \underline{0} & 5105.1 & \underline{5105.1} & \underline{0\%} & \textbf{0} & \textbf{4925.5} & \textbf{4925.5} & \textbf{0\%} \\
+ & $\Delta$ & -- & -- & -- & -- & -- & +20.7\% & +68.6\% & -- & -- & +20.9\% & +169.3\% & -- & -- & +7.6\% & +7.6\% & -- & -- & +3.8\% & +3.8\% & -- \\
+\midrule
+\multirow{6}{*}{\rotatebox{90}{Exchange-rate}} & 96 & 0 & 6.6 & 6.6 & 0\% & 1.2 & \textbf{6.2} & 7.4 & 16.1\% & 6.6 & \underline{6.2} & 12.9 & 51.4\% & \underline{0} & 6.9 & \textbf{6.9} & \underline{0\%} & \textbf{0} & 6.9 & \underline{6.9} & \textbf{0\%} \\
+ & 192 & 0 & 9.3 & 9.3 & 0\% & 1.4 & \textbf{8.6} & 10.0 & 13.9\% & 8.8 & \underline{8.7} & 17.5 & 50.5\% & \underline{0} & 9.5 & \textbf{9.5} & \underline{0\%} & \textbf{0} & 9.8 & \underline{9.8} & \textbf{0\%} \\
+ & 336 & 0 & 17.6 & 17.6 & 0\% & 2.2 & \textbf{15.3} & \textbf{17.6} & 12.7\% & 13.8 & \underline{15.4} & 29.2 & 47.4\% & \underline{0} & 18.1 & \underline{18.1} & \underline{0\%} & \textbf{0} & 18.3 & 18.3 & \textbf{0\%} \\
+ & 720 & 0 & 19.4 & 19.4 & 0\% & 1.4 & \textbf{11.4} & \textbf{12.8} & 10.6\% & 8.1 & \underline{11.4} & 19.6 & 41.5\% & \underline{0} & 12.8 & \underline{12.8} & \underline{0\%} & \textbf{0} & 20.1 & 20.1 & \textbf{0\%} \\
+\cmidrule{2-22}
+ & Avg & 0 & 13.2 & 13.2 & 0\% & 1.5 & \textbf{10.4} & \textbf{12.0} & 13.3\% & 9.4 & \underline{10.4} & 19.8 & 47.7\% & \underline{0} & 11.8 & \textbf{11.8} & \underline{0\%} & \textbf{0} & 13.8 & \underline{13.8} & \textbf{0\%} \\
+ & $\Delta$ & -- & -- & -- & -- & -- & -21.3\% & -9.6\% & -- & -- & -21.2\% & +49.5\% & -- & -- & -10.3\% & -10.3\% & -- & -- & +4.1\% & +4.1\% & -- \\
+\midrule
+\multirow{6}{*}{\rotatebox{90}{Traffic}} & 96 & 0 & 2252.0 & 2252.0 & 0\% & 1074.1 & \underline{2926.8} & 4000.9 & 26.9\% & 3969.9 & 2929.4 & 6899.4 & 57.5\% & \underline{0} & 2532.4 & \underline{2532.4} & \underline{0\%} & \textbf{0} & \textbf{2365.7} & \textbf{2365.7} & \textbf{0\%} \\
+ & 192 & 0 & 3442.6 & 3442.6 & 0\% & 1550.8 & \underline{4497.3} & 6048.0 & 25.6\% & 5796.8 & 4501.7 & 10298.5 & 56.3\% & \underline{0} & 3654.2 & \underline{3654.2} & \underline{0\%} & \textbf{0} & \textbf{3618.7} & \textbf{3618.7} & \textbf{0\%} \\
+ & 336 & 0 & 7528.3 & 7528.3 & 0\% & 2950.8 & \underline{9651.8} & 12602.6 & 23.4\% & 11091.3 & 9662.0 & 20753.3 & 53.4\% & \underline{0} & 7460.2 & \underline{7460.2} & \underline{0\%} & \textbf{0} & \textbf{7818.9} & \textbf{7818.9} & \textbf{0\%} \\
+ & 720 & 0 & 16531.5 & 16531.5 & 0\% & 5173.7 & \underline{21681.4} & 26855.1 & 19.3\% & 19542.4 & 21710.3 & 41252.7 & 47.4\% & \underline{0} & 17580.6 & \underline{17580.6} & \underline{0\%} & \textbf{0} & \textbf{17100.0} & \textbf{17100.0} & \textbf{0\%} \\
+\cmidrule{2-22}
+ & Avg & 0 & 7438.6 & 7438.6 & 0\% & 2687.3 & \underline{9689.3} & 12376.7 & 23.8\% & 10100.1 & 9700.9 & 19801.0 & 53.7\% & \underline{0} & 7806.8 & \underline{7806.8} & \underline{0\%} & \textbf{0} & \textbf{7725.8} & \textbf{7725.8} & \textbf{0\%} \\
+ & $\Delta$ & -- & -- & -- & -- & -- & +30.3\% & +66.4\% & -- & -- & +30.4\% & +166.2\% & -- & -- & +5.0\% & +5.0\% & -- & -- & +3.9\% & +3.9\% & -- \\
+\midrule
+\multirow{6}{*}{\rotatebox{90}{Weather}} & 96 & 0 & 188.5 & 188.5 & 0\% & 203.3 & \underline{213.4} & 416.6 & 48.8\% & 494.8 & 213.7 & 708.5 & 69.8\% & \underline{0} & 212.8 & \underline{212.8} & \underline{0\%} & \textbf{0} & \textbf{199.0} & \textbf{199.0} & \textbf{0\%} \\
+ & 192 & 0 & 295.3 & 295.3 & 0\% & 298.9 & \underline{333.8} & 632.7 & 47.3\% & 737.7 & 335.0 & 1072.7 & 68.8\% & \underline{0} & 333.9 & \underline{333.9} & \underline{0\%} & \textbf{0} & \textbf{310.9} & \textbf{310.9} & \textbf{0\%} \\
+ & 336 & 0 & 669.7 & 669.7 & 0\% & 586.7 & \underline{739.4} & 1326.0 & 44.2\% & 1460.6 & 740.3 & 2200.9 & 66.4\% & \underline{0} & 805.0 & \underline{805.0} & \underline{0\%} & \textbf{0} & \textbf{696.0} & \textbf{696.0} & \textbf{0\%} \\
+ & 720 & 0 & 1650.2 & 1650.2 & 0\% & 1138.6 & \underline{1818.4} & 2957.0 & 38.5\% & 2800.5 & 1820.1 & 4620.6 & 60.6\% & \underline{0} & 1762.7 & \underline{1762.7} & \underline{0\%} & \textbf{0} & \textbf{1707.8} & \textbf{1707.8} & \textbf{0\%} \\
+\cmidrule{2-22}
+ & Avg & 0 & 700.9 & 700.9 & 0\% & 556.9 & \underline{776.2} & 1333.1 & 44.7\% & 1373.4 & 777.3 & 2150.7 & 66.4\% & \underline{0} & 778.6 & \underline{778.6} & \underline{0\%} & \textbf{0} & \textbf{728.4} & \textbf{728.4} & \textbf{0\%} \\
+ & $\Delta$ & -- & -- & -- & -- & -- & +10.7\% & +90.2\% & -- & -- & +10.9\% & +206.8\% & -- & -- & +11.1\% & +11.1\% & -- & -- & +3.9\% & +3.9\% & -- \\
+\bottomrule
+\end{tabular}}
+\end{small}
+\label{tab:chronosbolt_total_time}
+\end{center}
+\end{table*}
+

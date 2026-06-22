@@ -1,0 +1,79 @@
+
+\begin{table*}[t]
+\centering
+\small
+\caption{Task taxonomy of TSRBench. The benchmark contains 15 fine-grained
+tasks grouped into four temporal reasoning dimensions. Domains are reported at
+a high level based on instance-level metadata and content inspection.}
+\resizebox{0.96\textwidth}{!}{
+\begin{tabular}{l c p{0.25\textwidth} p{0.25\textwidth} p{0.26\textwidth}}
+\toprule
+Dimension & \# Tasks & Fine-Grained Tasks & Domains Covered & Main Capability Tested \\
+\midrule
+Perception & 4 &
+Pattern Recognition; Noise Understanding; Anomaly Detection; Comparative Analysis &
+Various domains; patterns drawn from synthetic signals, signal processing, and statistical time series &
+Recognizing temporal patterns, noise, anomalies, and relationships among
+multiple series. \\
+\midrule
+Reasoning & 7 &
+Etiological Reasoning; Causal Discovery; Abductive Reasoning; Temporal Relation
+Reasoning; Numerical Reasoning; Deductive Reasoning; Inductive Reasoning &
+Health; Hydrology; Physics; Political Science; Sports; Energy; Traffic;
+Agriculture; Astronomy; Chemistry; Meteorology; Seismology &
+Inferring causes, latent events, temporal order, quantitative relations, rules,
+and higher-level temporal principles. \\
+\midrule
+Prediction & 2 &
+Time Series Forecasting; Event Prediction &
+Finance; Climate &
+Predicting future numerical values or future discrete events from temporal
+observations and contextual information. \\
+\midrule
+Decision-Making & 2 &
+Qualitative Decision-Making; Quantitative Decision-Making &
+Finance; Health &
+Selecting decisions or actions by combining temporal patterns, contextual
+knowledge, rules, and quantitative outcome comparison. \\
+\bottomrule
+\end{tabular}}
+\label{tab:tsrbench_taxonomy}
+\end{table*}
+
+
+
+\begin{table*}[t]
+\caption{Subtask-level instance distribution in TSRBench and our evaluation
+split. We use a stratified 20\% subset, selecting approximately one fifth of
+the instances from each subtask.}
+\centering
+\small
+\resizebox{0.7\textwidth}{!}{
+\begin{tabular}{llcc}
+\toprule
+Dimension & Subtask & Full Instances & Our 20\% Split \\
+\midrule
+Perception & Pattern Recognition & 371 & 74 \\
+Perception & Anomaly Detection & 129 & 26 \\
+Perception & Similarity Analysis & 113 & 23 \\
+Perception & Noise Understanding & 87 & 17 \\
+\midrule
+Prediction & Event Prediction & 360 & 72 \\
+Prediction & Time Series Forecasting & 720 & 144 \\
+\midrule
+Decision-Making & Qualitative Decision-Making & 335 & 67 \\
+Decision-Making & Quantitative Decision-Making & 300 & 60 \\
+\midrule
+Reasoning & Abductive Reasoning & 150 & 30 \\
+Reasoning & Causal Reasoning & 300 & 60 \\
+Reasoning & Deductive Reasoning & 250 & 50 \\
+Reasoning & Etiological Reasoning & 350 & 70 \\
+Reasoning & Inductive Reasoning & 100 & 20 \\
+Reasoning & Numerical Reasoning & 400 & 80 \\
+Reasoning & Temporal Relation Reasoning & 160 & 32 \\
+\midrule
+\multicolumn{2}{l}{Total} & 4,125 & 825 \\
+\bottomrule
+\end{tabular}}
+\label{tab:tsrbench_split_stats}
+\end{table*}

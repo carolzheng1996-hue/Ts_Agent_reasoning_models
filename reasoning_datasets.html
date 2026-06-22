@@ -1,0 +1,1111 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reasoning 数据集汇总：时间序列推理与 Agent 论文</title>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <style>
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.72; color: #1f2937; background: #f8fafc; }
+    main { max-width: 980px; margin: 0 auto; padding: 42px 24px 80px; background: #fff; }
+    h1 { font-size: 2rem; line-height: 1.25; margin: 0 0 12px; color: #111827; }
+    h2 { font-size: 1.45rem; margin-top: 34px; border-bottom: 1px solid #e5e7eb; padding-bottom: 6px; color: #111827; }
+    h3 { font-size: 1.15rem; margin-top: 24px; color: #111827; }
+    p { margin: 12px 0; }
+    ul, ol { padding-left: 1.5rem; }
+    code { background: #eef2f7; padding: 0.12rem 0.28rem; border-radius: 4px; }
+    pre { background: #0f172a; color: #e5e7eb; padding: 14px 16px; overflow-x: auto; border-radius: 6px; }
+    pre code { background: transparent; padding: 0; color: inherit; }
+    table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 0.94rem; }
+    th, td { border: 1px solid #d1d5db; padding: 8px 10px; text-align: left; vertical-align: top; }
+    th { background: #f3f4f6; }
+    .num { text-align: right; }
+    .math { overflow-x: auto; margin: 14px 0; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Reasoning 数据集汇总：时间序列推理与 Agent 论文</h1>
+  <p>本文汇总当前项目已解读论文中用于训练、评测、构造轨迹或 case study 的公开/半公开时间序列推理数据集：</p>
+  <ul>
+    <li>TimeClaw: <em>Harnessing Generalist Agents for Contextualized Time Series</em></li>
+    <li>TimeART: <em>TimeART: Towards Agentic Time Series Reasoning via Tool-Augmentation</em></li>
+    <li>TSQAgent: <em>Rating Time Series Data Quality via Dedicated Agentic Reasoning</em></li>
+    <li>Last-mile forecasting: <em>Bridging the Last Mile of Time Series Forecasting with LLM Agents</em></li>
+    <li>QoEReasoner: <em>An Agentic Reasoning Framework for Automated and Explainable QoE Diagnosis in RANs</em></li>
+    <li>ARTIST: <em>Adaptive Time Series Reasoning via Segment Selection</em></li>
+    <li>FinSTaR: <em>Towards Financial Reasoning with Time Series Reasoning Models</em></li>
+    <li>LLaTiSA: <em>Towards Difficulty-Stratified Time Series Reasoning from Visual Perception to Semantics</em></li>
+    <li>TSRBench: <em>A Comprehensive Multi-task Multi-modal Time Series Reasoning Benchmark for Generalist Models</em></li>
+    <li>VeriTime: <em>Time Series Reasoning via Process-Verifiable Thinking Data Synthesis and Scheduling for Tailored LLM Reasoning</em></li>
+    <li>SenTSR-Bench: <em>Thinking with Injected Knowledge for Time-Series Reasoning</em></li>
+    <li>Time-R1: <em>Time Series Forecasting as Reasoning</em></li>
+    <li>VESTA: <em>Visual Exploration with Statistical Tool Agents</em></li>
+    <li>MedRLM: <em>Recursive Multimodal Health Intelligence</em></li>
+    <li>2DV Annotation: <em>Evaluating Interactive 2D Visualization as a Sample Selection Strategy for Biomedical Time-Series Data Annotation</em></li>
+    <li>Coding Agents: <em>Can LLM Coding Agents Reason About Time Series?</em></li>
+    <li>TS-Memory: <em>Plug-and-Play Memory for Time Series Foundation Models</em></li>
+  </ul>
+  <p>说明：部分论文数据集已经在 GitHub 或 Hugging Face 公开；部分只在论文中描述，尚未发现官方公开下载入口。下文会明确区分“可下载链接”和“未发现官方公开下载”。样例为字段级简化样例，重点展示数据结构和任务形态。</p>
+  <h2>1. 总览</h2>
+  <table>
+    <tr><th class="">数据集</th><th class="">被哪篇论文使用</th><th class="">主要用途</th><th class="">官方/公开下载</th></tr>
+    <tr><td class="">Context-is-Key (CiK)</td><td class="">TimeClaw</td><td class="">上下文感知时间序列预测与推理评测</td><td class=""><a href="https://github.com/ServiceNow/context-is-key-forecasting">GitHub</a>, <a href="https://huggingface.co/datasets/ServiceNow/Context-is-Key-Forecasting">HF</a></td></tr>
+    <tr><td class="">TSRBench</td><td class="">TSRBench；TimeClaw</td><td class="">多任务、多模态、开放式时间序列推理评测</td><td class=""><a href="https://tsrbench.github.io/">项目页</a>, <a href="https://huggingface.co/datasets/umd-zhou-lab/TSRBench">HF</a></td></tr>
+    <tr><td class="">TSAIA</td><td class="">TimeClaw</td><td class="">金融时间序列分析与多步推理评测</td><td class=""><a href="https://huggingface.co/datasets/Melady/TSAIA">HF</a>, <a href="https://arxiv.org/abs/2509.01822">arXiv</a></td></tr>
+    <tr><td class="">MTBench</td><td class="">TimeART</td><td class="">多模态时间序列预测、推理与 QA 评测</td><td class=""><a href="https://arxiv.org/abs/2503.16858">arXiv</a>，未发现官方数据下载页</td></tr>
+    <tr><td class="">TimeMQA / TSQA</td><td class="">TimeART</td><td class="">多任务时间序列问答评测，也被 TimeToolBench 用作源数据</td><td class=""><a href="https://arxiv.org/abs/2503.01875">arXiv</a>，未发现官方数据下载页</td></tr>
+    <tr><td class="">TimeToolBench</td><td class="">TimeART</td><td class="">100k ReAct 风格工具调用训练轨迹</td><td class="">TimeART 论文中描述，未发现官方代码/HF 下载</td></tr>
+    <tr><td class="">TimeSeriesExam</td><td class="">TimeART 的 TimeToolBench 源数据之一</td><td class="">时间序列理解考试式 QA</td><td class=""><a href="https://arxiv.org/abs/2410.14752">arXiv</a>，未发现官方数据下载页</td></tr>
+    <tr><td class="">ChatTS 数据</td><td class="">TimeART 的 TimeToolBench 源数据之一</td><td class="">合成时间序列理解与推理数据</td><td class=""><a href="https://arxiv.org/abs/2412.03104">arXiv</a>, <a href="https://github.com/NetManAIOps/ChatTS">GitHub</a></td></tr>
+    <tr><td class="">TSQBench</td><td class="">TSQAgent</td><td class="">时间序列数据质量维度识别与 pairwise quality comparison</td><td class=""><a href="https://arxiv.org/abs/2606.03629">arXiv</a>, <a href="https://github.com/clsr1008/TSQualityAgent">GitHub</a></td></tr>
+    <tr><td class="">匿名航线日票务销售数据</td><td class="">Last-mile Forecasting</td><td class="">节假日上下文 forecast revision case study</td><td class=""><a href="https://arxiv.org/abs/2606.02497">arXiv</a>；未发现官方公开下载</td></tr>
+    <tr><td class="">真实运营 RAN QoE 诊断数据</td><td class="">QoEReasoner</td><td class="">AD、FCR、RCC 多任务网络诊断评测</td><td class=""><a href="https://arxiv.org/abs/2606.01925">arXiv</a>；未发现官方公开下载</td></tr>
+    <tr><td class="">ARTIST 六数据集套件</td><td class="">ARTIST</td><td class="">自适应片段选择式时间序列推理评测</td><td class=""><a href="https://github.com/mims-harvard/ARTIST">ARTIST GitHub</a>；各源数据见分项</td></tr>
+    <tr><td class="">FinTSR-Bench</td><td class="">FinSTaR</td><td class="">金融时间序列 assessment/prediction reasoning QA</td><td class=""><a href="https://arxiv.org/abs/2605.03460">arXiv</a>, <a href="https://github.com/seunghan96/FinSTaR">GitHub</a></td></tr>
+    <tr><td class="">HiTSR</td><td class="">LLaTiSA</td><td class="">分层时间序列推理训练与评测，含 verified CoT</td><td class=""><a href="https://arxiv.org/abs/2604.17295">arXiv</a>, <a href="https://github.com/RainingNovember/LLaTiSA">GitHub</a></td></tr>
+    <tr><td class="">VeriTime-TSRBench</td><td class="">VeriTime</td><td class="">过程可验证 TS-tailored CoT 训练/评测数据</td><td class=""><a href="https://arxiv.org/abs/2602.07830">arXiv</a>, <a href="https://anonymous.4open.science/r/VeriTime-E017">匿名代码</a></td></tr>
+    <tr><td class="">SenTSR-Bench</td><td class="">SenTSR-Bench</td><td class="">真实工业传感器多阶段诊断推理评测</td><td class=""><a href="https://arxiv.org/abs/2602.19455">arXiv</a>, <a href="https://zlhe0.github.io/SenTSR-Bench-Website/">项目页</a>；未发现官方 HF/GitHub 下载</td></tr>
+    <tr><td class="">TSEvol Dataset A</td><td class="">SenTSR-Bench；TimeART 的源数据相关方向</td><td class="">inductive/deductive/causal 时间序列推理评测</td><td class=""><a href="https://arxiv.org/abs/2412.03104">arXiv</a>, <a href="https://github.com/NetManAIOps/ChatTS">GitHub: ChatTS</a></td></tr>
+    <tr><td class="">TS&amp;Language MCQ2</td><td class="">SenTSR-Bench</td><td class="">两条时间序列之间的关系和比较推理</td><td class=""><a href="https://github.com/behavioral-data/TSandLanguage">论文/代码入口</a></td></tr>
+    <tr><td class="">Time-R1 预测数据集套件</td><td class="">Time-R1</td><td class="">reasoning-aware time-series forecasting 训练与评测</td><td class=""><a href="https://github.com/ustc-time-series/Time-R1">Time-R1 GitHub</a>；源数据见分项</td></tr>
+    <tr><td class="">DAWN</td><td class="">VESTA</td><td class="">分布拟合与时间序列概率建模 agent 评测</td><td class=""><a href="https://arxiv.org/abs/2606.00384">arXiv</a>；论文源码含 benchmark 描述，未发现独立数据仓库</td></tr>
+    <tr><td class="">MedRLM 真实临床评估数据套件</td><td class="">MedRLM</td><td class="">长病历、多模态影像、传感器/ICU 时间序列、转诊代理任务设计</td><td class="">MIMIC-IV/eICU/MIMIC-CXR/PTB-XL 等官方数据源；多数需 PhysioNet credentialed access</td></tr>
+    <tr><td class="">MAIJU-DS / NICU-A</td><td class="">2DV Annotation</td><td class="">真实人类标注者样本选择实验与下游分类评测</td><td class="">MAIJU-DS 见原论文数据；NICU-A 为研究数据集，本文未发现统一公开下载</td></tr>
+    <tr><td class="">TimeSeriesExam / TSFU</td><td class="">Coding Agents</td><td class="">LLM direct/code/hybrid agent 时间序列理解多选评测</td><td class=""><a href="https://arxiv.org/abs/2410.14752">TimeSeriesExam arXiv</a>, <a href="https://arxiv.org/abs/2503.06447">TSFU arXiv</a>；Coding Agents 代码见 <a href="https://github.com/DekuD2/can-llm-coding-agents-reason-about-time-series">GitHub</a></td></tr>
+    <tr><td class="">TS-Memory 长期预测数据套件</td><td class="">TS-Memory</td><td class="">冻结 TSFM + PlugMem 适配评测，MSE/MAE/CRPS 与延迟比较</td><td class=""><a href="https://github.com/sisuolv/TS-Memory">TS-Memory GitHub</a>；源数据含 ETT/Electricity/Exchange/Traffic/Weather</td></tr>
+  </table>
+  <h2>2. Context-is-Key (CiK)</h2>
+  <p><strong>论文中用途</strong>：TimeClaw 用 CiK 测试模型能否利用文本上下文改善时间序列预测。CiK 的关键点是：只看历史数值往往不够，未来事件、约束、因果关系或领域背景会改变目标序列。</p>
+  <p><strong>下载链接</strong>：</p>
+  <ul>
+    <li>GitHub: &lt;https://github.com/ServiceNow/context-is-key-forecasting&gt;</li>
+    <li>Hugging Face: &lt;https://huggingface.co/datasets/ServiceNow/Context-is-Key-Forecasting&gt;</li>
+    <li>论文页: &lt;https://proceedings.mlr.press/v267/williams25a.html&gt;</li>
+  </ul>
+  <p><strong>数据组成</strong>：</p>
+  <p>TimeClaw 论文中的统计表显示，CiK 共 71 个 context-aware temporal tasks，覆盖 7 个真实领域和一小组合成动力系统任务：</p>
+  <table>
+    <tr><th class="">领域</th><th class=" num">任务数</th><th class="">代表数据源</th></tr>
+    <tr><td class="">Public Safety</td><td class=" num">26</td><td class="">Montreal fire department intervention logs</td></tr>
+    <tr><td class="">Climatology</td><td class=" num">12</td><td class="">Solar irradiance、cloud cover、solar power</td></tr>
+    <tr><td class="">Transportation</td><td class=" num">11</td><td class="">PeMS traffic occupancy</td></tr>
+    <tr><td class="">Energy</td><td class=" num">7</td><td class="">Electricity consumption</td></tr>
+    <tr><td class="">Retail</td><td class=" num">6</td><td class="">ATM cash withdrawal</td></tr>
+    <tr><td class="">Mechanics</td><td class=" num">3</td><td class="">Causal Chambers wind-tunnel measurements</td></tr>
+    <tr><td class="">Economics</td><td class=" num">3</td><td class="">unemployment rates</td></tr>
+    <tr><td class="">Synthetic Dynamics</td><td class=" num">3</td><td class="">simulated bivariate dynamical systems</td></tr>
+  </table>
+  <p>CiK 的上下文类型包括：</p>
+  <table>
+    <tr><th class="">上下文类型</th><th class=" num">任务数</th><th class="">含义</th></tr>
+    <tr><td class="">Intemporal</td><td class=" num">51</td><td class="">过程性质、目标变量含义、长期季节性、取值约束</td></tr>
+    <tr><td class="">Historical</td><td class=" num">25</td><td class="">观测窗口外的历史统计或过去行为</td></tr>
+    <tr><td class="">Covariate</td><td class=" num">52</td><td class="">与目标序列相关的额外变量</td></tr>
+    <tr><td class="">Future</td><td class=" num">33</td><td class="">未来事件、场景或约束</td></tr>
+    <tr><td class="">Causal</td><td class=" num">14</td><td class="">协变量与目标之间的因果、反因果或混杂关系</td></tr>
+  </table>
+  <p><strong>字段级样例</strong>：</p>
+  <pre><code>{
+  "domain": "retail",
+  "target_series": [82, 79, 75, 80, 77, 74],
+  "future_horizon": 3,
+  "context": "The ATM will be inaccessible during the next three days because of maintenance.",
+  "question": "Forecast the next three daily cash withdrawal values.",
+  "expected_behavior": "Future withdrawals should be near zero during the inaccessible period."
+}</code></pre>
+  <pre><code>{
+  "domain": "energy",
+  "target_series": [113.2, 118.5, 121.0, 119.4],
+  "context": "A snowstorm is expected in the forecast window.",
+  "question": "Predict electricity demand under the provided future weather event.",
+  "expected_behavior": "Demand may rise because heating load increases."
+}</code></pre>
+  <h2>3. TSRBench</h2>
+  <p><strong>论文中用途</strong>：TSRBench 论文将其作为核心 benchmark，用于评测 30+ 个 LLM/VLM/TSLLM 的时间序列推理能力；TimeClaw 也用 TSRBench 测试开放式时间序列推理能力，包括 perception、reasoning、prediction 和 decision making。TimeClaw 论文使用了 stratified 20% subset，总计 825 条样本。</p>
+  <p><strong>下载链接</strong>：</p>
+  <ul>
+    <li>项目页: &lt;https://tsrbench.github.io/&gt;</li>
+    <li>Hugging Face: &lt;https://huggingface.co/datasets/umd-zhou-lab/TSRBench&gt;</li>
+    <li>arXiv: &lt;https://arxiv.org/abs/2601.18744&gt;</li>
+  </ul>
+  <p><strong>数据组成</strong>：</p>
+  <p>TimeClaw 论文列出 TSRBench 共 4,125 条完整实例，15 个细粒度任务，分为 4 大类：</p>
+  <table>
+    <tr><th class="">维度</th><th class=" num">细粒度任务数</th><th class=" num">完整实例数</th><th class=" num">TimeClaw 20% 子集</th></tr>
+    <tr><td class="">Perception</td><td class=" num">4</td><td class=" num">700</td><td class=" num">140</td></tr>
+    <tr><td class="">Prediction</td><td class=" num">2</td><td class=" num">1,080</td><td class=" num">216</td></tr>
+    <tr><td class="">Decision-Making</td><td class=" num">2</td><td class=" num">635</td><td class=" num">127</td></tr>
+    <tr><td class="">Reasoning</td><td class=" num">7</td><td class=" num">1,710</td><td class=" num">342</td></tr>
+    <tr><td class="">Total</td><td class=" num">15</td><td class=" num">4,125</td><td class=" num">825</td></tr>
+  </table>
+  <p>细粒度任务包括 pattern recognition、anomaly detection、similarity analysis、noise understanding、event prediction、forecasting、qualitative/quantitative decision-making、abductive/causal/deductive/etiological/inductive/numerical/temporal relation reasoning。</p>
+  <p>TSRBench 论文还说明该数据集包含 15,250 个 time series channels，覆盖 14 个领域，58.1% 样本为多变量时间序列，并支持文本、图像、文本+图像和 time-series embedding 四类输入。</p>
+  <p><strong>数据来源</strong>：</p>
+  <table>
+    <tr><th class="">任务</th><th class="">数据源</th></tr>
+    <tr><td class="">Pattern Recognition / Noise Understanding / Anomaly Detection / Comparative Analysis</td><td class="">TimeSeriesExam</td></tr>
+    <tr><td class="">Etiological Reasoning</td><td class="">LEAVES, Human Activity Recognition</td></tr>
+    <tr><td class="">Causal Discovery</td><td class="">CausalRiver</td></tr>
+    <tr><td class="">Abductive Reasoning</td><td class="">GAMETIME</td></tr>
+    <tr><td class="">Temporal Relation Reasoning</td><td class="">Time-IMM</td></tr>
+    <tr><td class="">Numerical Reasoning / Deductive Reasoning / Quantitative Decision-Making</td><td class="">Synthetic Data</td></tr>
+    <tr><td class="">Inductive Reasoning</td><td class="">Kaggle Philippines Typhoon Trend, Sunspots</td></tr>
+    <tr><td class="">Time Series Forecasting</td><td class="">CAMFE</td></tr>
+    <tr><td class="">Event Prediction</td><td class="">TimeCAP</td></tr>
+    <tr><td class="">Qualitative Decision-Making</td><td class="">ECG-QA, PTB-XL</td></tr>
+  </table>
+  <p><strong>构造流程</strong>：raw data collection -&gt; question generation -&gt; verification。合成任务用 code verifier 复跑生成逻辑；真实/网页数据用 fact verifier 对齐文本、时间戳和元数据。论文报告 data leakage 检测很低：o4-mini、GPT-5-mini、GPT-5 的 n-gram accuracy 分别为 0.3%、0.1%、0.4%。</p>
+  <p><strong>字段级样例</strong>：</p>
+  <pre><code>{
+  "dimension": "Reasoning",
+  "subtask": "Causal Reasoning",
+  "domain": "Hydrology",
+  "series": {
+    "station_A": [1.2, 1.8, 2.4, 2.1],
+    "station_B": [0.9, 1.1, 1.7, 2.3]
+  },
+  "context": "Station A is upstream of Station B.",
+  "question": "Which causal direction best explains the delayed rise?",
+  "choices": ["A causes B", "B causes A", "Both independent", "No relation"],
+  "answer": "A causes B"
+}</code></pre>
+  <pre><code>{
+  "dimension": "Perception",
+  "subtask": "Anomaly Detection",
+  "series": [0.06, 0.11, 0.13, 0.14, 0.51, 0.16],
+  "question": "Which value is likely an anomaly?",
+  "choices": ["0.51", "0.16", "0.14", "0.11"],
+  "answer": "0.51"
+}</code></pre>
+  <h2>4. TSAIA</h2>
+  <p><strong>论文中用途</strong>：TimeClaw 用 TSAIA 的金融任务测试实用型时间序列分析能力。论文特别关注 portfolio VaR、Sharpe ratio、market alpha、market beta 等问题，并通过能力演化生成 <code>portfolio_var</code>、<code>portfolio_sharpe</code>、<code>capm_regression</code>。</p>
+  <p><strong>下载链接</strong>：</p>
+  <ul>
+    <li>Hugging Face: &lt;https://huggingface.co/datasets/Melady/TSAIA&gt;</li>
+    <li>arXiv: &lt;https://arxiv.org/abs/2509.01822&gt;</li>
+  </ul>
+  <p><strong>数据组成</strong>：</p>
+  <p>TSAIA 是金融时间序列分析 benchmark，样本通常包含资产或投资组合相关时间序列、题目描述、选项和标准答案。TimeClaw 论文使用其 finance split，并重点评估多选准确率。</p>
+  <p><strong>字段级样例</strong>：</p>
+  <pre><code>{
+  "task": "Portfolio Sharpe Ratio",
+  "series": {
+    "asset_A": [100.0, 101.2, 100.8, 102.3],
+    "asset_B": [80.0, 79.5, 80.4, 81.0],
+    "risk_free_rate": 0.02
+  },
+  "question": "Which portfolio has the highest annualized Sharpe ratio?",
+  "choices": {
+    "A": "70% asset_A + 30% asset_B",
+    "B": "30% asset_A + 70% asset_B"
+  },
+  "answer": "A"
+}</code></pre>
+  <pre><code>{
+  "task": "CAPM Beta",
+  "series": {
+    "asset_return": [0.01, -0.02, 0.015, 0.006],
+    "market_return": [0.008, -0.018, 0.012, 0.004]
+  },
+  "question": "Estimate the asset beta against the market and choose the closest option.",
+  "choices": ["0.5", "0.9", "1.2", "1.8"],
+  "answer": "1.2"
+}</code></pre>
+  <h2>5. MTBench</h2>
+  <p><strong>论文中用途</strong>：TimeART 用 MTBench 做预测和推理评测。任务同时包含数值时间序列和文本信息，覆盖金融与天气场景。</p>
+  <p><strong>下载链接</strong>：</p>
+  <ul>
+    <li>arXiv: &lt;https://arxiv.org/abs/2503.16858&gt;</li>
+    <li>官方数据下载：未发现稳定公开入口。TimeART 论文只引用 MTBench 论文并按其 protocol 评测。</li>
+  </ul>
+  <p><strong>数据组成</strong>：</p>
+  <p>TimeART 论文实际使用的 MTBench 任务包括：</p>
+  <table>
+    <tr><th class="">任务组</th><th class="">具体任务</th><th class="">指标</th></tr>
+    <tr><td class="">Stock Price Forecasting</td><td class="">7-day 输入预测 1-day；30-day 输入预测 7-day</td><td class="">MAE, MAPE</td></tr>
+    <tr><td class="">Stock Indicator Forecasting</td><td class="">MACD、Bollinger Bands Upper Band</td><td class="">MSE</td></tr>
+    <tr><td class="">Temperature Forecasting</td><td class="">7-day 输入预测 1-day；14-day 输入预测 3-day</td><td class="">MSE, MAE</td></tr>
+    <tr><td class="">Stock Trend Classification</td><td class="">7-day/30-day，3-way 和 5-way 分类</td><td class="">Accuracy</td></tr>
+    <tr><td class="">News-stock Correlation</td><td class="">新闻与股票走势相关性，3-way 和 5-way</td><td class="">Accuracy</td></tr>
+    <tr><td class="">News-finance MCQA</td><td class="">新闻金融多选问答</td><td class="">Accuracy</td></tr>
+    <tr><td class="">Temperature Trend Classification</td><td class="">past/future trend</td><td class="">Accuracy</td></tr>
+  </table>
+  <p><strong>字段级样例</strong>：</p>
+  <pre><code>{
+  "domain": "finance",
+  "task": "stock_trend_classification",
+  "stock_prices": [174.2, 175.1, 173.8, 176.0, 177.4, 178.0, 177.6],
+  "news": "The company reported stronger-than-expected quarterly revenue.",
+  "question": "Classify the next-day stock trend.",
+  "choices": ["strong decrease", "decrease", "stable", "increase", "strong increase"],
+  "answer": "increase"
+}</code></pre>
+  <pre><code>{
+  "domain": "weather",
+  "task": "temperature_forecasting",
+  "temperature": [20.1, 19.8, 20.4, 21.0, 20.7, 19.9, 20.3],
+  "event_text": "A cold front is expected to pass through the station tomorrow.",
+  "question": "Forecast the next-day mean temperature.",
+  "target": 18.9
+}</code></pre>
+  <h2>6. TimeMQA / TSQA</h2>
+  <p><strong>论文中用途</strong>：TimeART 用 TimeMQA 的 QA 子集作为推理评测，并将任务划分为 Understanding、Perception、Reasoning、Estimation 四类。TimeToolBench 也从 TimeMQA 等源数据中构造轨迹，但会移除评测重叠样本以避免泄漏。</p>
+  <p><strong>下载链接</strong>：</p>
+  <ul>
+    <li>arXiv: &lt;https://arxiv.org/abs/2503.01875&gt;</li>
+    <li>官方数据下载：未发现稳定公开入口。</li>
+  </ul>
+  <p><strong>数据组成</strong>：</p>
+  <p>TimeMQA 论文摘要称其 TSQA 数据集约包含 200,000 question-answer pairs，覆盖 12 个领域，统一了 forecasting、imputation、anomaly detection、classification、open-ended reasoning 等任务。TimeART 论文选择其中 QA 子集，并按四类能力评测：</p>
+  <table>
+    <tr><th class="">TimeART 使用类别</th><th class="">含义</th></tr>
+    <tr><td class="">Understanding</td><td class="">理解时间序列、上下文和问题设置</td></tr>
+    <tr><td class="">Perception</td><td class="">识别模式、趋势、异常、局部特征</td></tr>
+    <tr><td class="">Reasoning</td><td class="">多步逻辑、因果或条件推理</td></tr>
+    <tr><td class="">Estimation</td><td class="">数值估计、预测或统计判断</td></tr>
+  </table>
+  <p><strong>字段级样例</strong>：</p>
+  <pre><code>{
+  "category": "Perception",
+  "series": [1.0, 1.2, 1.5, 3.9, 1.4, 1.3],
+  "context": "The readings are hourly sensor measurements.",
+  "question": "Which timestamp is most likely anomalous?",
+  "choices": ["t=1", "t=2", "t=3", "t=4"],
+  "answer": "t=4"
+}</code></pre>
+  <pre><code>{
+  "category": "Estimation",
+  "series": [10, 12, 14, 16],
+  "question": "Assuming the linear trend continues, what is the next value?",
+  "choices": ["16", "18", "20", "22"],
+  "answer": "18"
+}</code></pre>
+  <h2>7. TimeToolBench</h2>
+  <p><strong>论文中用途</strong>：TimeART 的核心训练语料。它不是原始 TSQA benchmark，而是由 GPT-4o 作为 expert model 生成并过滤得到的 ReAct-style 工具调用轨迹，用来训练 TSRM 学会战略性工具使用。</p>
+  <p><strong>下载链接</strong>：</p>
+  <ul>
+    <li>TimeART arXiv: &lt;https://arxiv.org/abs/2601.13653&gt;</li>
+    <li>官方数据下载：未发现官方 GitHub 或 Hugging Face 链接。</li>
+  </ul>
+  <p><strong>数据组成</strong>：</p>
+  <p>TimeToolBench 包含超过 100k 条工具使用轨迹。源数据来自 TimeMQA、TimeSeriesExam、MTBench、ChatTS 等研究团队发布或构造的 TSQA 数据。每条轨迹遵循：</p>
+  <pre><code>Query -&gt; Thought -&gt; Action -&gt; Observation -&gt; Thought -&gt; Action -&gt; Observation -&gt; Final Answer</code></pre>
+  <p>质量过滤包括：</p>
+  <ul>
+    <li>固定选项题要求最终答案和标准答案完全一致；</li>
+    <li>开放式问题要求 BERT-Score 超过阈值；</li>
+    <li>随机抽取中间逻辑链，由多个强 LLM judge 判断是否合理；</li>
+    <li>只有所有 judge 都通过的轨迹才保留。</li>
+  </ul>
+  <p><strong>字段级样例</strong>：</p>
+  <pre><code>{
+  "query": "Which value is likely an outlier in [0.06, 0.11, 0.13, 0.51, 0.16]?",
+  "trajectory": [
+    {
+      "thought": "I should use anomaly detection to confirm the suspicious point.",
+      "action": {"tool": "anomaly_detection", "tool_input": {"anomaly_threshold": 1}},
+      "observation": {"top_anomaly_index": 3, "top_anomaly_value": 0.51}
+    }
+  ],
+  "final_answer": "0.51"
+}</code></pre>
+  <pre><code>{
+  "query": "Analyze whether this series has trend and seasonality.",
+  "trajectory": [
+    {
+      "thought": "The main patterns are trend and seasonality.",
+      "action": {"tool": "trend_classifier", "tool_input": {"window": "global"}},
+      "observation": {"trend": "up"}
+    },
+    {
+      "thought": "Next I will test periodicity.",
+      "action": {"tool": "seasonality_detector", "tool_input": {"max_period": 48}},
+      "observation": {"period": 24, "strength": "strong"}
+    }
+  ],
+  "final_answer": "The series has an upward trend and strong daily seasonality."
+}</code></pre>
+  <h2>8. TimeSeriesExam</h2>
+  <p><strong>论文中用途</strong>：TimeART 论文将 TimeSeriesExam 列为 TimeToolBench 的源数据之一。</p>
+  <p><strong>下载链接</strong>：</p>
+  <ul>
+    <li>arXiv: &lt;https://arxiv.org/abs/2410.14752&gt;</li>
+    <li>官方数据下载：未发现稳定公开入口。</li>
+  </ul>
+  <p><strong>数据组成</strong>：</p>
+  <p>TimeSeriesExam 是时间序列理解考试式 benchmark，重点不是传统 forecasting leaderboard，而是测试模型对时间序列概念、统计特征、模式、异常、趋势等问题的理解。TimeART 使用它作为生成工具调用轨迹的源任务之一。</p>
+  <p><strong>字段级样例</strong>：</p>
+  <pre><code>{
+  "series": [3, 5, 7, 9, 11],
+  "question": "What pattern best describes this time series?",
+  "choices": ["linear upward trend", "seasonal pattern", "random noise", "downward trend"],
+  "answer": "linear upward trend"
+}</code></pre>
+  <pre><code>{
+  "series": [2.0, 2.1, 2.0, 8.7, 2.2, 2.1],
+  "question": "Which observation is most likely abnormal?",
+  "choices": ["2.0", "2.1", "8.7", "2.2"],
+  "answer": "8.7"
+}</code></pre>
+  <h2>9. ChatTS 数据</h2>
+  <p><strong>论文中用途</strong>：TimeART 论文将 ChatTS 列为 TimeToolBench 的源数据之一。ChatTS 主要关注把时间序列与 LLM 对齐，构造合成数据以增强时间序列理解与推理。</p>
+  <p><strong>下载链接</strong>：</p>
+  <ul>
+    <li>arXiv: &lt;https://arxiv.org/abs/2412.03104&gt;</li>
+    <li>GitHub: &lt;https://github.com/NetManAIOps/ChatTS&gt;</li>
+  </ul>
+  <p><strong>数据组成</strong>：</p>
+  <p>ChatTS 数据通常把时间序列、文本问题和答案组织成 instruction/response 或 QA 形式，面向时间序列描述、模式识别、趋势判断、异常定位和推理。</p>
+  <p><strong>字段级样例</strong>：</p>
+  <pre><code>{
+  "instruction": "Describe the major pattern in the following time series.",
+  "input": [12.1, 12.4, 12.8, 13.2, 13.7],
+  "output": "The series shows a steady upward trend."
+}</code></pre>
+  <pre><code>{
+  "instruction": "Answer the question based on the time series.",
+  "input": {
+    "series": [5.0, 5.1, 5.0, 7.8, 5.2],
+    "question": "Is there an obvious spike?"
+  },
+  "output": "Yes. The value 7.8 is a clear spike relative to neighboring values."
+}</code></pre>
+  <h2>10. TSQBench 与 TSQAgent 真实数据集</h2>
+  <p><strong>论文中用途</strong>：TSQAgent 使用 TSQBench 评估 LLM 的时间序列质量维度识别和维度级质量比较能力；随后在 11 个真实公开数据集上验证 quality-aware data selection 是否能提升下游预测/分类效果。</p>
+  <p><strong>下载链接</strong>：</p>
+  <ul>
+    <li>论文页面：&lt;https://arxiv.org/abs/2606.03629&gt;</li>
+    <li>代码仓库：&lt;https://github.com/clsr1008/TSQualityAgent&gt;</li>
+    <li>TSQBench 独立 Hugging Face：未发现官方链接。</li>
+  </ul>
+  <p><strong>TSQBench 组成</strong>：</p>
+  <p>TSQBench 是合成 pairwise benchmark。每个样本从共享模板时间序列复制得到 <code>series_A</code> 与 <code>series_B</code>，然后只对其中一侧注入质量缺陷，使质量差异可控、可解释。它评估两个能力：</p>
+  <table>
+    <tr><th class="">能力</th><th class="">输入</th><th class="">输出</th></tr>
+    <tr><td class="">Quality Dimension Identification</td><td class="">一对时间序列</td><td class="">哪些质量维度存在差异</td></tr>
+    <tr><td class="">Quality Comparison</td><td class="">一对时间序列 + 指定维度</td><td class="">哪条序列在该维度质量更高</td></tr>
+  </table>
+  <p>七个质量维度包括 missing value、noise level、rare pattern、trend、frequency、amplitude、pattern consistency。活跃维度数按 1 到 5 个维度采样，概率分别为 35%、35%、20%、8%、2%。</p>
+  <p><strong>真实数据集组成</strong>：</p>
+  <table>
+    <tr><th class="">任务类型</th><th class="">数据集</th><th class="">说明</th></tr>
+    <tr><td class="">Long-term forecasting</td><td class="">Electricity</td><td class="">321 个客户的小时级用电量，论文使用 <code>MT_320</code> 单变量目标</td></tr>
+    <tr><td class="">Long-term forecasting</td><td class="">ExchangeRate</td><td class="">1990-2016 年 8 种货币日汇率，论文选择新加坡元</td></tr>
+    <tr><td class="">Long-term forecasting</td><td class="">Traffic</td><td class="">San Francisco Bay Area freeway sensor 小时级占有率，论文使用 sensor <code>861</code></td></tr>
+    <tr><td class="">Long-term forecasting</td><td class="">Weather</td><td class="">美国约 1,600 个地点气象变量，论文关注 <code>wet_bulb</code></td></tr>
+    <tr><td class="">Short-term forecasting</td><td class="">M4 Yearly/Monthly/Daily</td><td class="">M4 竞赛数据的三个频率子集</td></tr>
+    <tr><td class="">Classification</td><td class="">MedicalImages, CBF, BME, Handwriting</td><td class="">UCR/UEA 分类数据集</td></tr>
+  </table>
+  <p><strong>字段级样例</strong>：</p>
+  <pre><code>{
+  "dataset": "TSQBench",
+  "series_A": [0.1, 0.2, 0.3, 0.4, 0.5],
+  "series_B": [0.1, null, 0.3, null, 0.5],
+  "active_dimensions": ["Missing Value"],
+  "quality_comparison_query": "Which series has higher quality under Missing Value?",
+  "quality_comparison_answer": "series_A"
+}</code></pre>
+  <pre><code>{
+  "dataset": "Electricity",
+  "task": "quality-aware data selection for forecasting",
+  "target_channel": "MT_320",
+  "sample": [1.21, 1.18, 1.25, 1.31, 1.29],
+  "quality_score_source": "TSQAgent pairwise preference distilled by Bradley-Terry rating model",
+  "downstream_metric": "RMSE"
+}</code></pre>
+  <h2>11. 匿名航线日票务销售数据</h2>
+  <p><strong>论文中用途</strong>：<em>Bridging the Last Mile of Time Series Forecasting with LLM Agents</em> 用该数据做三组 case study：春节 holiday-aware revision、126 天多节假日 long-horizon revision、三周 reflection-memory self-improvement。</p>
+  <p><strong>下载链接</strong>：</p>
+  <ul>
+    <li>论文页面：&lt;https://arxiv.org/abs/2606.02497&gt;</li>
+    <li>TeX 源码：&lt;https://arxiv.org/e-print/2606.02497&gt;</li>
+    <li>官方公开数据下载：未在论文 TeX、arXiv 信息或源文件中发现。</li>
+  </ul>
+  <p><strong>数据组成</strong>：</p>
+  <p>该数据是一条来自行业伙伴的真实 daily demand series，语义上是“中国热门国内航线的每日票务销售量”。论文将数值做了匿名化处理：所有值按未公开正比例常数线性缩放，因此绝对销量不可解释，但相对形状、季节性和节假日响应被保留。</p>
+  <table>
+    <tr><th class="">项目</th><th class="">说明</th></tr>
+    <tr><td class="">频率</td><td class="">Daily</td></tr>
+    <tr><td class="">时间范围</td><td class="">2024-01-01 至 2026-05-05</td></tr>
+    <tr><td class="">长度</td><td class="">856 个值</td></tr>
+    <tr><td class="">主要模式</td><td class="">周季节性、年季节性、中国农历节假日响应</td></tr>
+    <tr><td class="">关键事件</td><td class="">春节、元旦、清明、劳动节、国庆等</td></tr>
+    <tr><td class="">匿名化方式</td><td class="">数值线性缩放，日期保留</td></tr>
+    <tr><td class="">公开性</td><td class="">论文描述数据已匿名化，但未提供官方下载链接</td></tr>
+  </table>
+  <p><strong>case study 切分</strong>：</p>
+  <table>
+    <tr><th class="">Case</th><th class="">Forecast origin</th><th class="">Horizon</th><th class="">Event windows</th></tr>
+    <tr><td class="">Holiday-aware revision</td><td class="">2026-02-01</td><td class="">23 days，至 2026-02-23</td><td class="">Spring Festival 2026-02-15 至 2026-02-23</td></tr>
+    <tr><td class="">Long-horizon forecasting</td><td class="">2025-12-31</td><td class="">126 days，至 2026-05-05</td><td class="">New Year、Spring Festival、Qingming、Labor Day</td></tr>
+    <tr><td class="">Self-improvement W1</td><td class="">2026-01-05</td><td class="">7 days</td><td class="">非事件周</td></tr>
+    <tr><td class="">Self-improvement W2</td><td class="">2026-01-12</td><td class="">7 days</td><td class="">非事件周</td></tr>
+    <tr><td class="">Self-improvement W3</td><td class="">2026-01-19</td><td class="">7 days</td><td class="">非事件周</td></tr>
+  </table>
+  <p><strong>字段级样例</strong>：</p>
+  <pre><code>{
+  "dataset": "anonymized_air_route_daily_ticket_sales",
+  "frequency": "daily",
+  "date_range": ["2024-01-01", "2026-05-05"],
+  "columns": ["ds", "y"],
+  "anonymization": "values linearly rescaled by an undisclosed positive constant; calendar dates preserved",
+  "sample_window": {
+    "event": "Spring Festival",
+    "forecast_origin": "2026-02-01",
+    "horizon": ["2026-02-01", "2026-02-23"],
+    "event_window": ["2026-02-15", "2026-02-23"]
+  }
+}</code></pre>
+  <pre><code>{
+  "workspace_row": {
+    "ds": "2026-02-15",
+    "y": null,
+    "y_baseline": 842.0,
+    "y_final": 346.8
+  },
+  "revision_record": {
+    "event": "Spring Festival 2026 holiday suppression",
+    "mode": "override",
+    "evidence": [
+      "holiday_search_tool confirms 2026-02-15~23 as Spring Festival",
+      "2025 lunar-calendar analogue actuals show holiday trough"
+    ],
+    "confidence": 0.8
+  }
+}</code></pre>
+  <h2>12. 真实运营 RAN QoE 诊断数据</h2>
+  <p><strong>论文中用途</strong>：QoEReasoner 用该数据评估自动化 QoE 诊断，包括 anomaly detection (AD)、fault causal chain reasoning (FCR) 和 root-cause categorization (RCC)。</p>
+  <p><strong>下载链接</strong>：</p>
+  <ul>
+    <li>论文页面：&lt;https://arxiv.org/abs/2606.01925&gt;</li>
+    <li>TeX 源码：&lt;https://arxiv.org/e-print/2606.01925&gt;</li>
+    <li>官方公开数据下载：未在论文 TeX、arXiv 信息或源文件中发现。</li>
+  </ul>
+  <p><strong>数据组成</strong>：</p>
+  <p>该数据来自真实运营移动网络。每个样本是 session-level multivariate KPI telemetry，覆盖 PHY、MAC、RLC、PDCP 等协议层。论文未公开具体 KPI 字段列表，但说明该类诊断涉及超过 90 个相关 KPI。</p>
+  <table>
+    <tr><th class="">项目</th><th class="">数值 / 说明</th></tr>
+    <tr><td class="">session 总数</td><td class="">300</td></tr>
+    <tr><td class="">abnormal sessions</td><td class="">130</td></tr>
+    <tr><td class="">normal sessions</td><td class="">170</td></tr>
+    <tr><td class="">root-cause categories</td><td class="">6</td></tr>
+    <tr><td class="">expert-validated fault-chain templates</td><td class="">21</td></tr>
+    <tr><td class="">输入形式</td><td class="">$\mathbf{X}\in\mathbb{R}^{T\times M}$ 多变量 KPI 时间序列</td></tr>
+    <tr><td class="">标签</td><td class="">degradation label、root-cause category、expert-verified fault causal chain</td></tr>
+    <tr><td class="">公开性</td><td class="">未发现官方下载；工业标注成本高，每条 chain 需专家验证</td></tr>
+  </table>
+  <p><strong>任务组成</strong>：</p>
+  <table>
+    <tr><th class="">任务</th><th class="">输入</th><th class="">输出</th></tr>
+    <tr><td class="">AD</td><td class="">session KPI telemetry</td><td class="">是否 QoE degraded</td></tr>
+    <tr><td class="">FCR</td><td class="">session KPI telemetry</td><td class="">fault atom chain，如 root cause -&gt; mechanism -&gt; symptom</td></tr>
+    <tr><td class="">RCC</td><td class="">session KPI telemetry 或 FCR 起始 atom</td><td class="">root-cause category</td></tr>
+  </table>
+  <p><strong>字段级样例</strong>：</p>
+  <pre><code>{
+  "dataset": "operational_ran_qoe_diagnosis",
+  "session_id": "anonymous_session_001",
+  "kpi_telemetry_shape": {"T": 60, "M": 90},
+  "protocol_layers": ["PHY", "MAC", "RLC", "PDCP"],
+  "labels": {
+    "qoe_degraded": 1,
+    "root_cause_category": "uplink_interference",
+    "fault_chain": [
+      "uplink_interference_high",
+      "ul_retransmission_abnormal",
+      "uplink_delay_high",
+      "qoe_degradation"
+    ]
+  }
+}</code></pre>
+  <pre><code>{
+  "historical_bank_entry": {
+    "kpi_segment": "expert-validated anonymized multivariate KPI window",
+    "validated_fault_chain": [
+      "downlink_interference_high",
+      "dl_retransmission_abnormal",
+      "dl_rlc_delay_high",
+      "downlink_delay_high"
+    ],
+    "usage": "retrieved as candidate hypothesis, then revalidated against current KPI evidence and KB constraints"
+  }
+}</code></pre>
+  <h2>13. ARTIST 六数据集套件</h2>
+  <p><strong>论文中用途</strong>：ARTIST 在六个时间序列推理 benchmark 上评估 controller-reasoner segment selection，包括 TSQA、RCW、ECG-QA、Sleep-QA、TRQA 和 Etiological Reasoning (ETI)。</p>
+  <p><strong>下载链接</strong>：</p>
+  <ul>
+    <li>ARTIST 代码：&lt;https://github.com/mims-harvard/ARTIST&gt;</li>
+    <li>ARTIST 项目页：&lt;https://zitniklab.hms.harvard.edu/ARTIST/&gt;</li>
+    <li>TSQA / Time-MQA：&lt;https://arxiv.org/abs/2503.01875&gt;；论文称完整 TSQA 数据、模型和材料已开源，但 ARTIST TeX 中未给出具体下载 URL。</li>
+    <li>ECG-QA：&lt;https://arxiv.org/abs/2306.15681&gt;；论文摘要给出数据 URL &lt;https://github.com/Jwoo5/ecg-qa&gt;</li>
+    <li>ETI / TSandLanguage：&lt;https://arxiv.org/abs/2404.11757&gt;；代码与数据 &lt;https://github.com/behavioral-data/TSandLanguage&gt;</li>
+    <li>Sleep-QA：&lt;https://arxiv.org/abs/2305.19707&gt;；ARTIST 论文未给出官方下载 URL。</li>
+    <li>RCW / VL-Time / TimerBed：论文引用 NAACL 2025 <em>A Picture is Worth a Thousand Numbers</em>；ARTIST TeX 未给出独立下载 URL。</li>
+    <li>TRQA：ARTIST TeX 引用 <em>TRQA: Time Series Reasoning Question And Answering Benchmark</em>；未给出 arXiv 编号或官方下载 URL。</li>
+  </ul>
+  <p><strong>数据组成</strong>：</p>
+  <table>
+    <tr><th class="">Dataset</th><th class="">Task</th><th class=" num">Train</th><th class=" num">Val</th><th class=" num">Test</th><th class=" num">TS Len.</th><th class="">Domain</th></tr>
+    <tr><td class="">RCW</td><td class="">Binary Choice</td><td class=" num">19,135</td><td class=" num">4,405</td><td class=" num">226</td><td class=" num">4000</td><td class="">Nature</td></tr>
+    <tr><td class="">ECG-QA</td><td class="">Binary Choice</td><td class=" num">16,663</td><td class=" num">1,999</td><td class=" num">202</td><td class=" num">1000</td><td class="">ECG</td></tr>
+    <tr><td class="">Sleep-QA</td><td class="">Multi Choice</td><td class=" num">7,268</td><td class=" num">1,817</td><td class=" num">204</td><td class=" num">1500</td><td class="">EEG</td></tr>
+    <tr><td class="">TSQA</td><td class="">Multi Choice</td><td class=" num">7,243</td><td class=" num">1,811</td><td class=" num">207</td><td class=" num">22±5</td><td class="">Web/Nature/Healthcare/Energy</td></tr>
+    <tr><td class="">TRQA</td><td class="">Mixed</td><td class=" num">17,241</td><td class=" num">2,487</td><td class=" num">200</td><td class=" num">136±65</td><td class="">Web/Transport/Finance/Energy/Sales/Nature</td></tr>
+    <tr><td class="">ETI</td><td class="">Multi Choice</td><td class=" num">11,778</td><td class=" num">1,000</td><td class=" num">200</td><td class=" num">407±353</td><td class="">多领域</td></tr>
+  </table>
+  <p><strong>字段级样例</strong>：</p>
+  <pre><code>{
+  "dataset": "ARTIST_TSQA_subset",
+  "task": "multiple_choice_time_series_reasoning",
+  "question": "Which option best describes the trend in the selected time interval?",
+  "time_series": [0.13, 0.18, 0.25, 0.31, 0.30, 0.35],
+  "choices": ["decreasing", "increasing", "periodic", "constant"],
+  "answer": "increasing",
+  "artist_trace": [
+    {"controller": "select segment [0, 5] to inspect the local trend"},
+    {"reasoner": "the selected values mostly rise over time", "answer": "increasing"}
+  ]
+}</code></pre>
+  <pre><code>{
+  "dataset": "ETI",
+  "task": "etiological_reasoning",
+  "time_series": [12.0, 12.3, 12.1, 18.7, 19.1, 18.9],
+  "question": "Which generative scenario most plausibly produced this series?",
+  "choices": ["temporary spike", "persistent level shift", "seasonal cycle", "random noise"],
+  "answer": "persistent level shift",
+  "selected_segments": [[0, 2], [3, 5]]
+}</code></pre>
+  <h2>14. FinTSR-Bench</h2>
+  <p><strong>论文中用途</strong>：FinSTaR 用 FinTSR-Bench 训练和评测金融时间序列推理模型。该 benchmark 覆盖 deterministic assessment 与 stochastic prediction，并区分 single-stock 与 multi-stock 分析。</p>
+  <p><strong>下载链接</strong>：</p>
+  <ul>
+    <li>论文页面：&lt;https://arxiv.org/abs/2605.03460&gt;</li>
+    <li>代码仓库：&lt;https://github.com/seunghan96/FinSTaR&gt;</li>
+    <li>论文结论称将公开 FinTSR-Bench、FinSTaR checkpoints 和评测代码；当前项目未发现独立 Hugging Face 链接。</li>
+  </ul>
+  <p><strong>数据组成</strong>：</p>
+  <p>FinTSR-Bench 基于 S&amp;P 500 中按 2024 年 1 月市值排序的前 250 只股票，使用 2010-2025 日收盘价。每个样本输入 120 个交易日的 closing prices，并输出多选 QA 标签与 CoT。</p>
+  <table>
+    <tr><th class="">Split</th><th class=" num">股票数</th><th class="">时间段</th><th class="">Universe</th><th class="">Period</th></tr>
+    <tr><td class="">Train</td><td class=" num">200</td><td class="">2010-2022</td><td class="">ID</td><td class="">ID</td></tr>
+    <tr><td class="">Test A</td><td class=" num">200</td><td class="">2023-2025</td><td class="">ID</td><td class="">OOD</td></tr>
+    <tr><td class="">Test B</td><td class=" num">50</td><td class="">2010-2022</td><td class="">OOD</td><td class="">ID</td></tr>
+    <tr><td class="">Test C</td><td class=" num">50</td><td class="">2023-2025</td><td class="">OOD</td><td class="">OOD</td></tr>
+  </table>
+  <table>
+    <tr><th class="">参数</th><th class="">值</th></tr>
+    <tr><td class="">Window length</td><td class="">120 trading days</td></tr>
+    <tr><td class="">Samples per task raw</td><td class="">100,000</td></tr>
+    <tr><td class="">Train cap per task</td><td class="">3,500</td></tr>
+    <tr><td class="">Test cap per task</td><td class="">1,000</td></tr>
+    <tr><td class="">总训练规模</td><td class="">约 35K</td></tr>
+    <tr><td class="">每个测试 split</td><td class="">约 10K</td></tr>
+  </table>
+  <p><strong>任务组成</strong>：</p>
+  <table>
+    <tr><th class="">类型</th><th class="">范围</th><th class="">任务</th></tr>
+    <tr><td class="">Assessment</td><td class="">Single-stock</td><td class="">Drawdown、Volatility Regime、Trend Direction</td></tr>
+    <tr><td class="">Assessment</td><td class="">Multi-stock</td><td class="">Correlation</td></tr>
+    <tr><td class="">Prediction</td><td class="">Single-stock</td><td class="">Event Response、Support/Resistance、Drawdown Recovery、Volatility Forecast</td></tr>
+    <tr><td class="">Prediction</td><td class="">Multi-stock</td><td class="">Relative Performance、Pair Convergence</td></tr>
+  </table>
+  <p><strong>字段级样例</strong>：</p>
+  <pre><code>{
+  "dataset": "FinTSR-Bench",
+  "task": "Drawdown",
+  "category": "single-stock assessment",
+  "ticker": "PEP",
+  "input_window_days": 120,
+  "closing_prices": [170.39, 168.20, 165.10, 162.65],
+  "question": "Based on these prices, assess the current drawdown phase.",
+  "choices": {
+    "A": "At/Near Peak (&lt;3%)",
+    "B": "Pullback (3-10%)",
+    "C": "Correction (10-20%)",
+    "D": "Severe Decline (&gt;20%)"
+  },
+  "cot_type": "Compute-in-CoT",
+  "answer": "B"
+}</code></pre>
+  <pre><code>{
+  "dataset": "FinTSR-Bench",
+  "task": "Drawdown Recovery",
+  "category": "single-stock prediction",
+  "input_window_days": 120,
+  "forward_horizon_days": 20,
+  "features": {
+    "peak": 210.15,
+    "current": 191.08,
+    "drawdown": "9.1%",
+    "momentum": "-2.1%"
+  },
+  "scenario_aware_cot": {
+    "base": "Drawdown stabilizes and value buyers accumulate.",
+    "adverse": "Earnings revision or guidance cut deepens the decline.",
+    "favorable": "Positive catalyst triggers V-shaped recovery."
+  },
+  "answer": "Recovery"
+}</code></pre>
+  <h2>15. HiTSR</h2>
+  <p><strong>论文中用途</strong>：LLaTiSA 用 HiTSR 进行三阶段课程 SFT，并作为分层时间序列推理能力的诊断基准。HiTSR 重点覆盖 L1 数值读出、L2 模式感知、L3 语义推理，附录还扩展了 L4 predictive inference。</p>
+  <p><strong>下载链接</strong>：</p>
+  <ul>
+    <li>论文页面：&lt;https://arxiv.org/abs/2604.17295&gt;</li>
+    <li>TeX 源码：&lt;https://arxiv.org/e-print/2604.17295&gt;</li>
+    <li>代码仓库：&lt;https://github.com/RainingNovember/LLaTiSA&gt;</li>
+    <li>官方 Hugging Face：当前项目未发现论文中给出的独立 HF 链接。</li>
+  </ul>
+  <p><strong>数据组成</strong>：</p>
+  <table>
+    <tr><th class="">子集</th><th class=" num">样本数</th><th class="">数据类型</th><th class="">任务</th></tr>
+    <tr><td class="">HiTSR-L1</td><td class=" num">30,000</td><td class="">Synthetic</td><td class="">Min/Max Grounding、Multi-series Comparison、Start/End Comparison、Subseries Localization</td></tr>
+    <tr><td class="">HiTSR-L2</td><td class=" num">50,703</td><td class="">Synthetic</td><td class="">Local Pattern Differentiation、Global Pattern Differentiation、Numerical Perception</td></tr>
+    <tr><td class="">HiTSR-L3</td><td class=" num">3,121</td><td class="">Real-world</td><td class="">Semantic Understanding</td></tr>
+  </table>
+  <p>L1/L2 合成数据来自 ChatTS 的完整时间序列合成管线。L3 使用公开真实时间序列并结合元信息构造场景化 MCQ。论文使用的真实源包括 ETT、Weather、Exchange Rate、Traffic、Electricity、Illness、UTSD、Monash 和 Time-MMD 相关子集。</p>
+  <p><strong>真实时间序列源与 crop 设置</strong>：</p>
+  <table>
+    <tr><th class="">数据源</th><th class="">元信息示例</th><th class="">Crop length</th></tr>
+    <tr><td class="">ETTh/ETTm</td><td class="">transformer oil temperature / power load</td><td class="">96, 192, 336, 720</td></tr>
+    <tr><td class="">Weather</td><td class="">Max Planck weather station 10-minute indicators</td><td class="">96, 192, 336, 720</td></tr>
+    <tr><td class="">Exchange Rate</td><td class="">daily Singapore exchange rate</td><td class="">60, 120, 240, 360</td></tr>
+    <tr><td class="">Traffic.A</td><td class="">SF Bay freeway road occupancy</td><td class="">96, 192, 336, 720</td></tr>
+    <tr><td class="">Electricity</td><td class="">321 customers hourly consumption</td><td class="">96, 192, 336, 720</td></tr>
+    <tr><td class="">Illness</td><td class="">weekly influenza-related patient counts</td><td class="">24, 36, 52, 104</td></tr>
+    <tr><td class="">Time-MMD domains</td><td class="">economy, energy, environment, health, security, social good, traffic</td><td class="">full 或 96-576</td></tr>
+    <tr><td class="">Monash / UTSD domains</td><td class="">electricity demand, rainfall, smart meters, wind farms, ECG-like medical series, PM2.5, pedestrian counts, web traffic</td><td class="">60-1024</td></tr>
+  </table>
+  <p><strong>标注和验证</strong>：</p>
+  <table>
+    <tr><th class="">层级</th><th class="">标注方式</th><th class="">验证方式</th></tr>
+    <tr><td class="">L1</td><td class="">规则生成 index-value / interval 答案</td><td class="">10% 规则脚本校验</td></tr>
+    <tr><td class="">L2 numerical perception</td><td class="">规则生成并扰动数值证据</td><td class="">规则校验</td></tr>
+    <tr><td class="">L2 pattern differentiation</td><td class="">GPT-5 基于 plot 和统计量生成描述与 CoT</td><td class="">GPT-5 交叉验证 + 10% 人工审核</td></tr>
+    <tr><td class="">L3 semantic understanding</td><td class="">GPT-5 基于真实序列和 metadata 生成场景化 MCQ</td><td class="">GPT-5 双检 + 3,121 条全量人工复核</td></tr>
+  </table>
+  <p><strong>字段级样例</strong>：</p>
+  <pre><code>{
+  "dataset": "HiTSR-L1",
+  "level": "L1 Numerical Read-out",
+  "subtask": "Min/Max Grounding",
+  "input_views": {
+    "plot_image": "rendered time-series line chart",
+    "numeric_table_image": "index-value table"
+  },
+  "time_series": [1.2, 3.4, 2.8, -0.5, 4.1],
+  "question": "Find the maximum value and its index.",
+  "answer": {"index": 4, "value": 4.1},
+  "cot": "Check all index-value pairs; the largest value is 4.1 at index 4."
+}</code></pre>
+  <pre><code>{
+  "dataset": "HiTSR-L3",
+  "level": "L3 Semantic Reasoning",
+  "source": "SDWPF wind farm active power",
+  "metadata": "Active power output of a wind turbine in China, measured every 10 minutes.",
+  "time_series_excerpt": [0.0, 12.4, 488.2, 1525.51, 830.7, -0.3],
+  "question": "Which option is most consistent with the turbine operation context?",
+  "choices": {
+    "A": "The negative and zero values prove the sensor is unusable.",
+    "B": "Near-zero readings can occur during idling or low wind, and the 1525.51 kW peak is plausible for a 1.5 MW-class turbine.",
+    "C": "The sequence must represent room temperature because the values fluctuate.",
+    "D": "The peak is physically impossible for any wind turbine."
+  },
+  "answer": "B"
+}</code></pre>
+  <h2>16. VeriTime-TSRBench</h2>
+  <p><strong>论文中用途</strong>：VeriTime 用 TSRgen 构造论文内的 TSRBench，用于 SFT、GRPO/RFT 训练、过程奖励计算和评测。注意该数据集与前文 “TSRBench: A Comprehensive Multi-task Multi-modal Time Series Reasoning Benchmark for Generalist Models” 的公开 benchmark 同名但不是同一数据集；这里称为 VeriTime-TSRBench 以避免混淆。</p>
+  <p><strong>下载链接</strong>：</p>
+  <ul>
+    <li>论文页面：&lt;https://arxiv.org/abs/2602.07830&gt;</li>
+    <li>TeX 源码：&lt;https://arxiv.org/e-print/2602.07830&gt;</li>
+    <li>代码链接：&lt;https://anonymous.4open.science/r/VeriTime-E017&gt;</li>
+    <li>官方 Hugging Face：当前项目未发现论文中给出的独立 HF 链接。</li>
+  </ul>
+  <p><strong>数据组成</strong>：</p>
+  <table>
+    <tr><th class="">类别</th><th class="">任务/数据</th><th class="">领域/推理类型</th><th class=" num">样本数</th><th class=" num">平均时间点</th><th class=" num">平均 token</th></tr>
+    <tr><td class="">Scenario-based</td><td class="">Anomaly Detection</td><td class="">deductive reasoning</td><td class=" num">1,180</td><td class=" num">300</td><td class=" num">2,759</td></tr>
+    <tr><td class="">Scenario-based</td><td class="">Scenario Attribution</td><td class="">causal reasoning</td><td class=" num">930</td><td class=" num">300</td><td class=" num">2,932</td></tr>
+    <tr><td class="">Scenario-based</td><td class="">Inferential Calculation</td><td class="">quantitative reasoning</td><td class=" num">410</td><td class=" num">324</td><td class=" num">2,783</td></tr>
+    <tr><td class="">Knowledge-based</td><td class="">CTU</td><td class="">energy / device usage</td><td class=" num">270</td><td class=" num">720</td><td class=" num">5,942</td></tr>
+    <tr><td class="">Knowledge-based</td><td class="">ECG</td><td class="">medical / arrhythmia</td><td class=" num">780</td><td class=" num">500</td><td class=" num">4,239</td></tr>
+    <tr><td class="">Knowledge-based</td><td class="">EMG</td><td class="">healthcare / neuromuscular signal</td><td class=" num">450</td><td class=" num">600</td><td class=" num">4,990</td></tr>
+    <tr><td class="">Knowledge-based</td><td class="">RCW</td><td class="">bioacoustics / right whale call</td><td class=" num">320</td><td class=" num">500</td><td class=" num">4,201</td></tr>
+  </table>
+  <p>Scenario-based 任务由 ChatTS 合成数据过滤重组而来，训练测试比约 5:1；knowledge-based 任务来自真实数据集并沿用原始划分。每条样本包含时间序列、文本问题、CoT reasoning path、最终标签和过程标签。</p>
+  <p><strong>过程标签结构</strong>：</p>
+  <table>
+    <tr><th class="">CoT step</th><th class="">是否抽取过程标签</th><th class="">标签含义</th></tr>
+    <tr><td class="">Step 1 task intent</td><td class="">是</td><td class="">目标实体或任务对象</td></tr>
+    <tr><td class="">Step 2 key patterns</td><td class="">是</td><td class="">趋势、阈值、幅度、波动、领域关键词等</td></tr>
+    <tr><td class="">Step 3 segment analysis</td><td class="">否</td><td class="">保留探索空间</td></tr>
+    <tr><td class="">Step 4 preliminary answer</td><td class="">是</td><td class="">初步答案是否与 ground truth 对齐</td></tr>
+    <tr><td class="">Step 5 reflection</td><td class="">否</td><td class="">保留自检探索空间</td></tr>
+    <tr><td class="">Step 6 final answer</td><td class="">是</td><td class="">最终自检答案</td></tr>
+  </table>
+  <p><strong>字段级样例</strong>：</p>
+  <pre><code>{
+  "dataset": "VeriTime-TSRBench",
+  "category": "scenario-based",
+  "task": "Anomaly Detection",
+  "reasoning_type": "deductive reasoning",
+  "metric": "Cloud Cover",
+  "domain": "Weather Forecasting",
+  "time_series_length": 256,
+  "condition": "a sudden and significant increase in cloud cover is considered an anomaly",
+  "question": "Should the behavior at point 204 to point 206 be treated as an anomaly?",
+  "labels": {
+    "final": "Yes/No",
+    "process": {
+      "intent": "determine whether a local interval is anomalous",
+      "key_patterns": ["sudden increase", "point 204-206 interval", "cloud cover threshold"]
+    }
+  }
+}</code></pre>
+  <pre><code>{
+  "dataset": "VeriTime-TSRBench",
+  "category": "knowledge-based",
+  "task": "RCW classification",
+  "domain": "Bioacoustics",
+  "sampling": "2-second waveform sampled at 2kHz",
+  "time_series_length": 500,
+  "context": "Right whale up-calls have an acoustic signature around 60Hz-250Hz and typically last about 1 second.",
+  "question": "Classify whether the waveform segment contains a right whale call.",
+  "choices": ["A) Right Whale Present", "B) No Right Whale"],
+  "process_labels": {
+    "intent": "classify right whale call presence",
+    "key_patterns": ["low-frequency up-call", "duration near 1 second", "noise discrimination"]
+  }
+}</code></pre>
+  <h2>17. SenTSR-Bench</h2>
+  <p><strong>论文中用途</strong>：SenTSR-Bench 论文将其作为核心评测集，用于测试模型是否能从真实工业传感器数据中完成多阶段诊断推理。它覆盖异常识别、根因判断和修复建议，比单点 anomaly detection 更接近真实维护流程。</p>
+  <p><strong>下载链接</strong>：</p>
+  <ul>
+    <li>论文页面：&lt;https://arxiv.org/abs/2602.19455&gt;</li>
+    <li>TeX 源码：&lt;https://arxiv.org/e-print/2602.19455&gt;</li>
+    <li>项目页：&lt;https://zlhe0.github.io/SenTSR-Bench-Website/&gt;</li>
+    <li>官方 GitHub / Hugging Face：当前项目未发现论文中给出的可确认公开下载入口。</li>
+  </ul>
+  <p><strong>评测数据组成</strong>：</p>
+  <table>
+    <tr><th class="">项目</th><th class="">数量 / 描述</th></tr>
+    <tr><td class="">原始候选池</td><td class="">约 2,000 条真实 multivariate sensor streams</td></tr>
+    <tr><td class="">最终评测序列</td><td class="">110 条去标识化真实工业传感器序列</td></tr>
+    <tr><td class="">评测问题</td><td class="">330 道 MCQ</td></tr>
+    <tr><td class="">传感器类型</td><td class="">vibration acceleration、velocity、temperature 等</td></tr>
+    <tr><td class="">问题阶段</td><td class="">What happened、How happened、Suggested fix</td></tr>
+    <tr><td class="">标注方式</td><td class="">human-curated diagnostic annotations</td></tr>
+    <tr><td class="">隐私处理</td><td class="">标准化、去标识化、移除系统标识和敏感元数据</td></tr>
+  </table>
+  <p><strong>训练数据组成</strong>：</p>
+  <p>论文用 23 条去标识化真实 seed 序列驱动 VLM 生成 Python simulator，再把 simulator 随机化为多样化生成器，最终构造 6,000 条 MCQ 训练样本。训练问题和评测问题采用一致的多阶段诊断结构。</p>
+  <table>
+    <tr><th class="">阶段</th><th class="">输入</th><th class="">产物</th></tr>
+    <tr><td class="">Iterative code synthesis</td><td class="">23 条 seed plot 和高层上下文</td><td class="">可复现相似异常行为的 Python simulator</td></tr>
+    <tr><td class="">Diversification and simplification</td><td class="">seed-aligned simulator</td><td class="">随机化参数、噪声、衰减和事件频率后的 synthetic sensor streams</td></tr>
+    <tr><td class="">Query construction</td><td class="">synthetic anomalous segments</td><td class="">What/How/Fix 风格 QA 与 MCQ</td></tr>
+  </table>
+  <p><strong>字段级样例</strong>：</p>
+  <pre><code>{
+  "dataset": "SenTSR-Bench",
+  "source": "de-identified industrial sensor stream",
+  "channels": {
+    "vibration_acceleration": [0.12, 0.15, 0.18, 0.72, 0.83],
+    "velocity": [1.8, 1.9, 2.1, 4.9, 5.2],
+    "temperature": [42.1, 42.3, 42.5, 42.7, 42.8]
+  },
+  "stage": "What happened",
+  "question": "Which signal behavior best describes the observed anomaly?",
+  "choices": {
+    "A": "A sudden rise in vibration while temperature stays nearly stable",
+    "B": "A gradual temperature runaway with stable vibration",
+    "C": "All channels remain within normal range",
+    "D": "Velocity drops to zero before vibration increases"
+  },
+  "answer": "A"
+}</code></pre>
+  <pre><code>{
+  "dataset": "SenTSR-Bench",
+  "stage": "Suggested fix",
+  "observations": [
+    "vibration acceleration increases sharply in the late segment",
+    "velocity follows the same rising pattern",
+    "temperature does not show a matching increase"
+  ],
+  "question": "What is the most plausible next maintenance action?",
+  "choices": {
+    "A": "Inspect mechanical looseness, imbalance, or bearing-related vibration sources",
+    "B": "Replace the temperature sensor immediately",
+    "C": "Ignore the event because all channels move together",
+    "D": "Only recalibrate the clock timestamp"
+  },
+  "answer": "A"
+}</code></pre>
+  <h2>18. TSEvol Dataset A</h2>
+  <p><strong>论文中用途</strong>：SenTSR-Bench 论文用 TSEvol Dataset A 作为公开 benchmark，评测 inductive、deductive 和 causal 时间序列推理。TimeART/ChatTS 相关论文也把 TSEvol/ChatTS 数据作为时间序列问答和推理数据生态的一部分。</p>
+  <p><strong>下载链接</strong>：</p>
+  <ul>
+    <li>ChatTS 论文页面：&lt;https://arxiv.org/abs/2412.03104&gt;</li>
+    <li>ChatTS GitHub：&lt;https://github.com/NetManAIOps/ChatTS&gt;</li>
+    <li>Dataset A 的独立稳定下载入口需以后续官方仓库为准。</li>
+  </ul>
+  <p><strong>数据组成</strong>：</p>
+  <p>论文描述中，SenTSR-Bench 使用的 TSEvol Dataset A 包含 525 个问题，源时间序列来自 AIOps、meteorology、NAB 和 Oracle system metrics 等真实场景。时间序列关键行为由人工标注，题目、上下文和 root-cause options 由 LLM 自动生成。</p>
+  <table>
+    <tr><th class="">推理类别</th><th class="">含义</th></tr>
+    <tr><td class="">Inductive reasoning</td><td class="">根据单变量或多变量序列总结物理/语义含义</td></tr>
+    <tr><td class="">Deductive reasoning</td><td class="">验证给定时间条件是否满足</td></tr>
+    <tr><td class="">Causal reasoning</td><td class="">在文本上下文下选择最可能根因</td></tr>
+  </table>
+  <p><strong>字段级样例</strong>：</p>
+  <pre><code>{
+  "dataset": "TSEvol Dataset A",
+  "domain": "AIOps",
+  "task": "causal reasoning",
+  "time_series": {
+    "cpu_usage": [0.42, 0.45, 0.91, 0.94, 0.88],
+    "request_latency": [120, 128, 430, 460, 445]
+  },
+  "context": "A service experienced a latency spike after resource saturation.",
+  "question": "Which root cause is most consistent with the observed series?",
+  "choices": ["CPU saturation", "regular daily seasonality", "sensor reset", "missing timestamp"],
+  "answer": "CPU saturation"
+}</code></pre>
+  <h2>19. TS&amp;Language MCQ2</h2>
+  <p><strong>论文中用途</strong>：SenTSR-Bench 论文使用 TS&amp;Language benchmark 中的 MCQ2 子集，测试模型在文本上下文下比较两条时间序列并判断关系的能力。论文排除了不适合其诊断目标的 etiological reasoning 和 forecasting 部分，并随机抽样 100 个代表性问题。</p>
+  <p><strong>下载链接</strong>：</p>
+  <ul>
+    <li>GitHub / 论文入口：&lt;https://github.com/behavioral-data/TSandLanguage&gt;</li>
+    <li>相关论文：<em>Language Models Still Struggle to Zero-shot Reason about Time Series</em></li>
+  </ul>
+  <p><strong>数据组成</strong>：</p>
+  <p>TS&amp;Language 面向语言模型的零样本时间序列推理评测，时间序列、问题和答案多由 LLM 自动生成。MCQ2 关注 paired time-series 的关系、比较和条件判断。</p>
+  <p><strong>字段级样例</strong>：</p>
+  <pre><code>{
+  "dataset": "TS&amp;Language MCQ2",
+  "task": "paired time-series comparison",
+  "series_a": [3.2, 3.5, 4.1, 4.4, 4.8],
+  "series_b": [7.0, 6.7, 6.2, 5.8, 5.4],
+  "context": "Series A and B measure two components of a coupled system.",
+  "question": "Which statement best describes their relationship over time?",
+  "choices": {
+    "A": "Both increase monotonically",
+    "B": "A increases while B decreases",
+    "C": "Both are constant",
+    "D": "A decreases while B increases"
+  },
+  "answer": "B"
+}</code></pre>
+  <h2>20. Time-R1 预测数据集套件</h2>
+  <p><strong>论文中用途</strong>：Time-R1 用这些公开时间序列预测数据评测 slow-thinking LLM 是否能通过 SFT + RL 学会多步预测推理。除 NASDAQ 使用 36-step horizon 外，其余主实验使用 96-step horizon，并以 MSE/MAE 评估。</p>
+  <p><strong>下载链接</strong>：</p>
+  <ul>
+    <li>Time-R1 代码仓库：&lt;https://github.com/ustc-time-series/Time-R1&gt;</li>
+    <li>ETT 常用数据源：&lt;https://github.com/zhouhaoyi/ETDataset&gt;</li>
+    <li>Exchange / Wind 常见来源：LSTNet benchmark 相关数据，常在长期预测仓库中镜像。</li>
+    <li>NASDAQ 源论文：Temporal Relational Ranking for Stock Prediction。</li>
+  </ul>
+  <p><strong>数据组成</strong>：</p>
+  <table>
+    <tr><th class="">Dataset</th><th class="">Domain</th><th class=" num">Timestamps</th><th class=" num">Features</th><th class="">Frequency</th></tr>
+    <tr><td class="">ETTh1 / ETTh2</td><td class="">Electricity</td><td class=" num">17,420</td><td class=" num">7</td><td class="">1 hour</td></tr>
+    <tr><td class="">ETTm1 / ETTm2</td><td class="">Electricity</td><td class=" num">69,680</td><td class=" num">7</td><td class="">15 mins</td></tr>
+    <tr><td class="">AQWan / AQShunyi</td><td class="">Environment</td><td class=" num">35,064</td><td class=" num">11</td><td class="">1 hour</td></tr>
+    <tr><td class="">Exchange</td><td class="">Economy</td><td class=" num">7,588</td><td class=" num">8</td><td class="">1 day</td></tr>
+    <tr><td class="">Wind</td><td class="">Energy</td><td class=" num">48,673</td><td class=" num">7</td><td class="">15 mins</td></tr>
+    <tr><td class="">NASDAQ</td><td class="">Stock</td><td class=" num">1,244</td><td class=" num">5</td><td class="">1 day</td></tr>
+  </table>
+  <p><strong>字段级样例</strong>：</p>
+  <pre><code>{
+  "dataset": "ETTh1",
+  "domain": "Electricity transformer temperature",
+  "frequency": "1 hour",
+  "input_window": 96,
+  "target_horizon": 96,
+  "channels": {
+    "HUFL": [5.83, 5.69, 5.16, 5.22],
+    "HULL": [2.01, 2.04, 1.89, 1.92],
+    "OT": [30.53, 30.41, 30.20, 30.33]
+  },
+  "question": "Forecast the next 96 values for the target channel and provide reasoning about trend and seasonality.",
+  "answer_format": "&lt;think&gt;...&lt;/think&gt;&lt;answer&gt;[...]&lt;/answer&gt;"
+}</code></pre>
+  <pre><code>{
+  "dataset": "NASDAQ",
+  "domain": "Stock",
+  "frequency": "1 day",
+  "input_window": 96,
+  "target_horizon": 36,
+  "features": {
+    "open": [184.1, 185.3, 183.7],
+    "close": [185.0, 184.2, 186.1],
+    "volume": [32000000, 35800000, 34100000]
+  },
+  "question": "Forecast the next 36-step target sequence while considering trend shifts and volatility.",
+  "metric": "MSE/MAE"
+}</code></pre>
+  <h2>21. DAWN</h2>
+  <p><strong>论文中用途</strong>：VESTA 用 DAWN 评测统计建模 agent 能否为分布拟合与时间序列建模提出更好的 PyMC 概率模型。DAWN 特别强调由 Easy 到 Hard 再到 Astro 的难度递增，用来暴露“只靠反复 critique、不做诊断探索”的 agent 在复杂科学建模中的不足。</p>
+  <p><strong>下载链接</strong>：</p>
+  <ul>
+    <li>arXiv: &lt;https://arxiv.org/abs/2606.00384&gt;</li>
+    <li>本项目 TeX 源码目录：<code>tex/VESTA_Visual_Exploration_with_Statistical_Tool_Agents</code></li>
+    <li>未发现独立官方数据仓库；论文源码中包含 benchmark 说明、图表与生成/评测细节。</li>
+  </ul>
+  <p><strong>数据组成</strong>：</p>
+  <table>
+    <tr><th class="">子集</th><th class="">任务</th><th class=" num">规模</th><th class="">评价指标</th></tr>
+    <tr><td class="">Distribution fitting</td><td class="">从离散观测拟合概率分布</td><td class=" num">200 个 distribution datasets</td><td class="">Jensen-Shannon divergence 等</td></tr>
+    <tr><td class="">Time-series modeling</td><td class="">构造 PyMC/GP 等时间序列生成模型</td><td class=" num">200 个 time series</td><td class="">ELPD-LOO、$R^2$、CRPS</td></tr>
+    <tr><td class="">Astro</td><td class="">初始质量函数、引力波 chirp 等科学任务</td><td class=" num">真实天文风格任务</td><td class="">概率拟合与诊断质量</td></tr>
+  </table>
+  <p><strong>字段级样例</strong>：</p>
+  <pre><code>{
+  "dataset": "DAWN",
+  "domain": "time-series modeling",
+  "split": "Hard",
+  "observations": [0.13, 0.21, 0.18, 0.35, 0.72],
+  "agent_input": "Fit a probabilistic PyMC model to the observed signal.",
+  "tool_output": "Residual plot + autocorrelation diagnostic",
+  "metric": "ELPD-LOO"
+}</code></pre>
+  <h2>22. MedRLM 真实临床评估数据套件</h2>
+  <p><strong>论文中用途</strong>：MedRLM 没有报告完整 pipeline 的新准确率，而是设计了一个真实数据评估方案，用于覆盖长上下文 EHR、影像-报告 grounding、生理时间序列、ECG、ICU 风险和转诊代理任务。</p>
+  <p><strong>下载链接与访问状态</strong>：</p>
+  <ul>
+    <li>MIMIC-IV: &lt;https://physionet.org/content/mimiciv/&gt;</li>
+    <li>eICU-CRD: &lt;https://physionet.org/content/eicu-crd/&gt;</li>
+    <li>MIMIC-CXR-JPG: &lt;https://physionet.org/content/mimic-cxr-jpg/&gt;</li>
+    <li>PTB-XL: &lt;https://physionet.org/content/ptb-xl/&gt;</li>
+    <li>PhysioNet/CinC Challenge 2012: &lt;https://physionet.org/content/challenge-2012/&gt;</li>
+    <li>CheXpert: &lt;https://stanfordmlgroup.github.io/competitions/chexpert/&gt;</li>
+  </ul>
+  <p>多数临床数据需要账号、伦理培训或 credentialed access；索引中只列官方入口。</p>
+  <p><strong>数据组成</strong>：</p>
+  <table>
+    <tr><th class="">Dataset</th><th class="">模态</th><th class="">MedRLM 中角色</th></tr>
+    <tr><td class="">MIMIC-IV</td><td class="">EHR、ICU、急诊</td><td class="">长病历推理、诊断/检查/用药检索、风险分层</td></tr>
+    <tr><td class="">eICU-CRD</td><td class="">多中心 ICU EHR</td><td class="">跨医院外部验证、ICU 风险代理</td></tr>
+    <tr><td class="">MIMIC-CXR-JPG</td><td class="">胸片与报告</td><td class="">影像-文本 evidence grounding</td></tr>
+    <tr><td class="">CheXpert</td><td class="">胸片与不确定标签</td><td class="">放射异常检测、不确定性评估</td></tr>
+    <tr><td class="">PTB-XL</td><td class="">12 导联 ECG</td><td class="">传感器/波形筛查</td></tr>
+    <tr><td class="">PhysioNet/CinC 2012</td><td class="">ICU 多变量时间序列</td><td class="">死亡风险、急性恶化、转诊代理指标</td></tr>
+  </table>
+  <p><strong>字段级样例</strong>：</p>
+  <pre><code>{
+  "patient_id": "credentialed_access_only",
+  "ehr_events": ["lab: lactate high", "diagnosis: sepsis"],
+  "sensor_stream": {"heart_rate": [102, 108, 116], "spo2": [94, 92, 90]},
+  "image_report": "Chest radiograph suggests bilateral opacities.",
+  "guideline_query": "Check red flags and referral criteria.",
+  "target": "ICU escalation / mortality proxy / tertiary referral proxy"
+}</code></pre>
+  <h2>23. MAIJU-DS / NICU-A 与 TSExplorer 标注数据</h2>
+  <p><strong>论文中用途</strong>：2DV 标注论文用真实人类标注者比较 RND、FAFT 和 2D visualization-based exploration 三种样本选择策略，评价标签分布、下游分类表现和失败风险。</p>
+  <p><strong>下载链接</strong>：</p>
+  <ul>
+    <li>TSExplorer software: &lt;https://github.com/SPEECHCOG/TSExplorer&gt;</li>
+    <li>MAIJU-DS 与 NICU-A 为论文使用的研究数据集；本文未发现统一官方公开下载入口。应以原数据论文和作者发布说明为准。</li>
+  </ul>
+  <p><strong>数据组成</strong>：</p>
+  <table>
+    <tr><th class="">Dataset</th><th class="">模态</th><th class="">任务</th><th class="">规模</th></tr>
+    <tr><td class="">MAIJU-DS</td><td class="">婴儿四肢 IMU，24 通道，52 Hz，带视频辅助</td><td class="">posture、movement</td><td class="">41 recordings，约 29 小时，76,817 可用 frames</td></tr>
+    <tr><td class="">NICU-A</td><td class="">NICU 语音音频，16 kHz</td><td class="">valence、arousal</td><td class="">43 个 16 小时录音，129,007 utterances；GS test 345 samples</td></tr>
+  </table>
+  <p><strong>字段级样例</strong>：</p>
+  <pre><code>{
+  "dataset": "MAIJU-DS",
+  "sample": "2.3 second frame",
+  "features": "SSL embedding projected by t-SNE/PCA/UMAP",
+  "signals": {
+    "right_arm_acc": [[0.1, 0.2, 9.7]],
+    "left_leg_gyro": [[0.01, -0.03, 0.02]]
+  },
+  "annotation_task": "posture",
+  "label_space": ["prone", "supine", "side", "sitting", "standing"]
+}</code></pre>
+  <pre><code>{
+  "dataset": "NICU-A",
+  "sample": "caregiver/staff utterance",
+  "duration_seconds": 1.57,
+  "features": "SSL speech embedding projected to 2D",
+  "annotation_task": "valence",
+  "label_space": ["non-positive", "positive"]
+}</code></pre>
+  <h2>24. TimeSeriesExam / TSFU for Coding Agents</h2>
+  <p><strong>论文中用途</strong>：Coding Agents 论文用 TimeSeriesExam 和 TSFU 比较 direct、code、hybrid 三种 LLM agent 设置。TimeSeriesExam 测生成过程、周期、统计性质等时间序列理解；TSFU 覆盖 trend、seasonality、anomaly、correlation、fat tails 等 feature understanding。</p>
+  <p><strong>下载链接</strong>：</p>
+  <ul>
+    <li>Coding Agents GitHub: &lt;https://github.com/DekuD2/can-llm-coding-agents-reason-about-time-series&gt;</li>
+    <li>TimeSeriesExam arXiv: &lt;https://arxiv.org/abs/2410.14752&gt;</li>
+    <li>TSFU arXiv: &lt;https://arxiv.org/abs/2503.06447&gt;</li>
+  </ul>
+  <p><strong>数据组成</strong>：</p>
+  <table>
+    <tr><th class="">Benchmark</th><th class=" num">论文中规模/设置</th><th class="">用途</th></tr>
+    <tr><td class="">TimeSeriesExam (TSE)</td><td class=" num">多选时间序列考试题；论文报告 random baseline 40.1%</td><td class="">测试 LLM 能否识别周期、噪声、相关性、生成机制等</td></tr>
+    <tr><td class="">TSFU</td><td class=" num">2,000 questions，10 个 feature categories；论文报告 random baseline 29.3%</td><td class="">测试趋势、季节性、异常、相关、fat tails 等特征理解</td></tr>
+  </table>
+  <p><strong>字段级样例</strong>：</p>
+  <pre><code>{
+  "dataset": "TSFU",
+  "representation": "raw text or pandas DataFrame",
+  "series": [0.0, 0.7, 1.0, 0.7, 0.0, -0.7, -1.0],
+  "question": "Which feature best describes this series?",
+  "choices": ["positive trend", "seasonality", "structural break", "fat tails"],
+  "answer": "seasonality",
+  "agent_setup": "direct / code / hybrid"
+}</code></pre>
+  <h2>25. TS-Memory 长期预测数据套件</h2>
+  <p><strong>论文中用途</strong>：TS-Memory 用多个长期预测数据集评估冻结 TSFM 加 PlugMem 后的点预测、概率预测和推理效率。主表覆盖 ChronosBolt、Chronos2、Sundial、TimesFM 等 backbone。</p>
+  <p><strong>下载链接</strong>：</p>
+  <ul>
+    <li>TS-Memory GitHub: &lt;https://github.com/sisuolv/TS-Memory&gt;</li>
+    <li>ETT dataset: &lt;https://github.com/zhouhaoyi/ETDataset&gt;</li>
+    <li>Electricity / Exchange / Traffic / Weather 为长期预测常用公开数据，通常通过 TS forecasting benchmark 仓库提供。</li>
+  </ul>
+  <p><strong>数据组成</strong>：</p>
+  <table>
+    <tr><th class="">Dataset</th><th class="">领域</th><th class="">TS-Memory 中用途</th></tr>
+    <tr><td class="">ETTh1 / ETTh2</td><td class="">电力变压器温度，小时级</td><td class="">长期预测、跨 horizon 平均 MSE/MAE</td></tr>
+    <tr><td class="">ETTm1 / ETTm2</td><td class="">电力变压器温度，15 分钟级</td><td class="">level shift 与周期适配</td></tr>
+    <tr><td class="">Electricity</td><td class="">用电量</td><td class="">多变量负载预测</td></tr>
+    <tr><td class="">Exchange</td><td class="">汇率</td><td class="">金融/经济序列预测</td></tr>
+    <tr><td class="">Traffic</td><td class="">交通流量/占有率</td><td class="">大规模多变量预测</td></tr>
+    <tr><td class="">Weather</td><td class="">气象</td><td class="">多变量环境预测</td></tr>
+  </table>
+  <p><strong>字段级样例</strong>：</p>
+  <pre><code>{
+  "dataset": "ETTm2",
+  "context_length": 96,
+  "forecast_horizon": 720,
+  "channels": {
+    "HUFL": [2.1, 2.4, 2.3],
+    "OT": [30.2, 30.4, 30.1]
+  },
+  "teacher": "offline leakage-safe kNN quantile target",
+  "student": "PlugMem attached to frozen TSFM",
+  "metrics": ["MSE", "MAE", "CRPS", "latency"]
+}</code></pre>
+  <h2>26. 使用建议</h2>
+  <p>如果要复现实验或构建自己的时间序列 reasoning agent，可以按用途选择：</p>
+  <ul>
+    <li>做上下文影响预测：优先看 CiK；</li>
+    <li>做通用时间序列推理评测：优先看 TSRBench；</li>
+    <li>做金融时间序列 agent：优先看 TSAIA；</li>
+    <li>做多模态时间序列 QA：关注 MTBench 和 TimeMQA；</li>
+    <li>做工具调用训练：TimeToolBench 的思想最直接，但目前缺少公开下载；可以仿照其 ReAct 轨迹格式，用已有 QA 数据和工具返回结果自行构造。</li>
+    <li>做统计建模 agent：看 DAWN/VESTA，重点关注工具输出如何改变模型提案；</li>
+    <li>做临床多模态 workflow：看 MedRLM 的真实数据评估套件，但注意 credentialed access 和隐私合规；</li>
+    <li>做人类标注策略：看 MAIJU-DS/NICU-A 的 2DV 实验，尤其关注单标注者风险；</li>
+    <li>做代码工具型时间序列 agent：看 TimeSeriesExam/TSFU；</li>
+    <li>做 TSFM 低延迟适配：看 TS-Memory 的 ETT/Electricity/Exchange/Traffic/Weather 套件。</li>
+  </ul>
+</main>
+</body>
+</html>

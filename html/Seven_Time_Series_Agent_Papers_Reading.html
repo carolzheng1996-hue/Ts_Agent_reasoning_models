@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>七篇时间序列与 Agent 论文中文综合解读</title>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <style>
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.72; color: #1f2937; background: #f8fafc; }
+    main { max-width: 980px; margin: 0 auto; padding: 42px 24px 80px; background: #fff; }
+    h1 { font-size: 2rem; line-height: 1.25; margin: 0 0 12px; color: #111827; }
+    h2 { font-size: 1.45rem; margin-top: 34px; border-bottom: 1px solid #e5e7eb; padding-bottom: 6px; color: #111827; }
+    h3 { font-size: 1.15rem; margin-top: 24px; color: #111827; }
+    p { margin: 12px 0; }
+    ul, ol { padding-left: 1.5rem; }
+    code { background: #eef2f7; padding: 0.12rem 0.28rem; border-radius: 4px; }
+    pre { background: #0f172a; color: #e5e7eb; padding: 14px 16px; overflow-x: auto; border-radius: 6px; }
+    pre code { background: transparent; padding: 0; color: inherit; }
+    table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 0.94rem; }
+    th, td { border: 1px solid #d1d5db; padding: 8px 10px; text-align: left; vertical-align: top; }
+    th { background: #f3f4f6; }
+    .num { text-align: right; }
+    .math { overflow-x: auto; margin: 14px 0; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>七篇时间序列与 Agent 论文中文综合解读</h1>
+  <p><strong>覆盖论文</strong>：</p>
+  <ol>
+    <li>VESTA: Visual Exploration with Statistical Tool Agents</li>
+    <li>MedRLM: Recursive Multimodal Health Intelligence for Long-Context Clinical Reasoning, Sensor-Guided Screening, Evidence-Grounded Decision Support, and Community-to-Tertiary Referral Optimization</li>
+    <li>TelcoAgent: A Scalable 5G Multi-KPM Forecasting With 3GPP-Grounded Explainability</li>
+    <li>FinSTaR: Towards Financial Reasoning with Time Series Reasoning Models</li>
+    <li>Evaluating Interactive 2D Visualization as a Sample Selection Strategy for Biomedical Time-Series Data Annotation</li>
+    <li>Can LLM Coding Agents Reason About Time Series?</li>
+    <li>TS-Memory: Plug-and-Play Memory for Time Series Foundation Models</li>
+  </ol>
+  <p><strong>说明</strong>：VESTA、MedRLM、2DV 标注、Coding Agents、TS-Memory 均已按 arXiv TeX 源码阅读；FinSTaR 复用本项目已有 TeX 源码和解读；TelcoAgent 题名未能定位到同名官方论文源，本文只给出可验证状态与应有解读框架，不编造实验数值。</p>
+  <h2>1. 总览：这七篇在研究什么</h2>
+  <p>这些论文表面上来自不同领域：科学建模、医疗、通信、金融、数据标注、LLM coding agent、时间序列基础模型记忆。但它们共同回答一个问题：</p>
+  <div class="math">$$
+\text{时间序列智能}
+\neq
+\text{单步预测模型}
+$$</div>
+  <p>更完整的系统通常由四类能力组成：</p>
+  <table>
+    <tr><th class="">能力</th><th class="">对应论文</th><th class="">核心问题</th></tr>
+    <tr><td class="">工具化探索</td><td class="">VESTA、Coding Agents</td><td class="">模型如何调用代码、统计检验、可视化来理解序列</td></tr>
+    <tr><td class="">领域化推理</td><td class="">MedRLM、FinSTaR、TelcoAgent 预期方向</td><td class="">如何把医疗、金融、通信规则接入时间序列判断</td></tr>
+    <tr><td class="">人机协同数据构造</td><td class="">2DV 标注论文</td><td class="">如何选择最有价值样本让人标注</td></tr>
+    <tr><td class="">记忆与适配</td><td class="">TS-Memory</td><td class="">如何让冻结 TSFM 在新域中适配而不做在线检索</td></tr>
+  </table>
+  <p>一个统一抽象可以写成：</p>
+  <div class="math">$$
+y = \Pi_\theta(x_{1:T}, c, m, a)
+$$</div>
+  <p>其中 $x_{1:T}$ 是观测序列，$c$ 是领域上下文，$m$ 是记忆或检索结果，$a$ 是工具/动作轨迹，$\Pi_\theta$ 是模型或 agent policy。传统 forecasting 只关注 $p(y_{T+1:T+H}\mid x_{1:T})$；这些论文则把问题扩展到可解释建模、风险决策、样本选择、检索蒸馏和过程审计。</p>
+  <h2>2. VESTA：用动态统计工具做视觉探索</h2>
+  <p><strong>来源</strong>：<a href="https://arxiv.org/abs/2606.00384">arXiv 2606.00384</a>，TeX 目录：<code>tex/VESTA_Visual_Exploration_with_Statistical_Tool_Agents</code></p>
+  <p><strong>一句话总结</strong>：VESTA 让 VLM/LLM agent 在拟合概率模型时，不只反复自我批评，而是动态创建可视化诊断工具，通过残差、分布、频谱、自相关、统计检验等证据来改进 PyMC 模型。</p>
+  <h3>2.1 问题定义</h3>
+  <p>论文假设数据 $D$ 由真实生成过程 $M(\theta)$ 产生，agent 需要输出候选概率模型 $\tilde{M}(\tilde{\theta})$。模型拟合好坏由指标</p>
+  <div class="math">$$
+R(D,\tilde{M}(\tilde{\theta}))
+$$</div>
+  <p>评价。VESTA 的关键对象是视觉工具：</p>
+  <div class="math">$$
+\varepsilon(D,M,\theta)
+$$</div>
+  <p>它是一个 Python 函数，输入数据与当前模型，输出图像、统计量或诊断结果。区别于一次性代码执行，VESTA 把工具保存在注册表 $\mathcal{E}$ 中，在同一个任务内复用。</p>
+  <h3>2.2 Agent 结构</h3>
+  <table>
+    <tr><th class="">Agent 要素</th><th class="">VESTA 中的实现</th></tr>
+    <tr><td class="">State / workspace</td><td class="">数据 $D$、当前最优 PyMC 模型、参数、历史摘要 $s_{0:i}$、工具注册表 $\mathcal{E}$</td></tr>
+    <tr><td class="">Policy/model</td><td class="">LLM/VLM 组合：proposal、tool manager、critic、summarizer</td></tr>
+    <tr><td class="">Action space</td><td class="">选择旧工具、生成新 Python 工具、执行工具、提出新 PyMC 模型、停止</td></tr>
+    <tr><td class="">Tool space</td><td class="">残差图、QQ plot、频谱、自相关、Ljung-Box、GMM、信息准则等</td></tr>
+    <tr><td class="">Trajectory</td><td class="">$\{M_i,\theta_i,T_i,s_i\}_{i=1}^N$</td></tr>
+    <tr><td class="">Memory</td><td class="">当前 run 内动态增长的工具注册表与压缩摘要</td></tr>
+    <tr><td class="">Update</td><td class="">每轮根据工具输出和指标 $R$ 选择更优模型</td></tr>
+  </table>
+  <p>算法核心可写成：</p>
+  <div class="math">$$
+\varepsilon_i^*=\operatorname{ToolManager}(s_{i-1},D,\mathcal{E})
+$$</div>
+  <div class="math">$$
+T_i=\varepsilon_i^*(D,M_{i-1},\theta_{i-1})
+$$</div>
+  <div class="math">$$
+(M_i,\theta_i)=\operatorname{Critique}(T_i,s_{0:i-1},D)
+$$</div>
+  <div class="math">$$
+(M_{\text{best}},\theta_{\text{best}})
+=
+\arg\min_{(M,\theta)\in\{(M_i,\theta_i),(M_{\text{best}},\theta_{\text{best}})\}}
+R(D,M(\theta)).
+$$</div>
+  <p>直觉是：工具输出 $T_i$ 把“模型哪里不对”变成可见证据，critic 不再只凭语言猜测模型结构。</p>
+  <h3>2.3 关键指标</h3>
+  <p>时间序列任务使用 ELPD-LOO：</p>
+  <div class="math">$$
+\mathrm{ELPD\text{-}LOO}
+=
+\sum_{i=1}^{n}
+\int p_t(\tilde{y}_i)
+\log p(\tilde{y}_i\mid y)
+d\tilde{y}_i .
+$$</div>
+  <p>$p_t$ 是真实数据生成分布的近似，$p(\tilde{y}_i\mid y)$ 是 posterior predictive。ELPD 越高表示模型对留一观测的预测密度越高；它关注的是概率预测质量，而不是点预测误差。</p>
+  <h3>2.4 实验结论</h3>
+  <p>VESTA 提出 DAWN benchmark，包含 200 个分布拟合任务和 200 个时间序列建模任务，覆盖 Easy、Hard、Astro 三档难度。显著性汇总显示，在时间序列建模上，VESTA 的 None/Dynamic/Expert 三种配置对 PyVision 和 Box-LM 经常显著胜出；Dynamic 和 Expert 在 Hard 与 Astro 更稳定。</p>
+  <p>最有价值的结论不是“动态工具永远超过专家工具”，而是：</p>
+  <div class="math">$$
+\text{动态工具生成}
+\approx
+\text{让 agent 自己提出诊断实验}
+$$</div>
+  <p>VESTA 的动态工具更偏好多面板视觉证据，尤其大量覆盖残差分析和自相关诊断；但论文也承认 VLM 解释复杂多面板图仍是瓶颈，因此动态工具没有稳定超过人工专家工具。</p>
+  <h2>3. MedRLM：递归多模态临床推理框架</h2>
+  <p><strong>来源</strong>：<a href="https://arxiv.org/abs/2606.20164">arXiv 2606.20164</a>，TeX 目录：<code>tex/MedRLM_Recursive_Multimodal_Health_Intelligence</code></p>
+  <p><strong>一句话总结</strong>：MedRLM 不是报告一个已跑完的医疗模型成绩，而是提出一个递归、多模态、证据图记忆、传感器触发和转诊优化的临床决策支持框架。</p>
+  <h3>3.1 临床环境建模</h3>
+  <p>MedRLM 不把病历压成一个长 prompt，而是定义外部临床环境：</p>
+  <div class="math">$$
+\mathcal{E}_p=
+\{X_p^{\mathrm{text}},X_p^{\mathrm{ehr}},
+X_p^{\mathrm{img}},X_p^{\mathrm{sens}},
+\mathcal{G},\mathcal{R},\mathcal{H}\}.
+$$</div>
+  <p>这里 text 是症状/病程记录，EHR 是纵向结构化病历，img 是影像或手机图像，sens 是可穿戴/嵌入式传感器，$\mathcal{G}$ 是指南，$\mathcal{R}$ 是转诊规则，$\mathcal{H}$ 是本地医疗资源约束。</p>
+  <p>输出为：</p>
+  <div class="math">$$
+Y_p=(\hat{y}_p,r_p,d_p,\mathcal{A}_p,U_p),
+$$</div>
+  <p>分别表示临床解释、风险分数、转诊/照护决策、证据审计轨迹、不确定性与安全分数。</p>
+  <h3>3.2 递归控制器</h3>
+  <p>核心控制器按复杂度决定直接回答还是拆分：</p>
+  <div class="math">$$
+\Phi(q,\mathcal{E}_p)=
+\begin{cases}
+M(q,\rho(q,\mathcal{E}_p)), &amp; \kappa(q,\mathcal{E}_p)\le K,\\
+\Omega(\{\Phi(q_j,\mathcal{E}_{p,j})\}_{j=1}^{k}), &amp; \kappa(q,\mathcal{E}_p)&gt;K.
+\end{cases}
+$$</div>
+  <p>复杂度分数为：</p>
+  <div class="math">$$
+\kappa(q,\mathcal{E}_p)=
+\gamma_1 L+
+\gamma_2 V+
+\gamma_3 D+
+\gamma_4 R_{\mathrm{risk}}+
+\gamma_5 C_{\mathrm{conflict}}.
+$$</div>
+  <p>$L$ 衡量上下文长度，$V$ 衡量模态多样性，$D$ 衡量证据分散程度，$R_{\mathrm{risk}}$ 是初始风险，$C_{\mathrm{conflict}}$ 是证据冲突。临床含义是：病例越长、模态越多、风险越高、证据越矛盾，就越应递归拆解，而不是一次性回答。</p>
+  <h3>3.3 Evidence Graph Memory</h3>
+  <p>证据图为：</p>
+  <div class="math">$$
+\mathcal{M}_p=(\mathcal{V}_p,\mathcal{E}^g_p).
+$$</div>
+  <p>节点包括患者观察、临床实体、异常影像发现、传感器 biomarker、指南陈述、转诊标准；边表示时间、语义、因果或指南关系。证据节点三元组：</p>
+  <div class="math">$$
+\tau_i=(o_i,s_i,\delta_i),
+$$</div>
+  <p>其中 $o_i$ 是患者观察，$s_i$ 是来源或指南语句，$\delta_i$ 是标准化定义。</p>
+  <p>证据相关性：</p>
+  <div class="math">$$
+S(e_i|q,p)=
+\lambda_1\operatorname{sim}(h_q,h_{e_i})
+\lambda_2\operatorname{rel}(e_i,p)
+\lambda_3\operatorname{cred}(e_i)
+-\lambda_4\operatorname{age}(e_i)
+-\lambda_5\operatorname{conflict}(e_i).
+$$</div>
+  <p>随后用 softmax 得到证据权重：</p>
+  <div class="math">$$
+\alpha_i=
+\frac{\exp(S(e_i|q,p))}
+{\sum_{j=1}^{N}\exp(S(e_j|q,p))},
+\qquad
+z_p^{\mathrm{rag}}=\sum_i\alpha_i h_{e_i}.
+$$</div>
+  <p>这比普通 RAG 多了一层结构：检索证据被纳入可审计图，而不是只拼接进 prompt。</p>
+  <h3>3.4 传感器触发与转诊优化</h3>
+  <p>传感器序列：</p>
+  <div class="math">$$
+X_p^{\mathrm{sens}}=\{x_1,\ldots,x_T\}.
+$$</div>
+  <p>窗口 biomarker：</p>
+  <div class="math">$$
+b_t=G_\theta(x_{t-w:t}).
+$$</div>
+  <p>异常度使用马氏距离：</p>
+  <div class="math">$$
+a_t=(b_t-\mu_p)^T\Sigma_p^{-1}(b_t-\mu_p).
+$$</div>
+  <p>若 $a_t&gt;\epsilon$，触发更深递归：</p>
+  <div class="math">$$
+q_t^{\mathrm{sens}}=\operatorname{Trigger}(a_t,\mathcal{G},\mathcal{R}).
+$$</div>
+  <p>转诊决策集合：</p>
+  <div class="math">$$
+\mathcal{D}=\{d_1,d_2,d_3,d_4\},
+$$</div>
+  <p>对应自我照护教育、基层随访、专科远程会诊、三级医院转诊。最优决策：</p>
+  <div class="math">$$
+d_p^*=
+\arg\max_{d\in\mathcal{D}}
+\left[
+B(d,r_p,U_p,\mathcal{F}_p)
+-C(d,\mathcal{H})
+-\eta D(d,r_p)
+\right].
+$$</div>
+  <p>这个式子体现了医疗部署的现实约束：不只是预测风险，还要平衡收益、资源成本和高风险延迟转诊惩罚。</p>
+  <h3>3.5 评价状态</h3>
+  <p>论文列出真实数据评估设计，包括 MIMIC-IV、eICU-CRD、MIMIC-CXR-JPG、CheXpert、PTB-XL、PhysioNet/CinC 2012 等。它明确说明完整 MedRLM pipeline 尚未在受限数据集上执行，因此表格给的是 published anchors，而不是 MedRLM 自身准确率。阅读时应把它看作系统设计论文/框架论文，而不是已完成 benchmark 论文。</p>
+  <h2>4. TelcoAgent：官方来源未定位，谨慎解读</h2>
+  <p><strong>检索状态</strong>：未找到题名为 “TelcoAgent: A Scalable 5G Multi-KPM Forecasting With 3GPP-Grounded Explainability” 的官方 arXiv、OpenReview、会议或作者页。可检索到的是不同论文 <a href="https://arxiv.org/abs/2604.06209">TelcoAgent-Bench: A Multilingual Benchmark for Telecom AI Agents</a>，主题是电信 LLM agent benchmark，不是 Multi-KPM forecasting。</p>
+  <p>因此，本节不编造作者、公式或实验数值。如果该论文存在，按标题推断它应包含以下核心问题：</p>
+  <div class="math">$$
+\hat{\mathbf{Y}}_{t+1:t+H}
+=
+f_\theta(\mathbf{X}_{t-L+1:t},\mathbf{c}_{\mathrm{cell}},\mathbf{g}_{\mathrm{3GPP}})
+$$</div>
+  <p>其中 $\mathbf{X}$ 是多小区、多 KPM 历史序列，例如 PRB utilization、RSRP/RSRQ/SINR、throughput、latency、handover、RRC connection、drop rate 等；$\mathbf{c}_{\mathrm{cell}}$ 是小区配置和拓扑；$\mathbf{g}_{\mathrm{3GPP}}$ 是 3GPP 规则或术语约束。</p>
+  <p>多 KPM 预测通常应优化：</p>
+  <div class="math">$$
+\mathcal{L}_{\mathrm{forecast}}
+=
+\sum_{k=1}^{K}\sum_{h=1}^{H}
+w_k\ell(\hat{y}_{t+h}^{(k)},y_{t+h}^{(k)}),
+$$</div>
+  <p>其中 $k$ 表示 KPM，$h$ 表示预测 horizon，$w_k$ 表示业务重要性权重。若强调 3GPP-grounded explainability，还应把解释约束为：</p>
+  <div class="math">$$
+e=\operatorname{Explain}(\hat{\mathbf{Y}},\mathbf{X},\mathcal{R}_{3GPP})
+$$</div>
+  <p>即解释不能只说“模型注意到某个变量”，而要映射到 3GPP 语义，如拥塞、覆盖不足、干扰、切换失败、容量瓶颈等。</p>
+  <p>若用户提供 PDF/arXiv ID/源码，我可以按项目规则补齐正式 TeX 目录、公式、实验表和 HTML 解读。</p>
+  <h2>5. FinSTaR：金融时间序列推理</h2>
+  <p><strong>来源</strong>：<a href="https://arxiv.org/abs/2605.03460">arXiv 2605.03460</a>，本项目已有解读：<code>md/FinSTaR_paper_reading.md</code></p>
+  <p><strong>一句话总结</strong>：FinSTaR 认为金融 TSRM 不能只做价格预测，而要区分可由历史价格确定计算的 assessment 与受外部事件影响的 stochastic prediction。</p>
+  <h3>5.1 任务分类</h3>
+  <p>论文提出：</p>
+  <div class="math">$$
+\mathcal{C}
+=
+\{\text{single},\text{multi}\}
+\times
+\{\text{assessment},\text{prediction}\}.
+$$</div>
+  <p>落到金融领域形成 10 个任务：Drawdown、Volatility Regime、Trend Direction、Correlation、Event Response、Support/Resistance、Drawdown Recovery、Volatility Forecast、Relative Performance、Pair Convergence。</p>
+  <h3>5.2 Compute-in-CoT</h3>
+  <p>对 assessment，答案可计算。例如 drawdown：</p>
+  <div class="math">$$
+\operatorname{Drawdown}
+=
+\frac{\operatorname{Peak}-\operatorname{Current}}
+{\operatorname{Peak}}.
+$$</div>
+  <p>如果 peak 为 261.44，current 为 136.00：</p>
+  <div class="math">$$
+\frac{261.44-136.00}{261.44}=48.0\%.
+$$</div>
+  <p>超过阈值后映射为 severe decline。Compute-in-CoT 的价值是让模型学到“提取数值、计算指标、按阈值分类”，而不是凭金融语言直觉猜答案。</p>
+  <h3>5.3 Scenario-Aware CoT</h3>
+  <p>对 prediction，未来不可由价格完全确定。FinSTaR 生成三类场景：</p>
+  <div class="math">$$
+\{\text{base},\text{adverse},\text{favorable}\}
+\rightarrow
+\text{assessment}
+\rightarrow
+\text{judgment}.
+$$</div>
+  <p>它不是让模型伪装确定性证明，而是让模型显式承认不确定性。</p>
+  <h3>5.4 结果</h3>
+  <p>主结果显示 FinSTaR 在 Test A/B/C 平均准确率为 78.9、78.3、78.1，显著超过 Qwen2.5-7B zero-shot、TimeOmni-1 zero-shot 和 Qwen2.5 w/ CoT。消融中 w/ CoT 平均 78.9，w/o CoT 平均 55.9；Scenario-Aware CoT 在 prediction 平均从 65.2 提升到 68.2。</p>
+  <p>最重要实践启发：</p>
+  <div class="math">$$
+\text{金融推理}
+=
+\text{可计算 assessment}
++
+\text{不确定 prediction}
+$$</div>
+  <p>二者必须用不同推理轨迹训练。</p>
+  <h2>6. 2DV 标注论文：交互式二维可视化作为样本选择策略</h2>
+  <p><strong>来源</strong>：<a href="https://arxiv.org/abs/2603.26592">arXiv 2603.26592</a>，TeX 目录：<code>tex/Evaluating_Interactive_2D_Visualization_as_a_Sample_Selection_Strategy_for_Biomedical_Time_Series_Data_Annotation</code></p>
+  <p><strong>一句话总结</strong>：2DV 让真实标注者在 t-SNE/PCA/UMAP 可视化中自由选样本，能更好发现稀有类并提升聚合标签效果，但在小预算、单标注者、多类别不平衡任务中风险更高。</p>
+  <h3>6.1 三种样本选择</h3>
+  <p>RND 是随机采样。FAFT 选择离已选集合最远的样本：</p>
+  <div class="math">$$
+\mathbf{x}^*
+=
+\arg\max_{\mathbf{x}\notin A}
+d(\mathbf{x},A).
+$$</div>
+  <p>其中 $A$ 是已选样本集合，$d(\mathbf{x},A)$ 通常是 $\mathbf{x}$ 到集合 $A$ 最近点的距离。它鼓励覆盖整个特征空间。</p>
+  <p>2DV 使用 TSExplorer：把 SSL 特征投影到 t-SNE/PCA/UMAP，标注者在散点图中自由选择样本，同时查看视频、音频或传感器波形。</p>
+  <h3>6.2 数据与设置</h3>
+  <table>
+    <tr><th class="">数据</th><th class="">模态</th><th class="">任务</th><th class="">规模</th></tr>
+    <tr><td class="">MAIJU-DS / IMA</td><td class="">婴儿四肢 IMU，24 通道，52 Hz</td><td class="">posture、movement</td><td class="">41 recordings，约 29 小时，76,817 可用 frame</td></tr>
+    <tr><td class="">NICU-A / SER</td><td class="">NICU 语音音频</td><td class="">valence、arousal</td><td class="">43 个 16 小时录音，129,007 utterances</td></tr>
+  </table>
+  <p>12 名标注者参与；每个数据集 3 名专家、3 名非专家。IMA 每人每方法每 track 标 360 个样本，SER 为 400 个。</p>
+  <h3>6.3 指标</h3>
+  <p>IMA 用 UAF1：</p>
+  <div class="math">$$
+\operatorname{UAF1}
+=
+\frac{1}{C}
+\sum_{c=1}^{C}
+\operatorname{F1}_c.
+$$</div>
+  <p>SER 用 UAR：</p>
+  <div class="math">$$
+\operatorname{UAR}
+=
+\frac{1}{C}
+\sum_{c=1}^{C}
+\operatorname{Recall}_c.
+$$</div>
+  <p>失败风险包含三项：模型性能失败、稀有类覆盖失败、标签分布不稳定。论文还用 Hellinger distance 衡量标注者标签分布差异。</p>
+  <h3>6.4 结果解释</h3>
+  <p>总体结论是条件性的：</p>
+  <table>
+    <tr><th class="">场景</th><th class="">更合适的方法</th></tr>
+    <tr><td class="">多标注者标签可合并</td><td class="">2DV 往往最好</td></tr>
+    <tr><td class="">IMA 多类别且预算紧</td><td class="">FAFT 或 RND 更稳</td></tr>
+    <tr><td class="">SER 专家标注</td><td class="">2DV 风险最低</td></tr>
+    <tr><td class="">标注者数量/专业性不确定</td><td class="">RND 最保守</td></tr>
+  </table>
+  <p>失败风险总分中，RND 为 105.0，FAFT 为 110.0，2DV 为 126.0，分数越低越安全。这不是说 2DV 没用，而是说明自由探索会带来更高方差。2DV 的价值在于让人发现算法不一定会选的稀有类；风险在于不同人会探索不同区域。</p>
+  <h2>7. Coding Agents：LLM 编程代理能推理时间序列吗</h2>
+  <p><strong>来源</strong>：<a href="https://arxiv.org/abs/2606.16545">arXiv 2606.16545</a>，TeX 目录：<code>tex/Can_LLM_Coding_Agents_Reason_About_Time_Series</code></p>
+  <p><strong>一句话总结</strong>：代码工具能提升时间序列理解准确率，但最强 hybrid agent 仍有 22% 到 34% 错误；失败常来自误读代码结果、策略选择不当或过度信任工具。</p>
+  <h3>7.1 形式化任务</h3>
+  <p>给定时间序列集合：</p>
+  <div class="math">$$
+\mathcal{X}=(X_1,\ldots,X_N),\qquad
+X_i=(x_1,\ldots,x_T).
+$$</div>
+  <p>表示函数有两种：</p>
+  <div class="math">$$
+R_{\mathrm{raw}}(X)
+$$</div>
+  <p>表示把原始数值直接放进 prompt；</p>
+  <div class="math">$$
+R_{\mathrm{df}}(X)
+$$</div>
+  <p>表示把序列放在 pandas DataFrame 中供代码查询。</p>
+  <p>多选题定义为：</p>
+  <div class="math">$$
+A=\{a_1,\ldots,a_k\},\qquad
+a^*=\arg\max_{a\in A}\Pr(a\mid Q,R(X)).
+$$</div>
+  <p>模型输出：</p>
+  <div class="math">$$
+\mathcal{O}=(r,a)
+$$</div>
+  <p>或在 coding setup 中：</p>
+  <div class="math">$$
+\mathcal{O}=(r,c,\operatorname{Exec}(c),a).
+$$</div>
+  <h3>7.2 三种 agent</h3>
+  <table>
+    <tr><th class="">设置</th><th class="">表示</th><th class="">工具</th><th class="">循环</th></tr>
+    <tr><td class="">Direct</td><td class="">$R_{\text{raw}}$</td><td class="">无</td><td class="">单轮</td></tr>
+    <tr><td class="">Code</td><td class="">$R_{\text{df}}$</td><td class="">Python code</td><td class="">多轮</td></tr>
+    <tr><td class="">Hybrid</td><td class="">$R_{\text{raw}}+R_{\text{df}}$</td><td class="">Python code</td><td class="">多轮</td></tr>
+  </table>
+  <p>Agent 视角下，code agent 的 action space 是写 Python、执行、读取 stdout/stderr、继续写或回答。它的 memory 是多轮对话中的代码与执行结果。</p>
+  <h3>7.3 主结果</h3>
+  <table>
+    <tr><th class="">Dataset</th><th class="">Model</th><th class=" num">Direct</th><th class=" num">Code</th><th class=" num">Hybrid</th><th class=" num">Random</th></tr>
+    <tr><td class="">TSE</td><td class="">gpt-oss-120b</td><td class=" num">65.3%</td><td class=" num">70.4%</td><td class=" num">78.0%</td><td class=" num">40.1%</td></tr>
+    <tr><td class="">TSE</td><td class="">qwen3-next-80b</td><td class=" num">63.5%</td><td class=" num">56.4%</td><td class=" num">68.1%</td><td class=" num">40.1%</td></tr>
+    <tr><td class="">TSFU</td><td class="">gpt-oss-120b</td><td class=" num">55.6%</td><td class=" num">63.0%</td><td class=" num">65.6%</td><td class=" num">29.3%</td></tr>
+  </table>
+  <p>对 gpt-oss-120b，代码访问稳定有帮助；但对 qwen3-next，纯 code 低于 direct，说明 coding agent 能力不是“给工具就行”，还取决于模型是否会可靠编程、调试和解释结果。</p>
+  <h3>7.4 失败模式</h3>
+  <p>论文用 LLM judge 标注输出 $\mathcal{O}$，关注：</p>
+  <table>
+    <tr><th class="">类别</th><th class="">典型问题</th></tr>
+    <tr><td class="">Strategy</td><td class="">statistical test、spectral analysis、curve fitting、rolling stats、simple arithmetic</td></tr>
+    <tr><td class="">Methodological errors</td><td class="">概念误解、错误策略、阈值/方法错误、不支持假设</td></tr>
+    <tr><td class="">Code problems</td><td class="">工具调用失败、语法错误、部分失败、无代码</td></tr>
+    <tr><td class="">Reasoning mismatch</td><td class="">算对但选错、过度相信错误输出</td></tr>
+  </table>
+  <p>关键启发：</p>
+  <div class="math">$$
+\text{代码执行}
+\neq
+\text{正确分析}
+$$</div>
+  <p>工具把数值计算外包给 Python，但“应该算什么、如何解释结果、结果是否支持选项”仍需要模型推理。</p>
+  <h2>8. TS-Memory：把检索蒸馏成可插拔记忆</h2>
+  <p><strong>来源</strong>：<a href="https://arxiv.org/abs/2602.11550">arXiv 2602.11550</a>，TeX 目录：<code>tex/TS_Memory_Plug_and_Play_Memory_for_Time_Series_Foundation_Models</code></p>
+  <p><strong>一句话总结</strong>：TS-Memory 用离线 kNN teacher 构造置信度感知分位数目标，再蒸馏到轻量 PlugMem 适配器中，推理时无需检索，只有常数级额外开销。</p>
+  <h3>8.1 两阶段设计</h3>
+  <p>教师数据集：</p>
+  <div class="math">$$
+\mathcal{D}_{\text{teach}}
+=
+\{(\mathbf{X}_t,\mathbf{Y}_t,\widetilde{\mathbf{Q}}_t,\operatorname{Conf}_t)\}.
+$$</div>
+  <p>$\widetilde{\mathbf{Q}}_t\in\mathbb{R}^{Q\times H\times C}$ 是检索邻居未来轨迹聚合出的分位数目标，$\operatorname{Conf}_t$ 是检索置信度。</p>
+  <h3>8.2 离线 kNN teacher</h3>
+  <p>冻结编码器提取 embedding：</p>
+  <div class="math">$$
+\mathbf{e}_t=f_{\mathrm{enc}}(\mathbf{X}_t),
+\qquad
+\mathbf{e}_i=f_{\mathrm{enc}}(\mathbf{X}^{(i)}).
+$$</div>
+  <p>候选距离：</p>
+  <div class="math">$$
+d_i=\|\mathbf{e}_t-\mathbf{e}_i\|_2.
+$$</div>
+  <p>为了处理 level shift，用尾部均值对齐：</p>
+  <div class="math">$$
+\mathbf{s}_i=
+\operatorname{mean}(\mathbf{X}_{t,L-m+1:L})
+-
+\operatorname{mean}(\mathbf{X}^{(i)}_{L-m+1:L}).
+$$</div>
+  <div class="math">$$
+\mathbf{X}_{\mathrm{align}}^{(i)}
+=
+\mathbf{X}^{(i)}+\mathbf{s}_i,\qquad
+\mathbf{Y}_{\mathrm{align}}^{(i)}
+=
+\mathbf{Y}^{(i)}+\mathbf{s}_i.
+$$</div>
+  <p>邻居权重：</p>
+  <div class="math">$$
+w_k=
+\frac{\exp(-\psi(d_k)/\tau_{\mathrm{ret}})}
+{\sum_{j=1}^{K}\exp(-\psi(d_j)/\tau_{\mathrm{ret}})}.
+$$</div>
+  <p>分位数 teacher：</p>
+  <div class="math">$$
+\widetilde{Q}_{t,j,u}
+=
+v_{\pi(m^*)},
+\qquad
+m^*=\min\{m:S_m\ge q_j\}.
+$$</div>
+  <p>置信度：</p>
+  <div class="math">$$
+\operatorname{Conf}_t=\max_{1\le k\le K}w_k.
+$$</div>
+  <h3>8.3 置信门控蒸馏</h3>
+  <p>任务损失是分位数 pinball loss：</p>
+  <div class="math">$$
+\mathcal{L}_{\mathrm{task}}
+=
+\mathbb{E}_t[
+\operatorname{Pinball}_{\mathcal{Q}}
+(\widehat{\mathbf{Q}}^{\mathrm{mem}}_t,\mathbf{Y}_t)].
+$$</div>
+  <p>先比较 teacher 与 backbone 的中位数误差：</p>
+  <div class="math">$$
+\operatorname{err}_t^\star
+=
+\frac{1}{|\mathcal{U}|}
+\sum_{u\in\mathcal{U}}
+|Y_{t,u}-Q^\star_{t,j^*,u}|,
+\quad
+\star\in\{T,\mathrm{base}\}.
+$$</div>
+  <p>只有 teacher 明显优于 backbone 才蒸馏：</p>
+  <div class="math">$$
+\chi_t=
+\mathbb{I}(\operatorname{err}_t^T+\epsilon_{\mathrm{gate}}
+&lt;
+\operatorname{err}_t^{\mathrm{base}}),
+\qquad
+\omega_t=\chi_t\operatorname{Conf}_t^\gamma.
+$$</div>
+  <p>最终损失：</p>
+  <div class="math">$$
+\mathcal{L}
+=
+\mathcal{L}_{\mathrm{task}}
+\lambda_{\mathrm{align}}\mathcal{L}_{\mathrm{align}}
+\lambda_{\mathrm{reg}}\mathcal{L}_{\mathrm{reg}}.
+$$</div>
+  <p>推理融合：</p>
+  <div class="math">$$
+\widehat{\mathbf{Q}}^{\mathrm{final}}_t
+=
+(1-\alpha)\widehat{\mathbf{Q}}^{\mathrm{base}}_t
+\alpha\widehat{\mathbf{Q}}^{\mathrm{mem}}_t.
+$$</div>
+  <h3>8.4 结果与意义</h3>
+  <p>TS-Memory 在 ChronosBolt、Chronos2、Sundial、TimesFM 四类冻结 TSFM 上，对 ETTh1/2、ETTm1/2、Electricity、Exchange、Traffic、Weather 等数据集普遍降低 MSE/MAE。例如 TimesFM 上 ETTm2 MSE 从 0.332 降到 0.279，改善 16.0%；Chronos2 上 Weather MSE 从 0.274 降到 0.241，改善 12.0%。</p>
+  <p>效率上，在线 TS-RAG 需要检索，常导致总延迟翻倍甚至接近三倍；TS-Memory 检索时间为 0，只增加轻量 forward，典型总延迟只比 Origin 高约 4% 到 5%。这就是“把检索编译进参数记忆”的实际价值。</p>
+  <h2>9. 横向比较</h2>
+  <table>
+    <tr><th class="">论文</th><th class="">最核心机制</th><th class="">是否 agent</th><th class="">是否时间序列</th><th class="">是否有工具/记忆</th><th class="">最大风险</th></tr>
+    <tr><td class="">VESTA</td><td class="">动态可视化统计工具</td><td class="">是</td><td class="">是，且含分布拟合</td><td class="">工具注册表</td><td class="">VLM 读复杂图能力不足</td></tr>
+    <tr><td class="">MedRLM</td><td class="">递归多模态临床控制器</td><td class="">是</td><td class="">是，含 EHR/传感器</td><td class="">证据图记忆</td><td class="">框架多，完整实证未完成</td></tr>
+    <tr><td class="">TelcoAgent</td><td class="">未找到官方源</td><td class="">预期是</td><td class="">预期是</td><td class="">预期含 3GPP 规则</td><td class="">不能验证</td></tr>
+    <tr><td class="">FinSTaR</td><td class="">结构化金融 CoT</td><td class="">否，reasoning model</td><td class="">是</td><td class="">内化计算/场景</td><td class="">无外部新闻/财报</td></tr>
+    <tr><td class="">2DV 标注</td><td class="">人在 2D 投影中选样本</td><td class="">人机协同</td><td class="">是</td><td class="">交互式可视化</td><td class="">小预算下方差高</td></tr>
+    <tr><td class="">Coding Agents</td><td class="">Python 工具循环</td><td class="">是</td><td class="">是</td><td class="">代码执行</td><td class="">会算不等于会解释</td></tr>
+    <tr><td class="">TS-Memory</td><td class="">检索到记忆蒸馏</td><td class="">否</td><td class="">是</td><td class="">参数化记忆</td><td class="">teacher 噪声会被蒸馏</td></tr>
+  </table>
+  <p>统一来看，这些工作正在把时间序列研究从</p>
+  <div class="math">$$
+\hat{y}_{t+H}=f_\theta(x_{1:T})
+$$</div>
+  <p>推进到</p>
+  <div class="math">$$
+\hat{y},e,d
+=
+\operatorname{System}
+(x_{1:T},\text{tools},\text{memory},\text{domain rules},\text{human feedback}),
+$$</div>
+  <p>其中 $e$ 是解释，$d$ 是决策。真正困难的部分不是预测函数，而是如何保证过程可审计、工具调用可靠、领域约束有效、记忆不泄漏、人类标注成本可控。</p>
+</main>
+</body>
+</html>

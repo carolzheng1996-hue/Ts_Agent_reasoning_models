@@ -1,0 +1,228 @@
+%%%%%%%% ICML 2026 EXAMPLE LATEX SUBMISSION FILE %%%%%%%%%%%%%%%%%
+
+\documentclass{article}
+
+% Recommended, but optional, packages for figures and better typesetting:
+\usepackage[table]{xcolor}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+% \usepackage[noend]{algpseudocode}
+\usepackage{array}
+% Recommended packages
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage[table]{xcolor}
+\usepackage{xspace}
+\usepackage{rotating} % Required for sidewaystable
+% Define a custom column type for the metrics to save space
+% \newcolumntype{Y}{>{\centering\arraybackslash}X}
+% Attempt to make hyperref and algorithmic work together better:
+% \newcommand{\theHalgorithm}{\arabic{algorithm}}
+
+\usepackage{hyperref}
+% \usepackage{icml2026}
+\usepackage[accepted]{icml2026}
+% \makeatletter
+% \renewcommand{\Notice@String}{} % remove "Proceedings of..." / under-review notice
+% \makeatother
+
+\usepackage{fvextra}
+\usepackage{graphicx}
+\usepackage{subcaption}
+
+\usepackage[table]{xcolor}
+\definecolor{lightgreen}{RGB}{230,245,233}
+
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{url}
+\usepackage{caption}
+\usepackage{placeins}
+\usepackage{siunitx}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{adjustbox}
+\usepackage{tabularx}
+\usepackage{threeparttable}
+\usepackage{rotating}
+\usepackage[utf8]{inputenc}
+\usepackage{float}
+\usepackage{makecell}
+\usepackage{capt-of}
+\usepackage{cuted}   % provides the strip environment
+% \usepackage[table]{xcolor} % MUST be loaded BEFORE algorithm
+\usepackage{enumitem}
+% \usepackage{algorithm}
+% \usepackage[noend]{algpseudocode} % Only load ONCE
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{longtable}
+\usepackage{pdflscape} % Required for landscape orientation
+\usepackage[table]{xcolor}
+\usepackage{fancyvrb}
+\usepackage[most]{tcolorbox}
+\usepackage{capt-of}
+\usepackage{caption}
+\DeclareCaptionType{example}[Example][List of Examples]
+
+% if you use cleveref..
+\usepackage[capitalize,noabbrev]{cleveref}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% THEOREMS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{assumption}[theorem]{Assumption}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\urlstyle{same}
+
+% Todonotes is useful during development; simply uncomment the next line
+%    and comment out the line below the next line to turn off comments
+%\usepackage[disable,textsize=tiny]{todonotes}
+\usepackage[textsize=tiny]{todonotes}
+
+% The \icmltitle you define below is probably too long as a header.
+% Therefore, a short form for the running title is supplied here:
+\icmltitlerunning{Adaptive Time Series Reasoning via Segment Selection}
+\newcommand{\fix}{\marginpar{FIX}}
+\newcommand{\new}{\marginpar{NEW}}
+\newcommand{\algoname}{ARTIST\xspace}
+
+\newcolumntype{M}{>{\centering\arraybackslash}p{1.9cm}}
+
+\definecolor{controllercolor}{RGB}{235, 245, 255}  % Soft blue
+\definecolor{reasonercolor}{RGB}{240, 255, 235}    % Soft green
+\definecolor{updatecolor}{RGB}{255, 248, 235}      % Soft amber
+
+\definecolor{grpA}{HTML}{E6F0FF}  % Scenario & Context
+\definecolor{grpB}{HTML}{EAF7EE}  % Causal & Analytical
+\definecolor{grpC}{HTML}{FFF4E6}  % Decision & Domain
+\definecolor{stripe}{HTML}{FAFAFB} % Row zebra
+\arrayrulecolor[HTML]{D9D9D9}
+
+\newcommand{\pill}[2]{%
+  \begingroup
+  \setlength{\fboxsep}{1.5pt}%
+  \colorlet{framecol}{#2!55!black}%
+  \fcolorbox{framecol}{#2!22}{\footnotesize\sffamily #1}%
+  \endgroup
+}
+
+\newcommand{\colorsection}[1]{%
+  \Statex\hspace*{-\leftmargin}\colorbox{#1}{\parbox{\dimexpr\linewidth+\leftmargin-2\fboxsep\relax}{\vspace{2pt}}}%
+}
+\sisetup{
+  detect-weight=true,
+  detect-inline-weight=math,
+  table-format=2.1,
+}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+\newcommand{\one}[1]{\mathbf{1}\{#1\}}
+
+\usepackage{xcolor}
+
+\newcommand{\toimple}[1]{\textcolor{red}{#1}}
+
+\newcommand{\xhdr}[1]{\noindent{\bf #1.}}
+
+
+\begin{document}
+
+\twocolumn[
+  \icmltitle{Adaptive Time Series Reasoning via Segment Selection
+  }
+
+  \icmlsetsymbol{equal}{*}
+
+  \begin{icmlauthorlist}
+    \icmlauthor{Shvat Messica}{harvard}
+    \icmlauthor{Jiawen Zhang}{equal,hongkong}
+    \icmlauthor{Kevin Li}{equal,mit,harvard}
+    \icmlauthor{Theodoros Tsiligkaridis}{mitll}
+    \icmlauthor{Marinka Zitnik}{harvard}
+  \end{icmlauthorlist}
+
+  \icmlaffiliation{harvard}{Department of Biomedical Informatics, Harvard Medical School, Boston, MA, USA}
+  \icmlaffiliation{mit}{Massachusetts Institute of Technology}
+  \icmlaffiliation{mitll}{MIT Lincoln Laboratory}
+  \icmlaffiliation{hongkong}{The Hong Kong University of Science and Technology (Guangzhou)}
+
+  \icmlcorrespondingauthor{Shvat Messica and Marinka Zitnik}{shvat.messica@fas.harvard.edu, marinka@hms.harvard.edu}
+
+  \icmlkeywords{Machine Learning}
+
+  \vskip 0.3in
+]
+\definecolor{lightpurple}{RGB}{230,230,250}
+% this must go after the closing bracket ] following \twocolumn[ ...
+
+% This command actually creates the footnote in the first column listing the
+% affiliations and the copyright notice. The command takes one argument, which
+% is text to display at the start of the footnote. The \icmlEqualContribution
+% command is standard text for equal contribution. Remove it (just {}) if you
+% do not need this facility.
+
+% Use ONE of the following lines. DO NOT remove the command.
+% If you have no special notice, KEEP empty braces:
+% \printAffiliationsAndNotice{}  % no special notice (required even if empty)
+% Or, if applicable, use the standard equal contribution text:
+\printAffiliationsAndNotice{\icmlEqualContribution}
+
+
+\begin{abstract}
+Time series reasoning tasks often start with a natural language question and require targeted analysis of a time series. Evidence may span the full series or appear in a few short intervals, so the model must decide what to inspect. Most existing approaches encode the entire time series into a fixed representation before inference, regardless of relevance.
+%
+We introduce \algoname, which formulates time-series reasoning as a sequential decision problem. \algoname interleaves reasoning with adaptive temporal segment selection. It adopts a controller-reasoner architecture and uses reinforcement learning to train the controller role to select informative segments and the reasoner role to generate segment-conditioned reasoning traces and final answers. During inference, the model actively acquires task-relevant information instead of relying on a static summary of the full sequence. We use a novel hierarchical policy optimization approach for post-training that allows the model to excel in both segment selection and question-answering behavior.
+%
+We evaluate \algoname on six time-series reasoning benchmarks and compare it with large language models, vision-language models, and prior time-series reasoning systems. \algoname improves average accuracy by 6.46 absolute percentage points over the strongest baseline. The largest gains appear on rare event localization and multi-segment reasoning tasks. Supervised fine-tuning improves performance, and reinforcement learning provides additional gains by optimizing question-adaptive segment selection, showing that selective data use drives effective time-series reasoning.
+\end{abstract}
+
+\input{1_introduction}
+
+
+\input{2_related_work}
+
+
+\input{4_method_v3}
+\input{5_experiment}
+\input{6_conclusion}
+
+%\clearpage
+
+\section*{Impact Statement}
+This paper presents work whose goal is to advance the field of machine learning. There are many potential societal consequences of our work, none of which we feel must be specifically highlighted here.
+
+\section*{Acknowledgments}
+
+We gratefully acknowledge the support by NSF CAREER Award 2339524, ARPA-H Biomedical Data Fabric (BDF) Toolbox Program, Amazon Faculty Research, Google Research Scholar Program, AstraZeneca Research, GlaxoSmithKline Award, Roche Alliance with Distinguished Scientists (ROADS) Program, Sanofi iDEA-iTECH Award, Boehringer Ingelheim Award, Merck Award, Optum AI Research Collaboration Award, Pfizer Research, Gates Foundation (INV-079038), Chan Zuckerberg Initiative, John and Virginia Kaneb Fellowship at Harvard Medical School, Biswas Computational Biology Initiative in partnership with the Milken Institute, Harvard Medical School Dean’s Innovation Fund for the Use of Artificial Intelligence, and the Kempner Institute for the Study of Natural and Artificial Intelligence at Harvard University. 
+
+DISTRIBUTION STATEMENT A. Approved for public release. Distribution is unlimited. This material is based upon work supported by the Under Secretary of War for Research and Engineering under Air Force Contract No. FA8702-15-D-0001 or FA8702-25-D-B002. 
+
+Any opinions, findings, conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the Under Secretary of War for Research and Engineering.
+
+\bibliography{ref}
+\bibliographystyle{icml2026/icml2026}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% APPENDIX
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\appendix
+\onecolumn
+\input{7_appendix}
+\end{document}
+

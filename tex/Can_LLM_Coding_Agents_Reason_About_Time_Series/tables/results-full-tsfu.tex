@@ -1,0 +1,19 @@
+\begin{tabular}{lrrr}
+\toprule
+ & \multicolumn{3}{c}{\texttt{gpt-oss-120b}} \\
+\noalign{\vskip 1pt}
+\hdashline[0.4pt/2pt]
+\noalign{\vskip 1pt}
+category & \mcode{} & \mdirect{} & \mhybrid{} \\
+\midrule
+fixed correlation & \textbf{79.5\%} & 72.2\% & 78.8\% \\
+lagged correlation & \textbf{42.5\%} & 30.0\% & 37.5\% \\
+anomalies & 65.0\% & 74.0\% & \textbf{75.0\%} \\
+seasonality & 63.0\% & 56.0\% & \textbf{72.5\%} \\
+fat tail & \textbf{86.5\%} & 69.0\% & 85.0\% \\
+stationarity & 46.0\% & 28.0\% & \textbf{51.5\%} \\
+structural break & 44.0\% & \textbf{52.0\%} & 49.5\% \\
+trend & \textbf{96.5\%} & 88.0\% & \textbf{96.5\%} \\
+volatility & 27.5\% & 15.0\% & \textbf{31.0\%} \\
+\bottomrule
+\end{tabular}

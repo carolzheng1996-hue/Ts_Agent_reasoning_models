@@ -1,0 +1,48 @@
+```{context}```
+
+Extract the independent event(s) and the causal graph (each causal chain) from the text above, including any associated `time_start` and `time_end` (formatted as `YYYY-MM-DD HH:MM:SS`, if available). If a timestamp is not available, set its value to "null".
+
+Requirements:
+* Do not add any facts or context not explicitly stated in the text.
+* When a causal relationship exists, represent the cause and the effect as two semantically complete events. Do not split discourse markers or partial clauses into separate events.
+* Combine all background information, constraints, or other information with no causal relationship into a single event ("E1"). 
+* Each event must contain the complete relevant original text span.
+* Ensure that the extracted events collectively cover all the original information (no information is missing), and that no information is duplicated or overlapping.
+* The provided content may include task instructions, often appearing in the last sentence. If present, ignore these instructions.
+* If multiple statements describe successive states, value changes, or different aspects of the same underlying entity, process, or analogy, combine them into a single event (but not the background event) rather than splitting each state or timestamped change into separate events.
+* An event should represent a complete semantic unit describing a state, action, or causal situation. Avoid splitting short phrases, discourse markers, or connective fragments (e.g., "Due to", "After", "resulting in") into separate events.
+* The causal graph and causal context may be empty if the text contains no causal relationships. In this case, the objective is simply to decompose the original content into events and their corresponding text spans.
+* Each element in the `causal_context` list must correspond one-to-one with an entry in the `causal_graph` list, and both lists must have the same length.
+* The `causal_context` should only contain the original context covered by the events in the corresponding causal graph entry, do not add any other information, so different causal contexts should not be the same. But each causal context should be self-contained, expressing a complete meaning.
+* If an event's `time_start` or `time_end` can be logically inferred from other events in the text, fill them in accordingly; otherwise set them to "null".
+* If there is a gap between time intervals, do not merge time ranges across non-contiguous periods, represent them as separate events rather than combining them into a single continuous range. Make sure each event has a self-contained context.
+* Do not treat system descriptions, design properties, or static characteristics (e.g., "is designed to", "scales linearly") as effects in a causal relationship unless they are explicitly caused by another event.
+* Put only stable background or non-causal contextual information into E1. If the context states constraints on the time-series variable (e.g., bounds, maxima, minima, capacities, or other operating limits), extract those constraints as a separate self-contained event rather than merging them into E1.
+* If an extracted event contains explicit timestamps or clearly timestamped transitions, do not leave its time fields as "null"; use the earliest and latest explicit timestamps covered by that event span, and split the event if merging would make the timing unclear.
+
+Output format:
+Return a valid JSON object with the following structure (and no additional text):
+
+{
+  "extracted_events": [
+    {
+      "event_id": "E1",
+      "event": "complete relevant original text span, self-contained and semantically complete",
+      "time_start": "YYYY-MM-DD HH:MM:SS or null",
+      "time_end": "YYYY-MM-DD HH:MM:SS or null"
+    },
+    ...
+  ],
+  "causal_graph": [
+    {
+      "cause_event_id": "E1",
+      "effect_event_id": "E2",
+      "relation": "cause"
+    },
+    ...
+  ],
+  "causal_context": [
+    "Natural language description of the causal relation using the original text, self contained, without omitting any information",
+    ...
+  ]
+}

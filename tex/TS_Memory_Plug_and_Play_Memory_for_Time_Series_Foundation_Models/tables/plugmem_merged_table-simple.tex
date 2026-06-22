@@ -1,0 +1,197 @@
+% % Requires:
+% % \usepackage{booktabs,multirow}
+% % \usepackage{caption}
+
+% \begin{table*}[h!]
+% \begin{center}
+% \caption{Cross-model TS-Memory transfer evaluation. Values in parentheses denote relative change (\%) compared to Origin.}
+% \begin{small}
+% \renewcommand{\arraystretch}{0.80} 
+% \setlength\tabcolsep{2pt}
+% \resizebox{\textwidth}{!}{%
+% \begin{tabular}{l|cc|cc|cc|cc|cc|cc||cc|cc|cc|cc|cc|cc}
+% \toprule
+% \multirow{2}{*}{Dataset} & \multicolumn{12}{c||}{Chronos2-PlugMem} & \multicolumn{12}{c}{Sundial-PlugMem} \\
+% \cmidrule{2-25}
+%  &
+% \multicolumn{4}{c|}{ChronosBolt (base)} &
+% \multicolumn{4}{c|}{Sundial (base)} &
+% \multicolumn{4}{c||}{TimesFM (base)} &
+% \multicolumn{4}{c|}{ChronosBolt (base)} &
+% \multicolumn{4}{c|}{Chronos2 (base)} &
+% \multicolumn{4}{c}{TimesFM (base)} \\
+% \midrule
+% Metric &
+% \multicolumn{2}{c|}{Origin} & \multicolumn{2}{c|}{+TS Mem} &
+% \multicolumn{2}{c|}{Origin} & \multicolumn{2}{c|}{+TS Mem} &
+% \multicolumn{2}{c|}{Origin} & \multicolumn{2}{c||}{+TS Mem} &
+% \multicolumn{2}{c|}{Origin} & \multicolumn{2}{c|}{+TS Mem} &
+% \multicolumn{2}{c|}{Origin} & \multicolumn{2}{c|}{+TS Mem} &
+% \multicolumn{2}{c|}{Origin} & \multicolumn{2}{c}{+TS Mem} \\
+% \midrule
+%  &
+% MSE & MAE & MSE & MAE &
+% MSE & MAE & MSE & MAE &
+% MSE & MAE & MSE & MAE &
+% MSE & MAE & MSE & MAE &
+% MSE & MAE & MSE & MAE &
+% MSE & MAE & MSE & MAE \\
+% \midrule
+
+% ETTh1 & 0.448 & 0.419 & \textbf{0.420}{\scriptsize(-6.2\%)} & \textbf{0.416}{\scriptsize(-0.6\%)} & 0.400 & 0.412 & \textbf{0.395}{\scriptsize(-1.1\%)} & \textbf{0.410}{\scriptsize(-0.5\%)} & 0.479 & 0.442 & \textbf{0.436}{\scriptsize(-9.1\%)} & \textbf{0.430}{\scriptsize(-2.8\%)} & 0.448 & 0.419 & \textbf{0.409}{\scriptsize(-8.6\%)} & \textbf{0.416}{\scriptsize(-0.7\%)} & 0.442 & 0.412 & \textbf{0.409}{\scriptsize(-7.6\%)} & 0.412{\scriptsize(+0.2\%)} & 0.479 & 0.442 & \textbf{0.424}{\scriptsize(-11.5\%)} & \textbf{0.427}{\scriptsize(-3.6\%)} \\
+% \midrule
+% ETTh2 & 0.366 & 0.380 & \textbf{0.342}{\scriptsize(-6.6\%)} & 0.383{\scriptsize(+0.9\%)} & 0.344 & 0.380 & \textbf{0.338}{\scriptsize(-1.6\%)} & \textbf{0.379}{\scriptsize(-0.1\%)} & 0.402 & 0.409 & \textbf{0.358}{\scriptsize(-10.9\%)} & \textbf{0.402}{\scriptsize(-1.9\%)} & 0.366 & 0.380 & \textbf{0.339}{\scriptsize(-7.4\%)} & 0.382{\scriptsize(+0.6\%)} & 0.376 & 0.383 & \textbf{0.347}{\scriptsize(-7.6\%)} & 0.384{\scriptsize(+0.1\%)} & 0.402 & 0.409 & \textbf{0.356}{\scriptsize(-11.4\%)} & \textbf{0.399}{\scriptsize(-2.5\%)} \\
+% \midrule
+% ETTm1 & 0.421 & 0.383 & \textbf{0.375}{\scriptsize(-10.9\%)} & \textbf{0.375}{\scriptsize(-2.0\%)} & 0.369 & 0.369 & \textbf{0.356}{\scriptsize(-3.5\%)} & \textbf{0.366}{\scriptsize(-0.8\%)} & 0.429 & 0.416 & \textbf{0.375}{\scriptsize(-12.5\%)} & \textbf{0.390}{\scriptsize(-6.2\%)} & 0.421 & 0.383 & \textbf{0.367}{\scriptsize(-12.8\%)} & \textbf{0.375}{\scriptsize(-2.0\%)} & 0.433 & 0.381 & \textbf{0.370}{\scriptsize(-14.6\%)} & \textbf{0.378}{\scriptsize(-0.7\%)} & 0.429 & 0.416 & \textbf{0.372}{\scriptsize(-13.2\%)} & \textbf{0.390}{\scriptsize(-6.2\%)} \\
+% \midrule
+% ETTm2 & 0.290 & 0.317 & \textbf{0.262}{\scriptsize(-9.8\%)} & \textbf{0.314}{\scriptsize(-1.1\%)} & 0.276 & 0.317 & \textbf{0.262}{\scriptsize(-4.9\%)} & \textbf{0.314}{\scriptsize(-1.1\%)} & 0.332 & 0.341 & \textbf{0.267}{\scriptsize(-19.4\%)} & \textbf{0.322}{\scriptsize(-5.6\%)} & 0.290 & 0.317 & \textbf{0.265}{\scriptsize(-8.7\%)} & \textbf{0.314}{\scriptsize(-1.2\%)} & 0.295 & 0.315 & \textbf{0.264}{\scriptsize(-10.4\%)} & \textbf{0.313}{\scriptsize(-0.8\%)} & 0.332 & 0.341 & \textbf{0.273}{\scriptsize(-17.7\%)} & \textbf{0.325}{\scriptsize(-4.8\%)} \\
+% \midrule
+% Electricity & 0.159 & 0.244 & \textbf{0.154}{\scriptsize(-3.0\%)} & \textbf{0.242}{\scriptsize(-0.9\%)} & 0.148 & 0.242 & \textbf{0.144}{\scriptsize(-2.6\%)} & \textbf{0.238}{\scriptsize(-1.5\%)} & 0.154 & 0.244 & \textbf{0.151}{\scriptsize(-2.0\%)} & \textbf{0.242}{\scriptsize(-0.8\%)} & 0.159 & 0.244 & \textbf{0.154}{\scriptsize(-2.9\%)} & \textbf{0.243}{\scriptsize(-0.5\%)} & 0.163 & 0.244 & \textbf{0.157}{\scriptsize(-3.4\%)} & \textbf{0.242}{\scriptsize(-0.7\%)} & 0.154 & 0.244 & \textbf{0.151}{\scriptsize(-2.0\%)} & \textbf{0.243}{\scriptsize(-0.5\%)} \\
+% \midrule
+% Exchange & 0.371 & 0.412 & \textbf{0.355}{\scriptsize(-4.4\%)} & \textbf{0.405}{\scriptsize(-1.7\%)} & 0.553 & 0.494 & \textbf{0.408}{\scriptsize(-26.3\%)} & \textbf{0.444}{\scriptsize(-9.9\%)} & 0.433 & 0.446 & \textbf{0.383}{\scriptsize(-11.5\%)} & \textbf{0.427}{\scriptsize(-4.1\%)} & 0.371 & 0.412 & \textbf{0.365}{\scriptsize(-1.6\%)} & \textbf{0.407}{\scriptsize(-1.1\%)} & 0.399 & 0.421 & \textbf{0.392}{\scriptsize(-1.7\%)} & \textbf{0.417}{\scriptsize(-0.9\%)} & 0.433 & 0.446 & \textbf{0.420}{\scriptsize(-3.1\%)} & \textbf{0.438}{\scriptsize(-1.8\%)} \\
+% \midrule
+% Traffic & 0.435 & 0.263 & \textbf{0.417}{\scriptsize(-4.1\%)} & \textbf{0.260}{\scriptsize(-0.9\%)} & 0.461 & 0.286 & \textbf{0.427}{\scriptsize(-7.3\%)} & \textbf{0.275}{\scriptsize(-4.0\%)} & 0.370 & 0.244 & \textbf{0.366}{\scriptsize(-0.9\%)} & \textbf{0.243}{\scriptsize(-0.4\%)} & 0.435 & 0.263 & \textbf{0.418}{\scriptsize(-3.9\%)} & \textbf{0.261}{\scriptsize(-0.8\%)} & 0.394 & 0.237 & \textbf{0.388}{\scriptsize(-1.7\%)} & 0.240{\scriptsize(+1.3\%)} & 0.370 & 0.244 & \textbf{0.367}{\scriptsize(-0.7\%)} & \textbf{0.243}{\scriptsize(-0.2\%)} \\
+% \midrule
+% Weather & 0.263 & 0.276 & \textbf{0.235}{\scriptsize(-10.8\%)} & \textbf{0.269}{\scriptsize(-2.7\%)} & 0.244 & 0.269 & \textbf{0.235}{\scriptsize(-3.5\%)} & \textbf{0.269}{\scriptsize(-0.3\%)} & 0.222 & 0.237 & \textbf{0.198}{\scriptsize(-10.7\%)} & \textbf{0.232}{\scriptsize(-2.4\%)} & 0.263 & 0.276 & \textbf{0.235}{\scriptsize(-10.5\%)} & \textbf{0.273}{\scriptsize(-1.2\%)} & 0.274 & 0.267 & \textbf{0.233}{\scriptsize(-14.7\%)} & 0.268{\scriptsize(+0.5\%)} & 0.222 & 0.237 & \textbf{0.198}{\scriptsize(-10.5\%)} & \textbf{0.233}{\scriptsize(-1.8\%)} \\
+
+% \bottomrule
+% \end{tabular}}
+% \end{small}
+% \label{tab:plugmem_merged_compact}
+% \end{center}
+% \end{table*}
+
+
+% Requires:
+% \usepackage{booktabs,multirow}
+% \usepackage{caption}
+
+% Requires:
+% \usepackage{booktabs,multirow}
+% \usepackage{caption}
+
+% \begin{table*}[h!]
+% \begin{center}
+% \caption{Cross-model transfer results of TS-Memory across retrieval teachers and frozen TSFM backbones. We use the same protocol in Table~\ref{tab:ts_plugmem_compact}. Full results are in Appendix~\ref{appx:rag-TS-memory} Table~\ref{tab:plugmem_merged}.
+% }
+% \begin{small}
+% \renewcommand{\arraystretch}{0.80} 
+% \setlength\tabcolsep{2pt}
+% \resizebox{\textwidth}{!}{%
+% \begin{tabular}{c|cc|cc|cc|cc|cc|cc||cc|cc|cc|cc|cc|cc}
+% \toprule
+% \multirow{2}{*}{Model} & \multicolumn{12}{c||}{Chronos2-PlugMem} & \multicolumn{12}{c}{Sundial-PlugMem} \\
+% \cmidrule{2-25}
+%  &
+% \multicolumn{4}{c|}{ChronosBolt (base)} &
+% \multicolumn{4}{c|}{Sundial (base)} &
+% \multicolumn{4}{c||}{TimesFM (base)} &
+% \multicolumn{4}{c|}{ChronosBolt (base)} &
+% \multicolumn{4}{c|}{Chronos2 (base)} &
+% \multicolumn{4}{c}{TimesFM (base)} \\
+% \midrule
+% Dataset &
+% \multicolumn{2}{c|}{Origin} & \multicolumn{2}{c|}{+TS Mem} &
+% \multicolumn{2}{c|}{Origin} & \multicolumn{2}{c|}{+TS Mem} &
+% \multicolumn{2}{c|}{Origin} & \multicolumn{2}{c||}{+TS Mem} &
+% \multicolumn{2}{c|}{Origin} & \multicolumn{2}{c|}{+TS Mem} &
+% \multicolumn{2}{c|}{Origin} & \multicolumn{2}{c|}{+TS Mem} &
+% \multicolumn{2}{c|}{Origin} & \multicolumn{2}{c}{+TS Mem} \\
+% \midrule
+% Metric &
+% MSE & MAE & MSE & MAE &
+% MSE & MAE & MSE & MAE &
+% MSE & MAE & MSE & MAE &
+% MSE & MAE & MSE & MAE &
+% MSE & MAE & MSE & MAE &
+% MSE & MAE & MSE & MAE \\
+% \midrule
+
+% ETTh1 & 0.448 & 0.419 & \textbf{0.420} & \textbf{0.416} & 0.400 & 0.412 & \textbf{0.395} & \textbf{0.410} & 0.479 & 0.442 & \textbf{0.436} & \textbf{0.430} & 0.448 & 0.419 & \textbf{0.409} & \textbf{0.416} & 0.442 & \textbf{0.412} & \textbf{0.409} & 0.412 & 0.479 & 0.442 & \textbf{0.424} & \textbf{0.427} \\
+% \midrule
+% ETTh2 & 0.366 & \textbf{0.380} & \textbf{0.342} & 0.383 & 0.344 & 0.380 & \textbf{0.338} & \textbf{0.379} & 0.402 & 0.409 & \textbf{0.358} & \textbf{0.402} & 0.366 & \textbf{0.380} & \textbf{0.339} & 0.382 & 0.376 & \textbf{0.383} & \textbf{0.347} & 0.384 & 0.402 & 0.409 & \textbf{0.356} & \textbf{0.399} \\
+% \midrule
+% ETTm1 & 0.421 & 0.383 & \textbf{0.375} & \textbf{0.375} & 0.369 & 0.369 & \textbf{0.356} & \textbf{0.366} & 0.429 & 0.416 & \textbf{0.375} & \textbf{0.390} & 0.421 & 0.383 & \textbf{0.367} & \textbf{0.375} & 0.433 & 0.381 & \textbf{0.370} & \textbf{0.378} & 0.429 & 0.416 & \textbf{0.372} & \textbf{0.390} \\
+% \midrule
+% ETTm2 & 0.290 & 0.317 & \textbf{0.262} & \textbf{0.314} & 0.276 & 0.317 & \textbf{0.262} & \textbf{0.314} & 0.332 & 0.341 & \textbf{0.267} & \textbf{0.322} & 0.290 & 0.317 & \textbf{0.265} & \textbf{0.314} & 0.295 & 0.315 & \textbf{0.264} & \textbf{0.313} & 0.332 & 0.341 & \textbf{0.273} & \textbf{0.325} \\
+% \midrule
+% Electricity & 0.159 & 0.244 & \textbf{0.154} & \textbf{0.242} & 0.148 & 0.242 & \textbf{0.144} & \textbf{0.238} & 0.154 & 0.244 & \textbf{0.151} & \textbf{0.242} & 0.159 & 0.244 & \textbf{0.154} & \textbf{0.243} & 0.163 & 0.244 & \textbf{0.157} & \textbf{0.242} & 0.154 & 0.244 & \textbf{0.151} & \textbf{0.243} \\
+% \midrule
+% Exchange & 0.371 & 0.412 & \textbf{0.355} & \textbf{0.405} & 0.553 & 0.494 & \textbf{0.408} & \textbf{0.444} & 0.433 & 0.446 & \textbf{0.383} & \textbf{0.427} & 0.371 & 0.412 & \textbf{0.365} & \textbf{0.407} & 0.399 & 0.421 & \textbf{0.392} & \textbf{0.417} & 0.433 & 0.446 & \textbf{0.420} & \textbf{0.438} \\
+% \midrule
+% Traffic & 0.435 & 0.263 & \textbf{0.417} & \textbf{0.260} & 0.461 & 0.286 & \textbf{0.427} & \textbf{0.275} & 0.370 & 0.244 & \textbf{0.366} & \textbf{0.243} & 0.435 & 0.263 & \textbf{0.418} & \textbf{0.261} & 0.394 & \textbf{0.237} & \textbf{0.388} & 0.240 & 0.370 & 0.244 & \textbf{0.367} & \textbf{0.243} \\
+% \midrule
+% Weather & 0.263 & 0.276 & \textbf{0.235} & \textbf{0.269} & 0.244 & 0.269 & \textbf{0.235} & \textbf{0.269} & 0.222 & 0.237 & \textbf{0.198} & \textbf{0.232} & 0.263 & 0.276 & \textbf{0.235} & \textbf{0.273} & 0.274 & \textbf{0.267} & \textbf{0.233} & 0.268 & 0.222 & 0.237 & \textbf{0.198} & \textbf{0.233} \\
+
+% \bottomrule
+% \end{tabular}}
+% \end{small}
+% \label{tab:plugmem_merged_compact}
+% \end{center}
+% \end{table*}
+
+% Requires:
+% \usepackage{booktabs,multirow}
+% \usepackage{caption}
+
+\begin{table*}[!htbp]
+\begin{center}
+\caption{Cross-model transfer results of TS-Memory across retrieval teachers and frozen TSFM backbones. We use the same protocol as in Table~\ref{tab:ts_plugmem_compact}. Full results are in Table~\ref{tab:plugmem_merged} of Appendix~\ref{appx:complete_results}.
+}
+
+\begin{small}
+\renewcommand{\arraystretch}{0.80} 
+\setlength\tabcolsep{2pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{c|cc|cc|cc|cc|cc|cc||cc|cc|cc|cc|cc|cc}
+\toprule
+\multirow{2}{*}{Model} & \multicolumn{12}{c||}{Chronos2-PlugMem} & \multicolumn{12}{c}{Sundial-PlugMem} \\
+\cmidrule{2-25}
+ &
+\multicolumn{4}{c|}{ChronosBolt (base)} &
+\multicolumn{4}{c|}{Sundial (base)} &
+\multicolumn{4}{c||}{TimesFM (base)} &
+\multicolumn{4}{c|}{ChronosBolt (base)} &
+\multicolumn{4}{c|}{Chronos2 (base)} &
+\multicolumn{4}{c}{TimesFM (base)} \\
+\midrule
+Dataset &
+\multicolumn{2}{c|}{Origin} & \multicolumn{2}{c|}{TS-Memory} &
+\multicolumn{2}{c|}{Origin} & \multicolumn{2}{c|}{TS-Memory} &
+\multicolumn{2}{c|}{Origin} & \multicolumn{2}{c||}{TS-Memory} &
+\multicolumn{2}{c|}{Origin} & \multicolumn{2}{c|}{TS-Memory} &
+\multicolumn{2}{c|}{Origin} & \multicolumn{2}{c|}{TS-Memory} &
+\multicolumn{2}{c|}{Origin} & \multicolumn{2}{c}{TS-Memory} \\
+\midrule
+Metric &
+MSE & MAE & MSE & MAE &
+MSE & MAE & MSE & MAE &
+MSE & MAE & MSE & MAE &
+MSE & MAE & MSE & MAE &
+MSE & MAE & MSE & MAE &
+MSE & MAE & MSE & MAE \\
+\midrule
+
+ETTh1 & \underline{0.448} & \underline{0.419} & \textbf{0.420} & \textbf{0.416} & \underline{0.400} & \underline{0.412} & \textbf{0.395} & \textbf{0.410} & \underline{0.479} & \underline{0.442} & \textbf{0.436} & \textbf{0.430} & \underline{0.448} & \underline{0.419} & \textbf{0.409} & \textbf{0.416} & \underline{0.442} & \textbf{0.412} & \textbf{0.409} & \underline{0.412} & \underline{0.479} & \underline{0.442} & \textbf{0.424} & \textbf{0.427} \\
+\midrule
+ETTh2 & \underline{0.366} & \textbf{0.380} & \textbf{0.342} & \underline{0.383} & \underline{0.344} & \underline{0.380} & \textbf{0.338} & \textbf{0.379} & \underline{0.402} & \underline{0.409} & \textbf{0.358} & \textbf{0.402} & \underline{0.366} & \textbf{0.380} & \textbf{0.339} & \underline{0.382} & \underline{0.376} & \textbf{0.383} & \textbf{0.347} & \underline{0.384} & \underline{0.402} & \underline{0.409} & \textbf{0.356} & \textbf{0.399} \\
+\midrule
+ETTm1 & \underline{0.421} & \underline{0.383} & \textbf{0.375} & \textbf{0.375} & \underline{0.369} & \underline{0.369} & \textbf{0.356} & \textbf{0.366} & \underline{0.429} & \underline{0.416} & \textbf{0.375} & \textbf{0.390} & \underline{0.421} & \underline{0.383} & \textbf{0.367} & \textbf{0.375} & \underline{0.433} & \underline{0.381} & \textbf{0.370} & \textbf{0.378} & \underline{0.429} & \underline{0.416} & \textbf{0.372} & \textbf{0.390} \\
+\midrule
+ETTm2 & \underline{0.290} & \underline{0.317} & \textbf{0.262} & \textbf{0.314} & \underline{0.276} & \underline{0.317} & \textbf{0.262} & \textbf{0.314} & \underline{0.332} & \underline{0.341} & \textbf{0.267} & \textbf{0.322} & \underline{0.290} & \underline{0.317} & \textbf{0.265} & \textbf{0.314} & \underline{0.295} & \underline{0.315} & \textbf{0.264} & \textbf{0.313} & \underline{0.332} & \underline{0.341} & \textbf{0.273} & \textbf{0.325} \\
+\midrule
+Electricity & \underline{0.159} & \underline{0.244} & \textbf{0.154} & \textbf{0.242} & \underline{0.148} & \underline{0.242} & \textbf{0.144} & \textbf{0.238} & \underline{0.154} & \underline{0.244} & \textbf{0.151} & \textbf{0.242} & \underline{0.159} & \underline{0.244} & \textbf{0.154} & \textbf{0.243} & \underline{0.163} & \underline{0.244} & \textbf{0.157} & \textbf{0.242} & \underline{0.154} & \underline{0.244} & \textbf{0.151} & \textbf{0.243} \\
+\midrule
+Exchange & \underline{0.371} & \underline{0.412} & \textbf{0.355} & \textbf{0.405} & \underline{0.553} & \underline{0.494} & \textbf{0.408} & \textbf{0.444} & \underline{0.433} & \underline{0.446} & \textbf{0.383} & \textbf{0.427} & \underline{0.371} & \underline{0.412} & \textbf{0.365} & \textbf{0.407} & \underline{0.399} & \underline{0.421} & \textbf{0.392} & \textbf{0.417} & \underline{0.433} & \underline{0.446} & \textbf{0.420} & \textbf{0.438} \\
+\midrule
+Traffic & \underline{0.435} & \underline{0.263} & \textbf{0.417} & \textbf{0.260} & \underline{0.461} & \underline{0.286} & \textbf{0.427} & \textbf{0.275} & \underline{0.370} & \underline{0.244} & \textbf{0.366} & \textbf{0.243} & \underline{0.435} & \underline{0.263} & \textbf{0.418} & \textbf{0.261} & \underline{0.394} & \textbf{0.237} & \textbf{0.388} & \underline{0.240} & \underline{0.370} & \underline{0.244} & \textbf{0.367} & \textbf{0.243} \\
+\midrule
+Weather & \underline{0.263} & \underline{0.276} & \textbf{0.235} & \textbf{0.269} & \underline{0.244} & \underline{0.269} & \textbf{0.235} & \textbf{0.269} & \underline{0.222} & \underline{0.237} & \textbf{0.198} & \textbf{0.232} & \underline{0.263} & \underline{0.276} & \textbf{0.235} & \textbf{0.273} & \underline{0.274} & \textbf{0.267} & \textbf{0.233} & \underline{0.268} & \underline{0.222} & \underline{0.237} & \textbf{0.198} & \textbf{0.233} \\
+
+\bottomrule
+\end{tabular}}
+\end{small}
+\label{tab:plugmem_merged_compact}
+\end{center}
+
+\end{table*}

@@ -1,0 +1,23 @@
+\section{Related Work}
+
+In this section, we review the key related works on the topics that are closely related to this work. We put more related works and discussions in the Appendix \ref{ap:related_work} to keep the main text concise.
+
+
+\paragraph{Time-Series-only Analysis and Reasoning.}
+Traditional time series analysis has predominantly addressed core tasks like forecasting, anomaly detection, and classification using specialized deep learning architectures \citep{zhou2021informer, DBLP:conf/nips/WuXWL21, DBLP:conf/iclr/NieNSK23}.
+Recently, inspired by the success of LLMs, time series foundation models tokenize time series patches and are trained in a similar way to LLMs \citep{jin2024timellm, ansari2024chronos, DBLP:conf/icml/WooLKXSS24}. 
+Beyond numerical sequences, some recent studies transform time series as images and leverage the reasoning abilities of Vision-Language Models (VLMs) to model time series \cite{zhong2025time,he2026harnessing}. \method focuses on a more general setting of contextualized time-series reasoning, where temporal signals are analyzed with essential contexts.
+
+
+\paragraph{Contextualized and Multimodal Time Series.}
+Real-world time series are heavily influenced by external events, prompting a shift to integrate external multimodal knowledge \citep{liu2025towards, DBLP:journals/corr/abs-2502-01477, sun2024test, li2024urbangpt}. 
+Recent frameworks demonstrate significant improvement in forecasting accuracy with contexts \citep{DBLP:conf/ml4h/KingYM23,DBLP:conf/www/LiuHLDLHZ24}.
+Building on these contextual advances, recent work has expanded from traditional numerical estimation to Time Series Question Answering (TSQA), enabling natural-language-driven description over complex temporal behaviors of the time series\citep{chen2025mtbench, wang2025chattime,jing2026tsaqa,kong2025time}. 
+Yet, most existing work on contextualized time series still centers on predefined tasks such as forecasting. In contrast, \method targets generalized end-to-end workflows that require agents to jointly interpret time series, analyze with context, and produce actionable solutions accordingly.
+
+\paragraph{Agentic Systems for Time-Series Workflows.}
+
+As time series analysis grows in complexity, recent advancements have started applying agentic AI for time series \citep{DBLP:journals/corr/abs-2601-13653, DBLP:journals/corr/abs-2510-07432}. 
+While the broader AI literature explores agents across a wide array of domains, the application of LLM agents within time series research is currently overwhelmingly concentrated on forecasting tasks and time series property analysis tasks (e.g., periodicity, trend, stationary) \citep{DBLP:journals/corr/abs-2509-11575, DBLP:journals/corr/abs-2510-01538, lee2025timecap, huang2026many}. 
+While these agentic workflows show potential in forecasting accuracy and temporal property analysis, their objectives remain largely prediction-centric. \method takes a step toward a more reliable and general class of time-series agents that support context-rich and end-to-end workflow.
+

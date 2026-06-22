@@ -1,0 +1,315 @@
+%%
+%% This is file `sample-sigconf.tex',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% samples.dtx  (with options: `all,proceedings,bibtex,sigconf')
+%% 
+%% IMPORTANT NOTICE:
+%% 
+%% For the copyright see the source file.
+%% 
+%% Any modified versions of this file must be renamed
+%% with new filenames distinct from sample-sigconf.tex.
+%% 
+%% For distribution of the original source see the terms
+%% for copying and modification in the file samples.dtx.
+%% 
+%% This generated file may be distributed as long as the
+%% original source files, as listed above, are part of the
+%% same distribution. (The sources need not necessarily be
+%% in the same archive or directory.)
+%%
+%%
+%% Commands for TeXCount
+%TC:macro \cite [option:text,text]
+%TC:macro \citep [option:text,text]
+%TC:macro \citet [option:text,text]
+%TC:envir table 0 1
+%TC:envir table* 0 1
+%TC:envir tabular [ignore] word
+%TC:envir displaymath 0 word
+%TC:envir math 0 word
+%TC:envir comment 0 0
+%%
+%% The first command in your LaTeX source must be the \documentclass
+%% command.
+%%
+%% For submission and review of your manuscript please change the
+%% command to \documentclass[manuscript, screen, review]{acmart}.
+%%
+%% When submitting camera ready or to TAPS, please change the command
+%% to \documentclass[sigconf]{acmart} or whichever template is required
+%% for your publication.
+%%
+%%
+\documentclass[sigconf]{acmart}
+%%
+%% \BibTeX command to typeset BibTeX logo in the docs
+\AtBeginDocument{%
+  \providecommand\BibTeX{{%
+    Bib\TeX}}}
+
+%% Rights management information.  This information is sent to you
+%% when you complete the rights form.  These commands have SAMPLE
+%% values in them; it is your responsibility as an author to replace
+%% the commands and values with those provided to you when you
+%% complete the rights form.
+
+\copyrightyear{2026}
+\acmYear{2026}
+\setcopyright{cc}
+\setcctype{by}
+\acmConference[KDD '26]{Proceedings of the 32nd ACM SIGKDD Conference on Knowledge Discovery and Data Mining V.2}{August 09--13, 2026}{Jeju Island, Republic of Korea}
+\acmBooktitle{Proceedings of the 32nd ACM SIGKDD Conference on Knowledge Discovery and Data Mining V.2 (KDD '26), August 09--13, 2026, Jeju Island, Republic of Korea}
+\acmDOI{10.1145/3770855.3817614}
+\acmISBN{979-8-4007-2259-2/2026/08}
+%
+% Submission ID.
+% Use this when submitting an article to a sponsored event. You'll
+% receive a unique submission ID from the organizers
+% of the event, and this ID should be used as the parameter to this command.
+
+
+%%
+%% For managing citations, it is recommended to use bibliography
+%% files in BibTeX format.
+%%
+%% You can then either use BibTeX with the ACM-Reference-Format style,
+%% or BibLaTeX with the acmnumeric or acmauthoryear sytles, that include
+%% support for advanced citation of software artefact from the
+%% biblatex-software package, also separately available on CTAN.
+%%
+%% Look at the sample-*-biblatex.tex files for templates showcasing
+%% the biblatex styles.
+%%
+
+%%
+%% The majority of ACM publications use numbered citations and
+%% references.  The command \citestyle{authoryear} switches to the
+%% "author year" style.
+%%
+%% If you are preparing content for an event
+%% sponsored by ACM SIGGRAPH, you must use the "author year" style of
+%% citations and references.
+%% Uncommenting
+%% the next command will enable that style.
+%%\citestyle{acmauthoryear}
+\usepackage{algorithm}
+\usepackage{algpseudocode} % 提供 algorithmic 环境 + \State \For 
+\usepackage{amsmath}       % 为了 \text 等数学命令更稳
+\usepackage{booktabs,tabularx}
+\usepackage{booktabs,multirow}
+\usepackage{graphicx} 
+\usepackage{caption}
+\usepackage{placeins}
+\usepackage[table]{xcolor}
+\usepackage{array}
+\usepackage{makecell}
+\usepackage{xcolor}  
+\usepackage{enumitem}
+
+\settopmatter{printfolios=true}
+
+\definecolor{percentgray}{RGB}{100,100,100}  % 稍深
+\newcommand{\pct}[1]{{\scriptsize\textcolor{percentgray}{(#1)}}}
+
+% 让 tabularx 的 X 列支持垂直居中（可选但推荐）
+\renewcommand\tabularxcolumn[1]{m{#1}}
+
+% 居中且可换行的 X 列
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+
+% 固定宽度、居中且可换行的列（用于第一列“Aspect”更好控宽）
+
+
+%%
+%% end of the preamble, start of the body of the document source.
+\begin{document}
+
+%%
+%% The "title" command has an optional parameter,
+%% allowing the author to define a "short title" to be used in page headers.
+\title[TS-Memory: Plug-and-Play Memory for Time Series Foundation Models]{TS-Memory: Plug-and-Play Memory for \\ Time Series Foundation Models}
+
+%%
+%% The "author" command and its associated commands are used to define
+%% the authors and their affiliations.
+%% Of note is the shared affiliation of the first two authors, and the
+%% "authornote" and "authornotemark" commands
+%% used to denote shared contribution to the research.
+\author{Sisuo Lyu}
+\authornote{Equal Contribution.}
+\affiliation{%
+  \institution{The Hong Kong University of Science and Technology (Guangzhou)}
+  \city{Guangzhou}
+  \country{China}
+}
+\email{sisuolyu@outlook.com}
+
+\author{Siru Zhong}
+\authornotemark[1]
+\affiliation{%
+  \institution{The Hong Kong University of Science and Technology (Guangzhou)}
+  \city{Guangzhou}
+  \country{China}
+}
+\email{siruzhong@outlook.com}
+
+\author{Tiegang Chen}
+\affiliation{%
+  \institution{Tencent}
+  \city{Shenzhen}
+  \country{China}
+}
+\email{steelchen@tencent.com}
+
+\author{Weilin Ruan}
+\affiliation{%
+  \institution{The Hong Kong University of Science and Technology (Guangzhou)}
+  \city{Guangzhou}
+  \country{China}
+}
+\email{rwlinno@gmail.com}
+
+\author{Qingxiang Liu}
+\affiliation{%
+  \institution{The Hong Kong University of Science and Technology (Guangzhou)}
+  \city{Guangzhou}
+  \country{China}
+}
+\email{qingxiangliu737@gmail.com}
+
+\author{Taiqiang Lv}
+\affiliation{%
+  \institution{Tencent}
+  \city{Shenzhen}
+  \country{China}
+}
+\email{fielixlv@tencent.com}
+
+\author{Qingsong Wen}
+\affiliation{%
+  \institution{Squirrel Ai Learning}
+  \city{Bellevue}
+  \state{Washington}
+  \country{USA}
+}
+\email{qingsongedu@gmail.com}
+
+\author{Raymond Chi-Wing Wong}
+\authornote{Corresponding Author.}
+\affiliation{%
+  \institution{The Hong Kong University of Science and Technology}
+  \city{Hong Kong}
+  \country{China}
+}
+\email{raywong@cse.ust.hk}
+
+\author{Yuxuan Liang}
+\authornotemark[2]
+\affiliation{%
+  \institution{The Hong Kong University of Science and Technology (Guangzhou)}
+  \city{Guangzhou}
+  \country{China}
+}
+\email{yuxliang@outlook.com}
+%%
+%% By default, the full list of authors will be used in the page
+%% headers. Often, this list is too long, and will overlap
+%% other information printed in the page headers. This command allows
+%% the author to define a more concise list
+%% of authors' names for this purpose.
+\renewcommand{\shortauthors}{Sisuo Lyu et al.}
+
+%%
+%% The abstract is a short summary of the work to be presented in the
+%% article.
+% \begin{abstract}
+% % Retrieval augmentation can improve the robustness of frozen time-series foundation models (TSFMs) under distribution shift, but online retrieval adds latency and datastore overhead at inference time. We propose \textbf{TS-Memory}, a retrieval-to-memory framework that distills retrieval benefits into a plug-and-play memory module for strictly retrieval-free deployment. TS-Memory builds a leakage-safe offline teacher by retrieving similar contexts from the training split and summarizing their futures into confidence-aware quantile targets, and trains PlugMem via confidence-weighted distillation together with standard quantile supervision. PlugMem is backbone-agnostic and can be attached to any frozen TSFM without modifying backbone internals; a simple fusion rule combines memory and backbone forecasts with constant-time overhead independent of datastore size. Our contributions are: a search-to-memory adaptation paradigm for frozen TSFMs, a leakage-safe distributional teacher for retrieval-induced uncertainty, and a practical plug-and-play interface for retrieval-free serving. We conduct extensive experiments to validate TS-Memory's effectiveness. Our code is available at https://anonymous.4open.science/r/TS-Memory-78D0/.
+
+% Time Series Foundation Models (TSFMs) enable strong zero-shot forecasting via large-scale pretraining, yet adapting them to downstream domains remains challenging due to prevalent distribution shifts and domain heterogeneity. Existing strategies face a critical dilemma: \textit{Parametric Adaptation} risks catastrophic forgetting and high multi-domain maintenance costs, while \textit{Non-Parametric Retrieval} incurs prohibitive runtime latency from database searches. To address this, we propose \textit{Parametric Memory Distillation}—a framework distilling retrieval benefits into a lightweight learnable module—and instantiate it as \textbf{TS-Memory}, a backbone-agnostic, plug-and-play adapter for frozen TSFMs. Trained in two phases: an offline leakage-safe $k$NN teacher generates confidence-aware quantile targets from similar contexts, followed by distilling these distributional insights into the module via confidence-gated supervision. At inference, TS-Memory fuses memory and backbone predictions with constant-time overhead (datastore-size agnostic), enabling strictly retrieval-free serving. Extensive experiments across TSFMs and long-horizon benchmarks show TS-Memory consistently improves point/probabilistic forecasting accuracy—outperforming prior methods—while retaining near-baseline inference efficiency. Code: \url{https://anonymous.4open.science/r/TS-Memory-78D0/}.
+% \end{abstract}
+
+
+\begin{abstract}
+% \textit{Time Series Foundation Models} (TSFMs) enable strong zero-shot forecasting via large-scale pre-training, yet adapting them to downstream domains remains challenging due to distribution shifts and domain heterogeneity. Existing strategies face a critical dilemma: \textit{Parametric Adaptation} risks catastrophic forgetting and high multi-domain maintenance costs, while \textit{Non-Parametric Retrieval} incurs prohibitive runtime latency from database searches. To bridge this gap, we propose \textit{Parametric Memory Distillation}---a framework distilling retrieval benefits into a lightweight learnable module---and instantiate it as \textbf{TS-Memory}, a backbone-agnostic, plug-and-play adapter for frozen TSFMs. Training proceeds in two phases: an offline leakage-safe $k$NN teacher generates confidence-aware quantile targets from similar contexts, and then distills these distributional insights into the module via confidence-gated supervision. At inference, TS-Memory fuses memory and backbone predictions with constant-time overhead (datastore-size agnostic), enabling strictly retrieval-free deployment. Extensive experiments across TSFMs and long-horizon benchmarks show that TS-Memory consistently improves point/probabilistic forecasting accuracy---outperforming prior methods---while retaining near-baseline inference efficiency. Code: https://anonymous.4open.science/r/TS-Memory-78D0/.
+
+
+\textit{Time Series Foundation Models} (TSFMs) achieve strong zero-shot forecasting through large-scale pre-training, but adapting them to downstream domains under distribution shift remains challenging. Existing solutions face a trade-off: \textit{Parametric Adaptation} can cause catastrophic forgetting and requires costly multi-domain maintenance, while \textit{Non-Parametric Retrieval} improves forecasts but incurs high inference latency due to datastore search. We propose \textit{Parametric Memory Distillation} and implement it as \textbf{TS-Memory}, a lightweight memory adapter that augments frozen TSFMs. 
+% TS-Memory is trained in two stages: we first build a leakage-safe $k$NN teacher offline to retrieve similar contexts and generate confidence-aware quantile targets, then train TS-Memory to learn these targets via confidence-gated supervision.
+TS-Memory is trained in two stages. First, we construct an offline, retrieval-leakage-safe $k$NN teacher that synthesizes confidence-aware quantile targets from retrieved futures. Second, we distill this retrieval-induced distributional correction into a lightweight memory adapter via confidence-gated supervision.
+During inference, TS-Memory fuses memory and backbone predictions with constant-time overhead, enabling retrieval-free deployment. Experiments across diverse TSFMs and benchmarks demonstrate consistent improvements in both point and probabilistic forecasting over representative adaptation methods, with efficiency comparable to the frozen backbone. Code: https://github.com/sisuolv/TS-Memory.
+
+\end{abstract}
+
+
+%%
+%% The code below is generated by the tool at http://dl.acm.org/ccs.cfm.
+%% Please copy and paste the code instead of the example below.
+%%
+\begin{CCSXML}
+<ccs2012>
+  <concept>
+    <concept_id>10002950.10003648.10003688.10003693</concept_id>
+    <concept_desc>Mathematics of computing~Time series analysis</concept_desc>
+    <concept_significance>500</concept_significance>
+  </concept>
+  <concept>
+    <concept_id>10010147.10010257</concept_id>
+    <concept_desc>Computing methodologies~Machine learning</concept_desc>
+    <concept_significance>500</concept_significance>
+  </concept>
+
+</ccs2012>
+\end{CCSXML}
+
+\ccsdesc[500]{Mathematics of computing~Time series analysis}
+\ccsdesc[500]{Computing methodologies~Machine learning}
+%%
+%% Keywords. The author(s) should pick words that accurately describe
+%% the work being presented. Separate the keywords with commas.
+\keywords{Time Series Forecasting,
+Time Series Foundation Models,
+Retrieval-Free Inference,
+Knowledge Distillation,
+Plug-and-Play Memory
+}
+%% A "teaser" image appears between the author and affiliation
+%% information and the body of the document, and typically spans the
+%% page.
+
+% \received{20 February 2007}
+% \received[revised]{12 March 2009}
+% \received[accepted]{5 June 2009}
+
+%%
+%% This command processes the author and affiliation and title
+%% information and builds the first part of the formatted document.
+    \maketitle
+\input{contents/1_introduction}
+\input{contents/2_related_work}
+\input{contents/3_method}
+\input{contents/4_experiment}
+\input{contents/5_conclusion}
+
+
+%%
+%% The next two lines define the bibliography style to be used, and
+%% the bibliography file.
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{main}
+
+
+%%
+%% If your work has an appendix, this is the place to put it.
+\clearpage
+\appendix
+
+\input{contents/Appendix}
+
+\end{document}
+\endinput
+%%
+%% End of file `sample-sigconf.tex'.

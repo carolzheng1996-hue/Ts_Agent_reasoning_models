@@ -1,0 +1,47 @@
+Task ID: ```{task_id}```
+
+Original Task Context:
+```{context}```
+
+Primary Entity Extraction Slice For This Task:
+```{entity_extraction}```
+
+Note:
+- Each item in `primary_entities` is already restricted to the current task only.
+- `time_series_variable_for_this_task` should list the variable(s) aligned to this exact task.
+- Parent entities and contain relations are intentionally omitted from this validation step and are reviewed separately.
+
+You are validating whether the primary-entity extraction for this single task is correct enough for downstream use.
+
+Validation criteria:
+1. There should be exactly one primary entity for this task.
+2. The primary entity should be the object directly associated with the task's time-series variable.
+3. The extracted primary entity should be a general entity category, not an overly specific named instance or modifier-heavy variant.
+4. `time_series_variable_for_this_task` should be present and correct for this task.
+5. The slice should not include duplicate or irrelevant primary-entity candidates, and it should not miss a clearly necessary primary entity.
+
+Return valid JSON only with this schema:
+{
+  "judge": "correct | needs_correction | uncertain",
+  "confidence": "high | medium | low",
+  "summary": "short overall judgment",
+  "issue_types": ["snake_case_issue_type"],
+  "findings": [
+    {
+      "severity": "major | minor",
+      "issue_type": "snake_case_issue_type",
+      "target_id": "entity name, relation, or coverage",
+      "reason": "short reason",
+      "evidence": "short text span or explanation from the task context"
+    }
+  ],
+  "correction_hint": "short note for a human editor"
+}
+
+Rules:
+- If the slice is good enough for downstream use, set `judge` to `correct`.
+- Use `needs_correction` when there is a clear problem.
+- Use `uncertain` when the context is ambiguous or the extraction may be acceptable but you are not confident.
+- Keep `summary`, `reason`, `evidence`, and `correction_hint` concise.
+- If there are no issues, return an empty list for `findings` and `issue_types`.
+- Do not rewrite the extraction. Only validate it.

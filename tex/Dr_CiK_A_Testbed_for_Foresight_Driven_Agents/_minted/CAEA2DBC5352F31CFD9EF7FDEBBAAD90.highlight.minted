@@ -1,0 +1,154 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+You are a reasoning\PYGZhy{}chain refactoring assistant.
+
+Your task is to refactor the given input into a full reasoning chain by introducing exactly \PYGZob{}hops\PYGZcb{} new contexts.
+
+Item type:
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }\PYGZob{}item\PYGZus{}kind\PYGZcb{}
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }source ids: \PYGZob{}source\PYGZus{}event\PYGZus{}ids\PYGZcb{}
+
+Goal:
+Construct a coherent, step\PYGZhy{}by\PYGZhy{}step reasoning chain that preserves the original meaning while preventing shortcut retrieval.
+Also identify the materially real source\PYGZhy{}grounded details in the input and track where each one is preserved in the expanded chain.
+
+The final chain must:
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }be logically valid and sequential,
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }require step\PYGZhy{}by\PYGZhy{}step reasoning to traverse,
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }avoid shortcut reasoning and retrieval,
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }be locally obvious but globally non\PYGZhy{}obvious.
+
+Core requirements:
+\PYG{k}{1.} Introduce exactly \PYGZob{}hops\PYGZcb{} new contexts.
+\PYG{k}{2.} Preserve the original meaning of the input.
+\PYG{k}{3.} The output must be the full final chain (not only new contexts).
+\PYG{k}{4.} Original input contexts may be preserved, rewritten, split, or repositioned, but semantics must remain unchanged; if the input uses descriptive wording to characterize a specific state or transition, preserve that descriptive information for that same state or transition, and do not merge multiple descriptively distinct changes into one broader statement.
+\PYG{k}{5.} Each context must be specific, standalone, and reasoning\PYGZhy{}relevant; do not use generic bridge steps, and ensure every intermediate context preserves or advances the original causal specificity rather than replacing it with a vague statement.
+\PYG{k}{6.} Adjacent contexts must have a clear causal (reasoning) connection.
+\PYG{k}{7.} The chain must be a single linear path (no cycles, no branching).
+
+Shortcut prevention rules:
+\PYG{k}{8.} No single context or adjacent pair of contexts should be sufficient to reconstruct the final outcome.
+\PYG{k}{9.} Avoid placing critical or distinctive information at the beginning of the chain.
+\PYG{k}{10.} Distribute key information across NON\PYGZhy{}ADJACENT contexts.
+\PYG{k}{11.} Avoid repeating or clustering distinctive details in nearby contexts.
+\PYG{k}{12.} Ensure information can only be accessed through sequential traversal.
+
+Identifier and anchor control:
+\PYG{k}{13.} Treat identifiers (timestamps, names, unique values, distinctive phrases) as controlled anchors.
+\PYG{k}{14.} Anchors must not be repeated, paraphrased, or redistributed in ways that enable shortcut matching.
+\PYG{k}{15.} Anchors must not allow any single edge (adjacent pair) to act as a shortcut.
+\PYG{k}{16.} Structured fields from input (e.g., time\PYGZus{}start, time\PYGZus{}end) are boundary constraints and must not be freely propagated.
+
+Detail distribution and rewriting:
+\PYG{k}{17.} Separate identifiers from descriptive details when possible.
+\PYG{k}{18.} Spread different details across NON\PYGZhy{}ADJACENT contexts.
+    When direct separation would make the chain unnatural or incoherent, introduce intermediate context(s) to preserve realism while ensuring that such details remain SEPARATED by at least one reasoning step.
+\PYG{k}{19.} Rewrite original content with strong expression divergence:
+\PYG{+w}{    }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }All essential information must be preserved,
+\PYG{+w}{    }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }but the expression should be rewritten to be as different as possible in wording, phrasing, format (e.g., timestamps), and structure,
+\PYG{+w}{    }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }minimize lexical overlap and avoid distinctive or recognizable patterns,
+\PYG{+w}{    }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }the rewritten context should not be easily matched to the original through surface\PYGZhy{}level similarity,
+\PYG{+w}{    }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }prioritize maximal expression divergence while maintaining full semantic equivalence.
+\PYG{k}{20.} Do not produce contexts that closely mirror the original input.
+
+Quality constraints:
+\PYG{k}{21.} Maintain realism and plausibility, and preserve temporal and logical consistency with the input, including the original ordering, duration, persistence, reversals, and phase transitions of events or states.
+\PYG{k}{22.} Preserve all essential information across the full chain.
+\PYG{k}{23.} Avoid trivial steps, redundancy, or artificial decomposition.
+
+Interpretation rule:
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Use relation = \PYGZdq{}cause\PYGZdq{} for all edges (as general reasoning dependency).
+
+Item\PYGZhy{}specific rules:
+\PYGZob{}item\PYGZus{}specific\PYGZus{}rules\PYGZcb{}
+
+Output format:
+Return either:
+\PYG{k}{1.} JSON with:
+\PYG{+w}{   }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }\PYGZdq{}source\PYGZus{}detail\PYGZus{}inventory\PYGZdq{}
+\PYG{+w}{   }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }\PYGZdq{}contexts\PYGZdq{}
+\PYG{+w}{   }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }\PYGZdq{}relation\PYGZus{}graph\PYGZdq{}
+\PYG{+w}{   }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }\PYGZdq{}detail\PYGZus{}coverage\PYGZdq{}
+\PYG{k}{2.} null
+
+Alignment:
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+s+sb}{`relation\PYGZus{}graph`} must contain exactly \PYG{l+s+sb}{`len(contexts) \PYGZhy{} 1`} edges.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Each edge in \PYG{l+s+sb}{`relation\PYGZus{}graph`} must include exactly one non\PYGZhy{}empty \PYG{l+s+sb}{`relational\PYGZus{}context`}, so there must be exactly \PYG{l+s+sb}{`len(contexts) \PYGZhy{} 1`} relational contexts in total.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Each edge in \PYG{l+s+sb}{`relation\PYGZus{}graph`} must also include \PYG{l+s+sb}{`contains\PYGZus{}source\PYGZus{}grounded\PYGZus{}details`} and \PYG{l+s+sb}{`grounded\PYGZus{}detail\PYGZus{}ids`}.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Use \PYG{l+s+sb}{`grounded\PYGZus{}detail\PYGZus{}ids`} on an edge only when that edge preserves a real source\PYGZhy{}grounded relation/detail rather than bridge\PYGZhy{}only reasoning.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+s+sb}{`detail\PYGZus{}coverage[*].covered\PYGZus{}by\PYGZus{}edge\PYGZus{}ids`} must use the exact edge ids from \PYG{l+s+sb}{`relation\PYGZus{}graph`}, formatted as \PYG{l+s+sb}{`R1\PYGZhy{}\PYGZgt{}R2`}, \PYG{l+s+sb}{`R2\PYGZhy{}\PYGZgt{}R3`}, ... . Do not use any other separator.
+
+Context rules:
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Use IDs R1, R2, ..., in order.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+s+sb}{`relation\PYGZus{}graph`} must use only these \PYG{l+s+sb}{`context\PYGZus{}id`} values.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Do not place original source ids directly inside \PYG{l+s+sb}{`relation\PYGZus{}graph`}.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }The final chain must include both:
+\PYG{+w}{  }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }contexts newly introduced by the model, and
+\PYG{+w}{  }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }contexts derived from the original input.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Each original source id must be represented by at least one context in the final chain.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Each context must include:
+\PYG{+w}{  }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }context\PYGZus{}id
+\PYG{+w}{  }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }context
+\PYG{+w}{  }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }origin: new | original\PYGZus{}preserved | original\PYGZus{}refactored
+\PYG{+w}{  }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }type\PYGZus{}count: string in the form \PYG{l+s+sb}{`\PYGZlt{}origin\PYGZgt{}\PYGZus{}\PYGZlt{}n\PYGZgt{}`}, where \PYG{l+s+sb}{`n`} is the 1\PYGZhy{}based occurrence index within that origin type as contexts appear in \PYG{l+s+sb}{`contexts`}
+\PYG{+w}{  }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }contains\PYGZus{}source\PYGZus{}grounded\PYGZus{}details: true | false
+\PYG{+w}{  }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }grounded\PYGZus{}detail\PYGZus{}ids: list of \PYG{l+s+sb}{`detail\PYGZus{}id`} values preserved in this context
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }If origin is original\PYGZus{}*, include source\PYGZus{}context\PYGZus{}id.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }If origin is new, do not include source\PYGZus{}context\PYGZus{}id.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Count \PYG{l+s+sb}{`new`}, \PYG{l+s+sb}{`original\PYGZus{}preserved`}, and \PYG{l+s+sb}{`original\PYGZus{}refactored`} separately when assigning \PYG{l+s+sb}{`type\PYGZus{}count`}. For example, if the first two \PYG{l+s+sb}{`new`} contexts appear at \PYG{l+s+sb}{`R2`} and \PYG{l+s+sb}{`R5`}, their \PYG{l+s+sb}{`type\PYGZus{}count`} values must be \PYG{l+s+sb}{`new\PYGZus{}1`} and \PYG{l+s+sb}{`new\PYGZus{}2`}.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Exactly \PYGZob{}hops\PYGZcb{} contexts must have origin = \PYGZdq{}new\PYGZdq{}.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }For identifiers originating from the input (e.g., timestamps, unique profiles, or distinctive references), their associated semantic content and the identifier itself should be separated across different, non\PYGZhy{}adjacent contexts whenever possible. 
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }The identifier and its corresponding descriptive information must not be co\PYGZhy{}located in a single context or adjacent contexts in a way that enables direct retrieval.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }However, the chain must still allow the original information to be reconstructed through sequential reasoning across multiple steps.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Add \PYG{l+s+sb}{`source\PYGZus{}detail\PYGZus{}inventory`} before \PYG{l+s+sb}{`contexts`}.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Add \PYG{l+s+sb}{`detail\PYGZus{}coverage`} after \PYG{l+s+sb}{`relation\PYGZus{}graph`}.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Each context and each edge must indicate whether it contains any real source\PYGZhy{}grounded detail, and if so, which \PYG{l+s+sb}{`detail\PYGZus{}id`} values it preserves.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Every materially real source\PYGZhy{}grounded detail from the input must appear in \PYG{l+s+sb}{`source\PYGZus{}detail\PYGZus{}inventory`} and must be covered at least once in \PYG{l+s+sb}{`detail\PYGZus{}coverage`}.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Do not label inferred bridge reasoning as if it were a real source\PYGZhy{}grounded detail from the input.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }To maximize reasoning difficulty, distribute source\PYGZhy{}grounded details as sparsely as possible across different, non\PYGZhy{}adjacent contexts or edges instead of clustering multiple details in one context whenever fidelity and coherence allow.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }If a source\PYGZhy{}grounded detail is most naturally preserved in the transition between two contexts rather than in a single context, it may appear only on the corresponding \PYG{l+s+sb}{`relation\PYGZus{}graph`} edge; avoid duplicating the same detail in a context unless necessary for faithfulness or coherence.
+
+Fallback:
+Return null if no meaningful, consistent reasoning chain can be constructed.
+
+Output JSON schema:
+\PYGZob{}
+  \PYGZdq{}source\PYGZus{}detail\PYGZus{}inventory\PYGZdq{}: [
+    \PYGZob{}
+      \PYGZdq{}detail\PYGZus{}id\PYGZdq{}: \PYGZdq{}D1\PYGZdq{},
+      \PYGZdq{}detail\PYGZdq{}: \PYGZdq{}source\PYGZhy{}grounded detail text\PYGZdq{}
+    \PYGZcb{}
+  ],
+  \PYGZdq{}contexts\PYGZdq{}: [
+    \PYGZob{}
+      \PYGZdq{}context\PYGZus{}id\PYGZdq{}: \PYGZdq{}R1\PYGZdq{},
+      \PYGZdq{}context\PYGZdq{}: \PYGZdq{}...\PYGZdq{},
+      \PYGZdq{}origin\PYGZdq{}: \PYGZdq{}new | original\PYGZus{}preserved | original\PYGZus{}refactored\PYGZdq{},
+      \PYGZdq{}type\PYGZus{}count\PYGZdq{}: \PYGZdq{}original\PYGZus{}refactored\PYGZus{}1\PYGZdq{},
+      \PYGZdq{}source\PYGZus{}context\PYGZus{}id\PYGZdq{}: \PYGZdq{}E1\PYGZdq{},
+      \PYGZdq{}contains\PYGZus{}source\PYGZus{}grounded\PYGZus{}details\PYGZdq{}: true,
+      \PYGZdq{}grounded\PYGZus{}detail\PYGZus{}ids\PYGZdq{}: [\PYGZdq{}D1\PYGZdq{}]
+    \PYGZcb{}
+  ],
+  \PYGZdq{}relation\PYGZus{}graph\PYGZdq{}: [
+    \PYGZob{}
+      \PYGZdq{}source\PYGZus{}context\PYGZus{}id\PYGZdq{}: \PYGZdq{}R1\PYGZdq{},
+      \PYGZdq{}target\PYGZus{}context\PYGZus{}id\PYGZdq{}: \PYGZdq{}R2\PYGZdq{},
+      \PYGZdq{}relational\PYGZus{}context\PYGZdq{}: \PYGZdq{}...\PYGZdq{},
+      \PYGZdq{}relation\PYGZdq{}: \PYGZdq{}cause\PYGZdq{},
+      \PYGZdq{}contains\PYGZus{}source\PYGZus{}grounded\PYGZus{}details\PYGZdq{}: false,
+      \PYGZdq{}grounded\PYGZus{}detail\PYGZus{}ids\PYGZdq{}: []
+    \PYGZcb{}
+  ],
+  \PYGZdq{}detail\PYGZus{}coverage\PYGZdq{}: [
+    \PYGZob{}
+      \PYGZdq{}detail\PYGZus{}id\PYGZdq{}: \PYGZdq{}D1\PYGZdq{},
+      \PYGZdq{}covered\PYGZus{}by\PYGZus{}context\PYGZus{}ids\PYGZdq{}: [\PYGZdq{}R1\PYGZdq{}],
+      \PYGZdq{}covered\PYGZus{}by\PYGZus{}edge\PYGZus{}ids\PYGZdq{}: []
+    \PYGZcb{}
+  ]
+\PYGZcb{}
+
+Input:
+\PYGZob{}context\PYGZcb{}
+\end{MintedVerbatim}

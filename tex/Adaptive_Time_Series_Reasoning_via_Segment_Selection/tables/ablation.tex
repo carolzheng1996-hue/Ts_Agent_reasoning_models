@@ -1,0 +1,24 @@
+\begin{table}[t]
+\centering
+\small
+\caption{\textbf{Ablation on ECG-QA and RCW accuracy (\%).}}
+\label{tab:ablation}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Method} & \textbf{ECG} & \textbf{RCW} & \textbf{Avg.} \\
+\midrule
+\rowcolor{lightpurple}
+\algoname & \textbf{69.81} & \textbf{77.00} & \textbf{73.41} \\
+Reasoner Only & 65.33 & 62.88 & 64.11 \\
+Controller-only RL & 60.81 & 68.13 & 64.47 \\
+\midrule
+w/o Reliability Reward & 52.50 & 51.44 & 51.97 \\
+w/o Trajectory-based Objective & 55.19 & 67.06 & 61.13 \\
+w/o Variance-guided Sampling & 68.13 & 72.75 & 70.44 \\
+\bottomrule
+\end{tabular}
+\vspace{-3mm}
+\end{table}
+
+

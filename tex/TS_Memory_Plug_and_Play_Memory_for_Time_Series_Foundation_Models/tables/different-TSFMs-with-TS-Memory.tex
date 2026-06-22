@@ -1,0 +1,246 @@
+% %ok
+
+% \begin{table*}[!htpb]
+% \begin{center}
+% \caption{Full long-term forecasting results of TS-Memory across frozen TSFM backbones. Results are averaged over forecasting horizons $H \in $\{96, 192, 336, 720\}. Lower values indicate better performance. Best results are highlighted in \textbf{bold}, and second best results are underlined. $\Delta$ denotes the relative change (\%) of Avg after adding TS-Memory compared to Origin.}
+% \begin{small}
+% \setlength\tabcolsep{4pt}
+% \scalebox{0.95}{
+% \begin{tabular}{c|c|cc|cc|cc|cc|cc|cc|cc|cc}
+% \toprule
+% \multicolumn{2}{c|}{TSFM } &
+% \multicolumn{4}{c|}{ChronosBolt (base)} &
+% \multicolumn{4}{c|}{Chronos2 (base)} &
+% \multicolumn{4}{c|}{Sundial (base)} &
+% \multicolumn{4}{c}{TimesFM (base)} \\
+% \midrule
+% \multicolumn{2}{c|}{Dataset}  &
+% \multicolumn{2}{c|}{Origin} & \multicolumn{2}{c|}{+TS-Memory} &
+% \multicolumn{2}{c|}{Origin} & \multicolumn{2}{c|}{+TS-Memory} &
+% \multicolumn{2}{c|}{Origin} & \multicolumn{2}{c|}{+TS-Memory} &
+% \multicolumn{2}{c|}{Origin} & \multicolumn{2}{c}{+TS-Memory} \\
+% \midrule
+% \multicolumn{2}{c|}{Metric} &
+% MSE & MAE & MSE & MAE &
+% MSE & MAE & MSE & MAE &
+% MSE & MAE & MSE & MAE &
+% MSE & MAE & MSE & MAE \\
+% \midrule
+
+% \multirow{6}{*}{\rotatebox{90}{ETTh1}}
+% & 96  & 0.3849 & 0.3798 & \textbf{0.3736} & \textbf{0.3772} & 0.3948 & 0.3800 & \textbf{0.3704} & \textbf{0.3751} & 0.3574 & 0.3826 & \textbf{0.3540} & \textbf{0.3807} & 0.4211 & 0.4009 & \textbf{0.3920} & \textbf{0.3901} \\
+% & 192 & 0.4417 & 0.4122 & \textbf{0.4103} & \textbf{0.4071} & 0.4382 & 0.4073 & \textbf{0.4153} & \textbf{0.4019} & 0.3920 & 0.4056 & \textbf{0.3881} & \textbf{0.4026} & 0.4721 & 0.4323 & \textbf{0.4406} & \textbf{0.4209} \\
+% & 336 & 0.4814 & 0.4331 & \textbf{0.4393} & \textbf{0.4245} & 0.4679 & 0.4231 & \textbf{0.4394} & \textbf{0.4168} & 0.4065 & 0.4159 & \textbf{0.4038} & \textbf{0.4142} & 0.5098 & 0.4548 & \textbf{0.4578} & \textbf{0.4394} \\
+% & 720 & 0.4836 & 0.4489 & \textbf{0.4616} & \textbf{0.4451} & 0.4672 & 0.4355 & \textbf{0.4546} & \textbf{0.4331} & 0.4424 & 0.4453 & \textbf{0.4388} & \textbf{0.4430} & 0.5140 & 0.4813 & \textbf{0.5016} & \textbf{0.4752} \\
+
+% \cmidrule{2-18}
+% & Avg & 0.4479 & 0.4185 & \textbf{0.4212} & \textbf{0.4135} & 0.4420 & 0.4115 & \textbf{0.4199} & \textbf{0.4067} & 0.3996 & 0.4123 & \textbf{0.3962} & \textbf{0.4101} & 0.4793 & 0.4423 & \textbf{0.4480} & \textbf{0.4314} \\
+% & $\Delta$  & -- & -- & -5.96\% & -1.19\% & -- & -- & -5.00\% & -1.17\% & -- & -- & -0.85\% & -0.53\% & -- & -- & -6.53\% & -2.46\% \\
+% \midrule
+
+% \multirow{6}{*}{\rotatebox{90}{ETTh2}}
+% & 96  & 0.2895 & 0.3251 & \textbf{0.2823} & \textbf{0.3235} & 0.3095 & 0.3303 & \textbf{0.2903} & \textbf{0.3253} & 0.2804 & 0.3310 & \textbf{0.2768} & \textbf{0.3298} & 0.3263 & 0.3515 & \textbf{0.2966} & \textbf{0.3413} \\
+% & 192 & 0.3598 & 0.3695 & \textbf{0.3507} & \textbf{0.3657} & 0.3856 & 0.3819 & \textbf{0.3530} & \textbf{0.3767} & 0.3438 & 0.3740 & \textbf{0.3398} & \textbf{0.3707} & 0.3994 & 0.3979 & \textbf{0.3595} & \textbf{0.3873} \\
+% & 336 & 0.4029 & 0.4025 & \textbf{0.3881} & \textbf{0.3963} & 0.4040 & 0.4047 & \textbf{0.3670} & \textbf{0.3954} & 0.3617 & 0.3928 & \textbf{0.3565} & \textbf{0.3902} & 0.4335 & 0.4311 & \textbf{0.3831} & \textbf{0.4154} \\
+% & 720 & 0.4140 & 0.4210 & \textbf{0.3960} & \textbf{0.4159} & 0.4047 & 0.4168 & \textbf{0.3904} & \textbf{0.4124} & 0.3889 & 0.4219 & \textbf{0.3870} & \textbf{0.4200} & 0.4498 & 0.4572 & \textbf{0.4182} & \textbf{0.4466} \\
+
+% \cmidrule{2-18}
+% & Avg & 0.3666 & 0.3795 & \textbf{0.3543} & \textbf{0.3754} & 0.3760 & 0.3834 & \textbf{0.3502} & \textbf{0.3775} & 0.3437 & 0.3799 & \textbf{0.3400} & \textbf{0.3777} & 0.4022 & 0.4094 & \textbf{0.3643} & \textbf{0.3977} \\
+% & $\Delta$  & -- & -- & -3.36\% & -1.08\% & -- & -- & -6.86\% & -1.54\% & -- & -- & -1.08\% & -0.58\% & -- & -- & -9.42\% & -2.86\% \\
+% \midrule
+
+% \multirow{6}{*}{\rotatebox{90}{ETTm1}}
+% & 96  & 0.3319 & 0.3332 & \textbf{0.3030} & \textbf{0.3253} & 0.3340 & 0.3261 & \textbf{0.3055} & \textbf{0.3205} & 0.2948 & 0.3239 & \textbf{0.2820} & \textbf{0.3192} & 0.3568 & 0.3668 & \textbf{0.3061} & \textbf{0.3454} \\
+% & 192 & 0.3870 & 0.3658 & \textbf{0.3594} & \textbf{0.3583} & 0.4032 & 0.3643 & \textbf{0.3707} & \textbf{0.3562} & 0.3451 & 0.3561 & \textbf{0.3319} & \textbf{0.3502} & 0.4113 & 0.4024 & \textbf{0.3653} & \textbf{0.3824} \\
+% & 336 & 0.4363 & 0.3934 & \textbf{0.4032} & \textbf{0.3825} & 0.4533 & 0.3931 & \textbf{0.4064} & \textbf{0.3824} & 0.3813 & 0.3792 & \textbf{0.3692} & \textbf{0.3733} & 0.4409 & 0.4261 & \textbf{0.3788} & \textbf{0.3978} \\
+% & 720 & 0.5279 & 0.4391 & \textbf{0.4590} & \textbf{0.4177} & 0.5421 & 0.4385 & \textbf{0.4904} & \textbf{0.4274} & 0.4563 & 0.4180 & \textbf{0.4415} & \textbf{0.4119} & 0.5069 & 0.4685 & \textbf{0.4779} & \textbf{0.4581} \\
+
+% \cmidrule{2-18}
+% & Avg & 0.4208 & 0.3829 & \textbf{0.3811} & \textbf{0.3709} & 0.4332 & 0.3805 & \textbf{0.3932} & \textbf{0.3716} & 0.3694 & 0.3693 & \textbf{0.3562} & \textbf{0.3636} & 0.4290 & 0.4160 & \textbf{0.3820} & \textbf{0.3959} \\
+% & $\Delta$  & -- & -- & -9.43\% & -3.13\% & -- & -- & -9.23\% & -2.34\% & -- & -- & -3.57\% & -1.54\% & -- & -- & -10.96\% & -4.83\% \\
+% \midrule
+
+% \multirow{6}{*}{\rotatebox{90}{ETTm2}}
+% & 96  & 0.1777 & 0.2448 & \textbf{0.1672} & \textbf{0.2400} & 0.1801 & 0.2415 & \textbf{0.1687} & \textbf{0.2370} & 0.1776 & 0.2514 & \textbf{0.1666} & \textbf{0.2452} & 0.2046 & 0.2660 & \textbf{0.1769} & \textbf{0.2543} \\
+% & 192 & 0.2511 & 0.2935 & \textbf{0.2317} & \textbf{0.2879} & 0.2551 & 0.2915 & \textbf{0.2347} & \textbf{0.2866} & 0.2404 & 0.2947 & \textbf{0.2266} & \textbf{0.2883} & 0.2927 & 0.3176 & \textbf{0.2396} & \textbf{0.2996} \\
+% & 336 & 0.3170 & 0.3359 & \textbf{0.2919} & \textbf{0.3279} & 0.3192 & 0.3330 & \textbf{0.2932} & \textbf{0.3269} & 0.2977 & 0.3325 & \textbf{0.2881} & \textbf{0.3266} & 0.3644 & 0.3607 & \textbf{0.2924} & \textbf{0.3358} \\
+% & 720 & 0.4160 & 0.3950 & \textbf{0.3782} & \textbf{0.3863} & 0.4265 & 0.3948 & \textbf{0.3848} & \textbf{0.3856} & 0.3878 & 0.3907 & \textbf{0.3831} & \textbf{0.3884} & 0.4644 & 0.4204 & \textbf{0.4051} & \textbf{0.4063} \\
+
+% \cmidrule{2-18}
+% & Avg & 0.2905 & 0.3173 & \textbf{0.2672} & \textbf{0.3105} & 0.2952 & 0.3152 & \textbf{0.2703} & \textbf{0.3090} & 0.2759 & 0.3173 & \textbf{0.2661} & \textbf{0.3121} & 0.3315 & 0.3412 & \textbf{0.2785} & \textbf{0.3240} \\
+% & $\Delta$  & -- & -- & -8.02\% & -2.14\% & -- & -- & -8.43\% & -1.97\% & -- & -- & -3.55\% & -1.64\% & -- & -- & -15.99\% & -5.04\% \\
+% \midrule
+
+% \multirow{6}{*}{\rotatebox{90}{Electricity}}
+% & 96  & 0.1242 & 0.2105 & \textbf{0.1206} & \textbf{0.2083} & 0.1275 & 0.2107 & \textbf{0.1251} & \textbf{0.2082} & 0.1182 & 0.2123 & \textbf{0.1137} & \textbf{0.2102} & 0.1185 & 0.2116 & \textbf{0.1160} & \textbf{0.2090} \\
+% & 192 & 0.1428 & 0.2287 & \textbf{0.1381} & \textbf{0.2264} & 0.1470 & 0.2295 & \textbf{0.1453} & \textbf{0.2268} & 0.1355 & 0.2300 & \textbf{0.1318} & \textbf{0.2267} & 0.1366 & 0.2286 & \textbf{0.1301} & \textbf{0.2253} \\
+% & 336 & 0.1613 & 0.2482 & \textbf{0.1585} & \textbf{0.2459} & 0.1668 & 0.2495 & \textbf{0.1617} & \textbf{0.2468} & 0.1507 & 0.2466 & \textbf{0.1477} & \textbf{0.2430} & 0.1570 & 0.2481 & \textbf{0.1515} & \textbf{0.2468} \\
+% & 720 & 0.2069 & 0.2882 & \textbf{0.2019} & \textbf{0.2848} & 0.2099 & 0.2865 & \textbf{0.2056} & \textbf{0.2838} & 0.1886 & 0.2796 & \textbf{0.1839} & \textbf{0.2755} & 0.2030 & 0.2867 & \textbf{0.1999} & \textbf{0.2838} \\
+
+% \cmidrule{2-18}
+% & Avg & 0.1588 & 0.2439 & \textbf{0.1548} & \textbf{0.2414} & 0.1628 & 0.2441 & \textbf{0.1594} & \textbf{0.2414} & 0.1483 & 0.2421 & \textbf{0.1443} & \textbf{0.2388} & 0.1538 & 0.2438 & \textbf{0.1494} & \textbf{0.2412} \\
+% & $\Delta$  & -- & -- & -2.52\% & -1.03\% & -- & -- & -2.09\% & -1.11\% & -- & -- & -2.70\% & -1.36\% & -- & -- & -2.86\% & -1.07\% \\
+% \midrule
+
+% \multirow{6}{*}{\rotatebox{90}{Exchange-rate}}
+% & 96  & 0.0992 & 0.2191 & \textbf{0.0882} & \textbf{0.2091} & 0.0920 & 0.2096 & \textbf{0.0864} & \textbf{0.2052} & 0.1279 & 0.2447 & \textbf{0.0924} & \textbf{0.2180} & 0.1096 & 0.2331 & \textbf{0.0905} & \textbf{0.2140} \\
+% & 192 & 0.1944 & 0.3140 & \textbf{0.1885} & \textbf{0.3101} & 0.1977 & 0.3151 & \textbf{0.1866} & \textbf{0.3080} & 0.2840 & 0.3731 & \textbf{0.2299} & \textbf{0.3485} & 0.2194 & 0.3341 & \textbf{0.2166} & \textbf{0.3303} \\
+% & 336 & 0.3420 & 0.4238 & \textbf{0.3354} & \textbf{0.4185} & 0.3625 & 0.4333 & \textbf{0.3582} & \textbf{0.4318} & 0.5351 & 0.5279 & \textbf{0.4042} & \textbf{0.4701} & 0.3934 & 0.4562 & \textbf{0.3893} & \textbf{0.4536} \\
+% & 720 & 0.8493 & 0.6915 & \textbf{0.8463} & \textbf{0.6865} & 0.9421 & 0.7260 & \textbf{0.8317} & \textbf{0.6871} & 1.2646 & 0.8283 & \textbf{1.1586} & \textbf{0.8183} & 1.0090 & 0.7587 & \textbf{1.0017} & \textbf{0.7355} \\
+
+% \cmidrule{2-18}
+% & Avg & 0.3712 & 0.4121 & \textbf{0.3646} & \textbf{0.4060} & 0.3986 & 0.4210 & \textbf{0.3657} & \textbf{0.4080} & 0.5529 & 0.4935 & \textbf{0.4713} & \textbf{0.4637} & 0.4329 & 0.4455 & \textbf{0.4245} & \textbf{0.4333} \\
+% & $\Delta$  & -- & -- & -1.78\% & -1.48\% & -- & -- & -8.25\% & -3.09\% & -- & -- & -14.76\% & -6.04\% & -- & -- & -1.94\% & -2.74\% \\
+% \midrule
+
+% \multirow{6}{*}{\rotatebox{90}{Traffic}}
+% & 96  & 0.3870 & 0.2409 & \textbf{0.3762} & \textbf{0.2372} & 0.3547 & 0.2169 & \textbf{0.3511} & \textbf{0.2152} & 0.4272 & 0.2665 & \textbf{0.4014} & \textbf{0.2581} & 0.3273 & 0.2204 & \textbf{0.3257} & \textbf{0.2181} \\
+% & 192 & 0.4137 & 0.2531 & \textbf{0.4062} & \textbf{0.2483} & 0.3811 & 0.2291 & \textbf{0.3767} & \textbf{0.2286} & 0.4501 & 0.2795 & \textbf{0.4280} & \textbf{0.2713} & 0.3538 & 0.2346 & \textbf{0.3511} & \textbf{0.2314} \\
+% & 336 & 0.4355 & 0.2633 & \textbf{0.4265} & \textbf{0.2593} & 0.3977 & 0.2378 & \textbf{0.3917} & \textbf{0.2368} & 0.4644 & 0.2881 & \textbf{0.4341} & \textbf{0.2786} & 0.3779 & 0.2477 & \textbf{0.3758} & \textbf{0.2451} \\
+% & 720 & 0.5033 & 0.2934 & \textbf{0.4902} & \textbf{0.2886} & 0.4440 & 0.2628 & \textbf{0.4360} & \textbf{0.2606} & 0.5006 & 0.3102 & \textbf{0.4817} & \textbf{0.3020} & 0.4196 & 0.2722 & \textbf{0.4170} & \textbf{0.2694} \\
+
+% \cmidrule{2-18}
+% & Avg & 0.4349 & 0.2627 & \textbf{0.4248} & \textbf{0.2584} & 0.3944 & 0.2366 & \textbf{0.3889} & \textbf{0.2353} & 0.4606 & 0.2861 & \textbf{0.4363} & \textbf{0.2775} & 0.3696 & 0.2437 & \textbf{0.3674} & \textbf{0.2410} \\
+% & $\Delta$  & -- & -- & -2.32\% & -1.64\% & -- & -- & -1.39\% & -0.55\% & -- & -- & -5.28\% & -3.01\% & -- & -- & -0.60\% & -1.11\% \\
+% \midrule
+
+% \multirow{6}{*}{\rotatebox{90}{Weather}}
+% & 96  & 0.1775 & 0.2102 & \textbf{0.1573} & \textbf{0.1975} & 0.1680 & 0.1907 & \textbf{0.1557} & \textbf{0.1867} & 0.1604 & 0.2009 & \textbf{0.1535} & \textbf{0.1969} & 0.1221 & 0.1565 & \textbf{0.1169} & \textbf{0.1537} \\
+% & 192 & 0.2242 & 0.2535 & \textbf{0.2015} & \textbf{0.2448} & 0.2249 & 0.2413 & \textbf{0.2015} & \textbf{0.2352} & 0.2121 & 0.2490 & \textbf{0.2069} & \textbf{0.2459} & 0.1671 & 0.1996 & \textbf{0.1585} & \textbf{0.1959} \\
+% & 336 & 0.2838 & 0.2947 & \textbf{0.2521} & \textbf{0.2833} & 0.2968 & 0.2879 & \textbf{0.2558} & \textbf{0.2805} & 0.2662 & 0.2889 & \textbf{0.2586} & \textbf{0.2855} & 0.2358 & 0.2540 & \textbf{0.2189} & \textbf{0.2481} \\
+% & 720 & 0.3670 & 0.3465 & \textbf{0.3459} & \textbf{0.3408} & 0.4055 & 0.3477 & \textbf{0.3510} & \textbf{0.3382} & 0.3355 & 0.3385 & \textbf{0.3309} & \textbf{0.3360} & 0.3610 & 0.3391 & \textbf{0.3245} & \textbf{0.3241} \\
+
+% \cmidrule{2-18}
+% & Avg & 0.2631 & 0.2762 & \textbf{0.2392} & \textbf{0.2666} & 0.2738 & 0.2669 & \textbf{0.2410} & \textbf{0.2601} & 0.2436 & 0.2693 & \textbf{0.2375} & \textbf{0.2660} & 0.2215 & 0.2373 & \textbf{0.2047} & \textbf{0.2304} \\
+% & $\Delta$  & -- & -- & -9.08\% & -3.48\% & -- & -- & -11.98\% & -2.55\% & -- & -- & -2.50\% & -1.23\% & -- & -- & -7.58\% & -2.91\% \\
+% \bottomrule
+% \end{tabular}}
+% \end{small}
+
+% \label{tab:ts_plugmem_full}
+% \end{center}
+% \end{table*}
+
+
+%ok
+
+\begin{table*}[!htpb]
+\begin{center}
+\caption{Full long-term forecasting results of TS-Memory across frozen TSFM backbones. Results are averaged over forecasting horizons $H \in $\{96, 192, 336, 720\}. Lower values indicate better performance. Best results are highlighted in \textbf{bold}, and second best results are underlined. $\Delta$ denotes the relative change (\%) of Avg after adding TS-Memory compared to Origin.}
+\begin{small}
+\setlength\tabcolsep{4pt}
+\scalebox{0.95}{
+\begin{tabular}{c|c|cc|cc|cc|cc|cc|cc|cc|cc}
+\toprule
+\multicolumn{2}{c|}{TSFM } &
+\multicolumn{4}{c|}{ChronosBolt (base)} &
+\multicolumn{4}{c|}{Chronos2 (base)} &
+\multicolumn{4}{c|}{Sundial (base)} &
+\multicolumn{4}{c}{TimesFM (base)} \\
+\midrule
+\multicolumn{2}{c|}{Dataset}  &
+\multicolumn{2}{c|}{Origin} & \multicolumn{2}{c|}{TS-Memory} &
+\multicolumn{2}{c|}{Origin} & \multicolumn{2}{c|}{TS-Memory} &
+\multicolumn{2}{c|}{Origin} & \multicolumn{2}{c|}{TS-Memory} &
+\multicolumn{2}{c|}{Origin} & \multicolumn{2}{c}{TS-Memory} \\
+\midrule
+\multicolumn{2}{c|}{Metric} &
+MSE & MAE & MSE & MAE &
+MSE & MAE & MSE & MAE &
+MSE & MAE & MSE & MAE &
+MSE & MAE & MSE & MAE \\
+\midrule
+
+\multirow{6}{*}{\rotatebox{90}{ETTh1}}
+& 96  & \underline{0.3849} & \underline{0.3798} & \textbf{0.3736} & \textbf{0.3772} & \underline{0.3948} & \underline{0.3800} & \textbf{0.3704} & \textbf{0.3751} & \underline{0.3574} & \underline{0.3826} & \textbf{0.3540} & \textbf{0.3807} & \underline{0.4211} & \underline{0.4009} & \textbf{0.3920} & \textbf{0.3901} \\
+& 192 & \underline{0.4417} & \underline{0.4122} & \textbf{0.4103} & \textbf{0.4071} & \underline{0.4382} & \underline{0.4073} & \textbf{0.4153} & \textbf{0.4019} & \underline{0.3920} & \underline{0.4056} & \textbf{0.3881} & \textbf{0.4026} & \underline{0.4721} & \underline{0.4323} & \textbf{0.4406} & \textbf{0.4209} \\
+& 336 & \underline{0.4814} & \underline{0.4331} & \textbf{0.4393} & \textbf{0.4245} & \underline{0.4679} & \underline{0.4231} & \textbf{0.4394} & \textbf{0.4168} & \underline{0.4065} & \underline{0.4159} & \textbf{0.4038} & \textbf{0.4142} & \underline{0.5098} & \underline{0.4548} & \textbf{0.4578} & \textbf{0.4394} \\
+& 720 & \underline{0.4836} & \underline{0.4489} & \textbf{0.4616} & \textbf{0.4451} & \underline{0.4672} & \underline{0.4355} & \textbf{0.4546} & \textbf{0.4331} & \underline{0.4424} & \underline{0.4453} & \textbf{0.4388} & \textbf{0.4430} & \underline{0.5140} & \underline{0.4813} & \textbf{0.5016} & \textbf{0.4752} \\
+
+\cmidrule{2-18}
+& Avg & \underline{0.4479} & \underline{0.4185} & \textbf{0.4212} & \textbf{0.4135} & \underline{0.4420} & \underline{0.4115} & \textbf{0.4199} & \textbf{0.4067} & \underline{0.3996} & \underline{0.4123} & \textbf{0.3962} & \textbf{0.4101} & \underline{0.4793} & \underline{0.4423} & \textbf{0.4480} & \textbf{0.4314} \\
+& $\Delta$  & -- & -- & -5.96\% & -1.19\% & -- & -- & -5.00\% & -1.17\% & -- & -- & -0.85\% & -0.53\% & -- & -- & -6.53\% & -2.46\% \\
+\midrule
+
+\multirow{6}{*}{\rotatebox{90}{ETTh2}}
+& 96  & \underline{0.2895} & \underline{0.3251} & \textbf{0.2823} & \textbf{0.3235} & \underline{0.3095} & \underline{0.3303} & \textbf{0.2903} & \textbf{0.3253} & \underline{0.2804} & \underline{0.3310} & \textbf{0.2768} & \textbf{0.3298} & \underline{0.3263} & \underline{0.3515} & \textbf{0.2966} & \textbf{0.3413} \\
+& 192 & \underline{0.3598} & \underline{0.3695} & \textbf{0.3507} & \textbf{0.3657} & \underline{0.3856} & \underline{0.3819} & \textbf{0.3530} & \textbf{0.3767} & \underline{0.3438} & \underline{0.3740} & \textbf{0.3398} & \textbf{0.3707} & \underline{0.3994} & \underline{0.3979} & \textbf{0.3595} & \textbf{0.3873} \\
+& 336 & \underline{0.4029} & \underline{0.4025} & \textbf{0.3881} & \textbf{0.3963} & \underline{0.4040} & \underline{0.4047} & \textbf{0.3670} & \textbf{0.3954} & \underline{0.3617} & \underline{0.3928} & \textbf{0.3565} & \textbf{0.3902} & \underline{0.4335} & \underline{0.4311} & \textbf{0.3831} & \textbf{0.4154} \\
+& 720 & \underline{0.4140} & \underline{0.4210} & \textbf{0.3960} & \textbf{0.4159} & \underline{0.4047} & \underline{0.4168} & \textbf{0.3904} & \textbf{0.4124} & \underline{0.3889} & \underline{0.4219} & \textbf{0.3870} & \textbf{0.4200} & \underline{0.4498} & \underline{0.4572} & \textbf{0.4182} & \textbf{0.4466} \\
+
+\cmidrule{2-18}
+& Avg & \underline{0.3666} & \underline{0.3795} & \textbf{0.3543} & \textbf{0.3754} & \underline{0.3760} & \underline{0.3834} & \textbf{0.3502} & \textbf{0.3775} & \underline{0.3437} & \underline{0.3799} & \textbf{0.3400} & \textbf{0.3777} & \underline{0.4022} & \underline{0.4094} & \textbf{0.3643} & \textbf{0.3977} \\
+& $\Delta$  & -- & -- & -3.36\% & -1.08\% & -- & -- & -6.86\% & -1.54\% & -- & -- & -1.08\% & -0.58\% & -- & -- & -9.42\% & -2.86\% \\
+\midrule
+
+\multirow{6}{*}{\rotatebox{90}{ETTm1}}
+& 96  & \underline{0.3319} & \underline{0.3332} & \textbf{0.3030} & \textbf{0.3253} & \underline{0.3340} & \underline{0.3261} & \textbf{0.3055} & \textbf{0.3205} & \underline{0.2948} & \underline{0.3239} & \textbf{0.2820} & \textbf{0.3192} & \underline{0.3568} & \underline{0.3668} & \textbf{0.3061} & \textbf{0.3454} \\
+& 192 & \underline{0.3870} & \underline{0.3658} & \textbf{0.3594} & \textbf{0.3583} & \underline{0.4032} & \underline{0.3643} & \textbf{0.3707} & \textbf{0.3562} & \underline{0.3451} & \underline{0.3561} & \textbf{0.3319} & \textbf{0.3502} & \underline{0.4113} & \underline{0.4024} & \textbf{0.3653} & \textbf{0.3824} \\
+& 336 & \underline{0.4363} & \underline{0.3934} & \textbf{0.4032} & \textbf{0.3825} & \underline{0.4533} & \underline{0.3931} & \textbf{0.4064} & \textbf{0.3824} & \underline{0.3813} & \underline{0.3792} & \textbf{0.3692} & \textbf{0.3733} & \underline{0.4409} & \underline{0.4261} & \textbf{0.3788} & \textbf{0.3978} \\
+& 720 & \underline{0.5279} & \underline{0.4391} & \textbf{0.4590} & \textbf{0.4177} & \underline{0.5421} & \underline{0.4385} & \textbf{0.4904} & \textbf{0.4274} & \underline{0.4563} & \underline{0.4180} & \textbf{0.4415} & \textbf{0.4119} & \underline{0.5069} & \underline{0.4685} & \textbf{0.4779} & \textbf{0.4581} \\
+
+\cmidrule{2-18}
+& Avg & \underline{0.4208} & \underline{0.3829} & \textbf{0.3811} & \textbf{0.3709} & \underline{0.4332} & \underline{0.3805} & \textbf{0.3932} & \textbf{0.3716} & \underline{0.3694} & \underline{0.3693} & \textbf{0.3562} & \textbf{0.3636} & \underline{0.4290} & \underline{0.4160} & \textbf{0.3820} & \textbf{0.3959} \\
+& $\Delta$  & -- & -- & -9.43\% & -3.13\% & -- & -- & -9.23\% & -2.34\% & -- & -- & -3.57\% & -1.54\% & -- & -- & -10.96\% & -4.83\% \\
+\midrule
+
+\multirow{6}{*}{\rotatebox{90}{ETTm2}}
+& 96  & \underline{0.1777} & \underline{0.2448} & \textbf{0.1672} & \textbf{0.2400} & \underline{0.1801} & \underline{0.2415} & \textbf{0.1687} & \textbf{0.2370} & \underline{0.1776} & \underline{0.2514} & \textbf{0.1666} & \textbf{0.2452} & \underline{0.2046} & \underline{0.2660} & \textbf{0.1769} & \textbf{0.2543} \\
+& 192 & \underline{0.2511} & \underline{0.2935} & \textbf{0.2317} & \textbf{0.2879} & \underline{0.2551} & \underline{0.2915} & \textbf{0.2347} & \textbf{0.2866} & \underline{0.2404} & \underline{0.2947} & \textbf{0.2266} & \textbf{0.2883} & \underline{0.2927} & \underline{0.3176} & \textbf{0.2396} & \textbf{0.2996} \\
+& 336 & \underline{0.3170} & \underline{0.3359} & \textbf{0.2919} & \textbf{0.3279} & \underline{0.3192} & \underline{0.3330} & \textbf{0.2932} & \textbf{0.3269} & \underline{0.2977} & \underline{0.3325} & \textbf{0.2881} & \textbf{0.3266} & \underline{0.3644} & \underline{0.3607} & \textbf{0.2924} & \textbf{0.3358} \\
+& 720 & \underline{0.4160} & \underline{0.3950} & \textbf{0.3782} & \textbf{0.3863} & \underline{0.4265} & \underline{0.3948} & \textbf{0.3848} & \textbf{0.3856} & \underline{0.3878} & \underline{0.3907} & \textbf{0.3831} & \textbf{0.3884} & \underline{0.4644} & \underline{0.4204} & \textbf{0.4051} & \textbf{0.4063} \\
+
+\cmidrule{2-18}
+& Avg & \underline{0.2905} & \underline{0.3173} & \textbf{0.2672} & \textbf{0.3105} & \underline{0.2952} & \underline{0.3152} & \textbf{0.2703} & \textbf{0.3090} & \underline{0.2759} & \underline{0.3173} & \textbf{0.2661} & \textbf{0.3121} & \underline{0.3315} & \underline{0.3412} & \textbf{0.2785} & \textbf{0.3240} \\
+& $\Delta$  & -- & -- & -8.02\% & -2.14\% & -- & -- & -8.43\% & -1.97\% & -- & -- & -3.55\% & -1.64\% & -- & -- & -15.99\% & -5.04\% \\
+\midrule
+
+\multirow{6}{*}{\rotatebox{90}{Electricity}}
+& 96  & \underline{0.1242} & \underline{0.2105} & \textbf{0.1206} & \textbf{0.2083} & \underline{0.1275} & \underline{0.2107} & \textbf{0.1251} & \textbf{0.2082} & \underline{0.1182} & \underline{0.2123} & \textbf{0.1137} & \textbf{0.2102} & \underline{0.1185} & \underline{0.2116} & \textbf{0.1160} & \textbf{0.2090} \\
+& 192 & \underline{0.1428} & \underline{0.2287} & \textbf{0.1381} & \textbf{0.2264} & \underline{0.1470} & \underline{0.2295} & \textbf{0.1453} & \textbf{0.2268} & \underline{0.1355} & \underline{0.2300} & \textbf{0.1318} & \textbf{0.2267} & \underline{0.1366} & \underline{0.2286} & \textbf{0.1301} & \textbf{0.2253} \\
+& 336 & \underline{0.1613} & \underline{0.2482} & \textbf{0.1585} & \textbf{0.2459} & \underline{0.1668} & \underline{0.2495} & \textbf{0.1617} & \textbf{0.2468} & \underline{0.1507} & \underline{0.2466} & \textbf{0.1477} & \textbf{0.2430} & \underline{0.1570} & \underline{0.2481} & \textbf{0.1515} & \textbf{0.2468} \\
+& 720 & \underline{0.2069} & \underline{0.2882} & \textbf{0.2019} & \textbf{0.2848} & \underline{0.2099} & \underline{0.2865} & \textbf{0.2056} & \textbf{0.2838} & \underline{0.1886} & \underline{0.2796} & \textbf{0.1839} & \textbf{0.2755} & \underline{0.2030} & \underline{0.2867} & \textbf{0.1999} & \textbf{0.2838} \\
+
+\cmidrule{2-18}
+& Avg & \underline{0.1588} & \underline{0.2439} & \textbf{0.1548} & \textbf{0.2414} & \underline{0.1628} & \underline{0.2441} & \textbf{0.1594} & \textbf{0.2414} & \underline{0.1483} & \underline{0.2421} & \textbf{0.1443} & \textbf{0.2388} & \underline{0.1538} & \underline{0.2438} & \textbf{0.1494} & \textbf{0.2412} \\
+& $\Delta$  & -- & -- & -2.52\% & -1.03\% & -- & -- & -2.09\% & -1.11\% & -- & -- & -2.70\% & -1.36\% & -- & -- & -2.86\% & -1.07\% \\
+\midrule
+
+\multirow{6}{*}{\rotatebox{90}{Exchange-rate}}
+& 96  & \underline{0.0992} & \underline{0.2191} & \textbf{0.0882} & \textbf{0.2091} & \underline{0.0920} & \underline{0.2096} & \textbf{0.0864} & \textbf{0.2052} & \underline{0.1279} & \underline{0.2447} & \textbf{0.0924} & \textbf{0.2180} & \underline{0.1096} & \underline{0.2331} & \textbf{0.0905} & \textbf{0.2140} \\
+& 192 & \underline{0.1944} & \underline{0.3140} & \textbf{0.1885} & \textbf{0.3101} & \underline{0.1977} & \underline{0.3151} & \textbf{0.1866} & \textbf{0.3080} & \underline{0.2840} & \underline{0.3731} & \textbf{0.2299} & \textbf{0.3485} & \underline{0.2194} & \underline{0.3341} & \textbf{0.2166} & \textbf{0.3303} \\
+& 336 & \underline{0.3420} & \underline{0.4238} & \textbf{0.3354} & \textbf{0.4185} & \underline{0.3625} & \underline{0.4333} & \textbf{0.3582} & \textbf{0.4318} & \underline{0.5351} & \underline{0.5279} & \textbf{0.4042} & \textbf{0.4701} & \underline{0.3934} & \underline{0.4562} & \textbf{0.3893} & \textbf{0.4536} \\
+& 720 & \underline{0.8493} & \underline{0.6915} & \textbf{0.8463} & \textbf{0.6865} & \underline{0.9421} & \underline{0.7260} & \textbf{0.8317} & \textbf{0.6871} & \underline{1.2646} & \underline{0.8283} & \textbf{1.1586} & \textbf{0.8183} & \underline{1.0090} & \underline{0.7587} & \textbf{1.0017} & \textbf{0.7355} \\
+
+\cmidrule{2-18}
+& Avg & \underline{0.3712} & \underline{0.4121} & \textbf{0.3646} & \textbf{0.4060} & \underline{0.3986} & \underline{0.4210} & \textbf{0.3657} & \textbf{0.4080} & \underline{0.5529} & \underline{0.4935} & \textbf{0.4713} & \textbf{0.4637} & \underline{0.4329} & \underline{0.4455} & \textbf{0.4245} & \textbf{0.4333} \\
+& $\Delta$  & -- & -- & -1.78\% & -1.48\% & -- & -- & -8.25\% & -3.09\% & -- & -- & -14.76\% & -6.04\% & -- & -- & -1.94\% & -2.74\% \\
+\midrule
+
+\multirow{6}{*}{\rotatebox{90}{Traffic}}
+& 96  & \underline{0.3870} & \underline{0.2409} & \textbf{0.3762} & \textbf{0.2372} & \underline{0.3547} & \underline{0.2169} & \textbf{0.3511} & \textbf{0.2152} & \underline{0.4272} & \underline{0.2665} & \textbf{0.4014} & \textbf{0.2581} & \underline{0.3273} & \underline{0.2204} & \textbf{0.3257} & \textbf{0.2181} \\
+& 192 & \underline{0.4137} & \underline{0.2531} & \textbf{0.4062} & \textbf{0.2483} & \underline{0.3811} & \underline{0.2291} & \textbf{0.3767} & \textbf{0.2286} & \underline{0.4501} & \underline{0.2795} & \textbf{0.4280} & \textbf{0.2713} & \underline{0.3538} & \underline{0.2346} & \textbf{0.3511} & \textbf{0.2314} \\
+& 336 & \underline{0.4355} & \underline{0.2633} & \textbf{0.4265} & \textbf{0.2593} & \underline{0.3977} & \underline{0.2378} & \textbf{0.3917} & \textbf{0.2368} & \underline{0.4644} & \underline{0.2881} & \textbf{0.4341} & \textbf{0.2786} & \underline{0.3779} & \underline{0.2477} & \textbf{0.3758} & \textbf{0.2451} \\
+& 720 & \underline{0.5033} & \underline{0.2934} & \textbf{0.4902} & \textbf{0.2886} & \underline{0.4440} & \underline{0.2628} & \textbf{0.4360} & \textbf{0.2606} & \underline{0.5006} & \underline{0.3102} & \textbf{0.4817} & \textbf{0.3020} & \underline{0.4196} & \underline{0.2722} & \textbf{0.4170} & \textbf{0.2694} \\
+
+\cmidrule{2-18}
+& Avg & \underline{0.4349} & \underline{0.2627} & \textbf{0.4248} & \textbf{0.2584} & \underline{0.3944} & \underline{0.2366} & \textbf{0.3889} & \textbf{0.2353} & \underline{0.4606} & \underline{0.2861} & \textbf{0.4363} & \textbf{0.2775} & \underline{0.3696} & \underline{0.2437} & \textbf{0.3674} & \textbf{0.2410} \\
+& $\Delta$  & -- & -- & -2.32\% & -1.64\% & -- & -- & -1.39\% & -0.55\% & -- & -- & -5.28\% & -3.01\% & -- & -- & -0.60\% & -1.11\% \\
+\midrule
+
+\multirow{6}{*}{\rotatebox{90}{Weather}}
+& 96  & \underline{0.1775} & \underline{0.2102} & \textbf{0.1573} & \textbf{0.1975} & \underline{0.1680} & \underline{0.1907} & \textbf{0.1557} & \textbf{0.1867} & \underline{0.1604} & \underline{0.2009} & \textbf{0.1535} & \textbf{0.1969} & \underline{0.1221} & \underline{0.1565} & \textbf{0.1169} & \textbf{0.1537} \\
+& 192 & \underline{0.2242} & \underline{0.2535} & \textbf{0.2015} & \textbf{0.2448} & \underline{0.2249} & \underline{0.2413} & \textbf{0.2015} & \textbf{0.2352} & \underline{0.2121} & \underline{0.2490} & \textbf{0.2069} & \textbf{0.2459} & \underline{0.1671} & \underline{0.1996} & \textbf{0.1585} & \textbf{0.1959} \\
+& 336 & \underline{0.2838} & \underline{0.2947} & \textbf{0.2521} & \textbf{0.2833} & \underline{0.2968} & \underline{0.2879} & \textbf{0.2558} & \textbf{0.2805} & \underline{0.2662} & \underline{0.2889} & \textbf{0.2586} & \textbf{0.2855} & \underline{0.2358} & \underline{0.2540} & \textbf{0.2189} & \textbf{0.2481} \\
+& 720 & \underline{0.3670} & \underline{0.3465} & \textbf{0.3459} & \textbf{0.3408} & \underline{0.4055} & \underline{0.3477} & \textbf{0.3510} & \textbf{0.3382} & \underline{0.3355} & \underline{0.3385} & \textbf{0.3309} & \textbf{0.3360} & \underline{0.3610} & \underline{0.3391} & \textbf{0.3245} & \textbf{0.3241} \\
+
+\cmidrule{2-18}
+& Avg & \underline{0.2631} & \underline{0.2762} & \textbf{0.2392} & \textbf{0.2666} & \underline{0.2738} & \underline{0.2669} & \textbf{0.2410} & \textbf{0.2601} & \underline{0.2436} & \underline{0.2693} & \textbf{0.2375} & \textbf{0.2660} & \underline{0.2215} & \underline{0.2373} & \textbf{0.2047} & \textbf{0.2304} \\
+& $\Delta$  & -- & -- & -9.08\% & -3.48\% & -- & -- & -11.98\% & -2.55\% & -- & -- & -2.50\% & -1.23\% & -- & -- & -7.58\% & -2.91\% \\
+\bottomrule
+\end{tabular}}
+\end{small}
+
+\label{tab:ts_plugmem_full}
+\end{center}
+\end{table*}

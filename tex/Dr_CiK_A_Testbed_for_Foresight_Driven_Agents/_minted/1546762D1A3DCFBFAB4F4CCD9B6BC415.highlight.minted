@@ -1,0 +1,41 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+Here is a collection of background text from multiple forecasting tasks:
+
+\PYGZlt{}background\PYGZus{}corpus\PYGZgt{}
+\PYGZob{}background\PYGZus{}corpus\PYGZcb{}
+\PYGZlt{}/background\PYGZus{}corpus\PYGZgt{}
+
+\PYGZhy{}\PYGZhy{}\PYGZhy{}
+
+Can you help me extract the entities, the associated time\PYGZhy{}series variables, and the \PYGZsq{}contain\PYGZsq{} relations between them (only between extracted entities)? 
+For each task, there must be exactly one primary entity (the object directly associated with the time series variable).
+
+Please return JSON with this schema:
+\PYGZob{}
+  \PYGZdq{}entities\PYGZdq{}: [
+    \PYGZob{}
+      \PYGZdq{}entity\PYGZus{}name\PYGZdq{}: \PYGZdq{}...\PYGZdq{},
+      \PYGZdq{}time\PYGZus{}series\PYGZus{}variable\PYGZdq{}: [\PYGZdq{}...\PYGZdq{}],
+      \PYGZdq{}source\PYGZus{}tasks\PYGZdq{}: [\PYGZdq{}...\PYGZdq{}],
+      \PYGZdq{}source\PYGZus{}tasks\PYGZus{}as\PYGZus{}primary\PYGZus{}entity\PYGZdq{}: [\PYGZdq{}...\PYGZdq{}]
+    \PYGZcb{}
+  ],
+  \PYGZdq{}contain\PYGZus{}relations\PYGZdq{}: [
+    \PYGZob{}
+      \PYGZdq{}parent\PYGZus{}entity\PYGZdq{}: \PYGZdq{}...\PYGZdq{},
+      \PYGZdq{}child\PYGZus{}entity\PYGZdq{}: \PYGZdq{}...\PYGZdq{},
+      \PYGZdq{}evidence\PYGZdq{}: \PYGZdq{}...\PYGZdq{}
+    \PYGZcb{}
+  ]
+\PYGZcb{}
+
+Requirements:
+\PYG{k}{1.} Entity list must be NON\PYGZhy{}REPEATED (deduplicated by real\PYGZhy{}world entity). The order in time\PYGZus{}series\PYGZus{}variable should be the same as the order in source\PYGZus{}tasks\PYGZus{}as\PYGZus{}primary\PYGZus{}entity for the same entity.
+\PYG{k}{2.} The source\PYGZus{}tasks\PYGZus{}as\PYGZus{}primary\PYGZus{}entity should be the source\PYGZus{}tasks that entities are directly associated with the time series variable.
+\PYG{k}{3.} Entity names must refer to GENERAL real\PYGZhy{}world categories (type\PYGZhy{}level concepts). If an entity contains descriptive modifiers (e.g., location, ownership, time, temporary context), REMOVE these modifiers and keep only the base category name, and modifiers should not be extracted as entities.
+\PYG{k}{4.} Additional entities should only be extracted if they serve as parent entities that contain the primary entity in a clear physical, geographical, or organizational sense. No additional entities should be extracted otherwise.
+\PYG{k}{5.} Only include containment relations that are explicitly stated or universally true by definition. Do not include contain\PYGZus{}relations that require assumptions, background knowledge expansion, or multi\PYGZhy{}hop inference.
+\PYG{k}{6.} The parent\PYGZus{}entity and the child\PYGZus{}entity must be from the entity list. If no contain relation is clear, return an empty list for \PYGZdq{}contain\PYGZus{}relations\PYGZdq{}.
+\PYG{k}{7.} Do NOT output transitive/ancestor containment edges. Only output the nearest parent (most specific parent) for each child entity when multiple levels exist.
+\PYG{k}{8.} Only return a JSON object with the specified schema, and make sure it satisfies all the requirements above. Do not include any additional text in the response.
+\end{MintedVerbatim}

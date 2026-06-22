@@ -1,0 +1,224 @@
+\begin{thebibliography}{44}
+\providecommand{\natexlab}[1]{#1}
+
+\bibitem[{Achiam et~al.(2023)Achiam, Adler, Agarwal, Ahmad, Akkaya, Aleman, Almeida, Altenschmidt, Altman, Anadkat et~al.}]{gpt4}
+Josh Achiam, Steven Adler, Sandhini Agarwal, Lama Ahmad, Ilge Akkaya, Florencia~Leoni Aleman, Diogo Almeida, Janko Altenschmidt, Sam Altman, Shyamal Anadkat, and 1 others. 2023.
+\newblock Gpt-4 technical report.
+\newblock \emph{arXiv preprint arXiv:2303.08774}.
+
+\bibitem[{Bai et~al.(2025)Bai, Cai, Chen, Chen, Chen, Cheng, Deng, Ding, Gao, Ge, Ge, Guo, Huang, Huang, Huang, Hui, Jiang, Li, Li, Li, Li, Lin, Lin, Liu, Liu, Liu, Liu, Liu, Liu, Lu, Luo, Lv, Men, Meng, Ren, Ren, Song, Sun, Tang, Tu, Wan, Wang, Wang, Wang, Wang, Xie, Xu, Xu, Xu, Yang, Yang, Yang, Yang, Yu, Zhang, Zhang, Zhang, Zheng, Zhong, Zhou, Zhou, Zhou, Zhu, and Zhu}]{Qwen3-VL}
+Shuai Bai, Yuxuan Cai, Ruizhe Chen, Keqin Chen, Xionghui Chen, Zesen Cheng, Lianghao Deng, Wei Ding, Chang Gao, Chunjiang Ge, Wenbin Ge, Zhifang Guo, Qidong Huang, Jie Huang, Fei Huang, Binyuan Hui, Shutong Jiang, Zhaohai Li, Mingsheng Li, and 45 others. 2025.
+\newblock Qwen3-vl technical report.
+\newblock \emph{arXiv preprint arXiv:2511.21631}.
+
+\bibitem[{Bloom et~al.(1956)Bloom, Engelhart, Furst, Hill, Krathwohl et~al.}]{bloom}
+Benjamin~S Bloom, Max~D Engelhart, Edward~J Furst, Walker~H Hill, David~R Krathwohl, and 1 others. 1956.
+\newblock Handbook i: cognitive domain.
+\newblock \emph{New York: David McKay}, pages 483--498.
+
+\bibitem[{Cai et~al.(2024)Cai, Choudhry, Goswami, and Dubrawski}]{timeseriesexam}
+Yifu Cai, Arjun Choudhry, Mononito Goswami, and Artur Dubrawski. 2024.
+\newblock Timeseriesexam: A time series understanding exam.
+\newblock \emph{arXiv preprint arXiv:2410.14752}.
+
+\bibitem[{Chen et~al.(2025)Chen, Feng, Zhao, Garza, Nurbek, Qin, Maatouk, Tassiulas, Gao, and Ying}]{mtbench}
+Jialin Chen, Aosong Feng, Ziyu Zhao, Juan Garza, Gaukhar Nurbek, Cheng Qin, Ali Maatouk, Leandros Tassiulas, Yifeng Gao, and Rex Ying. 2025.
+\newblock Mtbench: A multimodal time series benchmark for temporal reasoning and question answering.
+\newblock \emph{arXiv preprint arXiv:2503.16858}.
+
+\bibitem[{Godahewa et~al.(2021)Godahewa, Bergmeir, Webb, Hyndman, and Montero-Manso}]{monash}
+Rakshitha Godahewa, Christoph Bergmeir, Geoffrey~I Webb, Rob~J Hyndman, and Pablo Montero-Manso. 2021.
+\newblock Monash time series forecasting archive.
+\newblock \emph{arXiv preprint arXiv:2105.06643}.
+
+\bibitem[{Guan et~al.(2025)Guan, Meng, Li, Wang, Yang, Wen, Liu, Siniscalchi, Jin, and Pan}]{timeomni}
+Tong Guan, Zijie Meng, Dianqi Li, Shiyu Wang, Chao-Han~Huck Yang, Qingsong Wen, Zuozhu Liu, Sabato~Marco Siniscalchi, Ming Jin, and Shirui Pan. 2025.
+\newblock {TimeOmni-1}: Incentivizing complex reasoning with time series in large language models.
+\newblock \emph{arXiv preprint arXiv:2509.24803}.
+
+\bibitem[{Huber and Niklaus(2025)}]{huber2025llms}
+Thomas Huber and Christina Niklaus. 2025.
+\newblock Llms meet bloom’s taxonomy: A cognitive view on large language model evaluations.
+\newblock In \emph{Proceedings of the 31st International Conference on Computational Linguistics}, pages 5211--5246.
+
+\bibitem[{{illeness}(2021)}]{illness}
+{illeness}. 2021.
+\newblock {Illness Dataset}.
+\newblock \url{https://gis.cdc.gov/grasp/fluview/fluportaldashboard.html}.
+
+\bibitem[{Jin et~al.(2023)Jin, Wang, Ma, Chu, Zhang, Shi, Chen, Liang, Li, Pan et~al.}]{timellm}
+Ming Jin, Shiyu Wang, Lintao Ma, Zhixuan Chu, James~Y Zhang, Xiaoming Shi, Pin-Yu Chen, Yuxuan Liang, Yuan-Fang Li, Shirui Pan, and 1 others. 2023.
+\newblock Time-llm: Time series forecasting by reprogramming large language models.
+\newblock \emph{arXiv preprint arXiv:2310.01728}.
+
+\bibitem[{Jing et~al.(2025)Jing, Chen, Zheng, Liu, Li, Zou, Wei, Liu, Zeng, Qiu et~al.}]{trqa}
+Baoyu Jing, Sanhorn Chen, Lecheng Zheng, Boyu Liu, Zihao Li, Jiaru Zou, Tianxin Wei, Zhining Liu, Zhichen Zeng, Ruizhong Qiu, and 1 others. 2025.
+\newblock {TRQA}: Time series reasoning question and answering benchmark.
+\newblock OpenReview.
+\newblock Withdrawn submission to ICLR 2026. Available at \url{https://openreview.net/forum?id=ULQt51DRug}.
+
+\bibitem[{Kong et~al.(2025)Kong, Yang, Hwang, Du, Zohren, Wang, Jin, and Wen}]{timemqa}
+Yaxuan Kong, Yiyuan Yang, Yoontae Hwang, Wenjie Du, Stefan Zohren, Zhangyang Wang, Ming Jin, and Qingsong Wen. 2025.
+\newblock Time-{MQA}: Time series multi-task question answering with context enhancement.
+\newblock In \emph{Association for Computational Linguistics (ACL)}.
+
+\bibitem[{Lai et~al.(2018)Lai, Chang, Yang, and Liu}]{exchange}
+Guokun Lai, Wei-Cheng Chang, Yiming Yang, and Hanxiao Liu. 2018.
+\newblock Modeling long-and short-term temporal patterns with deep neural networks.
+\newblock In \emph{The 41st international ACM SIGIR conference on research \& development in information retrieval}, pages 95--104.
+
+\bibitem[{Lan et~al.(2025)Lan, Wu, He, Zhao, Hong, and Feng}]{ecgrounding}
+Xiang Lan, Feng Wu, Kai He, Qinghao Zhao, Shenda Hong, and Mengling Feng. 2025.
+\newblock {GEM}: Empowering mllm for grounded ecg understanding with time series and images.
+\newblock In \emph{Advances in Neural Information Processing Systems (NeurIPS)}.
+
+\bibitem[{Langer et~al.(2025)Langer, Kaar, Rosenblattl, Xu, Chow, Maritsch, Verma, Han, Kim, Chubb et~al.}]{opentslm}
+Patrick Langer, Thomas Kaar, Max Rosenblattl, Maxwell~A Xu, Winnie Chow, Martin Maritsch, Aradhana Verma, Brian Han, Daniel~Seung Kim, Henry Chubb, and 1 others. 2025.
+\newblock {OpenTSLM}: Time-series language models for reasoning over multivariate medical text-and time-series data.
+\newblock \emph{arXiv preprint arXiv:2510.02410}.
+
+\bibitem[{Li et~al.(2023)Li, Li, Savarese, and Hoi}]{blip}
+Junnan Li, Dongxu Li, Silvio Savarese, and Steven Hoi. 2023.
+\newblock Blip-2: Bootstrapping language-image pre-training with frozen image encoders and large language models.
+\newblock In \emph{International conference on machine learning}, pages 19730--19742. PMLR.
+
+\bibitem[{Liu et~al.(2024{\natexlab{a}})Liu, Xu, Zhao, Kong, Prabhakar~Kamarthi, Sasanur, Sharma, Cui, Wen, Zhang et~al.}]{timemmd}
+Haoxin Liu, Shangqing Xu, Zhiyuan Zhao, Lingkai Kong, Harshavardhan Prabhakar~Kamarthi, Aditya Sasanur, Megha Sharma, Jiaming Cui, Qingsong Wen, Chao Zhang, and 1 others. 2024{\natexlab{a}}.
+\newblock Time-mmd: Multi-domain multimodal dataset for time series analysis.
+\newblock \emph{Advances in Neural Information Processing Systems}, 37:77888--77933.
+
+\bibitem[{Liu et~al.(2024{\natexlab{b}})Liu, Bai, Yue, and Zhang}]{pulse}
+Ruoqi Liu, Yuelin Bai, Xiang Yue, and Ping Zhang. 2024{\natexlab{b}}.
+\newblock Teach multimodal llms to comprehend electrocardiographic images.
+\newblock \emph{arXiv preprint arXiv:2410.19008}.
+
+\bibitem[{Liu et~al.(2024{\natexlab{c}})Liu, Zhang, Li, Huang, Wang, and Long}]{timer}
+Yong Liu, Haoran Zhang, Chenyu Li, Xiangdong Huang, Jianmin Wang, and Mingsheng Long. 2024{\natexlab{c}}.
+\newblock Timer: Generative pre-trained transformers are large time series models.
+\newblock \emph{arXiv preprint arXiv:2402.02368}.
+
+\bibitem[{Luo et~al.(2025)Luo, Zhou, Cheng, Wang, Wang, Pan, and Zhang}]{timer1}
+Yucong Luo, Yitong Zhou, Mingyue Cheng, Jiahao Wang, Daoyu Wang, Tingyue Pan, and Jintao Zhang. 2025.
+\newblock Time series forecasting as reasoning: A slow-thinking approach with reinforced llms.
+\newblock \emph{arXiv preprint arXiv:2506.10630}.
+
+\bibitem[{Merrill et~al.(2024)Merrill, Tan, Gupta, Hartvigsen, and Althoff}]{mcq2}
+Mike~A Merrill, Mingtian Tan, Vinayak Gupta, Thomas Hartvigsen, and Tim Althoff. 2024.
+\newblock Language models still struggle to zero-shot reason about time series.
+\newblock In \emph{Findings of the Association for Computational Linguistics: EMNLP 2024}, pages 3512--3533.
+
+\bibitem[{Monmonier(1985)}]{Bertin}
+Mark Monmonier. 1985.
+\newblock Semiology of graphics: Diagrams, networks, maps.
+
+\bibitem[{Quinlan et~al.(2025)Quinlan, Li, and Zhu}]{chat-ts}
+Paul Quinlan, Qingguo Li, and Xiaodan Zhu. 2025.
+\newblock Chat-ts: Enhancing multi-modal reasoning over time-series and natural language data.
+\newblock \emph{arXiv preprint arXiv:2503.10883}.
+
+\bibitem[{Sen et~al.(2025)Sen, Gottesman, Qiu, Bruss, Nguyen, and Hartvigsen}]{bedtime}
+Medhasweta Sen, Zachary Gottesman, Jiaxing Qiu, C~Bayan Bruss, Nam Nguyen, and Tom Hartvigsen. 2025.
+\newblock {BEDTime}: A unified benchmark for automatically describing time series.
+\newblock \emph{arXiv preprint arXiv:2509.05215}.
+
+\bibitem[{Team et~al.(2025)Team, Riviere, Pathak, Sessa, Hardin, Bhupatiraju, Hussenot, Mesnard, Shahriari, Ram{\'e} et~al.}]{gemma3}
+Gemma Team, Morgane Riviere, Shreya Pathak, Pier~Giuseppe Sessa, Cassidy Hardin, Surya Bhupatiraju, L{\'e}onard Hussenot, Thomas Mesnard, Bobak Shahriari, Alexandre Ram{\'e}, and 1 others. 2025.
+\newblock Gemma 3 technical report.
+\newblock \emph{arXiv preprint arXiv:2503.19786}.
+
+\bibitem[{Wang et~al.(2025{\natexlab{a}})Wang, Qi, Wang, Sun, Zhuang, Wu, Zhang, and Liao}]{chattime}
+Chengsen Wang, Qi~Qi, Jingyu Wang, Haifeng Sun, Zirui Zhuang, Jinming Wu, Lei Zhang, and Jianxin Liao. 2025{\natexlab{a}}.
+\newblock Chattime: A unified multimodal time series foundation model bridging numerical and textual data.
+\newblock In \emph{Proceedings of the AAAI Conference on Artificial Intelligence}, volume~39, pages 12694--12702.
+
+\bibitem[{Wang et~al.(2025{\natexlab{b}})Wang, Lei, Song, Hao, Chen, Zhang, Jia, Li, and Wei}]{itformer}
+Yilin Wang, Peixuan Lei, Jie Song, Yuzhe Hao, Tao Chen, Yuxuan Zhang, Lei Jia, Yuanxiang Li, and Zhongyu Wei. 2025{\natexlab{b}}.
+\newblock {ITFormer}: Bridging time series and natural language for multi-modal qa with large-scale multitask dataset.
+\newblock In \emph{International Conference on Machine Learning (ICML)}.
+
+\bibitem[{Wei et~al.(2025)Wei, Sun, and Li}]{deepseekocr}
+Haoran Wei, Yaofeng Sun, and Yukun Li. 2025.
+\newblock Deepseek-ocr: Contexts optical compression.
+\newblock \emph{arXiv preprint arXiv:2510.18234}.
+
+\bibitem[{Wetterstation(2020)}]{weatherd}
+Wetterstation. 2020.
+\newblock Weather dataset.
+\newblock \url{https://www.bgc-jena.mpg.de/wetter/}.
+
+\bibitem[{Williams et~al.(2024)Williams, Ashok, Marcotte, Zantedeschi, Subramanian, Riachi, Requeima, Lacoste, Rish, Chapados et~al.}]{cik}
+Andrew~Robert Williams, Arjun Ashok, {\'E}tienne Marcotte, Valentina Zantedeschi, Jithendaraa Subramanian, Roland Riachi, James Requeima, Alexandre Lacoste, Irina Rish, Nicolas Chapados, and 1 others. 2024.
+\newblock Context is key: A benchmark for forecasting with essential textual information.
+\newblock \emph{arXiv preprint arXiv:2410.18959}.
+
+\bibitem[{Wu et~al.(2021)Wu, Xu, Wang, and Long}]{autoformer}
+Haixu Wu, Jiehui Xu, Jianmin Wang, and Mingsheng Long. 2021.
+\newblock Autoformer: Decomposition transformers with auto-correlation for long-term series forecasting.
+\newblock \emph{Advances in neural information processing systems}, 34:22419--22430.
+
+\bibitem[{Wu et~al.(2025)Wu, Zhang, Liu, Xu, Liu, Fan, Lv, Zhuang, Zhang, Yuan et~al.}]{scits}
+Wen Wu, Ziyang Zhang, Liwei Liu, Xuenan Xu, Junlin Liu, Ke~Fan, Qitan Lv, Jimin Zhuang, Chen Zhang, Zheqi Yuan, and 1 others. 2025.
+\newblock {SciTS}: Scientific time series understanding and generation with llms.
+\newblock \emph{arXiv preprint arXiv:2510.03255}.
+
+\bibitem[{Xie et~al.(2025{\natexlab{a}})Xie, Li, Lin, Wang, Yang, Zhong, Zhang, Li, Jiang, Zhang et~al.}]{heartcare}
+Yihan Xie, Sijing Li, Tianwei Lin, Zhuonan Wang, Chenglin Yang, Yu~Zhong, Wenqiao Zhang, Haoyuan Li, Hao Jiang, Fengda Zhang, and 1 others. 2025{\natexlab{a}}.
+\newblock Heartcare suite: Multi-dimensional understanding of ecg with raw multi-lead signal modeling.
+\newblock \emph{arXiv preprint arXiv:2506.05831}.
+
+\bibitem[{Xie et~al.(2025{\natexlab{b}})Xie, Li, He, Xu, Wen, Zhang, Chen, Shi, and Pei}]{chatts}
+Zhe Xie, Zeyan Li, Xiao He, Longlong Xu, Xidao Wen, Tieying Zhang, Jianjun Chen, Rui Shi, and Dan Pei. 2025{\natexlab{b}}.
+\newblock {ChatTS}: Aligning time series with llms via synthetic data for enhanced understanding and reasoning.
+\newblock \emph{Proceedings of the VLDB Endowment, 2025}.
+
+\bibitem[{Xu et~al.(2025)Xu, Xiang, Liu, Wang, Ma, Zhang, Hu, Xu, and Zhang}]{finmultitime}
+Wenyan Xu, Dawei Xiang, Yue Liu, Xiyu Wang, Yanxiang Ma, Liang Zhang, Shu Hu, Chang Xu, and Jiaheng Zhang. 2025.
+\newblock {FinMultiTime}: A four-modal bilingual dataset for financial time-series analysis.
+\newblock \emph{arXiv preprint arXiv:2506.05019}.
+
+\bibitem[{Yang et~al.(2025{\natexlab{a}})Yang, Li, Yang, Zhang, Hui, Zheng, Yu, Gao, Huang, Lv et~al.}]{qwen3}
+An~Yang, Anfeng Li, Baosong Yang, Beichen Zhang, Binyuan Hui, Bo~Zheng, Bowen Yu, Chang Gao, Chengen Huang, Chenxu Lv, and 1 others. 2025{\natexlab{a}}.
+\newblock Qwen3 technical report.
+\newblock \emph{arXiv preprint arXiv:2505.09388}.
+
+\bibitem[{Yang et~al.(2025{\natexlab{b}})Yang, Liu, Song, Ying, Wang, Bamford, Vyetrenko, Bian, and Wen}]{timera}
+Yiyuan Yang, Zichuan Liu, Lei Song, Kai Ying, Zhiguang Wang, Tom Bamford, Svitlana Vyetrenko, Jiang Bian, and Qingsong Wen. 2025{\natexlab{b}}.
+\newblock Time-ra: Towards time series reasoning for anomaly with llm feedback.
+\newblock \emph{arXiv preprint arXiv:2507.15066}.
+
+\bibitem[{Ye et~al.(2025)Ye, Liu, Cao, Yang, and Liu}]{tsaia}
+Wen Ye, Jinbo Liu, Defu Cao, Wei Yang, and Yan Liu. 2025.
+\newblock When llm meets time series: Can llms perform multi-step time series reasoning and inference.
+\newblock \emph{arXiv preprint arXiv:2509.01822}.
+
+\bibitem[{Yin et~al.(2026)Yin, Xiao, Li, Liu, Nan, He, Wang, Zhang, and Gu}]{mmtsbench}
+Yao Yin, Zhenyu Xiao, Musheng Li, Yiwen Liu, Sutong Nan, Yiting He, Ruiqi Wang, Zhenwei Zhang, and Yuantao Gu. 2026.
+\newblock Mmts-bench: A comprehensive benchmark for multimodal time series understanding and reasoning.
+\newblock \emph{arXiv preprint arXiv:2602.08588}.
+
+\bibitem[{Zhang et~al.(2025{\natexlab{a}})Zhang, Feng, Guo, Wu, Dong, and Xu}]{timemaster}
+Junru Zhang, Lang Feng, Xu~Guo, Yuhan Wu, Yabo Dong, and Duanqing Xu. 2025{\natexlab{a}}.
+\newblock Timemaster: Training time-series multimodal llms to reason via reinforcement learning.
+\newblock In \emph{NeurIPS 2025 Workshop on Behavioral Foundation Models, Representational Learning, and Time Series (BERT2S)}.
+
+\bibitem[{Zhang et~al.(2025{\natexlab{b}})Zhang, Pei, Gao, Xie, Hao, Yu, Xu, Xiao, Han, and Pei}]{timesense}
+Zhirui Zhang, Changhua Pei, Tianyi Gao, Zhe Xie, Yibo Hao, Zhaoyang Yu, Longlong Xu, Tong Xiao, Jing Han, and Dan Pei. 2025{\natexlab{b}}.
+\newblock Timesense: Making large language models proficient in time-series analysis.
+\newblock \emph{arXiv preprint arXiv:2511.06344}.
+
+\bibitem[{Zhou et~al.(2021)Zhou, Zhang, Peng, Zhang, Li, Xiong, and Zhang}]{informer}
+Haoyi Zhou, Shanghang Zhang, Jieqi Peng, Shuai Zhang, Jianxin Li, Hui Xiong, and Wancai Zhang. 2021.
+\newblock Informer: Beyond efficient transformer for long sequence time-series forecasting.
+\newblock In \emph{Proceedings of the AAAI conference on artificial intelligence}, volume~35, pages 11106--11115.
+
+\bibitem[{Zhou et~al.(2025)Zhou, Yashwante, Fisher, Sampieri, Zhou, Galasso, and Yu}]{catsbench}
+Luca Zhou, Pratham Yashwante, Marshall Fisher, Alessio Sampieri, Zihao Zhou, Fabio Galasso, and Rose Yu. 2025.
+\newblock {CaTS-Bench}: Can language models describe numeric time series?
+\newblock \emph{arXiv preprint arXiv:2509.20823}.
+
+\bibitem[{Zhu et~al.(2025)Zhu, Wang, Chen, Liu, Ye, Gu, Tian, Duan, Su, Shao et~al.}]{internvl3}
+Jinguo Zhu, Weiyun Wang, Zhe Chen, Zhaoyang Liu, Shenglong Ye, Lixin Gu, Hao Tian, Yuchen Duan, Weijie Su, Jie Shao, and 1 others. 2025.
+\newblock Internvl3: Exploring advanced training and test-time recipes for open-source multimodal models.
+\newblock \emph{arXiv preprint arXiv:2504.10479}.
+
+\end{thebibliography}

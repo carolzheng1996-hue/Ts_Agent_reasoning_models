@@ -1,0 +1,16 @@
+\begin{tabular}{llr rrr r}
+\toprule
+\textbf{Model} & \textbf{Setup} & \textbf{Data} & \textbf{Mean} & \textbf{Median} & \textbf{Max} & \textbf{Cut off (\%)} \\
+\midrule
+\texttt{gpt-oss-120b} & \mdirect{} & \textsc{TSE} & 13,340 & 9,933 & 30,040 & 26.8 \\
+\texttt{gpt-oss-120b} & \mcode{} & \textsc{TSE} & 4,036 & 2,668 & 30,997 & 4.2 \\
+\texttt{gpt-oss-120b} & \mhybrid{} & \textsc{TSE} & 4,693 & 2,459 & 46,622 & 8.2 \\
+\texttt{gpt-oss-120b} & \mdirect{} & \textsc{TSFU} & 7,900 & 3,825 & 30,172 & 5.8 \\
+\texttt{gpt-oss-120b} & \mcode{} & \textsc{TSFU} & 4,335 & 2,737 & 48,540 & $<$0.1 \\
+\texttt{gpt-oss-120b} & \mhybrid{} & \textsc{TSFU} & 3,719 & 2,178 & 43,251 & 0.1 \\
+\midrule
+\texttt{qwen3-next} & \mdirect{} & \textsc{TSE} & 15,983 & 10,068 & 275,925 & 3.4 \\
+\texttt{qwen3-next} & \mcode{} & \textsc{TSE} & 11,886 & 7,496 & 64,730 & $<$0.1 \\
+\texttt{qwen3-next} & \mhybrid{} & \textsc{TSE} & 16,730 & 11,219 & 337,976 & 2.5 \\
+\bottomrule
+\end{tabular}

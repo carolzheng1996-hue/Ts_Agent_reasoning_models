@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LLaTiSA 中文文献解读</title>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <style>
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.72; color: #1f2937; background: #f8fafc; }
+    main { max-width: 980px; margin: 0 auto; padding: 42px 24px 80px; background: #fff; }
+    h1 { font-size: 2rem; line-height: 1.25; margin: 0 0 12px; color: #111827; }
+    h2 { font-size: 1.45rem; margin-top: 34px; border-bottom: 1px solid #e5e7eb; padding-bottom: 6px; color: #111827; }
+    h3 { font-size: 1.15rem; margin-top: 24px; color: #111827; }
+    p { margin: 12px 0; }
+    ul, ol { padding-left: 1.5rem; }
+    code { background: #eef2f7; padding: 0.12rem 0.28rem; border-radius: 4px; }
+    table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 0.94rem; }
+    th, td { border: 1px solid #d1d5db; padding: 8px 10px; text-align: left; vertical-align: top; }
+    th { background: #f3f4f6; }
+    td.num, th.num { text-align: right; }
+    .meta { color: #4b5563; margin-bottom: 26px; }
+    .callout { background: #f1f5f9; border-left: 4px solid #2563eb; padding: 12px 16px; margin: 18px 0; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>《LLaTiSA: Towards Difficulty-Stratified Time Series Reasoning from Visual Perception to Semantics》中文文献解读</h1>
+  <p class="meta">论文：Yueyang Ding, HaoPeng Zhang, Rui Dai, Yi Wang, Tianyu Zong, Kaikui Liu, Xiangxiang Chu，Amap, Alibaba Group<br>方法名：<strong>LLaTiSA</strong>；数据集：<strong>HiTSR</strong></p>
+  <table>
+    <tr><th>资源</th><th>链接</th></tr>
+    <tr><td>论文页面</td><td><a href="https://arxiv.org/abs/2604.17295">arXiv:2604.17295</a></td></tr>
+    <tr><td>PDF</td><td><a href="https://arxiv.org/pdf/2604.17295">https://arxiv.org/pdf/2604.17295</a></td></tr>
+    <tr><td>TeX 源码</td><td><a href="https://arxiv.org/e-print/2604.17295">https://arxiv.org/e-print/2604.17295</a></td></tr>
+    <tr><td>代码</td><td><a href="https://github.com/RainingNovember/LLaTiSA">GitHub: RainingNovember/LLaTiSA</a></td></tr>
+  </table>
+
+  <h2>1. 一句话总结</h2>
+  <p>LLaTiSA 认为时间序列推理应按从数值读出到模式感知再到语义推理的难度层级诊断；论文构造 83K 规模的 HiTSR 数据集，并用“折线图 + 索引数值表”双图输入训练 VLM，让模型同时具备视觉模式直觉和精确数值 grounding。</p>
+
+  <h2>2. 背景与问题诊断</h2>
+  <p>现有时间序列推理数据集的任务定义碎片化。TSQA、BEDTime、Engine-QA、Heartcare-Bench 等数据集各自关注 forecasting、classification、pattern description 或领域 QA，但缺少统一的认知难度坐标系。因此，一个模型在高层语义问题上表现好，不一定代表它真的能读出时间点和值。</p>
+  <p>另一个问题是 benchmark 可靠性不足：上下文不足、选项语义模糊、标签不唯一、数值证据不严，都会让模型学到“说得像推理”，而不是每一步都能落到真实数值和时间位置。</p>
+
+  <h2>3. TSR 四层难度 taxonomy</h2>
+  <table>
+    <tr><th>Level</th><th>名称</th><th>能力目标</th><th>例子</th></tr>
+    <tr><td>L1</td><td>Numerical Read-out</td><td>时间索引感知、点级数值检索</td><td>找最大值及其 index；比较起点和终点</td></tr>
+    <tr><td>L2</td><td>Pattern Perception</td><td>识别局部/全局模式，并用数值证据区分</td><td>判断 spike、周期、趋势、局部形态</td></tr>
+    <tr><td>L3</td><td>Semantic Reasoning</td><td>把序列证据和上下文/领域知识结合</td><td>判断风机功率、ECG、交通、经济等场景解释</td></tr>
+    <tr><td>L4</td><td>Predictive Inference</td><td>生成或选择高保真未来序列</td><td>从候选 continuation 中选真实后继片段</td></tr>
+  </table>
+  <p>给定时间序列集合 $X=\{x^{(n)}_{1:T}\}_{n=1}^{N}$ 和问题/上下文 $Q$，模型生成自然语言回答 $R$：</p>
+  $$R \sim p_{\theta}(R \mid X, Q)$$
+  <p>这里 $X$ 可以是文本数组、图像、数值表图像或专用时序编码；$Q$ 是任务指令与语义上下文；$R$ 不只是标签，而是包含 reasoning 的自然语言输出。</p>
+
+  <h2>4. HiTSR 数据集</h2>
+  <table>
+    <tr><th>子集</th><th class="num">样本数</th><th>数据来源</th><th>主要任务</th></tr>
+    <tr><td>HiTSR-L1</td><td class="num">30,000</td><td>ChatTS 合成时间序列</td><td>Min/Max grounding、multi-series comparison、start/end comparison、subseries localization</td></tr>
+    <tr><td>HiTSR-L2</td><td class="num">50,703</td><td>ChatTS 合成时间序列</td><td>local pattern differentiation、global pattern differentiation、numerical perception</td></tr>
+    <tr><td>HiTSR-L3</td><td class="num">3,121</td><td>公开真实时间序列</td><td>semantic understanding</td></tr>
+  </table>
+  <p>L1 和 L2 中可规则确定答案的任务，用 deterministic scripts 生成标签；L2 的 pattern differentiation 和 L3 的 semantic understanding 采用 LLM 生成、GPT-5 交叉检查、人类审核的多阶段流程。L3 的 3,121 条全部人工复核。</p>
+  <p>论文还用 Qwen3-235B-A22B-Instruct 做 cross-model validation。L2 Local、L2 Global、L3 的 Cohen's Kappa 分别为 0.865、0.847、0.831，平均约 0.848。</p>
+
+  <h2>5. LLaTiSA 方法</h2>
+  <h3>5.1 双图输入</h3>
+  <table>
+    <tr><th>视图</th><th>作用</th></tr>
+    <tr><td>plot image</td><td>看全局趋势、周期、spike、局部形态</td></tr>
+    <tr><td>numerical table image</td><td>精确校验 index-value、区间、最大/最小点</td></tr>
+    <tr><td>text context</td><td>提供题目、选项、领域语义</td></tr>
+  </table>
+  <p>LLaTiSA 不是单纯把数值序列转成文本，而是让 VLM 通过图像 token 同时处理模式和表格。折线图给全局形态，数值表图像给精确 grounding。</p>
+  <h3>5.2 三阶段课程训练</h3>
+  <table>
+    <tr><th>Stage</th><th>数据</th><th>目标</th></tr>
+    <tr><td>Stage 1</td><td>HiTSR-L1</td><td>建立精确数值读出和 index grounding</td></tr>
+    <tr><td>Stage 2</td><td>HiTSR-L2</td><td>学习局部/全局 pattern perception</td></tr>
+    <tr><td>Stage 3</td><td>HiTSR-L3 或领域任务</td><td>学习语义推理和场景迁移</td></tr>
+  </table>
+  <p>Backbone 为 Qwen3-VL-8B-Instruct。训练使用 AdamW、cosine scheduler、weight decay 0.1、8 张 H20 GPU，Stage 1/2/3 学习率均为 $1\times10^{-5}$。</p>
+
+  <h2>6. 框架视角拆解</h2>
+  <table>
+    <tr><th>组件</th><th>对应内容</th></tr>
+    <tr><td>state / input object</td><td>时间序列 plot、数值表图像、文本问题、选项、领域 metadata</td></tr>
+    <tr><td>policy/model</td><td>Qwen3-VL-8B-Instruct 经过 HiTSR 分阶段 SFT 后的 VLM</td></tr>
+    <tr><td>action/output</td><td>生成自然语言 CoT 和最终选项/数值回答</td></tr>
+    <tr><td>tool space</td><td>无外部工具；数值表图像相当于内置精确读数辅助视图</td></tr>
+    <tr><td>trajectory</td><td>经验证的 CoT，从 numerical evidence 到 pattern 再到 semantic conclusion</td></tr>
+    <tr><td>update mechanism</td><td>L1 -> L2 -> L3 curriculum SFT；附录还尝试 L4 阶段</td></tr>
+  </table>
+
+  <h2>7. 主结果：OOD L1-L3</h2>
+  <table>
+    <tr><th>模型 / 表示</th><th class="num">L1 Acc</th><th class="num">L1 half-Acc</th><th class="num">L1 SR</th><th class="num">L2 Local</th><th class="num">L2 Global</th><th class="num">L3</th></tr>
+    <tr><td>GPT-4o text w/o index</td><td class="num">47.4</td><td class="num">69.8</td><td class="num">100.0</td><td class="num">47.6</td><td class="num">95.0</td><td class="num">43.0</td></tr>
+    <tr><td>GPT-4o vision plot</td><td class="num">-</td><td class="num">-</td><td class="num">-</td><td class="num">72.2</td><td class="num">96.7</td><td class="num">39.0</td></tr>
+    <tr><td>ChatTS</td><td class="num">7.8</td><td class="num">29.2</td><td class="num">100.0</td><td class="num">57.0</td><td class="num">80.0</td><td class="num">59.0</td></tr>
+    <tr><td>GPT-4o vision+text w/ index</td><td class="num">54.2</td><td class="num">88.6</td><td class="num">100.0</td><td class="num">65.8</td><td class="num">96.7</td><td class="num">48.0</td></tr>
+    <tr><td><strong>LLaTiSA plot+num</strong></td><td class="num"><strong>86.8</strong></td><td class="num"><strong>96.0</strong></td><td class="num"><strong>100.0</strong></td><td class="num"><strong>75.6</strong></td><td class="num"><strong>97.5</strong></td><td class="num"><strong>67.0</strong></td></tr>
+  </table>
+  <p>只看图的 VLM 在 L2 pattern 上可以很强，但无法做 L1 精确读数；文本数组如果没有 index，长序列定位容易失败。LLaTiSA 的 plot+num 双图输入在 L1、L2、L3 全部最好。</p>
+
+  <h2>8. 编码策略对比</h2>
+  <table>
+    <tr><th>表示策略</th><th class="num">L1 Acc</th><th class="num">L1 SR</th><th class="num">L2 Local</th><th class="num">L2 Global</th><th class="num">L3</th></tr>
+    <tr><td>Text w/ index</td><td class="num"><strong>87.6</strong></td><td class="num">100.0</td><td class="num">39.0</td><td class="num">94.2</td><td class="num">47.0</td></tr>
+    <tr><td>Vision single plot</td><td class="num">-</td><td class="num">-</td><td class="num">68.0</td><td class="num"><strong>97.5</strong></td><td class="num">62.0</td></tr>
+    <tr><td>Vision single num</td><td class="num">86.8</td><td class="num">100.0</td><td class="num">32.4</td><td class="num">75.0</td><td class="num">32.0</td></tr>
+    <tr><td>Plot + Text w/ index</td><td class="num">85.2</td><td class="num">100.0</td><td class="num">49.8</td><td class="num">95.8</td><td class="num">60.0</td></tr>
+    <tr><td><strong>LLaTiSA plot+num</strong></td><td class="num">86.8</td><td class="num">100.0</td><td class="num"><strong>75.6</strong></td><td class="num"><strong>97.5</strong></td><td class="num"><strong>67.0</strong></td></tr>
+  </table>
+
+  <h2>9. ECG 迁移实验</h2>
+  <table>
+    <tr><th>Setting</th><th>Model</th><th class="num">Diagnosis Acc</th><th class="num">Lead Coverage</th><th class="num">Lead Accuracy</th><th class="num">Evidence Reasoning</th></tr>
+    <tr><td>ID</td><td>GEM (LLaVA)</td><td class="num"><strong>87.2</strong></td><td class="num">71.1</td><td class="num">46.4</td><td class="num"><strong>75.1</strong></td></tr>
+    <tr><td>ID</td><td>Qwen3-VL-8B</td><td class="num">60.9</td><td class="num">69.3</td><td class="num">50.1</td><td class="num">63.8</td></tr>
+    <tr><td>ID</td><td><strong>LLaTiSA</strong></td><td class="num">62.8</td><td class="num"><strong>84.0</strong></td><td class="num"><strong>53.0</strong></td><td class="num">71.2</td></tr>
+    <tr><td>OOD</td><td>GEM (PULSE)</td><td class="num"><strong>73.6</strong></td><td class="num">78.9</td><td class="num">48.0</td><td class="num"><strong>75.4</strong></td></tr>
+    <tr><td>OOD</td><td>Qwen3-VL-8B</td><td class="num">59.0</td><td class="num">56.4</td><td class="num">38.1</td><td class="num">63.8</td></tr>
+    <tr><td>OOD</td><td><strong>LLaTiSA</strong></td><td class="num">62.2</td><td class="num">66.5</td><td class="num"><strong>49.2</strong></td><td class="num">66.6</td></tr>
+  </table>
+  <p>诊断准确率上，GEM/PULSE 这类专门 ECG 模型更强；但 LLaTiSA 在 lead-wise coverage/accuracy 上很突出。论文强调它只用了 GEM 约 2.5% 的 instruction data，即 30K vs 1.186M。</p>
+
+  <h2>10. 消融实验</h2>
+  <table>
+    <tr><th>Setting</th><th>Variant</th><th class="num">L2</th><th class="num">L3</th><th class="num">ECG-Grounding</th></tr>
+    <tr><td>ID</td><td>w/o CoT</td><td class="num">97.0</td><td class="num">80.0</td><td class="num">57.4</td></tr>
+    <tr><td>ID</td><td>joint training</td><td class="num">95.0</td><td class="num">84.0</td><td class="num">61.5</td></tr>
+    <tr><td>ID</td><td><strong>LLaTiSA</strong></td><td class="num"><strong>97.0</strong></td><td class="num"><strong>87.0</strong></td><td class="num"><strong>62.8</strong></td></tr>
+    <tr><td>OOD</td><td>w/o CoT</td><td class="num">93.3</td><td class="num">55.0</td><td class="num">54.3</td></tr>
+    <tr><td>OOD</td><td>joint training</td><td class="num">95.8</td><td class="num">57.0</td><td class="num">59.7</td></tr>
+    <tr><td>OOD</td><td><strong>LLaTiSA</strong></td><td class="num"><strong>97.5</strong></td><td class="num"><strong>67.0</strong></td><td class="num"><strong>62.2</strong></td></tr>
+  </table>
+  <p>去掉 CoT 后，OOD L3 从 67.0 掉到 55.0。joint training 也低于 L1 -> L2 -> L3 的顺序训练，说明高层语义任务不会自然反向继承低层 grounding。</p>
+
+  <h2>11. L4 扩展实验</h2>
+  <p>附录加入 L4 predictive inference：给定历史片段 $x$，从四个候选后继片段 $y_1,\dots,y_4$ 中选择真实 chronological successor。</p>
+  <table>
+    <tr><th>模型</th><th class="num">Acc</th></tr>
+    <tr><td>GPT-4.1 text</td><td class="num">79.1</td></tr>
+    <tr><td>GPT-4o text</td><td class="num">75.6</td></tr>
+    <tr><td>Claude-3.5-Sonnet text</td><td class="num">82.2</td></tr>
+    <tr><td>Qwen3-VL-8B plot+num</td><td class="num">42.1</td></tr>
+    <tr><td>LLaTiSA L1->L2->L3</td><td class="num">54.2</td></tr>
+    <tr><td><strong>LLaTiSA L1->L2->L3->L4</strong></td><td class="num"><strong>83.3</strong></td></tr>
+  </table>
+
+  <h2>12. 贡献、局限与启发</h2>
+  <p>论文的主要贡献是提出 L1-L4 difficulty-stratified TSR taxonomy，构造包含 verified CoT 的 HiTSR，并证明 plot + numerical table image 的双图 VLM 输入比单一图像或文本数组更适合时间序列推理。</p>
+  <p>局限方面，论文主要是 SFT，没有深入探索 RL/RFT；HiTSR 的 L1/L2 大量依赖合成数据，真实复杂场景覆盖仍可扩展。实践上最值得借鉴的是：先让模型稳定读数和定位，再训练复杂时序问答；同时给 VLM 图形视图和精确数值视图。</p>
+</main>
+</body>
+</html>

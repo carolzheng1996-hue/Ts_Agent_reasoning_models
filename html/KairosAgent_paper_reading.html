@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KairosAgent 中文文献解读</title>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <style>
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.72; color: #1f2937; background: #f8fafc; }
+    main { max-width: 980px; margin: 0 auto; padding: 42px 24px 80px; background: #fff; }
+    h1 { font-size: 2rem; line-height: 1.25; margin: 0 0 12px; color: #111827; }
+    h2 { font-size: 1.45rem; margin-top: 34px; border-bottom: 1px solid #e5e7eb; padding-bottom: 6px; color: #111827; }
+    h3 { font-size: 1.15rem; margin-top: 24px; color: #111827; }
+    p { margin: 12px 0; }
+    ul, ol { padding-left: 1.5rem; }
+    code { background: #eef2f7; padding: 0.12rem 0.28rem; border-radius: 4px; }
+    pre { background: #0f172a; color: #e5e7eb; padding: 14px 16px; overflow-x: auto; border-radius: 6px; }
+    pre code { background: transparent; padding: 0; color: inherit; }
+    table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 0.94rem; }
+    th, td { border: 1px solid #d1d5db; padding: 8px 10px; text-align: left; vertical-align: top; }
+    th { background: #f3f4f6; }
+    .num { text-align: right; }
+    .math { overflow-x: auto; margin: 14px 0; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>《KairosAgent: Agentic Time Series Forecasting with Fused Semantic Reasoning》中文文献解读</h1>
+  <p>论文：<em>KairosAgent: Agentic Time Series Forecasting with Fused Semantic Reasoning</em>，arXiv:2605.30002 方法名：<strong>KairosAgent</strong> 数据/训练语料：<strong>T-STAR</strong> 本地 TeX 源码目录：<a href="KairosAgent_Agentic_Time_Series_Forecasting_with_Fused_Semantic_Reasoning/">KairosAgent_Agentic_Time_Series_Forecasting_with_Fused_Semantic_Reasoning</a></p>
+  <h2>1. 一句话总结</h2>
+  <p>KairosAgent 把时间序列 forecasting 拆成“先用 LLM agent 做工具增强的未来形态推理，再把推理文本作为 semantic prior 融入 TSFM 隐空间”。它不是让 LLM 直接输出数值预测，而是让 LLM 生成 qualitative morphology description，再由 Kairos 这类原生时间序列模型输出数值预测。</p>
+  <p>核心公式是：</p>
+  <div class="math">$$
+r=\pi_{\mathrm{reason}}(\mathbf{X},c,\mathcal{T}),
+\qquad
+\hat{\mathbf{Y}}=f_{\mathrm{forecast}}(\mathbf{X},r).
+$$</div>
+  <p>其中 $\mathbf{X}$ 是历史数值序列，$c$ 是文本上下文，$\mathcal{T}$ 是时间序列分析工具集，$r$ 是未来形态描述，$\hat{\mathbf{Y}}$ 是最终数值预测。</p>
+  <h2>2. 动机：LLM 和 TSFM 各自缺什么</h2>
+  <p>跨领域多模态时间序列预测有两个信息源：</p>
+  <ul>
+    <li>数值历史：趋势、周期、波动、突变、异常；</li>
+    <li>文本语义：领域背景、事件解释、元数据、可能的未来驱动因素。</li>
+  </ul>
+  <p>纯 LLM 方案的问题是数值理解弱，容易把长序列序列化成文本后产生 numerical hallucination。纯 TSFM 的问题是保留了数值模态，但往往缺乏语义理解，也无法把文本中的未来线索转成可解释的预测依据。</p>
+  <p>已有 agentic forecasting 系统常见两种不足：</p>
+  <ol>
+    <li>LLM agent 直接输出数值预测，定量精度不稳定；</li>
+    <li>LLM 只做外部解释，最终 forecasting backbone 没真正使用语义推理结果。</li>
+  </ol>
+  <p>KairosAgent 的设计是折中：LLM 只负责“推理未来形态”，不负责点值；TSFM 负责数值预测，但必须通过 cross-modal fusion 使用 LLM 推理出的 morphology prior。</p>
+  <h2>3. 任务定义</h2>
+  <p>时间序列推理任务：</p>
+  <div class="math">$$
+r=\pi_{\mathrm{reason}}(\mathbf{X},c),
+$$</div>
+  <p>其中 $r$ 是自然语言解释，描述趋势、周期、波动和未来可能形态。</p>
+  <p>时间序列预测任务：</p>
+  <div class="math">$$
+\hat{\mathbf{Y}}
+=
+(\hat{y}_{L+1},\dots,\hat{y}_{L+H})
+\in\mathbb{R}^{H}.
+$$</div>
+  <p>KairosAgent 把两者统一为 reason-then-forecast：</p>
+  <div class="math">$$
+r=\pi_{\mathrm{reason}}(\mathbf{X},c,\mathcal{T}),
+\qquad
+\hat{\mathbf{Y}}
+=
+f_{\mathrm{forecast}}(\mathbf{X},r).
+$$</div>
+  <p>这里 $r$ 是中间语义先验，不要求包含具体未来数值，甚至刻意避免 exact numbers。它描述的是 morphology：未来可能上升/下降、是否周期延续、波动是否扩大、是否可能 regime shift、短期/长期形态如何不同。</p>
+  <h2>4. Stage I：工具增强形态推理</h2>
+  <p>LLM reasoner $\pi_{\mathrm{reason}}$ 可以多轮调用工具 $\mathcal{T}$。每轮要么调用工具并接收 observation，要么输出最终 morphology description。</p>
+  <p>工具共 23 个，来自 tsfresh，覆盖七类：</p>
+  <table>
+    <tr><th class="">类别</th><th class="">工具示例</th><th class="">用途</th></tr>
+    <tr><td class="">Trend</td><td class=""><code>linear_trend</code></td><td class="">回归斜率、p-value、r-value</td></tr>
+    <tr><td class="">Volatility</td><td class=""><code>standard_deviation</code>, <code>mean_abs_change</code>, <code>ratio_beyond_r_sigma</code></td><td class="">波动强度和异常波动</td></tr>
+    <tr><td class="">Distribution</td><td class=""><code>quantile</code>, <code>change_quantiles</code></td><td class="">分布位置和分位区间变化</td></tr>
+    <tr><td class="">Periodicity</td><td class=""><code>autocorrelation</code>, <code>agg_autocorrelation</code></td><td class="">周期性和滞后相关</td></tr>
+    <tr><td class="">Extrema</td><td class=""><code>number_peaks</code>, <code>first_location_of_maximum</code>, <code>longest_strike_above_mean</code></td><td class="">峰谷和局部结构</td></tr>
+    <tr><td class="">Frequency</td><td class=""><code>fft_coefficient</code>, <code>spkt_welch_density</code>, <code>fourier_entropy</code></td><td class="">频域结构</td></tr>
+    <tr><td class="">Dynamics</td><td class=""><code>augmented_dickey_fuller</code>, <code>cid_ce</code></td><td class="">平稳性和复杂度</td></tr>
+  </table>
+  <p>典型工具公式例子：</p>
+  <div class="math">$$
+\texttt{mean\_abs\_change}
+=
+\frac{1}{n-1}
+\sum_{i=1}^{n-1}|x_{i+1}-x_i|.
+$$</div>
+  <p>自相关工具：</p>
+  <div class="math">$$
+R(l)
+=
+\frac{1}{(n-l)\sigma^2}
+\sum_{t=1}^{n-l}
+(X_t-\mu)(X_{t+l}-\mu).
+$$</div>
+  <p>CID complexity：</p>
+  <div class="math">$$
+\mathrm{cid\_ce}
+=
+\sqrt{\sum_{i=1}^{n-1}(x_i-x_{i-1})^2}.
+$$</div>
+  <p>这些工具让 LLM 不必凭文本化序列“目测”趋势和周期，而是基于定量 evidence 生成语义判断。</p>
+  <h2>5. Stage II：Morphology-conditioned forecasting</h2>
+  <p>KairosAgent 的 forecaster 基于 Kairos TSFM。它保留 Kairos 的 encoder-decoder backbone 和 prediction head，新增 text adapter 和 gated cross-modal fusion。</p>
+  <h3>5.1 Semantic prior encoding</h3>
+  <p>先用 text encoder 编码 morphology description：</p>
+  <div class="math">$$
+\boldsymbol{E}_r
+=
+\mathrm{Proj}(\mathrm{TextEnc}(r))
+\in\mathbb{R}^{M\times D_h}.
+$$</div>
+  <p>$M$ 是文本 token 长度，$D_h$ 是 Kairos hidden dimension。<code>Proj</code> 是 MLP，把文本 embedding 投影到 TSFM hidden space。</p>
+  <h3>5.2 Gated cross-modal fusion</h3>
+  <p>在 Kairos decoder 的每一层 $l$，用 cross-attention 把 $\boldsymbol{E}_r$ 融入时间序列 hidden states：</p>
+  <div class="math">$$
+\boldsymbol{H}^{(l)}
+\leftarrow
+\mathrm{LN}
+\left(
+\boldsymbol{H}^{(l)}
++
+\sigma(\boldsymbol{g}^{(l)})
+\odot
+\mathrm{CA}
+(\boldsymbol{H}^{(l)},\boldsymbol{E}_r)
+\right).
+$$</div>
+  <p>各符号含义：</p>
+  <ul>
+    <li>$\boldsymbol{H}^{(l)}$：第 $l$ 层 decoder hidden states；</li>
+    <li>$\mathrm{CA}$：cross-attention，query 来自时间序列 hidden，key/value 来自文本先验；</li>
+    <li>$\boldsymbol{g}^{(l)}\in\mathbb{R}^{D_h}$：可学习 gate；</li>
+    <li>$\sigma$：sigmoid，把 gate 约束到 0-1；</li>
+    <li>$\odot$：逐维乘法；</li>
+    <li>$\mathrm{LN}$：layer normalization。</li>
+  </ul>
+  <p>这个公式的直觉是：semantic prior 不应强行覆盖 TSFM 的数值表示，而应该由 gate 控制每层、每个 hidden dimension 注入多少文本信息。论文初始化 gate 为 $-2.197$，因此：</p>
+  <div class="math">$$
+\sigma(-2.197)\approx 0.1.
+$$</div>
+  <p>这意味着训练初期只注入少量语义信息，避免破坏 Kairos 预训练预测能力；随着训练，gate 可以逐步打开。</p>
+  <h2>6. Stage III：三阶段训练</h2>
+  <p>KairosAgent 训练分三步：</p>
+  <table>
+    <tr><th class="">阶段</th><th class="">训练对象</th><th class="">目标</th></tr>
+    <tr><td class="">Stage I SFT</td><td class="">LLM reasoner</td><td class="">学会工具调用、参数生成和 morphology synthesis</td></tr>
+    <tr><td class="">Stage II multimodal alignment</td><td class="">TSFM + text encoder + fusion modules</td><td class="">学会把 $r$ 当 semantic prior 用于数值预测</td></tr>
+    <tr><td class="">Stage III RL</td><td class="">LLM reasoner</td><td class="">用 forecasting reward 优化工具调用和推理过程</td></tr>
+  </table>
+  <h3>6.1 SFT</h3>
+  <p>T-STAR 轨迹被格式化为多轮 chat，包括 system prompt、user query、tool calls、tool observations、最终 morphology description。SFT 用标准 next-token prediction objective，监督 assistant 侧所有 token，包括中间工具调用。</p>
+  <h3>6.2 Quantile pinball loss</h3>
+  <p>Stage II 用 quantile pinball loss：</p>
+  <div class="math">$$
+\ell_q(y,\hat{y}_q)
+=
+2\left|
+(y-\hat{y}_q)
+(\mathbb{I}[y\leq \hat{y}_q]-q)
+\right|.
+$$</div>
+  <p>$q$ 是 quantile level，$\hat{y}_q$ 是对应分位预测。这个 loss 让 forecaster 输出概率分位，而不只是点预测。</p>
+  <p>完整 loss 先对目标值做基于 history statistics 的标准化。对第 $k$ 个 horizon-specific prediction head：</p>
+  <div class="math">$$
+\mathcal{L}_k
+=
+\frac{1}{B}
+\sum_{b=1}^{B}
+\sum_{t=1}^{H_k}
+\omega_t
+\frac{1}{|\mathcal{Q}|}
+\sum_{q\in\mathcal{Q}}
+\ell_q(\tilde{y}_{b,t},\hat{y}_{b,k,q,t}).
+$$</div>
+  <p>时间权重为 log-decay：</p>
+  <div class="math">$$
+\omega_t
+=
+\frac{1}{H_k}(\log H_k-\log t).
+$$</div>
+  <p>这会更强调近端 forecast step，同时保留长 horizon 监督。最终目标对所有 horizon-specific heads 平均：</p>
+  <div class="math">$$
+\mathcal{L}_{\mathrm{q}}(\mathbf{X},r;\mathbf{Y})
+=
+\frac{1}{K}
+\sum_{k=1}^{K}\mathcal{L}_k.
+$$</div>
+  <h2>7. Turn-level GRPO：把 reward 分给具体工具调用</h2>
+  <p>普通 outcome-only RL 只在整条 trajectory 结束后给一个 reward，很难判断哪次工具调用有用。KairosAgent 设计 turn-level credit assignment。</p>
+  <p>给定 $N$ 轮 trajectory，先生成一个不调用工具的 baseline morphology：</p>
+  <div class="math">$$
+r^0.
+$$</div>
+  <p>第 $i$ 轮之后生成当前 morphology：</p>
+  <div class="math">$$
+r^i,\qquad i=1,\dots,N.
+$$</div>
+  <p>用冻结的 Stage II forecaster 打分：</p>
+  <div class="math">$$
+S^i
+=
+-\mathcal{L}_{\mathrm{q}}(\mathbf{X},r^i;\mathbf{Y}).
+$$</div>
+  <p>分数越高，表示预测 loss 越低。第 $i$ 轮的边际收益：</p>
+  <div class="math">$$
+\Delta^i
+=
+S^i-S^{i-1}.
+$$</div>
+  <p>turn-level return 是未来改进的折扣和：</p>
+  <div class="math">$$
+R^i
+=
+\sum_{j=i}^{N}
+\gamma^{j-i}\Delta^j.
+$$</div>
+  <p>对每个 prompt 采样 $G$ 条 trajectories，做 group normalization：</p>
+  <div class="math">$$
+\hat{A}_g^i
+=
+\frac{R_g^i-\mu(\{R\})}
+{\sigma(\{R\})}.
+$$</div>
+  <p>然后把 $\hat{A}^i$ 分配给第 $i$ 轮生成的 token 集合 $s^i$，用 GRPO 优化：</p>
+  <div class="math">$$
+\mathcal{L}_{\mathrm{GRPO}}
+=
+\mathbb{E}_{g,i}
+\left[
+\min
+\left(
+\rho_g^t\hat{A}_g^i,
+\operatorname{clip}(\rho_g^t,1\pm\epsilon)\hat{A}_g^i
+\right)
+-
+\beta
+D_{\mathrm{KL}}
+(\pi_{\mathrm{reason}}\|\pi_{\mathrm{ref}})
+\right].
+$$</div>
+  <p>其中：</p>
+  <div class="math">$$
+\rho_g^t
+=
+\frac{
+\pi_{\mathrm{reason}}(s_g^t\mid s_g^{&lt;t})
+}{
+\pi_{\mathrm{old}}(s_g^t\mid s_g^{&lt;t})
+}.
+$$</div>
+  <p>这个设计的核心是把“这次工具调用是否降低了最终 forecasting loss”转成 token-level advantage，而不是把所有工具调用混在同一个终局 reward 里。</p>
+  <h2>8. T-STAR 数据集</h2>
+  <p>T-STAR 是一个 40K+ tool-augmented reasoning trajectory corpus，来自 29 个数据集、9 个领域。每个样本不是简单的 history/future pair，而是完整的工具调用轨迹、工具返回、morphology forecast。</p>
+  <p>窗口构造：</p>
+  <table>
+    <tr><th class="">项目</th><th class=" num">设置</th></tr>
+    <tr><td class="">History length</td><td class=" num">$L=2048$</td></tr>
+    <tr><td class="">Short-term horizon</td><td class=" num">$H_s=96$</td></tr>
+    <tr><td class="">Long-term horizon</td><td class=" num">$H_l=720$</td></tr>
+    <tr><td class="">Default stride</td><td class=" num">512</td></tr>
+    <tr><td class="">Budget cap</td><td class=" num">5000 windows</td></tr>
+    <tr><td class="">Minimum budget</td><td class=" num">500 windows</td></tr>
+    <tr><td class="">Metadata masking</td><td class=" num">30% samples</td></tr>
+  </table>
+  <p>窗口采样逻辑：</p>
+  <ol>
+    <li>太短且不足 $H_s+H_l$ 的序列跳过；</li>
+    <li>若不足 $L+H_l$，用最大可用 history 抽一个窗口；</li>
+    <li>否则按 stride 生成 sliding windows；</li>
+    <li>若总窗口数超过预算，按 $\sqrt{s_i}$ 给每条序列分配采样预算；</li>
+    <li>若窗口太少，用更小 stride 重新生成。</li>
+  </ol>
+  <p>轨迹生成由 Kimi-K2.5 作为 tool-calling agent 完成，最多 8 轮、每轮最多 3 个并行工具调用。质量控制由 GPT-5.2 judge 依次检查：</p>
+  <ul>
+    <li>metadata leak：最终 forecast 不得泄漏 exact numbers、timestamp、dataset name、unit 等；</li>
+    <li>reasoning usage：推理是否真正使用工具输出和 metadata；</li>
+    <li>forecast accuracy：未来形态描述是否与 held-out future 的趋势、周期、波动和转折大体一致。</li>
+  </ul>
+  <h2>9. 实验与主要结论</h2>
+  <p>评测包括两部分：</p>
+  <table>
+    <tr><th class="">评测</th><th class="">数据集</th><th class="">指标</th></tr>
+    <tr><td class="">morphology reasoning</td><td class="">Time-MMD</td><td class="">LLM-as-judge 判断未来形态推理质量</td></tr>
+    <tr><td class="">zero-shot forecasting</td><td class="">Time-MMD、Time-IMM</td><td class="">MSE、MAE、MASE</td></tr>
+  </table>
+  <p>论文主文给出的核心结论：</p>
+  <ol>
+    <li>KairosAgent-4B 在 morphology reasoning 上超过同规模 baseline，说明工具增强推理比单纯增大模型更有效。</li>
+    <li>在 Time-MMD 和 Time-IMM 上，KairosAgent 的 zero-shot forecasting 优于 zero-shot TSFMs，并能超过部分 full-shot baseline。</li>
+    <li>turn-level RL 优于 SFT-only 和 outcome-only RL；outcome-level RL 甚至可能退化，因为稀疏 reward 无法区分有用工具调用和冗余调用。</li>
+    <li>去掉 morphology prior 会显著降低 Time-IMM 预测性能，证明语义先验不是只提供解释，而是被 forecaster 使用了。</li>
+    <li>agent 学到的数据依赖工具策略：前几轮偏 trend/volatility，后几轮转向 extrema/distribution；不同数据集调用模式不同。</li>
+  </ol>
+  <p>效率方面，Stage II forecaster 在 TITAN RTX 上 input length 2048、horizon 96 的 forward latency 为 0.075s，而 Kairos-Base 为 0.054s。跨模态 fusion 增加约 0.021s，参数增加 40.6M，总计 109.1M 参数。</p>
+  <h2>10. Agent / framework 视角拆解</h2>
+  <table>
+    <tr><th class="">要素</th><th class="">KairosAgent 中的对应</th></tr>
+    <tr><td class="">State / input</td><td class="">历史序列 $\mathbf{X}$、文本上下文 $c$、metadata、工具 observations</td></tr>
+    <tr><td class="">Policy</td><td class="">LLM reasoner $\pi_{\mathrm{reason}}$</td></tr>
+    <tr><td class="">Action space</td><td class="">调用 23 个统计工具或输出 final morphology</td></tr>
+    <tr><td class="">Tool space</td><td class="">trend、volatility、distribution、periodicity、extrema、frequency、dynamics 工具</td></tr>
+    <tr><td class="">Intermediate state</td><td class="">morphology description $r$</td></tr>
+    <tr><td class="">Forecaster</td><td class="">text-conditioned Kairos TSFM $f_{\mathrm{forecast}}$</td></tr>
+    <tr><td class="">Memory / corpus</td><td class="">T-STAR tool-augmented trajectories</td></tr>
+    <tr><td class="">Training update</td><td class="">SFT + multimodal alignment + GRPO</td></tr>
+    <tr><td class="">Reward</td><td class="">frozen Stage II forecaster 的负 quantile loss</td></tr>
+    <tr><td class="">Evaluation</td><td class="">morphology judge + forecasting MSE/MAE/MASE</td></tr>
+  </table>
+  <h2>11. 贡献、局限与启示</h2>
+  <p>贡献：</p>
+  <ol>
+    <li>提出 reason-then-forecast，把 LLM 语义推理和 TSFM 数值预测明确分工。</li>
+    <li>用 gated cross-modal fusion 把 morphology prior 注入 TSFM hidden space。</li>
+    <li>构造 T-STAR，提供 40K+ 工具增强时间序列推理轨迹。</li>
+    <li>提出 turn-level credit assignment，让 RL 能优化具体工具调用和中间推理。</li>
+    <li>在 regular 和 irregular multimodal forecasting 上展示 zero-shot 预测收益。</li>
+  </ol>
+  <p>局限：</p>
+  <ul>
+    <li>目前验证集中在 forecasting，尚未扩展到分类、异常检测等其他任务；</li>
+    <li>fusion 模块声称可迁移到其他 TSFM，但论文尚未系统验证；</li>
+    <li>morphology judge 和自动数据生成依赖强 LLM，质量仍受 judge 偏差影响；</li>
+    <li>Stage I agent reasoning latency 没计入 Stage II forecaster 的效率表，完整端到端延迟需要单独评估。</li>
+  </ul>
+  <p>实践启示：</p>
+  <p>KairosAgent 的关键不是让 LLM “算得更准”，而是让 LLM 生成可被 TSFM 使用的语义先验。对时间序列 agent 来说，一个更稳健的架构是：LLM 负责选择工具、解释形态和构造语义条件；TSFM 负责数值预测；二者通过 latent fusion 真正耦合，而不是只在最终报告里并列出现。</p>
+</main>
+</body>
+</html>

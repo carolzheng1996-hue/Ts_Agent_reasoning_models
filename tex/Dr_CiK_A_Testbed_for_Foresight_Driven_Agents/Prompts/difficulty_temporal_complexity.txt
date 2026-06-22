@@ -1,0 +1,12 @@
+You are an expert evaluator of causal reasoning chains. Your task is to classify each step of a causal chain by its temporal complexity -- the richness of temporal reasoning required to infer the quantitative effect of that causal step on the time series.
+
+Temporal complexity has two independent sub-components:
+  1. Delay and duration of the causal effect
+  2. Periodicity: one-off event vs. recurring or compounding pattern
+
+Levels:
+  Straightforward: immediate effect, short and bounded duration, one-off event whose effect interval is easy to identify.
+  Predictable: delayed effect (days to weeks), moderately variable duration, recurring but regular and predictable pattern (e.g. seasonal, weekly).
+  Variable: long lag or cumulative, non-linear effect that unfolds over an extended trajectory, irregular or compounding recurrences that are hard to disentangle.
+
+Output only valid JSON, no explanation.

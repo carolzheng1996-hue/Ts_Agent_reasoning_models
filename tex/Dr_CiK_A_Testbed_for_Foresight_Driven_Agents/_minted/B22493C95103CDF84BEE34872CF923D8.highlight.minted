@@ -1,0 +1,108 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+Task ID: ```\PYGZob{}task\PYGZus{}id\PYGZcb{}```
+
+Original Context:
+```\PYGZob{}context\PYGZcb{}```
+
+Ground Truth Evidences (events) Extraction Result:
+```\PYGZob{}gt\PYGZus{}evidence\PYGZus{}extraction\PYGZcb{}```
+
+You are validating whether the ground\PYGZhy{}truth evidence extraction result for this single task is correct enough for downstream use.
+
+Important principle:
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }The goal is NOT perfection, but usability.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Minor differences in phrasing, granularity, or grouping that do NOT affect meaning or causal interpretation should NOT be treated as errors.
+
+Validation criteria:
+\PYG{k}{1.} Coverage:
+\PYG{+w}{   }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }All meaningful information and details from the context should be represented.
+\PYG{+w}{   }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Minor omissions of low\PYGZhy{}importance details are acceptable if they do not affect understanding.
+
+\PYG{k}{2.} Event quality:
+\PYG{+w}{   }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Events should be semantically complete and self\PYGZhy{}contained.
+\PYG{+w}{   }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Slight differences in how events are grouped or phrased are acceptable if meaning is preserved.
+\PYG{+w}{   }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Do NOT flag alternative but reasonable segmentations as errors.
+
+\PYG{k}{3.} Non\PYGZhy{}duplication:
+\PYG{+w}{   }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Events should not unnecessarily repeat the same information.
+\PYG{+w}{   }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Partial overlap is acceptable if it improves clarity.
+
+\PYG{k}{4.} Causal edges:
+\PYG{+w}{   }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Causal relationships must be directly supported by the context.
+\PYG{+w}{   }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Implicit but clear causal relations are acceptable.
+\PYG{+w}{   }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Do NOT penalize missing weak or ambiguous causal links.
+\PYG{+w}{   }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }causal edges can be empty if the text contains no explicit causal relationships.
+
+\PYG{k}{5.} Background event (E1):
+\PYG{+w}{   }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Should mainly contain non\PYGZhy{}causal or contextual information.
+\PYG{+w}{   }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Minor misplacement of information into or out of E1 is acceptable if it does not affect causal structure.
+
+\PYG{k}{6.} Time fields:
+\PYG{+w}{   }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Should match the context when explicitly available or inferable.
+\PYG{+w}{   }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Missing or null timestamps are acceptable if not clearly stated or inferable.
+
+\PYG{k}{7.} Causal context alignment:
+\PYG{+w}{   }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }The \PYG{l+s+sb}{`causal\PYGZus{}context`} list must correspond one\PYGZhy{}to\PYGZhy{}one with the \PYG{l+s+sb}{`causal\PYGZus{}graph`}, and both lists must have the same length.
+
+\PYG{k}{8.} Constraints:
+   Constraints over the time series variable should be treated as a SEPARATE event and should be self\PYGZhy{}contained; constraints refer to limits, or requirements imposed on the variable over time.
+
+\PYG{k}{9.} Consistency:
+   The extracted events, causal\PYGZus{}graph, and causal\PYGZus{}context should be consistent, semantically aligned with one another, and should together preserve the overall meaning of the original context.
+   
+
+Judgment rules:
+
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }\PYGZdq{}correct\PYGZdq{}:
+\PYG{+w}{  }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }All 9 validation criteria are satisfied. (otherwise should be \PYGZdq{}needs\PYGZus{}correction\PYGZdq{} or \PYGZdq{}uncertain\PYGZdq{})
+\PYG{+w}{  }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Minor issues (stylistic differences, alternative valid segmentations, or low\PYGZhy{}impact omissions) are allowed as long as they do NOT affect:
+\PYG{+w}{    }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }semantic correctness
+\PYG{+w}{    }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }causal validity
+\PYG{+w}{    }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }overall usability for downstream tasks
+\PYG{+w}{  }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }No major issues are present.
+
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }\PYGZdq{}needs\PYGZus{}correction\PYGZdq{}:
+\PYG{+w}{  }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }At least one major issue exists in any of the 9 validation criteria, including but not limited to:
+\PYG{+w}{    }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }missing key information that affects understanding (coverage)
+\PYG{+w}{    }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }incorrect, unsupported, or misleading causal relationships
+\PYG{+w}{    }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }inconsistent or misaligned events, causal\PYGZus{}graph, and causal\PYGZus{}context
+\PYG{+w}{    }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }if constraints are present, they should be correctly extracted as a separate event; if this is not the case, it is a major issue.
+\PYG{+w}{    }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }violations that break semantic correctness or usability
+
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }\PYGZdq{}uncertain\PYGZdq{}:
+\PYG{+w}{  }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }The case is borderline, where:
+\PYG{+w}{    }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }multiple interpretations are plausible, AND
+\PYG{+w}{    }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }it is unclear whether the differences impact downstream usability
+\PYG{+w}{  }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Use this sparingly; prefer \PYGZdq{}correct\PYGZdq{} if the extraction is usable.
+
+Additional integrated guidelines:
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Do NOT penalize alternative but reasonable event segmentation or phrasing.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Do NOT over\PYGZhy{}flag weak or ambiguous missing causal links.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Be strict only when issues affect meaning, correctness, or causal structure.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }The granularity of events may vary: parallel or enumerated content can be grouped into a single event as long as meaning and causal interpretation are preserved.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }It\PYGZsq{}s fine to have only a single event if there is no clear causal structure or if the text is best represented that way.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Prefer usability over perfection.
+
+Severity guidelines:
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }major: Affects correctness, meaning, or causal structure.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }minor: Stylistic, formatting, or alternative\PYGZhy{}but\PYGZhy{}valid interpretation.
+
+Return valid JSON only with this schema, no other text:
+\PYGZob{}
+  \PYGZdq{}judge\PYGZdq{}: \PYGZdq{}correct | needs\PYGZus{}correction | uncertain\PYGZdq{},
+  \PYGZdq{}confidence\PYGZdq{}: \PYGZdq{}high | medium | low\PYGZdq{},
+  \PYGZdq{}summary\PYGZdq{}: \PYGZdq{}short overall judgment\PYGZdq{},
+  \PYGZdq{}issue\PYGZus{}types\PYGZdq{}: [\PYGZdq{}snake\PYGZus{}case\PYGZus{}issue\PYGZus{}type\PYGZdq{}],
+  \PYGZdq{}findings\PYGZdq{}: [
+    \PYGZob{}
+      \PYGZdq{}severity\PYGZdq{}: \PYGZdq{}major | minor\PYGZdq{},
+      \PYGZdq{}issue\PYGZus{}type\PYGZdq{}: \PYGZdq{}snake\PYGZus{}case\PYGZus{}issue\PYGZus{}type\PYGZdq{},
+      \PYGZdq{}target\PYGZus{}id\PYGZdq{}: \PYGZdq{}event id, edge, or coverage\PYGZdq{},
+      \PYGZdq{}reason\PYGZdq{}: \PYGZdq{}short reason\PYGZdq{},
+      \PYGZdq{}evidence\PYGZdq{}: \PYGZdq{}short text span or explanation from the task context\PYGZdq{}
+    \PYGZcb{},
+    ...
+  ],
+  \PYGZdq{}correction\PYGZus{}hint\PYGZdq{}: \PYGZdq{}note for a human editor\PYGZdq{}
+\PYGZcb{}
+\end{MintedVerbatim}

@@ -1,0 +1,112 @@
+You are a distractor generation assistant.
+
+Your task is to generate one realistic but misleading time-series distractor specification for a forecasting task.
+
+Input:
+
+The history_values and future_values inputs are provided in direct-prompt time-series format, where each line is `(timestamp, value)`.
+
+history_values:
+```{history_values}```
+
+future_values:
+```{future_values}```
+
+context:
+```{context}```
+
+Goal:
+Construct one distractor specification that:
+- is realistic and plausible given the context,
+- introduces a minimal mischaracterization of one time-series feature, expressed as a plausible but misleading empirical pattern, tendency, or historical-style behavior, without using specific timestamps, and remaining distinguishable from the true history when grounded in the data
+- leads to a materially different future pattern,
+- can only be identified as incorrect when grounded in the time series.
+
+
+## Rules
+
+
+1. Use the SAME context background. Do not change the entity and maybe the event type.
+2. Do NOT introduce new causes or external mechanisms.
+   - Only change how the history is characterized.
+3. The distractor must NOT be easily rejected using text alone.
+   - It should require time-series grounding to detect the error.
+4. The distractor_history_description and distractor_future_pattern must be independent and self-contained. The distractor should arise naturally from the mischaracterized pattern alone.
+
+
+## Taxonomy
+
+Valid scope-feature combinations:
+
+- point: value
+- segment: value, trend, periodicity
+- global: value, trend, periodicity
+
+
+## Allowed minimal errors by feature
+
+For each selected (scope, feature_type), the distractor must apply ONE of the following minimal modifications:
+
+Value:
+- point:
+  - misstate the value at a specific time point (e.g., a wrong value, a small deviation, or a different local extremum)
+- segment:
+  - misstate the average level (e.g., describe as a wrong average value)
+  - slightly misidentify local max or min (e.g., claim a peak is higher/lower than it is)
+- global:
+  - misstate the overall level (similar to segment but applied to the whole history)
+
+Trend:
+- segment:
+  - misstate the local direction (e.g., describe as rising instead of flat, or flat instead of slightly decreasing)
+- global:
+  - misstate the overall trend (e.g., describe as increasing when it is roughly stable)
+
+Periodicity:
+- segment:
+  - misstate whether periodicity is present (e.g., describe weak periodicity as absent, or wrong frequency)
+- global:
+  - misstate the overall periodic pattern (e.g., claim no periodicity when a weak pattern exists or wrong frequency)
+
+
+## Procedure
+
+
+Step 1: Inspect history_values, future_values, and context.
+
+Step 2: Select one valid (scope, feature_type).
+
+Step 3 : Reason about the true history pattern for that feature and how it leads to the true future pattern.
+- Inside reasoning, also output suitable experience-style descriptions of the distracting pattern, such as empirical tendencies, observed patterns, or typical behaviors, rather than specific factual statements that could be directly checked against the time series.
+
+Step 4: Write a concise ground-truth description of the history for that feature.
+
+Step 5: Write a concise ground-truth description of the future pattern.
+
+Step 6: Create a distractor history description by making an identifiable minimal error on ONLY the selected (scope, feature_type).
+- A self-contained, plausible but misleading characterization of a different pattern narrated as a experience or potential scenario (with no specific timestamps) that would lead to a different future pattern.
+- The error must be minimal: misstate that feature slightly, without changing the overall structure of the history.
+- The error must be identifiable from the history itself.
+- Keep all non-selected properties unchanged.
+- Do not invent new patterns or exaggerate weak ones.
+- The distractor's modified history description should not be stated as a false factual replacement of the true history. Instead, it should be written as a plausible but misleading description of the observed series, such as an empirical pattern, a typical tendency, or an expected mode of behavior.
+- Do not describe the distractor history using specific, checkable facts about the real historical time series, such as exact timestamps, or explicit local events. These would risk creating conflicting information (a lie). Instead, express the distractor history as a plausible but misleading empirical tendency, pattern-level regularity, or conditional behavior (e.g., how the series typically behaves when values stay within a certain range or under a certain observed pattern).
+
+Step 7: Derive a distractor future pattern from that incorrect history description.
+- The distractor future must be a plausible but incorrect continuation under the same context.
+- It must materially contradict the true future time series.
+- When the context implies a future effect or consequence, the distractor future should also contradict that implication.
+- The difference must be qualitative, not merely a small numeric deviation.
+
+
+## Output format (STRICT JSON)
+
+{
+  "reasoning": "...",
+  "scope": "...",
+  "feature_type": "...",
+  "gt_history_description": "...",
+  "gt_future_pattern": "...",
+  "distractor_history_description": "...",
+  "distractor_future_pattern": "..."
+}

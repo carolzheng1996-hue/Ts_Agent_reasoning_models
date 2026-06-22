@@ -1,0 +1,30 @@
+\begin{table*}[!htbp]
+  \caption{Summary of benchmark datasets. Each dataset includes multiple time series (Dim.) with varying sequence lengths, split into training, validation, and testing sets. Data are collected at different frequencies across various domains.}
+  \vspace{-0.5em}
+  \label{tab:dataset}
+  \centering
+  \begin{tabular}{l|c|c|c|c|c|c|c}
+    \toprule
+    Dataset & Dim. & Forecast Horizons & Dataset Size & Frequency & Domain & Forecastability* & Periodicity \\
+    \toprule
+    ETTm1 & 7 & {\{96, 192, 336, 720\}} & (34465, 11521, 11521) & 15 min & Temperature & 0.46 & 96 \\
+    \cmidrule{1-8}
+    ETTm2 & 7 & {\{96, 192, 336, 720\}} & (34465, 11521, 11521) & 15 min & Temperature & 0.55 & 96 \\
+    \cmidrule{1-8}
+    ETTh1 & 7 & {\{96, 192, 336, 720\}} & (8545, 2881, 2881) & 1 hour & Temperature & 0.38 & 24 \\
+    \cmidrule{1-8}
+    ETTh2 & 7 & {\{96, 192, 336, 720\}} & (8545, 2881, 2881) & 1 hour & Temperature & 0.45 & 24 \\
+    \cmidrule{1-8}
+    Electricity & 321 & {\{96, 192, 336, 720\}} & (18317, 2633, 5261) & 1 hour & Electricity & 0.77 & 24 \\
+    \cmidrule{1-8}
+    Exchange-rate & 8 & {\{96, 192, 336, 720\}} & (5216, 761, 1518) & 1 day & Finance & 0.41 & 7 \\
+    \cmidrule{1-8}
+    Traffic & 862 & {\{96, 192, 336, 720\}} & (12185, 1757, 3509) & 1 hour & Transportation & 0.68 & 24 \\
+    \cmidrule{1-8}
+    Weather & 21 & {\{96, 192, 336, 720\}} & (36792, 5271, 10540) & 10 min & Weather & 0.75 & 144 \\
+    \bottomrule
+    \multicolumn{8}{l}{\scriptsize* Forecastability is computed as $1$ minus the entropy of the Fourier decomposition of a time series \cite{goerg2013forecastable}. Larger values indicate higher predictability.} \\
+    
+  \end{tabular}
+    \vspace{-0.5em}
+\end{table*}

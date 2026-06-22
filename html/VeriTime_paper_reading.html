@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VeriTime 中文文献解读</title>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <style>
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.72; color: #1f2937; background: #f8fafc; }
+    main { max-width: 980px; margin: 0 auto; padding: 42px 24px 80px; background: #fff; }
+    h1 { font-size: 2rem; line-height: 1.25; margin: 0 0 12px; color: #111827; }
+    h2 { font-size: 1.45rem; margin-top: 34px; border-bottom: 1px solid #e5e7eb; padding-bottom: 6px; color: #111827; }
+    h3 { font-size: 1.15rem; margin-top: 24px; color: #111827; }
+    p { margin: 12px 0; }
+    ul, ol { padding-left: 1.5rem; }
+    code { background: #eef2f7; padding: 0.12rem 0.28rem; border-radius: 4px; }
+    table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 0.94rem; }
+    th, td { border: 1px solid #d1d5db; padding: 8px 10px; text-align: left; vertical-align: top; }
+    th { background: #f3f4f6; }
+    td.num, th.num { text-align: right; }
+    .meta { color: #4b5563; margin-bottom: 26px; }
+    .callout { background: #f1f5f9; border-left: 4px solid #2563eb; padding: 12px 16px; margin: 18px 0; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>《Time Series Reasoning via Process-Verifiable Thinking Data Synthesis and Scheduling for Tailored LLM Reasoning》中文文献解读</h1>
+  <p class="meta">方法名：<strong>VeriTime</strong>；数据生成管线：<strong>TSRgen</strong>；论文内数据集：<strong>VeriTime-TSRBench</strong><br>作者：Jiahui Zhou 等，Sun Yat-sen University / Xiaomi / NUS</p>
+  <table>
+    <tr><th>资源</th><th>链接</th></tr>
+    <tr><td>论文页面</td><td><a href="https://arxiv.org/abs/2602.07830">arXiv:2602.07830</a></td></tr>
+    <tr><td>PDF</td><td><a href="https://arxiv.org/pdf/2602.07830">https://arxiv.org/pdf/2602.07830</a></td></tr>
+    <tr><td>TeX 源码</td><td><a href="https://arxiv.org/e-print/2602.07830">https://arxiv.org/e-print/2602.07830</a></td></tr>
+    <tr><td>代码</td><td><a href="https://anonymous.4open.science/r/VeriTime-E017">anonymous.4open.science/r/VeriTime-E017</a></td></tr>
+  </table>
+
+  <h2>1. 一句话总结</h2>
+  <p>VeriTime 不只监督最终答案，还监督模型是否正确识别任务意图、关键模式、初步答案和自检结果；它用 TSRgen 合成 process-verifiable CoT 数据，并用难度调度 + 多目标 GRPO，让 3B-4B 级 LLM 在多类时序推理任务上显著提升。</p>
+
+  <h2>2. TSRgen 数据合成</h2>
+  <p>TSRgen 用规则抽取器筛选时间序列任务，用 DeepSeek-R1 生成结构化 TS-tailored CoT，并从最终答案正确的轨迹中抽取过程标签。</p>
+  <table>
+    <tr><th>Step</th><th>名称</th><th>作用</th></tr>
+    <tr><td>1</td><td>Analyzing task intent</td><td>识别题目目标、实体、要求</td></tr>
+    <tr><td>2</td><td>Selecting key patterns</td><td>提取趋势、阈值、幅度、波动、领域关键词等关键模式</td></tr>
+    <tr><td>3</td><td>Analyzing time series samples</td><td>用关键模式分析整段或关键片段</td></tr>
+    <tr><td>4</td><td>Generating preliminary answer</td><td>给出初步结论</td></tr>
+    <tr><td>5</td><td>Reflection / backtracking</td><td>检查模式是否完整、排除干扰因素</td></tr>
+    <tr><td>6</td><td>Final summary</td><td>汇总推理并输出最终答案</td></tr>
+  </table>
+
+  <h2>3. VeriTime-TSRBench 数据集</h2>
+  <p>注意：这里的 TSRBench 是 VeriTime 论文自己的 process-verifiable CoT 数据集，不等同于另一篇 TSRBench benchmark 论文。</p>
+  <table>
+    <tr><th>类别</th><th>任务</th><th class="num">样本数</th><th class="num">平均时间点</th><th class="num">平均 token</th></tr>
+    <tr><td>Scenario</td><td>Anomaly Detection</td><td class="num">1,180</td><td class="num">300</td><td class="num">2,759</td></tr>
+    <tr><td>Scenario</td><td>Scenario Attribution</td><td class="num">930</td><td class="num">300</td><td class="num">2,932</td></tr>
+    <tr><td>Scenario</td><td>Inferential Calculation</td><td class="num">410</td><td class="num">324</td><td class="num">2,783</td></tr>
+    <tr><td>Knowledge</td><td>CTU</td><td class="num">270</td><td class="num">720</td><td class="num">5,942</td></tr>
+    <tr><td>Knowledge</td><td>ECG</td><td class="num">780</td><td class="num">500</td><td class="num">4,239</td></tr>
+    <tr><td>Knowledge</td><td>EMG</td><td class="num">450</td><td class="num">600</td><td class="num">4,990</td></tr>
+    <tr><td>Knowledge</td><td>RCW</td><td class="num">320</td><td class="num">500</td><td class="num">4,201</td></tr>
+  </table>
+
+  <h2>4. 数据调度与训练</h2>
+  <p>训练数据定义为：</p>
+  $$\mathcal{D}_{train}=\{(x_i,y_i,\mathcal{L}_i)\mid i=1,2,\dots,n\}$$
+  <p>$x_i$ 是问题，$y_i$ 是 CoT，$\mathcal{L}_i=\{l_{\text{final}},l_{\text{process}}\}$ 包含最终答案和过程标签。</p>
+  <p>VeriTime 先用 10% 数据 warmup SFT，然后用 warmup model 把 scenario 数据分为 normal 和 hard。normal 用 SFT，hard 用 RL：</p>
+  $$\theta_{final}=\arg\max_{\theta}\mathbb{E}_{(x_i,\mathcal{L}_i)\sim\mathcal{D}_{hard}}\left[\mathcal{R}(\pi_{\theta}(x_i),\mathcal{L}_i)\right]$$
+
+  <h2>5. 多目标奖励</h2>
+  <table>
+    <tr><th>类别</th><th>奖励</th><th>作用</th></tr>
+    <tr><td>Structural</td><td>$r_{\text{fmt}}$, $r_{\text{len}}$</td><td>控制 <code>&lt;THINK&gt;</code> / <code>&lt;ANSWER&gt;</code> 格式和合理长度</td></tr>
+    <tr><td>Hard</td><td>$r_{\text{hard}}$</td><td>最终答案是否正确，权重最大</td></tr>
+    <tr><td>Process</td><td>$r_{\text{intent}}$, $r_{\text{pattern}}$, $r_{\text{align}}$, $r_{\text{verify}}$</td><td>验证中间步骤</td></tr>
+  </table>
+  $$r_{\text{intent}}(y)=\mathbb{I}\left[\operatorname{FuzzySim}(J_1(y),\hat{J_1})\ge T_1\right]$$
+  $$M(y)=\sum_{d\in D}\mathbb{I}\left[\max_{s\in S}\operatorname{FuzzySim}(d,s)\ge T_2\right]$$
+  $$r_{\text{hard}}(y)=
+\begin{cases}
+5.0,&A(y)=\hat{a}\\
+-2.0,&\text{otherwise}
+\end{cases}$$
+  $$r(y)=r_{\text{struct}}(y)+r_{\text{hard}}(y)+r_{\text{process}}(y)$$
+
+  <h2>6. GRPO</h2>
+  <p>对每个输入，从旧策略采样 $G$ 个输出，按 group reward 标准化 advantage：</p>
+  $$\hat{A}_i=\frac{r_i-\mu_r}{\sigma_r},\quad
+\mu_r=\frac{1}{G}\sum_{j=1}^{G}r_j,\quad
+\sigma_r=\sqrt{\frac{1}{G}\sum_{j=1}^{G}(r_j-\mu_r)^2+\varepsilon}$$
+  $$\rho_{i,k}=\frac{\pi_{\theta}(y_{i,k}\mid y_{i,<k},x)}{\pi_{\text{old}}(y_{i,k}\mid y_{i,<k},x)}$$
+  $$\mathcal{L}_{GRPO}(\theta)=\frac{1}{G}\sum_{i=1}^{G}\frac{1}{|y_i|}\sum_{k=1}^{|y_i|}
+\left[\mathcal{L}_{clip}(\theta)-\beta\operatorname{KL}[\pi_{\theta}\|\pi_{\text{ref}}]\right]$$
+
+  <h2>7. 主结果</h2>
+  <h3>Scenario-based reasoning</h3>
+  <table>
+    <tr><th>Model</th><th class="num">Overall</th><th class="num">Anomaly</th><th class="num">Scenario Attr.</th><th class="num">Inferential Calc.</th></tr>
+    <tr><td>GPT-4o-mini</td><td class="num">70.43</td><td class="num">82.12</td><td class="num">61.36</td><td class="num">65.71</td></tr>
+    <tr><td>Qwen2.5-3B Base</td><td class="num">40.99</td><td class="num">26.67</td><td class="num">61.36</td><td class="num">31.43</td></tr>
+    <tr><td><strong>Qwen2.5-3B + VeriTime</strong></td><td class="num"><strong>82.86</strong></td><td class="num">90.56</td><td class="num"><strong>83.52</strong></td><td class="num"><strong>68.57</strong></td></tr>
+    <tr><td>Qwen3-4B Base</td><td class="num">75.48</td><td class="num">77.78</td><td class="num">80.68</td><td class="num">62.85</td></tr>
+    <tr><td><strong>Qwen3-4B + VeriTime</strong></td><td class="num"><strong>86.55</strong></td><td class="num"><strong>91.11</strong></td><td class="num"><strong>87.50</strong></td><td class="num"><strong>77.14</strong></td></tr>
+  </table>
+  <h3>Knowledge-based reasoning</h3>
+  <table>
+    <tr><th>Model</th><th class="num">CTU</th><th class="num">ECG</th><th class="num">EMG</th><th class="num">RCW</th></tr>
+    <tr><td>TimesNet</td><td class="num">64.00</td><td class="num">28.13</td><td class="num"><strong>73.33</strong></td><td class="num">59.33</td></tr>
+    <tr><td>Qwen2.5-3B Base</td><td class="num">52.54</td><td class="num">23.16</td><td class="num">51.09</td><td class="num">43.32</td></tr>
+    <tr><td>Qwen2.5-3B + VeriTime</td><td class="num">64.93</td><td class="num">25.79</td><td class="num">64.96</td><td class="num"><strong>64.89</strong></td></tr>
+    <tr><td>Qwen3-4B Base</td><td class="num">42.50</td><td class="num">15.15</td><td class="num">56.46</td><td class="num">43.08</td></tr>
+    <tr><td><strong>Qwen3-4B + VeriTime</strong></td><td class="num"><strong>67.50</strong></td><td class="num"><strong>30.30</strong></td><td class="num">65.31</td><td class="num">63.59</td></tr>
+  </table>
+
+  <h2>8. 迁移、效率与消融</h2>
+  <p>TimeSeriesExam 上，Qwen3/Qwen2.5 分别提升 24.46% 和 16.85%；DROP 上，Qwen3/Qwen2.5 分别提升 8.36% 和 52.87%。VeriTime 还显著减少推理 token，Qwen3-4B 在 ECG 任务从 7,093 tokens 降到 965，减少 86.40%。</p>
+  <p>消融显示 hard reward 和 process reward 都关键；去掉 hard reward 时 inferential calculation 从 68.6% 降到 47.6%。去掉 critical pattern reward 平均下降 18.94%，说明识别关键时序模式是最终正确的核心。</p>
+
+  <h2>9. 系统视角</h2>
+  <table>
+    <tr><th>组件</th><th>VeriTime 对应内容</th></tr>
+    <tr><td>state / input</td><td>时间序列、文本问题、领域上下文、任务类型</td></tr>
+    <tr><td>policy/model</td><td>Qwen2.5-3B 或 Qwen3-4B，经 SFT + GRPO 训练</td></tr>
+    <tr><td>action/output</td><td><code>&lt;THINK&gt;</code> 六步 CoT 和 <code>&lt;ANSWER&gt;</code> 最终答案</td></tr>
+    <tr><td>verifier</td><td>rule-based extractor、final answer checker、process label extractor、cross-LLM judge</td></tr>
+    <tr><td>update</td><td>10% warmup SFT -> data split -> normal SFT -> hard GRPO</td></tr>
+    <tr><td>reward</td><td>format/length + final answer + intent/pattern/align/verify</td></tr>
+  </table>
+
+  <h2>10. 贡献与局限</h2>
+  <p>VeriTime 的贡献是把时间序列 reasoning RL 从 final-answer reward 推到 process-verifiable reward，并证明数据调度能提高效率。局限是代码仍是匿名链接，主要实验集中在 compact LLM；过程标签依赖 DeepSeek-R1 与规则抽取，后续需要更广领域和更强 verifier。</p>
+</main>
+</body>
+</html>

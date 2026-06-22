@@ -1,0 +1,34 @@
+Now generate realistic but purely synthetic profiles for one target entity.
+
+Target entity:
+{entity_name}
+
+Time-series variables for tasks where this target entity is the primary entity are:
+{all_time_series_variables}
+
+Please assign {k_profiles} different profiles to this target entity.
+
+Please return JSON with this schema:
+{
+  "entity_name": "...",
+  "profiles": [
+    {
+      "profile_id": "1",
+      "name": "...",
+      "details": {
+        "...": "...",
+      }
+    }
+  ]
+}
+
+Requirements:
+1. The profiles must be realistic and detailed enough to sound like plausible real-world descriptions for the target entity.
+2. The profiles must be purely synthetic. Do not copy or infer any factual background from the input tasks beyond the entity category itself.
+3. The profiles must not contain any information that could affect forecasting for any of the listed time-series variables, either directly or indirectly.
+4. Avoid predictive signals such as events, trends, operations, demand, weather, outages, anomalies, promotions, policies, schedules, maintenance, failures, holidays, traffic shifts, or any other factor that may influence the time series.
+5. Keep the profiles as stable background descriptions only, the details should be realistic and just background information will be enough.
+6. Generate exactly {k_profiles} profiles for the target entity.
+7. The returned entity_name must match the target entity exactly.
+8. Make sure the name and details are REALISTIC as if they were describing a real-world entity, but do not include any information that could be used to predict the time-series variables associated with the entity.
+9. Only return a JSON object with the specified schema. Do not include any additional text in the response.

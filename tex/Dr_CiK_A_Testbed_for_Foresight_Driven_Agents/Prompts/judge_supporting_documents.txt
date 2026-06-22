@@ -1,0 +1,96 @@
+Task ID: ```{task_id}```
+
+Real Context:
+```{context}```
+
+Supporting Documents To Validate:
+```{supporting_documents}```
+
+You are validating whether the supporting documents for this single task are good enough for downstream use.
+
+Important principle:
+- Judge the supporting documents collectively.
+- The goal is NOT perfection, but usability.
+- Minor phrasing or formatting differences are acceptable if the documents still cover the useful details from the real context.
+
+Validation criteria:
+1. Coverage:
+   - Collectively, the supporting documents should contain all useful details from the real context.
+   - Minor wording differences are acceptable if meaning is preserved.
+   - Small omissions are acceptable only when they do not affect understanding or downstream usefulness.
+
+2. Source realism:
+   - The supporting documents should use appropriate source types and realistic presentation styles.
+   - Metadata, tone, structure, and document format should feel plausible for the claimed source.
+
+3. Context alignment:
+   - The documents should stay aligned with the real context rather than drifting to a different scenario.
+   - Do not treat clearly irrelevant extra content as acceptable.
+   - No conflicting information: the documents should not contain information that contradicts the real context. (wrong time period, wrong entity, wrong setting, etc.)
+   - If one supporting document presents itself as a final summary, final assessment, or precise forecast sequence for the target period, it should not omit a key transition that is part of the real context's expected sequence; such omissions are major only when they make the document materially misleading rather than merely incomplete on its own.
+
+4. Temporal consistency:
+   - The supporting documents should be temporally consistent with the real context.
+   - Dates, time windows, and relative time expressions should not point to a clearly different incident or period.
+   - If a document describes a different date or time period while presenting it as the same immediate or current event, that is a major issue.
+
+5. Entity consistency:
+   - The supporting documents must stay consistent about the core entity or asset identity referenced by the real context.
+   - If the real context refers to a specific terminal, unit, site, device, location, or named entity, the supporting documents should not switch to a different one unless the equivalence is explicitly clear.
+   - Cross-document inconsistencies in terminal names, unit IDs, site names, or other core identifiers are major issues when they make the evidence set refer to different entities.
+
+6. Collective usefulness:
+   - The documents may divide information across multiple sources, but together they should still be easy to use.
+   - Redundant overlap is acceptable if it improves clarity, but excessive redundancy that reduces usability is a problem.
+
+Judgment rules:
+
+- "correct":
+  - All 4 validation criteria are satisfied.
+  - Minor issues are allowed if they do NOT materially affect coverage, realism, or downstream usefulness.
+
+- "needs_correction":
+  - At least one major issue exists, including but not limited to:
+    - missing useful real-context details that affect understanding,
+    - inappropriate or unrealistic source types / presentation,
+    - documents that drift away from the real context,
+    - collectively unusable supporting coverage.
+    - documents that point to a clearly different date, time window, or incident period than the real context,
+    - conflicting terminal / unit / site / device / entity identifiers across supporting documents or against the real context,
+
+- "uncertain":
+  - The case is borderline and it is unclear whether the issues materially affect downstream usefulness.
+  - Use this sparingly; prefer "correct" if the supporting set is usable.
+
+Severity guidelines:
+- major: Affects coverage, realism, alignment, temporal consistency, entity consistency, or downstream usefulness.
+- minor: Stylistic, formatting, or low-impact presentation issue.
+
+Output formatting rules:
+- When referring to a specific supporting document, always use the provided `id` field exactly as given, such as `Supporting Document 04`.
+- Do not invent shorthand forms like `Doc 04`, `04/05`, or other alternative labels.
+- If a finding concerns multiple documents, list each exact document id explicitly, for example `Supporting Document 04; Supporting Document 05`.
+- Keep the same exact document ids in `target_id`, `reason`, and `evidence` whenever a finding is tied to specific documents.
+- For every finding, `repair_target_ids` should list the exact provided document ids that should be regenerated to fix that issue.
+- Even when an issue is collective, map it to the concrete supporting document ids that should be repaired whenever possible instead of leaving it purely abstract.
+- `repair_instruction` must be concrete, edit-ready, and specific enough that applying it would resolve the full issue for the listed `repair_target_ids` without guesswork.
+- Across all findings, the repair instructions should collectively address all major issues in the supporting set.
+
+Return valid JSON only with this schema, no other text:
+{
+  "judge": "correct | needs_correction | uncertain",
+  "confidence": "high | medium | low",
+  "summary": "short overall judgment",
+  "findings": [
+    {
+      "severity": "major | minor",
+      "issue_type": "snake_case_issue_type",
+      "target_id": "exact provided document id such as Supporting Document 04, or a precise collective label such as collective_coverage or source_realism",
+      "repair_target_ids": ["Supporting Document 04"],
+      "reason": "short reason",
+      "evidence": "short text span or explanation from the real context or supporting docs",
+      "repair_instruction": "specific instruction that would fully resolve this issue for the listed repair_target_ids"
+    }
+  ],
+  "correction_hint": "note for a human editor"
+}

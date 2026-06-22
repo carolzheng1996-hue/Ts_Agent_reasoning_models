@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dr-CiK 中文文献解读</title>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <style>
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.72; color: #1f2937; background: #f8fafc; }
+    main { max-width: 980px; margin: 0 auto; padding: 42px 24px 80px; background: #fff; }
+    h1 { font-size: 2rem; line-height: 1.25; margin: 0 0 12px; color: #111827; }
+    h2 { font-size: 1.45rem; margin-top: 34px; border-bottom: 1px solid #e5e7eb; padding-bottom: 6px; color: #111827; }
+    h3 { font-size: 1.15rem; margin-top: 24px; color: #111827; }
+    p { margin: 12px 0; }
+    ul, ol { padding-left: 1.5rem; }
+    code { background: #eef2f7; padding: 0.12rem 0.28rem; border-radius: 4px; }
+    pre { background: #0f172a; color: #e5e7eb; padding: 14px 16px; overflow-x: auto; border-radius: 6px; }
+    pre code { background: transparent; padding: 0; color: inherit; }
+    table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 0.94rem; }
+    th, td { border: 1px solid #d1d5db; padding: 8px 10px; text-align: left; vertical-align: top; }
+    th { background: #f3f4f6; }
+    .num { text-align: right; }
+    .math { overflow-x: auto; margin: 14px 0; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>《Dr-CiK: A Testbed for Foresight-Driven Agents》中文文献解读</h1>
+  <p>论文：<em>Dr-CiK: A Testbed for Foresight-Driven Agents</em>，arXiv:2605.27904 方法/基准名：<strong>Dr-CiK</strong> 本地 TeX 源码目录：<a href="Dr_CiK_A_Testbed_for_Foresight_Driven_Agents/">Dr_CiK_A_Testbed_for_Foresight_Driven_Agents</a></p>
+  <h2>1. 一句话总结</h2>
+  <p>Dr-CiK 不是提出一个新 forecasting model，而是提出一个评测 foresight-driven agents 的基准：给 agent 历史时间序列和一个含支持文档与干扰文档的 corpus，要求它主动检索、过滤、合成 forecast-useful evidence，再让 forecaster 基于这些 evidence 做 context-aided forecasting。</p>
+  <p>核心问题是：</p>
+  <div class="math">$$
+\text{能否找到真正会改变未来预测的上下文，而不是找到表面相关的文本？}
+$$</div>
+  <p>论文发现：高质量 supporting evidence 能显著改善预测，但现有 deep research agents 通常找不到足够支持证据，supporting evidence recall 多数低于 5%，引用文档中超过 80% 可能是 distractors，甚至会让 forecaster 比无上下文时更差。</p>
+  <h2>2. 背景：CAF 和 DR 为什么要合并评测</h2>
+  <p>传统概率预测估计：</p>
+  <div class="math">$$
+P(\mathbf{X}_F\mid \mathbf{X}_H),
+$$</div>
+  <p>其中 $\mathbf{X}_H=[X_1,\dots,X_t]$ 是历史序列，$\mathbf{X}_F=[X_{t+1},\dots,X_T]$ 是未来序列。</p>
+  <p>Context-aided forecasting (CAF) 估计：</p>
+  <div class="math">$$
+P(\mathbf{X}_F\mid \mathbf{X}_H,\mathbf{C}),
+$$</div>
+  <p>其中 $\mathbf{C}$ 是外部文本上下文。已有 CAF benchmark 往往直接把相关 context 给模型，评测模型是否会用 context。但真实场景更难：forecasting agent 需要从大量文档里主动找 context。</p>
+  <p>Deep research (DR) benchmark 则通常评测检索、报告生成和引用质量，把“研究报告”当最终产物。Dr-CiK 认为这不够，因为 forecasting 场景中，检索质量最终要由预测效用检验。</p>
+  <p>因此 Dr-CiK 定义 <strong>CAF via DR</strong>：agent 必须先做 deep research，再支持数值 forecasting。</p>
+  <h2>3. 形式化定义</h2>
+  <p>agent 可以访问文档集合：</p>
+  <div class="math">$$
+\mathbf{D}=\{D_1,\dots,D_n\}.
+$$</div>
+  <p>其中只有子集 $\mathbf{D}_s\subset\mathbf{D}$ 包含 supporting context。supporting evidence 记为：</p>
+  <div class="math">$$
+\mathbf{E}_s.
+$$</div>
+  <p>supporting document 是包含有用信息的文档；supporting evidence 是其中真正 forecast-relevant 的具体内容或摘要。</p>
+  <p>理想情况下，给定任何从 corpus 合成的上下文 $\mathbf{C}\in\mathcal{C}(\mathbf{D})$，使用真实 supporting evidence 应该达到最优预测损失：</p>
+  <div class="math">$$
+\mathbb{E}_{\mathbf{x}_F}
+\mathcal{L}
+\left(
+P(\mathbf{X}_F\mid \mathbf{X}_H,\mathbf{E}_s),
+\mathbf{x}_F
+\right)
+\le
+\mathbb{E}_{\mathbf{x}_F}
+\mathcal{L}
+\left(
+P(\mathbf{X}_F\mid \mathbf{X}_H,\mathbf{C}),
+\mathbf{x}_F
+\right),
+\quad
+\forall \mathbf{C}\in\mathcal{C}(\mathbf{D}).
+$$</div>
+  <p>这条不等式表达了 Dr-CiK 的核心评价逻辑：不是所有“相关文本”都有用，只有支持未来预测的 evidence 才应该降低 forecasting loss。</p>
+  <h2>4. Dr-CiK 数据规模</h2>
+  <p>Dr-CiK 包含：</p>
+  <table>
+    <tr><th class="">项目</th><th class=" num">数量/范围</th></tr>
+    <tr><td class="">总任务数</td><td class=" num">240</td></tr>
+    <tr><td class="">生成任务</td><td class=" num">199</td></tr>
+    <tr><td class="">专家标注任务</td><td class=" num">41</td></tr>
+    <tr><td class="">总文档数</td><td class=" num">8,849</td></tr>
+    <tr><td class="">平均 supporting documents / task</td><td class=" num">约 12</td></tr>
+    <tr><td class="">平均 distractors / task</td><td class=" num">约 25</td></tr>
+    <tr><td class="">文档比例</td><td class=" num">约 1:2 supporting-to-distractor</td></tr>
+    <tr><td class="">覆盖领域</td><td class=" num">energy、finance、transportation、retail、public health、compute observability 等</td></tr>
+  </table>
+  <p>199 个任务来自 CiK 和 GIFT-CTX 等已有 CAF 资源；41 个任务由专家构造，使用真实未编辑时间序列和专家撰写上下文，目标是提高部署真实性。</p>
+  <h2>5. 任务生成流水线</h2>
+  <p>Dr-CiK 的生成流程有三阶段。</p>
+  <h3>5.1 Entity Disambiguation</h3>
+  <p>所有任务文档被放进共享 corpus，因此不同任务中可能出现相似实体。Dr-CiK 会：</p>
+  <ol>
+    <li>抽取 task 中的实体和 containment relations；</li>
+    <li>为实体生成 synthetic profiles；</li>
+    <li>把原上下文改写到这些 profiles 上；</li>
+    <li>对真实时间窗口和文档 timestamp 做 time shifting。</li>
+  </ol>
+  <p>这样可以降低模型靠参数记忆或表面实体名称完成任务的可能。</p>
+  <h3>5.2 Multi-hop Decomposition</h3>
+  <p>如果 supporting evidence 都放在单个文档里，任务会退化成单文档检索。Dr-CiK 把支持证据拆成多跳 reasoning chain：</p>
+  <div class="math">$$
+E_1 \rightarrow R_1 \rightarrow E_2 \rightarrow R_2 \rightarrow \cdots \rightarrow E_m,
+$$</div>
+  <p>其中 $E_i$ 是 supporting evidence node，$R_i$ 是 reasoning link node。链路被约束为无分支、无环、无 shortcut。</p>
+  <p>hop count 是难度旋钮：</p>
+  <ul>
+    <li>1-hop：接近单文档 recall；</li>
+    <li>多跳：需要跨文档检索、连接和合成。</li>
+  </ul>
+  <h3>5.3 Document Generation</h3>
+  <p>支持文档采用 overlapping assignment：每个 supporting document 覆盖相邻两个 evidence nodes 及中间 reasoning link。这样连续文档共享 causal anchor，保持链路可追踪。</p>
+  <p>随后生成 distractor metadata，再渲染成自然语言文档。每一步由校准过的人类/LLM judge 检查，不合格则 regenerate-until-correct，最后用 Agent Judge 做整体 audit。</p>
+  <h2>6. Forecast-dependent distractor taxonomy</h2>
+  <p>Dr-CiK 的 distractors 不是普通语义 hard negative，而是 forecast-dependent：它们看起来相关，但如果 agent 用它们，会把预测推向错误方向。每个 distractor 都应该可被排除，方法是核对 task metadata 或历史时间序列。</p>
+  <p>五类 distractors：</p>
+  <table>
+    <tr><th class="">类型</th><th class="">含义</th><th class="">测试能力</th></tr>
+    <tr><td class="">Confounder</td><td class="">合理但作用于另一个变量的伪因果机制</td><td class="">因果链是否真的指向目标序列</td></tr>
+    <tr><td class="">Profile Mismatch</td><td class="">正确场景模板套到同类型错误实体上</td><td class="">实体 grounding</td></tr>
+    <tr><td class="">Temporal Misalignment</td><td class="">正确事件和实体，但不在预测窗口</td><td class="">时间锚定</td></tr>
+    <tr><td class="">Time-series Misinterpretation</td><td class="">故意误读历史序列，推出错误未来</td><td class="">数值/形态推理</td></tr>
+    <tr><td class="">Noisy</td><td class="">同实体同时间窗口但无预测价值的细节</td><td class="">区分 causal evidence 和 filler</td></tr>
+  </table>
+  <p>其中 time-series misinterpretation 又按 scope 和 feature 细分：</p>
+  <div class="math">$$
+\mathit{scope}\in\{\mathit{segment},\mathit{global}\},
+\qquad
+\mathit{feature}\in\{\mathit{value},\mathit{trend},\mathit{periodicity}\}.
+$$</div>
+  <p>这类干扰项最能暴露 agent 的时间序列理解缺陷：文本可能和目标实体、目标时间都相关，但它对历史走势的解释是错的。</p>
+  <h2>7. 三层评估协议</h2>
+  <p>Dr-CiK 把端到端失败拆成三层：</p>
+  <table>
+    <tr><th class="">层级</th><th class="">评估对象</th><th class="">问题</th></tr>
+    <tr><td class="">Level 1 End-to-End</td><td class="">DR agent + forecaster</td><td class="">检索/合成/预测整体是否好</td></tr>
+    <tr><td class="">Level 2 Deep Research</td><td class="">DR agent</td><td class="">是否找回 supporting evidence、是否引用 distractors</td></tr>
+    <tr><td class="">Level 3 Context-Aided Forecasting</td><td class="">forecaster</td><td class="">在不同 context 条件下是否能用文本改进预测</td></tr>
+  </table>
+  <p>这个设计很重要。否则 forecast 错了时无法判断原因：是 agent 没找到证据，还是找到证据但合成错了，还是 forecaster 不会用文本。</p>
+  <h2>8. Deep Research 指标</h2>
+  <p>对任务 $t$，ground-truth supporting evidence 集合为 $\mathcal{E}_t$。每个 evidence item $e$ 需要一组 supporting documents $R_e$ 支撑。DR agent 输出 synthesized evidence items 和引用文档。</p>
+  <p>令：</p>
+  <ul>
+    <li>$M_e\in\{0,1\}$：judge 是否认为某个 synthesized evidence 与 ground-truth evidence $e$ 语义匹配；</li>
+    <li>$C_e$：匹配的 synthesized evidence 引用的文档集合；</li>
+    <li>$Q_t$：DR report 中所有被解析引用的文档；</li>
+    <li>$D_t$：任务 $t$ 的 distractor documents。</li>
+  </ul>
+  <h3>8.1 Evidence Recall</h3>
+  <div class="math">$$
+\mathrm{EvidenceRecall}
+=
+\frac{1}{\sum_t|\mathcal{E}_t|}
+\sum_t
+\sum_{e\in\mathcal{E}_t}
+M_e
+\frac{|R_e\cap C_e|}{|R_e|}.
+$$</div>
+  <p>只有 synthesized evidence 语义匹配时才给分，并且按引用到的 required supporting docs 比例给 partial credit。</p>
+  <h3>8.2 Supporting Document Recall</h3>
+  <div class="math">$$
+\mathrm{SuppDocRecall}
+=
+\frac{1}{\sum_t|\mathcal{E}_t|}
+\sum_t
+\sum_{e\in\mathcal{E}_t}
+\frac{|R_e\cap Q_t|}{|R_e|}.
+$$</div>
+  <p>这个指标只看 agent 是否找到源文档，不管 evidence synthesis 是否语义正确。它能区分“没检索到文档”和“检索到了但总结错了”。</p>
+  <h3>8.3 Distractor Avoidance</h3>
+  <div class="math">$$
+\mathrm{DistractorAvoidance}
+=
+1-
+\frac{|Q_t\cap D_t|}{|Q_t|}.
+$$</div>
+  <p>值越高说明引用中 distractor 越少。论文强调它不按 corpus 中 distractor base rate 归一化，因为关心的是 agent 实际引用证据源的质量。</p>
+  <h2>9. Forecasting 指标</h2>
+  <p>每个任务 horizon 为 $T$，每个 forecaster 采样 $S$ 条预测轨迹 $\hat{y}_{s,t}$，真实值为 $y_t$。缩放因子：</p>
+  <div class="math">$$
+a
+=
+\left(
+\frac{1}{T}\sum_{t=1}^{T}|y_t|
+\right)^{-1}.
+$$</div>
+  <p>点预测为样本均值：</p>
+  <div class="math">$$
+\bar{y}_t
+=
+\frac{1}{S}
+\sum_{s=1}^{S}\hat{y}_{s,t}.
+$$</div>
+  <p>scaled MAE：</p>
+  <div class="math">$$
+\mathrm{sMAE}
+=
+a\cdot
+\frac{1}{T}
+\sum_{t=1}^{T}
+|\bar{y}_t-y_t|.
+$$</div>
+  <p>scaled RMSE：</p>
+  <div class="math">$$
+\mathrm{sRMSE}
+=
+a\cdot
+\sqrt{
+\frac{1}{T}
+\sum_{t=1}^{T}
+(\bar{y}_t-y_t)^2
+}.
+$$</div>
+  <p>经验 CRPS：</p>
+  <div class="math">$$
+\mathrm{CRPS}_t
+=
+\frac{1}{S}
+\sum_{s=1}^{S}
+|\hat{y}_{s,t}-y_t|
+-
+\frac{1}{2S^2}
+\sum_{s=1}^{S}
+\sum_{s'=1}^{S}
+|\hat{y}_{s,t}-\hat{y}_{s',t}|.
+$$</div>
+  <p>scaled CRPS：</p>
+  <div class="math">$$
+\mathrm{sCRPS}
+=
+a\cdot
+\frac{1}{T}
+\sum_{t=1}^{T}
+\mathrm{CRPS}_t.
+$$</div>
+  <p>sCRPS 越低，概率预测分布越好。主实验每个 forecaster 每任务采样 $S=25$ 条预测轨迹。</p>
+  <h2>10. 实验设置</h2>
+  <p>DR agents：</p>
+  <table>
+    <tr><th class="">Agent</th><th class="">类型</th></tr>
+    <tr><td class="">Codex</td><td class="">OpenAI Codex CLI agent，GPT-5.5 high reasoning</td></tr>
+    <tr><td class="">DRBench</td><td class="">deep research baseline</td></tr>
+    <tr><td class="">Bench2Future</td><td class="">ReAct-style corpus search</td></tr>
+    <tr><td class="">Open-Deep-Research</td><td class="">LangChain-style open DR</td></tr>
+    <tr><td class="">Retrieval</td><td class="">embedding retrieval + one-shot synthesis</td></tr>
+  </table>
+  <p>Forecasters：</p>
+  <table>
+    <tr><th class="">类别</th><th class="">模型</th></tr>
+    <tr><td class="">Statistical</td><td class="">ARIMA、ETS、SES、Naive</td></tr>
+    <tr><td class="">TS / multimodal</td><td class="">Chronos、Aurora、TimeOmni-7B</td></tr>
+    <tr><td class="">LLM direct prompt</td><td class="">Gemini、Mistral、Qwen、Llama、Phi</td></tr>
+    <tr><td class="">Forecasting agent</td><td class="">MoiraiAgent + Gemini</td></tr>
+  </table>
+  <p>上下文条件包括 No Context、Original Context、Supporting Evidence、Supporting Documents、DR-synthesized Evidence、Verified DR 等，用于隔离不同失败来源。</p>
+  <h2>11. 关键结果</h2>
+  <p>端到端表中，sCRPS 越低越好：</p>
+  <table>
+    <tr><th class="">Context</th><th class=" num">Aurora</th><th class=" num">DP-Gemini</th><th class=" num">MoiraiAgent</th></tr>
+    <tr><td class="">No Context</td><td class=" num">0.483</td><td class=" num">0.319</td><td class=" num">0.338</td></tr>
+    <tr><td class="">Original Context</td><td class=" num">0.487</td><td class=" num">0.233</td><td class=" num"><strong>0.206</strong></td></tr>
+    <tr><td class="">Bench2Future DR</td><td class=" num">0.481</td><td class=" num">0.631</td><td class=" num">0.521</td></tr>
+    <tr><td class="">DrBench DR</td><td class=" num">0.483</td><td class=" num">0.567</td><td class=" num">0.483</td></tr>
+    <tr><td class="">Retrieval DR</td><td class=" num"><strong>0.479</strong></td><td class=" num">0.586</td><td class=" num">0.515</td></tr>
+    <tr><td class="">OpenDR</td><td class=" num">0.482</td><td class=" num">0.582</td><td class=" num">0.415</td></tr>
+    <tr><td class="">Codex-GPT5.5 DR</td><td class=" num">0.483</td><td class=" num"><strong>0.326</strong></td><td class=" num"><strong>0.310</strong></td></tr>
+  </table>
+  <p>解读：</p>
+  <ol>
+    <li>原始高质量上下文能明显帮助 DP-Gemini 和 MoiraiAgent，例如 MoiraiAgent 从 0.338 降到 0.206。</li>
+    <li>现有 DR agent 产生的上下文通常不能复现这种收益，甚至会显著变差。</li>
+    <li>Aurora 对上下文不敏感，说明它主要依赖数值模态，文本条件没有强影响。</li>
+    <li>Codex 是 DR 条件里较好的，但仍远不如 Original Context。</li>
+  </ol>
+  <p>论文的更强结论是：问题不在于 context-aided forecasting 没用，而在于当前 DR agent 没有可靠找到和保留 forecasting 所需 evidence。</p>
+  <h2>12. 失败模式：specificity collapse</h2>
+  <p>论文给了一个 Codex 失败案例：agent 找到了正确 supporting docs，也能避开不少 distractors，但在 synthesis 时丢掉关键数值锚点和 modal qualifiers。</p>
+  <p>例如：</p>
+  <ul>
+    <li>具体装修时间被压缩成“renovation phase”；</li>
+    <li>169-reading 低用电段被泛化成“wattage reductions”；</li>
+    <li>1:00 AM handover 被泛化成“October 13”；</li>
+    <li>“permanent baseline increase” 被改写成“rising/drifting higher”。</li>
+  </ul>
+  <p>这类错误不是检索失败，而是 read-then-synthesize 失败。对 forecasting 来说，小时级时间锚点、持续性/永久性判断、具体 regime change index 正是预测模型需要的输入。流畅摘要反而会损害预测。</p>
+  <h2>13. Agent 视角拆解</h2>
+  <table>
+    <tr><th class="">要素</th><th class="">Dr-CiK 中的对应</th></tr>
+    <tr><td class="">State / input</td><td class="">历史时间序列 $\mathbf{X}_H$、任务说明、共享文档 corpus $\mathbf{D}$</td></tr>
+    <tr><td class="">Agent action</td><td class="">搜索、阅读、引用、合成 supporting evidence</td></tr>
+    <tr><td class="">Environment</td><td class="">8,849 文档，含 supporting docs 和 forecast-dependent distractors</td></tr>
+    <tr><td class="">Ground truth</td><td class="">supporting evidence $\mathbf{E}_s$、supporting docs、future values $\mathbf{X}_F$</td></tr>
+    <tr><td class="">Reward / evaluation</td><td class="">Evidence Recall、SuppDocRecall、DistractorAvoidance、sCRPS</td></tr>
+    <tr><td class="">Downstream model</td><td class="">statistical/LLM/TSFM/multimodal forecasters</td></tr>
+    <tr><td class="">Failure decomposition</td><td class="">DR retrieval failure、evidence synthesis failure、forecaster grounding failure</td></tr>
+  </table>
+  <p>Dr-CiK 不是训练 agent 的方法，而是一个 diagnostic testbed：它让我们能判断 foresight-driven agent 到底是“找不到证据”“引用了干扰项”“总结时丢了关键细节”，还是“forecaster 不会用证据”。</p>
+  <h2>14. 贡献、局限与启示</h2>
+  <p>贡献：</p>
+  <ol>
+    <li>定义 CAF via DR，把 deep research 的质量绑定到 downstream numerical forecasting。</li>
+    <li>构造 240 个任务、8,849 个文档的可控 benchmark。</li>
+    <li>提出 forecast-dependent distractor taxonomy，尤其覆盖 time-series misinterpretation。</li>
+    <li>提供三层评估协议，分离 DR agent 和 forecaster 的失败来源。</li>
+    <li>实验证明当前 DR agent 引入的上下文常常不如人工/原始 supporting context，甚至会降低预测表现。</li>
+  </ol>
+  <p>局限：</p>
+  <ul>
+    <li>大量文档和任务由 LLM 生成并经 judge 校验，仍可能有生成分布偏差；</li>
+    <li>目前 benchmark 数量为 240，覆盖面比开放网络环境更可控但也更有限；</li>
+    <li>使用的闭源模型和未来模型名称会影响可复现性；</li>
+    <li>Dr-CiK 主要评估 forecast-useful evidence retrieval，不直接提出新 agent 改进算法。</li>
+  </ul>
+  <p>实践启示：</p>
+  <p>真实 forecasting agent 不能只做语义检索。它必须验证 retrieved context 是否与目标实体、预测窗口、历史走势和未来变量一致。对时间序列预测来说，最危险的不是完全无关文档，而是“看起来很相关、但会把未来方向带错”的 context。Dr-CiK 的价值就在于把这种失败显式测出来。</p>
+</main>
+</body>
+</html>

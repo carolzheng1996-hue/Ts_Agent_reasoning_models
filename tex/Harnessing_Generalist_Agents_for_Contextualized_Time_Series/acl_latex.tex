@@ -1,0 +1,141 @@
+\documentclass[11pt]{article}
+
+% Change "review" to "final" to generate the final (sometimes called camera-ready) version.
+% Change to "preprint" to generate a non-anonymous version with page numbers.
+\usepackage[preprint]{acl}
+
+% Standard package includes
+\usepackage{times}
+\usepackage{latexsym}
+
+% For proper rendering and hyphenation of words containing Latin characters (including in bib files)
+\usepackage[T1]{fontenc}
+% For Vietnamese characters
+% \usepackage[T5]{fontenc}
+% See https://www.latex-project.org/help/documentation/encguide.pdf for other character sets
+
+% This assumes your files are encoded as UTF8
+\usepackage[utf8]{inputenc}
+
+% This is not strictly necessary, and may be commented out,
+% but it will improve the layout of the manuscript,
+% and will typically save some space.
+\usepackage{microtype}
+
+% This is also not strictly necessary, and may be commented out.
+% However, it will improve the aesthetics of text in
+% the typewriter font.
+\usepackage{inconsolata}
+
+%Including images in your LaTeX document requires adding
+%additional package(s)
+\usepackage{graphicx}
+
+% added packages
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{bm}
+\usepackage{amsmath,amssymb, amsthm}
+\usepackage{makecell}
+\usepackage{xspace}
+
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{hyperref}
+\usepackage{xurl}
+
+\usepackage{subcaption}
+\captionsetup[subfigure]{justification=centering}
+\usepackage{setspace}
+\usepackage[table]{xcolor}
+\definecolor{cvprblue}{rgb}{0.21,0.49,0.74}
+
+\usepackage[most]{tcolorbox}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{assumption}[theorem]{Assumption}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{remark}[theorem]{Remark}
+
+
+% If the title and author information does not fit in the area allocated, uncomment the following
+%
+%\setlength\titlebox{<dim>}
+%
+% and set <dim> to something 5cm or larger.
+
+\title{Harnessing Generalist Agents for Contextualized Time Series}
+
+
+\author{
+ \textbf{Zihao Li}, % Project Lead
+ \textbf{Kaifeng Jin}, 
+ \textbf{Yuanchen Bei},
+ \textbf{Jiaru Zou},
+ \textbf{Avaneesh Kumar},
+ \textbf{Xuying Ning}
+ \\
+ \textbf{Yanjun Zhao}, 
+ \textbf{Mengting Ai},
+ \textbf{Baoyu Jing}, 
+ \textbf{Hanghang Tong},
+ \textbf{Jingrui He}
+\\
+\\
+ % \textsuperscript{1}Affiliation 1,
+ % \textsuperscript{2}Affiliation 2,
+ % \textsuperscript{3}Affiliation 3,
+ % \textsuperscript{4}Affiliation 4,
+ % \textsuperscript{5}Affiliation 5
+ \textsuperscript{}University of Illinois Urbana-Champaign
+\\
+ \small{
+   \textbf{Correspondence:} \href{mailto:zihaoli5@illinois.edu}{zihaoli5@illinois.edu}, \href{mailto:jingrui@illinois.edu}{jingrui@illinois.edu}
+ }
+}
+
+
+\newcommand{\method}{\textsc{TimeClaw}\xspace}
+
+
+\begin{document}
+\maketitle
+\begin{abstract}
+Time series are often embedded in rich contexts that are essential for holistic modeling. Moreover, real-world practitioners often require end-to-end workflows for analyzing temporal dynamics, where widely studied tasks such as forecasting are only one step in a broader solution loop. While generalist AI agents offer a promising interface for such workflows under complex contexts, they still operate primarily in textual spaces that are not fully aligned with structured temporal signals. 
+In this work, we introduce \method, an agentic harness framework for time series that equips generalist LLM agents with the time-series-native runtime support needed for contextualized temporal reasoning. \method integrates executable temporal tools for grounded and auditable analysis, experience-driven capability evolution for creating reusable analytical routines, and episodic multimodal memory for retrieving relevant reasoning traces. Together, these components unlock harnessed open-ended temporal reasoning with contextual information.
+Extensive evaluation on multiple benchmarks covering diverse tasks across energy, finance, weather, traffic, and other real-world domains demonstrates improved performance of \method. Code is available at this \textcolor{cvprblue}{\href{https://github.com/iDEA-iSAIL-Lab-UIUC/TimeClaw}{repository hyperlink}}.
+\end{abstract}
+
+\addtocontents{toc}
+{\protect\setcounter{tocdepth}{-1}}
+
+\input{0_sections/1_introduction}
+
+\input{0_sections/2_preliminary}
+
+\input{0_sections/4_method}
+
+\input{0_sections/5_experiment}
+
+\input{0_sections/6_related_work}
+
+\input{0_sections/7_conclusion}
+
+
+% Bibliography entries for the entire Anthology, followed by custom entries
+% \bibliography{custom,anthology-overleaf-1,anthology-overleaf-2}
+
+% Custom bibliography entries only
+\bibliography{reference}
+
+% \newpage
+\clearpage
+
+\input{1_appendix/appendix}
+% This is an appendix.
+
+\end{document}

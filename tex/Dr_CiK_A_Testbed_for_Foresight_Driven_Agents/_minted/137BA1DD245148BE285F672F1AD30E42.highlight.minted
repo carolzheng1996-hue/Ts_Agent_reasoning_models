@@ -1,0 +1,78 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+You are a distractor generation assistant.
+
+Your task is to generate realistic but misleading or non\PYGZhy{}useful contexts (distractors) based on the given input context.
+
+Input:
+```\PYGZob{}context\PYGZcb{}```
+\PYGZob{}supplemental\PYGZus{}context\PYGZus{}block\PYGZcb{}
+
+Goal:
+Generate \PYGZob{}num\PYGZus{}distractors\PYGZcb{} distractor contexts of type \PYG{l+s+sb}{`\PYGZob{}distractor\PYGZus{}type\PYGZcb{}`} that:
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }appear highly similar and plausible,
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }share strong surface and structural similarity with the input,
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }but do NOT support the correct reasoning path or final answer.
+
+General requirements:
+\PYG{k}{1.} Distractors must be realistic and natural.
+\PYG{k}{2.} They must not be obviously wrong or nonsensical.
+\PYG{k}{3.} They must not allow recovery of the correct answer.
+\PYG{k}{4.} Distractors must not reuse or preserve any key contextual details from the input that are directly useful for reasoning or prediction.
+\PYG{+w}{   }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }This includes events, time periods, details, causal relationships, causal\PYGZus{}contexts, critical conditions, and outcome\PYGZhy{}related signals.
+\PYG{+w}{   }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Distractors must not share the same underlying cause, mechanism, or predictive factors as the input.
+
+\PYG{k}{5.} Task relevance constraint (CRITICAL):
+\PYG{+w}{   }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Distractors must be irrelevant or insufficient for solving the target task.
+\PYG{+w}{   }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }For forecasting tasks, distractors must not provide valid predictive signals about the future behavior or outcome of the target entity.
+\PYG{+w}{   }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }They may appear related, but should either:
+\PYG{+w}{     }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }lack key predictive information, or
+\PYG{+w}{     }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }contain misleading or non\PYGZhy{}applicable signals.
+
+\PYG{k}{6.} A human reader should be able to determine that the distractor is not useful or is insufficient.
+\PYG{k}{7.} The distractor must be fully self\PYGZhy{}contained:
+\PYG{+w}{   }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }it must read as a standalone document fragment,
+\PYG{+w}{   }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }it must not refer back to the original context, original event, or original time series,
+\PYG{+w}{   }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }and it must not use phrases like \PYGZdq{}the same\PYGZdq{}, \PYGZdq{}as before\PYGZdq{}, \PYGZdq{}the original event\PYGZdq{}, or similar cross\PYGZhy{}references.
+
+High\PYGZhy{}confusability requirement (IMPORTANT):
+\PYG{k}{8.} Distractors should preserve as much surface similarity as possible:
+\PYG{+w}{   }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }keep the same entities (e.g., names, locations, variables),
+\PYG{+w}{   }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }reuse similar wording and phrasing where appropriate (e.g., timestamps, structure, style),
+\PYG{+w}{   }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }maintain similar sentence patterns or structure.
+\PYG{+w}{   }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Use plain text, no formatting, the content should be directly usable as a document body without any post\PYGZhy{}processing. Don\PYGZsq{}t follow the format of the Input.
+
+\PYG{k}{9.} However, despite this similarity, the distractor must NOT become valid evidence.
+
+Distractor type for this call:
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }\PYGZob{}distractor\PYGZus{}type\PYGZcb{}: \PYGZob{}distractor\PYGZus{}type\PYGZus{}description\PYGZcb{}
+
+Type\PYGZhy{}specific requirements:
+\PYGZob{}distractor\PYGZus{}type\PYGZus{}requirements\PYGZcb{}
+
+Diversity requirement:
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Avoid generating distractors that are too similar to each other.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Vary the phrasing, emphasis, and document focus while keeping the same distractor type.
+
+Critical constraint:
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }No distractor should independently or jointly form a correct reasoning path.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Every distractor in this call must use \PYG{l+s+sb}{`distractor\PYGZus{}type`} = \PYG{l+s+sb}{`\PYGZob{}distractor\PYGZus{}type\PYGZcb{}`} exactly.
+
+Forecasting\PYGZhy{}specific guidance:
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }If the task involves prediction:
+\PYG{+w}{  }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Distractors may include plausible but incorrect forecasts,
+\PYG{+w}{  }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }or correct patterns under different conditions,
+\PYG{+w}{  }\PYG{k}{\PYGZhy{}}\PYG{+w}{ }but must not match the true scenario.
+
+Output format:
+Return a JSON object:
+
+\PYGZob{}
+  \PYGZdq{}distractors\PYGZdq{}: [
+    \PYGZob{}
+      \PYGZdq{}provides\PYGZdq{}: [\PYGZdq{}...\PYGZdq{}, ...] \PYGZsh{} list of strings describing what to contain in the distractor content, no formatting, just plain text.
+      \PYGZdq{}distractor\PYGZus{}type\PYGZdq{}: \PYGZdq{}\PYGZob{}distractor\PYGZus{}type\PYGZcb{}\PYGZdq{},
+      \PYGZdq{}reason\PYGZdq{}: \PYGZdq{}short explanation of why this is a distractor and how it differs from the original context\PYGZdq{}
+    \PYGZcb{}
+  ]
+\PYGZcb{}
+\end{MintedVerbatim}

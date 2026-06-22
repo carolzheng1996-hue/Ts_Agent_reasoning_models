@@ -1,0 +1,172 @@
+\begin{table}[t]
+\vspace{-35pt}
+\centering
+\caption{\textbf{Main results of assessment/prediction tasks across Test A/B/C.} FinSTaR outperforms all baselines on 10 tasks (4 assessment, 6 prediction) under both in-domain (Test A) and out-of-distribution (Test B, C) settings. \first{Red bold} = best, \second{blue underline} = second best per split.}
+\label{tab:main_results}
+\vspace{1pt}
+\adjustbox{max width=\textwidth}{
+\scriptsize
+\begin{tabular}{l|l|cccc|cccccc|c}
+\toprule
+\multirow{2.5}{*}{\textbf{Model}} & \multirow{2.5}{*}{\textbf{Split}} & \multicolumn{4}{c|}{\textit{Assessment}} & \multicolumn{6}{c|}{\textit{Prediction}} & \multirow{2.5}{*}{\textbf{Avg.}} \\
+\cmidrule(lr){3-6} \cmidrule(lr){7-12}
+ &  & \textbf{Draw.} & \textbf{Vol.} & \textbf{Trend} & \textbf{Corr.} & \textbf{Event} & \textbf{S/R} & \textbf{DDR} & \textbf{V.F.} & \textbf{R.P.} & \textbf{P.C.} & \\
+\midrule
+\rowcolor{gray!10}
+\textit{Random} & --- & 25.0 & 33.3 & 20.0 & 33.3 & 50.0 & 50.0 & 50.0 & 50.0 & 50.0 & 50.0 & 41.2 \\
+\midrule
+% \midrule
+\multicolumn{13}{l}{\textbf{\textit{Language Models}}} \\
+\midrule
+\multirow{3}{*}{Phi-3.5-mini} & A & 1.8 & 0.4 & 9.6 & 8.2 & 0.2 & 0.8 & 1.2 & 2.0 & 1.5 & 1.7 & 2.7 \\
+ & B & 3.0 & 1.1 & 12.4 & 5.7 & 0.2 & 1.1 & 1.6 & 0.5 & 1.3 & 1.8 & 2.9 \\
+ & C & 2.0 & 0.3 & 10.5 & 7.3 & 0.0 & 0.5 & 1.1 & 0.8 & 1.8 & 0.8 & 2.5 \\
+\hline
+\multirow{3}{*}{Mistral-7B} & A & 8.8 & 0.7 & 1.0 & 0.0 & 45.3 & 52.4 & 4.9 & 40.4 & 23.7 & 34.8 & 21.2 \\
+ & B & 4.0 & 1.1 & 0.5 & 0.0 & 37.6 & 46.3 & 2.3 & 40.7 & 24.6 & 36.6 & 19.4 \\
+ & C & 10.4 & 0.3 & 1.4 & 0.0 & 46.1 & 51.0 & 1.8 & 40.2 & 28.3 & 36.9 & 21.6 \\
+\hline
+\multirow{3}{*}{Gemma-2-9B} & A & 79.6 & 0.0 & 59.6 & 29.4 & 45.4 & 29.4 & 22.3 & 17.2 & 0.0 & 0.1 & 28.3 \\
+ & B & 78.9 & 0.0 & 58.4 & 30.9 & 47.4 & 36.9 & 28.0 & 16.4 & 0.1 & 0.0 & 29.7 \\
+ & C & 77.3 & 0.0 & 50.7 & 30.8 & 45.4 & 30.6 & 23.2 & 20.1 & 0.0 & 0.2 & 27.8 \\
+\hline
+\multirow{3}{*}{Llama-3.1-8B} & A & 57.2 & 30.3 & 75.7 & 1.4 & 47.3 & 50.2 & 47.3 & 48.0 & 29.9 & 33.6 & 42.1 \\
+ & B & 59.9 & 30.5 & 73.4 & 2.8 & 46.5 & 48.3 & 45.2 & 48.8 & 26.9 & 31.7 & 41.4 \\
+ & C & 57.8 & 30.2 & 76.4 & 2.0 & 46.4 & 50.2 & 46.3 & 45.9 & 31.5 & 35.1 & 42.2 \\
+\hline
+\multirow{3}{*}{Qwen2.5-7B} & A & 72.9 & 37.1 & 76.9 & 26.9 & 52.2 & 51.2 & 54.1 & 44.9 & 49.2 & 50.4 & 51.6 \\
+ & B & 71.5 & 37.0 & 73.3 & 30.3 & \second{53.6} & 48.6 & 58.8 & 46.7 & \first{50.2} & 46.6 & 51.7 \\
+ & C & 73.7 & 36.6 & 77.5 & 25.8 & \second{51.4} & 50.4 & 55.0 & 44.9 & \second{51.3} & 47.4 & 51.4 \\
+\midrule
+% \midrule
+\multicolumn{13}{l}{\textbf{\textit{TS Language Models}}} \\
+\midrule
+\multirow{3}{*}{TimeMQA-Qwen} & A & 5.9 & 1.6 & 3.3 & 0.4 & 1.2 & 2.1 & 1.6 & 1.7 & 1.4 & 2.0 & 2.1 \\
+ & B & 5.5 & 0.8 & 2.9 & 0.6 & 0.7 & 1.7 & 0.8 & 2.1 & 0.7 & 0.8 & 1.7 \\
+ & C & 5.1 & 1.0 & 3.3 & 0.3 & 1.2 & 2.0 & 1.1 & 1.7 & 1.4 & 1.4 & 1.8 \\
+\hline
+\multirow{3}{*}{TimeMQA-Mistral} & A & 5.5 & 1.6 & 4.7 & 1.3 & 2.5 & 11.5 & 10.8 & 11.0 & 9.9 & 5.4 & 6.4 \\
+ & B & 3.5 & 2.8 & 5.4 & 0.9 & 3.0 & 10.1 & 10.9 & 10.8 & 7.0 & 3.9 & 5.8 \\
+ & C & 4.7 & 2.6 & 5.5 & 0.8 & 3.9 & 12.7 & 13.3 & 11.1 & 7.9 & 4.9 & 6.7 \\
+\hline
+\multirow{3}{*}{TimeMQA-Llama} & A & 6.9 & 7.5 & 6.6 & 3.3 & 16.0 & 20.4 & 17.6 & 7.2 & 8.7 & 9.7 & 10.4 \\
+ & B & 9.6 & 8.6 & 7.9 & 6.1 & 15.6 & 20.1 & 16.8 & 7.6 & 7.9 & 11.9 & 11.2 \\
+ & C & 10.3 & 6.3 & 5.8 & 6.9 & 16.6 & 18.6 & 15.7 & 8.7 & 9.7 & 10.2 & 10.9 \\
+\midrule
+% \midrule
+\multicolumn{13}{l}{\textbf{\textit{TS Reasoning Models}}} \\
+\midrule
+\multirow{3}{*}{TimeOmni-1-7B} & A & 75.7 & 35.6 & 50.5 & 31.5 & 49.1 & \second{54.1} & 59.3 & 58.2 & \second{50.7} & 48.4 & 51.3 \\
+ & B & 75.0 & 35.6 & 53.1 & 31.9 & 51.7 & 50.7 & 57.6 & 55.8 & 48.3 & 49.0 & 50.9 \\
+ & C & 73.0 & 33.7 & 49.7 & 34.5 & 48.6 & 52.8 & 53.7 & 54.1 & 50.8 & 48.4 & 49.9 \\
+\midrule
+% \midrule
+\multicolumn{13}{l}{\textbf{\textit{SFT Baselines (trained on FinTSR-Bench)}}} \\
+\midrule
+\multirow{3}{*}{Qwen2.5-7B (w/o CoT)} & A & 77.5 & 40.4 & 75.2 & 34.7 & \second{53.0} & 53.7 & \second{67.1} & \second{60.6} & 50.7 & 51.3 & 56.4 \\
+ & B & 79.6 & 41.6 & 75.9 & \second{36.2} & 50.0 & \second{51.1} & \second{68.7} & \second{58.2} & 46.9 & 48.1 & 55.6 \\
+ & C & 77.9 & 39.1 & 72.8 & 30.3 & 50.4 & \second{55.2} & \second{61.5} & \second{59.0} & 50.3 & 49.4 & 54.6 \\
+\hline
+\multirow{3}{*}{Qwen2.5-7B (w/ CoT)} & A & \second{96.4} & \second{46.6} & \second{92.3} & \second{35.4} & 47.6 & 51.1 & 57.2 & 48.7 & 47.3 & \second{55.0} & \second{57.8} \\
+ & B & \second{97.1} & \second{52.6} & \second{93.5} & 36.0 & 50.7 & 49.4 & 59.1 & 46.8 & 49.9 & \second{51.6} & \second{58.7} \\
+ & C & \second{96.5} & \second{45.7} & \second{91.6} & \second{38.5} & 48.7 & 51.0 & 56.4 & 49.8 & 45.8 & \second{53.6} & \second{57.8} \\
+\midrule
+% \midrule
+\multicolumn{13}{l}{\textbf{\textit{Financial TSRMs (Ours)}}} \\
+\midrule
+\multirow{3}{*}{\textbf{FinSTaR}} & \cellcolor{yellow!15}  A & \cellcolor{yellow!15} \first{99.3} & \cellcolor{yellow!15} \first{93.5} & \cellcolor{yellow!15} \first{99.3} & \cellcolor{yellow!15} \first{88.1} & \cellcolor{yellow!15} \first{57.2} & \cellcolor{yellow!15} \first{80.5} & \cellcolor{yellow!15} \first{74.4} & \cellcolor{yellow!15} \first{79.5} & \cellcolor{yellow!15} \first{51.5} & \cellcolor{yellow!15} \first{65.8} & \cellcolor{yellow!15}\first{78.9} \\
+& \cellcolor{yellow!15}  B & \cellcolor{yellow!15}  \first{99.6} & \cellcolor{yellow!15}  \first{92.2} & \cellcolor{yellow!15}  \first{99.5} & \cellcolor{yellow!15}  \first{89.0} & \cellcolor{yellow!15}  \first{55.6} & \cellcolor{yellow!15}  \first{80.0} & \cellcolor{yellow!15}  \first{75.0} & \cellcolor{yellow!15}  \first{77.3} & \cellcolor{yellow!15}  \second{50.1} & \cellcolor{yellow!15} \first{64.3} & \cellcolor{yellow!15}  \first{78.3} \\
+& \cellcolor{yellow!15}   C & \cellcolor{yellow!15}  \first{99.0} & \cellcolor{yellow!15}  \first{92.7} & \cellcolor{yellow!15}  \first{99.4} & \cellcolor{yellow!15}  \first{87.9} & \cellcolor{yellow!15}  \first{53.5} & \cellcolor{yellow!15}  \first{79.5} & \cellcolor{yellow!15}  \first{72.9} & \cellcolor{yellow!15}  \first{78.8} & \cellcolor{yellow!15}  \first{53.0} & \cellcolor{yellow!15}  \first{64.6} & \cellcolor{yellow!15}  \first{78.1} \\
+\bottomrule
+\end{tabular}
+}
+\vspace{-7pt}
+\end{table}
+
+\section{Experiments}
+\label{sec:experiments}
+
+\subsection{Baselines}
+We compare FinSTaR against four categories of \textit{reasoning/language model} baselines:
+\textbf{(1)~Language Models}: Qwen2.5-7B-Instruct~\cite{qwen2025qwen25}, Llama-3.1-8B-Instruct~\cite{llama31}, Mistral-7B-Instruct~\cite{mistral7b}, Gemma-2-9B-it~\cite{gemma2}, Phi-3.5-mini~\cite{phi35}.
+\textbf{(2)~TS Language Models}: TimeMQA~\cite{timemqa2025} with Qwen-2.5-7B/Mistral-7B/Llama-3-8B backbones.
+\textbf{(3)~TS Reasoning Models}: TimeOmni-1-7B~\cite{timeomni1}\footnote{As of this work, TimeOmni-1 is the only TSRM that publicly releases model weights at the 7B scale. The remaining TSRMs either lack public code/weights or are available only at larger scales (e.g., Thoth, 30B).}, which serves as FinSTaR's base model before fine-tuning.
+\textbf{(4)~SFT Baselines}: To ensure fair comparison, we also fine-tune Qwen2.5-7B on FinTSR-Bench with both answer-only (w/o CoT) and full CoT supervision, providing matched baselines that isolate the contribution of TS reasoning pre-training and our CoT design.
+Additionally, we compare against \textit{forecasting-based} approaches (statistical and DL models) on prediction tasks in Section~\ref{sec:analysis}.
+All LLM baselines in (1)--(3) are evaluated zero-shot, following the standard protocol in TSRM literature~\cite{timeomni1, merrill2024towards}. This tests inherent reasoning ability rather than in-context learning from few-shot exemplars. We note that models with high success rates but low accuracy
+%(e.g., Qwen at 99.9\% SR, 51.6\% accuracy)
+confirm that output formatting is not the primary bottleneck, as shown in Table~\ref{tab:sr}.
+%\rev{We do not include few-shot prompting baselines because (i) our tasks require processing 120-day price series (${\sim}$600 tokens per input), making multi-shot prompts prohibitively long, and (ii) the high success rates of Qwen2.5 (99.9\%) and TimeOmni-1 (98.8\%) confirm that formatting failure is not the primary bottleneck --- the gap is in reasoning ability, not instruction following.}
+
+\subsection{Main Results}
+Table~\ref{tab:main_results} presents the comparison across all three test splits.
+FinSTaR achieves \textbf{78.9\%} overall accuracy on Test~A, outperforming the best zero-shot LLM (Qwen2.5-7B, 51.6\%) by \textbf{+27.3\%}, the best SFT baseline (Qwen2.5-7B w/ CoT, 57.8\%) by \textbf{+21.1\%}, and the best TSRM (TimeOmni-1-7B, 51.3\%) by \textbf{+27.6\%}, with consistent performance across Test~B (78.3\%) and Test~C (78.1\%).
+
+\textbf{Key observations.}
+(1)~Assessment tasks reach near-perfect accuracy ($>$93\%), as Compute-in-CoT makes the computation explicit and verifiable.
+(2)~On prediction tasks, FinSTaR consistently outperforms all baselines, with the largest gains on Volatility Forecast (+21.3\% over the best zero-shot baseline) and Support/Resistance (+26.4\%).
+(3)~TimeMQA models, despite being fine-tuned on TS QA, perform \textit{worse} than general LLMs, indicating that non-financial TS training \textit{does not transfer} to financial reasoning.
+(4)~Many models exhibit low success rates on our benchmark as shown in Table~\ref{tab:sr}, failing to produce valid output format, consistent with the findings of TimeOmni-1~\cite{timeomni1}.
+
+Note that the three test splits, which vary both stock universe and time period, implicitly \textit{introduce input distribution shifts} (e.g., different price ranges, volatility regimes) spanning different macro regimes (Test~B
+%: 2010--2022 
+including COVID crash and bull markets; Test~A/C
+%: 2023--2025 
+including rate hikes and market volatility), and FinSTaR's consistent performance across all splits serves as a natural robustness test.
+
+\subsection{Ablation: Value of Reasoning}
+\vspace{-3pt}
+Table~\ref{tab:ao_vs_cot} compares w/o CoT (answer-only) vs.\ w/ CoT (FinSTaR) on the TimeOmni-1-7B. %backbone.
+CoT provides the largest gains on assessment tasks where computation becomes explicit: Correlation (+56.0), Volatility (+56.3), and Trend (+31.0).
+On prediction tasks, gains are moderate but consistent: Support/Resistance (+24.2), Volatility Forecast (+10.4), and Pair Convergence (+11.2).
+Relative Performance shows the smallest gain (+4.6), reflecting the inherent difficulty of stock return prediction.
+% \footnote{Predicting future stock returns from historical prices alone is a well-known hard problem due to market efficiency~\cite{fama1970efficient, lo2004adaptive}. Even small improvements over random chance are considered meaningful in this setting.}
+
+\subsection{Scenario-Aware CoT Effect}
+To isolate the effect of Scenario-Aware CoT, we compare two CoT configurations for prediction tasks: (deterministic) standard CoT vs. (probabilistic) Scenario-Aware CoT, 
+with standard CoT fixed for assessment tasks in both.
+As shown in Table~\ref{tab:e_vs_i}, assessment accuracy is nearly identical between the two.
+On prediction tasks, Scenario-Aware CoT achieves +2.9\% average improvement, with the largest gains on Volatility Forecast (+10.2) and Event Response (+6.2).
+The overall average (+2.0\%) is diluted by assessment tasks where both configs use identical CoT ($\Delta \approx 0$ by design).
+These results confirm that \textit{scenario reasoning consistently improves performance on uncertain outcomes}.
+
+\begin{table}[t]
+\vspace{-33pt}
+\centering
+\captionof{table}{\textbf{Ablation study w/ and w/o CoT}. CoT consistently improves accuracy across all 10 tasks, with the largest gains on assessment tasks where computation becomes explicit.}
+\label{tab:ao_vs_cot}
+\vspace{5pt}
+\adjustbox{max width=\textwidth}{
+\begin{tabular}{l|cccc|cccccc|c}
+\toprule
+ & \multicolumn{4}{c|}{\textit{Assessment}} & \multicolumn{6}{c|}{\textit{Prediction}} & \multirow{2.5}{*}{\textbf{Avg.}} \\
+\cmidrule(lr){2-5} \cmidrule(lr){6-11}
+ & \textbf{Draw.} & \textbf{Vol.} & \textbf{Trend} & \textbf{Corr.} & \textbf{Event} & \textbf{S/R} & \textbf{DDR} & \textbf{V.F.} & \textbf{R.P.} & \textbf{P.C.} & \\
+\midrule
+w/o CoT & 78.3 & 37.2 & 68.3 & 32.1 & 49.0 & 56.3 & 66.8 & 69.1 & 46.9 & 54.6 & 55.9 \\
+\rowcolor{yellow!15} w/ CoT &  \first{99.3} &  \first{93.5} &  \first{99.3} &  \first{88.1} &  \first{57.2} &  \first{80.5} &  \first{74.4} &  \first{79.5} &  \first{51.5} &  \first{65.8} &  \first{78.9} \\
+\midrule
+$\Delta$ & \up{+21.0} & \up{+56.3} & \up{+31.0} & \up{+56.0} & \up{+8.2} & \up{+24.2} & \up{+7.6} & \up{+10.4} & \up{+4.6} & \up{+11.2} & \up{+23.0} \\
+\bottomrule
+\end{tabular}
+}
+\vspace{15pt}
+
+\captionof{table}{\textbf{Effect of Scenario-Aware CoT.} Scenario-Aware CoT improves both assessment and prediction over (deterministic) standard CoT on Test A. As expected, \textit{the gain is larger on prediction tasks}, for which the scenario-based reasoning was specifically designed to \textit{handle uncertainty}.}
+\label{tab:e_vs_i}
+% \vspace{5pt}
+\adjustbox{max width=\textwidth}{
+\begin{tabular}{l|cccc|c|cccccc|c}
+\toprule
+\multirow{2.5}{*}{\textbf{CoT}} & \multicolumn{5}{c|}{\textit{Assessment}} & \multicolumn{7}{c}{\textit{Prediction}} \\
+\cmidrule(lr){2-6} \cmidrule(lr){7-13}
+ & \textbf{Draw.} & \textbf{Vol.} & \textbf{Trend} & \textbf{Corr.} & \textbf{Avg.} & \textbf{Event} & \textbf{S/R} & \textbf{DDR} & \textbf{V.F.} & \textbf{R.P.} & \textbf{P.C.} & \textbf{Avg.} \\
+\midrule
+Standard & 99.1 & 92.7 & \first{99.3} & 86.9 & 94.5 & 51.0 & 80.0 & 74.3 & 69.3 & 51.1 & 65.4 & 65.2 \\
+\rowcolor{yellow!15} Scenario-Aware & \first{99.3} & \first{93.5} & \first{99.3} & \first{88.1} & \first{95.0} & \first{57.2} & \first{80.5} & \first{74.4} & \first{79.5} & \first{51.5} & \first{65.8} & \first{68.2} \\
+\midrule
+$\Delta$ & \up{+0.2} & \up{+0.8} & +0.0 & \up{+1.2} & \up{+0.5} & \up{+6.2} & \up{+0.5} & \up{+0.1} & \up{+10.2} & \up{+0.4} & \up{+0.4} & \up{+3.0} \\
+\bottomrule
+\end{tabular}
+}
+\end{table}

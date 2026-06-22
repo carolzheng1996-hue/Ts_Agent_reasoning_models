@@ -1,0 +1,743 @@
+
+\section{Controller and Reasoner Objectives and Rewards}
+\label{app:objectives}
+
+\subsection{Controller Advantages}\label{app:controller_advantages}
+We form group-relative advantages \cite{shao2024deepseekmath}
+$\{\hat{A}_{\text{ctl}}^{(g)}\}_{g=1}^G$ as:
+%
+\begin{equation}
+\mu_\text{ctl} = \frac{1}{G}\sum_{g=1}^{G} r_{\text{ctl}}^{(g)}, \qquad
+\sigma_\text{ctl} = \sqrt{\frac{1}{G}\sum_{g=1}^{G}(r_{\text{ctl}}^{(g)} - \mu_\text{ctl})^2},
+\end{equation}
+\begin{equation}
+\hat{A}_{\text{ctl}}^{(g)} =
+\begin{cases}
+0, & \sigma_\text{ctl} < \epsilon,\\[4pt]
+\dfrac{r_{\text{ctl}}^{(g)} - \mu_\text{ctl}}{\sigma_\text{ctl} + \epsilon}, & \text{otherwise,}
+\end{cases}
+\end{equation}
+%
+where $\epsilon$ is a small constant for numerical stability.
+\subsection{Controller Objective}
+\label{app:controller_objective}
+ 
+Let $\{o_{\text{ctl},i,t}^{(g)}\}_{t=1}^{T^{(g)}_i}$ be the sequence of the $T^{(g)}_i$ total tokens in the Controller output $(u_i^{(g)}, d_i^{(g)}, s_i^{(g)})$ at round $i$ of interaction trajectory $\tau^{(g)}$. For a batch of $B$ questions, the Controller objective function is defined as
+\begin{equation}
+\label{eq:controller_loss_app}
+\mathcal{J}_{\text{ctl}}(\theta)
+=
+\frac{1}{B}\sum_{b=1}^{B}\frac{1}{G}\sum_{g=1}^{G} \frac{1}{L^{(g)}} \sum_{i=1}^{L^{(g)}} \frac{1}{T_i^{(g)}} \sum_{t=1}^{T_i^{(g)}} \hat{A}_{\text{ctl}}^{(g)} \log \pi_\theta\Big(o_{\text{ctl},i,t}^{(g)}\mid q_b, \{o_{\text{ctl},i,j}^{(g)}\}_{j=1}^{t-1}\Big)
+\end{equation}
+
+\subsection{Reasoner Advantages}\label{app:reasoner_advantages}
+
+We form group-relative advantages $\{\hat{A}_{\text{rsn}}^{(g^*,n)}\}_{n=1}^N$ as:
+%
+\begin{equation}
+\mu_\text{rsn} = \frac{1}{N}\sum_{n=1}^{N} r_{\text{rsn}}^{(g^*,n)}, \qquad
+\sigma_\text{rsn} = \sqrt{\frac{1}{N}\sum_{n=1}^{N}(r_{\text{rsn}}^{(g^*,n)} - \mu_\text{rsn})^2},
+\end{equation}
+\begin{equation}
+\hat{A}_{\text{rsn}}^{(g^*,n)} =
+\begin{cases}
+0, & \sigma_\text{rsn} < \epsilon,\\[4pt]
+\dfrac{r_{\text{rsn}}^{(g^*,n)} - \mu_\text{rsn}}{\sigma_\text{rsn} + \epsilon}, & \text{otherwise.}
+\end{cases}
+\end{equation}
+%
+
+\subsection{Reasoner Objective}
+\label{app:reasoner_objective}
+
+Let $\{o_{\text{rsn},t}^{(n)}\}_{t=1}^{T^{(n)}}$ be the sequence of the $T^{(n)}$ total tokens in the Reasoner output $(a^{(g^*,n)}_{L^{(g^*)}},\hat{y}^{(g^*,n)}_{L^{(g^*)}})$ at round $L^{(g^*)}$ of Reasoner trajectory $\tau_\text{rsn}^{(g^*,n)}$. For a batch of $B$ questions, the Reasoner objective function is defined as
+
+\begin{equation}
+\label{eq:controller_loss_app}
+\mathcal{J}_{\text{rsn}}(\theta)
+=
+\frac{1}{B}\sum_{b=1}^{B}\frac{1}{N}\sum_{n=1}^{N} \frac{1}{T^{(n)}} \sum_{t=1}^{T^{(n)}} \hat{A}_{\text{rsn}}^{(n)} \log \pi_\theta\Big(o_{\text{rsn},t}^{(n)}\mid q_b, \{o_{\text{rsn},j}^{(n)}\}_{j=1}^{t-1}\Big) - D_{KL}(\pi_\theta||\pi_\text{ref})
+\end{equation}
+
+where the reference policy $\pi_\text{ref}$ is the reasoning model policy after SFT but before RL post-training.
+
+\subsection{Combined Objective}
+
+The two objectives above are aggregated into a joint objective, which is maximized via gradient ascent:
+\begin{equation}
+\mathcal{J} = \mathcal{J}_{\text{ctl}} + \mathcal{J}_{\text{rsn}}.
+\end{equation}
+
+\subsection{Format Reward}
+\label{app:format_score}
+
+We introduce a format reward to ensure that both the Controller and the Reasoner produce
+well-structured outputs that follow the required interaction protocol.
+The format reward penalizes malformed, ambiguous, or incomplete responses and assigns
+a hard failure to critical violations.
+
+\paragraph{Reasoner Format Reward.}
+Given a reasoner completion \(c\), we compute a scalar format score between -1 and 1.
+The score starts from 1 and is reduced according to the following cases:
+
+\begin{itemize}
+    \item \textbf{Reasoning block:} The completion must contain exactly one
+    \texttt{<think>} block. Missing or multiple reasoning blocks incur a penalty.
+    \item \textbf{Answer block:} The completion must contain exactly one non-empty
+    \texttt{<answer>} block. Missing answers constitute a critical violation.
+    \item \textbf{Separation:} The \texttt{<answer>} block must not appear inside
+    the \texttt{<think>} block; violations are penalized.
+\end{itemize}
+
+If a critical violation occurs (for example, missing answer), the format score becomes negative,
+triggering a hard failure.
+
+\paragraph{Controller Format Reward.}
+Let the controller produce a sequence of responses
+where the final response must terminate the interaction.
+Each controller iteration receives a per-step format score.
+
+The trajectory level controller format score
+is computed by averaging the per iteration scores, unless a critical violation occurs.
+Specifically, the controller must satisfy the following rules:
+
+\begin{itemize}
+    \item \textbf{Decision exclusivity:} Each step must contain exactly one decision:
+    either a segment selection or an acceptance.
+    \item \textbf{Iteration structure:} All non-final steps must issue a valid segment selection call, while the final step must accepts the reasoner's answer as final.
+    \item \textbf{segment selection validity:} segment selections must be valid JSON and specify a
+    time-series segment with valid bounds.
+\end{itemize}
+
+If any step violates these constraints, a violation indicator
+is triggered and the controller format score
+is set to \(-1\).
+
+\paragraph{Hard Format Failure.}
+For both roles, any negative format score results in a hard penalty (-1).
+
+\section{Datasets}
+\label{app:datasets}
+
+\input{tables/datasets}
+
+We follow each benchmark’s standard evaluation protocol, with minor restrictions for consistency across datasets.
+
+\textbf{TSQA}~\cite{tsqa_dataset} is a large-scale time-series question answering dataset composed of real and synthetic data, designed to evaluate models’ ability to understand and reason about temporal patterns beyond numeric prediction. We use its multiple-choice questions defined over univariate time series.
+
+\textbf{RCW} is a univariate acoustic time-series dataset within the TimerBed benchmark~\cite{rcw_dataset} that evaluates simple deterministic reasoning by requiring models to infer the presence of a North Atlantic right whale call from temporal–spectral structure in the signal.
+
+\textbf{ECG-QA}~\cite{ecgqa_dataset} is a clinical time-series question answering dataset designed to evaluate medical reasoning over ECG signals, consisting of 10-second 12-lead ECG recordings paired with clinical context. In this work, we only use binary (true/false) questions involving a single lead, requiring models to reason over univariate cardiac time series.
+
+\textbf{Sleep-QA}~\cite{langer2025opentslm} is a clinical time-series question answering dataset designed to evaluate reasoning over sleep-stage dynamics, consisting of 30-second single-channel electroencephalogram (EEG) recordings annotated with sleep stages. Following prior work\cite{pouliou2025new,langer2025opentslm}, non-REM stages 3 and 4 are merged, yielding five classes: Wake, REM, Non-REM1, Non-REM2, and Non-REM3.
+
+\textbf{TRQA}~\cite{trqa_dataset} is a large-scale time-series reasoning benchmark; we use its characterization task, which evaluates reasoning about intrinsic properties of univariate time series through true/false and multiple-choice questions.
+
+\textbf{Etiological Reasoning (ETI)}~\cite{merrill2024tsandlang} is a time-series reasoning dataset that evaluates causal interpretation by requiring models to identify the most plausible generative scenario for a given univariate time series via multiple-choice questions. The original dataset consists of 6,978 synthetic time series; to obtain sufficient data for both RL and SFT, we additionally use a subset of the single–time-series (1TS) dataset released by the authors and adapt it to the etiological reasoning format using their provided code.
+
+\section{SFT CoT Data Creation}
+\label{app:sft_cot_data}
+Supervised fine-tuning reasoning traces follow a structured, interleaved format that alternates between natural-language reasoning and explicit time-series segment selection. Each trace consists of multiple reasoning steps, where intermediate reasoning motivates the selection of informative temporal segments, followed by a final answer.
+To construct these traces, we prompted GPT-5 to answer time-series questions conditioned on rendered visualizations. The resulting responses were then transformed into structured reasoning traces with explicit segment-selection steps and post-processed to ensure correctness, structural consistency, and adherence to the template.
+A simplified example is shown in Figure~\ref{trace_template}. Figure~\ref{sft_data_curation} presents the prompt used to generate the raw responses from which the structured reasoning traces were derived.
+
+
+
+\begin{center}
+\captionof{example}{SFT reasoning trace template.} 
+\label{trace_template}
+\begin{tcolorbox}[
+        breakable,          
+        colback=gray!5,    
+        colframe=black, 
+        arc=2mm,  
+        boxrule=0.5pt,
+        fontupper=\footnotesize
+    ]
+\begin{Verbatim}[fontsize=\footnotesize]
+<think> reasoning ... </think>
+<timeseries_selection_tool> [x1, y1] </timeseries_selection_tool>
+<think> reasoning ... </think>
+<timeseries_selection_tool> [x2, y2] </timeseries_selection_tool>
+<think> reasoning ... </think>
+<answer> A / B / C / D / E </answer>
+\end{Verbatim}
+\end{tcolorbox}
+\end{center}
+
+\begin{center}
+\captionof{example}{SFT CoT curation example.} 
+\label{sft_data_curation}
+\begin{tcolorbox}[
+        breakable,          
+        colback=gray!5,    
+        colframe=black, 
+        arc=2mm,  
+        boxrule=0.5pt,
+        fontupper=\footnotesize
+    ]
+\begin{Verbatim}[breaklines=true, breakanywhere=true]
+You are a world-class expert in time-series reasoning and analysis.
+
+You are given:
+- A time series (indexed from 0 to {ts_len - 1})
+- A question about the time series
+- Statistics about the time series
+- The correct answer.
+
+Your task has two parts:
+
+(1) Identify the specific contiguous segments of the time series that are essential for solving the question.
+- You may choose at most 3 segments.
+- Each segment must be at least 8 time steps long (inclusive).
+- Segment boundaries must lie within [0, {ts_len - 1}].
+- Only include segments that are strictly necessary. If the entire series is needed, use a single segment [0, {ts_len - 1}].
+
+(2) Using only the identified segments and the metadata, provide a concise, step-by-step explanation that leads to the correct answer.
+
+Critical explanation constraint:
+- For each segment, you MUST separate:
+(a) The reasoning objective for selecting the segment, and
+(b) The analysis of what the segment reveals.
+- The sentence explaining why a segment is chosen MUST NOT describe, summarize, or analyze the values, patterns, trends, or variability within that segment, but explain the rationale and how to approach the question correctly.
+- All observations and analyses of the segment MUST appear only in the subsequent sentence.
+
+Important constraints:
+- Base all explanations strictly on the observable behavior and statistical properties of the time series.
+- Do NOT use external context, prior knowledge of labels, or textual descriptions of answer options.
+- Do NOT mention or allude to any answer option or class label until the final answer line.
+
+Your response MUST follow exactly the structure below, with no additional sections or deviations:
+
+Important segments:
+Segment 1: [x1, y1]
+Explanation:
+First, to solve the question, I need to <state the reasoning objective>.
+For this purpose, I'm choosing segment [x1, y1] because it is required to <state the logical purpose this segment serves, without describing what is observed>.
+From this segment, I conclude that <state the key insight derived from analyzing this segment>.
+
+(If needed)
+Segment 2: [x2, y2]
+Explanation:
+Next, I need to <state the reasoning objective>.
+For this purpose, I'm choosing segment [x2, y2] is chosen because it is required to <state the logical purpose this segment serves, without describing what is observed>.
+From this segment, I conclude that <state the key insight derived from analyzing this segment>.
+
+(If needed)
+Segment 3: [x3, y3]
+Explanation:
+Finally, I need to <state the reasoning objective>.
+For this purpose, I'm choosing segment [x3, y3] is chosen because it is required to <state the logical purpose this segment serves, without describing what is observed>.
+From this segment, I conclude that <state the key insight derived from analyzing this segment>.
+
+Final conclusion:
+One or two sentences that combine the insights from the selected segments to justify the correct answer, expressed purely in terms of time-series behavior.
+
+Answer: X
+
+Answer formatting rules:
+- The final line must be exactly: "Answer: X"
+- X must be a single capital letter:
+- A/B/C/D for multiple-choice questions
+- A/B for true/false questions
+- The final line must contain nothing except the letter.
+
+Question:
+{question}
+
+{option_block}
+
+Additional data you may use (metadata):
+Summary statistics:
+- Mean: {mean}
+- Min: {min_ts}
+- Max: {max_ts}
+- Std: {std}
+
+Time series length: {ts_len}
+
+Correct answer: {correct_ans}
+\end{Verbatim}
+\end{tcolorbox}
+\end{center}
+
+\section{Supervised Fine-Tuning Configuration}
+\label{app:sft_trainig_details}
+Prior to reinforcement learning, we train \algoname through large-scale pretraining following the procedure described in \cite{chatts}, enabling joint modeling of time-series representations and natural language inputs. 
+For each benchmark, we then independently perform supervised fine-tuning using LoRA adapters (rank 8, $\alpha = 16$) for up to 5 epochs, with early stopping based on validation performance.
+
+\section{RL Training Configuration}
+\label{app:trainig_details}
+We train \algoname using fully on-policy reinforcement learning with full-parameter fine-tuning. Optimization is performed using AdamW with learning rate $1 \times 10^{-6}$. Each update processes a batch of 64 question and time-series pairs. For each pair, $G = 6$ interaction trajectories are sampled for the controller, and for each trajectory, $N = 6$ final-round reasoner rollouts are generated. 
+During rollout generation, we use a controller temperature of $1.0$, a reasoner temperature of $0.7$, and top-$p$ sampling with $p = 0.95$. We apply KL regularization only to the reasoner objective with a fixed coefficient $\beta = 0.002$, using the SFT-initialized model as the reference policy $\pi_{\mathrm{ref}}$. Training runs for one epoch over the dataset, and experiments are conducted on four NVIDIA H100 GPUs.
+
+\subsection{Training Cost: RL vs. SFT}
+\label{app:training_cost}
+
+We report the wall-clock training cost of \algoname's two stages on three benchmarks. The SFT stage uses LoRA adapters on a single H100, while the RL stage performs full-parameter fine-tuning across four H100s.
+
+\begin{table}[h]
+\centering
+\small
+\caption{\textbf{Training cost of \algoname's SFT and RL stages.} Wall-clock and GPU-hours are reported per benchmark.}
+\label{tab:training_cost}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{llccccc}
+\toprule
+\textbf{Dataset} & \textbf{Stage} & \textbf{Trainable Params} & \textbf{GPUs} & \textbf{Wall-clock (h)} & \textbf{GPU-hours} & \textbf{Batch Size} \\
+\midrule
+\multirow{2}{*}{TRQA}
+& SFT & LoRA (16.5M)  & 1$\times$H100 & 1.50  & 1.50   & 4  \\
+& RL  & Full (4B)     & 4$\times$H100 & 23.00 & 92.00  & 64 \\
+\midrule
+\multirow{2}{*}{ETI}
+& SFT & LoRA (16.5M)  & 1$\times$H100 & 0.67  & 0.67   & 4  \\
+& RL  & Full (4B)     & 4$\times$H100 & 26.00 & 104.00 & 64 \\
+\midrule
+\multirow{2}{*}{ECG-QA}
+& SFT & LoRA (16.5M)  & 1$\times$H100 & 1.35  & 1.35   & 4  \\
+& RL  & Full (4B)     & 4$\times$H100 & 27.00 & 108.00 & 64 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The SFT stage converges within 2-3 epochs (early-stopped on validation accuracy) using a per-device batch size of 4, while the RL stage runs for around 100 updates with a global batch size of 64 question-time-series pairs.
+
+% \section{Sensitivity to Rollout Group Sizes}
+% \label{app:GN_sensitivity}
+
+% \algoname's RL stage is governed by two rollout hyperparameters: the number of controller trajectories $G$ sampled per training example, and the number of final-round reasoner rollouts $N$ generated per controller trajectory. Together they determine the quality of the reliability reward estimate and the granularity of the group-relative advantages. We evaluate sensitivity to these parameters on TRQA by varying $G$ and $N$ jointly, keeping all other hyperparameters fixed. We tie $G = N$ for simplicity and because the dominant memory cost scales with their product.
+
+% Table~\ref{tab:GN_sensitivity} shows that \algoname's performance is robust across the tested range, with accuracy varying by 0.62 percentage points between the smallest ($G = N = 2$) and largest ($G = N = 8$) configuration. The full configuration used in our main experiments ($G = N = 6$) trades off compute and stability of the reward estimate; further increases yield only marginal returns.
+
+% \begin{table}[h]
+% \centering
+% \small
+% \caption{\textbf{Sensitivity to rollout group sizes $G$ and $N$ on TRQA (\%).}}
+% \label{tab:GN_sensitivity}
+% \setlength{\tabcolsep}{8pt}
+% \begin{tabular}{cccc}
+% \toprule
+% \textbf{$G$} & \textbf{$N$} & \textbf{Acc} & \textbf{F1} \\
+% \midrule
+% 2 & 2 & 82.63 & 77.04 \\
+% \rowcolor{lightpurple}
+% 6 & 6 & \textbf{83.06} & \textbf{78.02} \\
+% 8 & 8 & 83.25 & 78.10 \\
+% \bottomrule
+% \end{tabular}
+% \end{table}
+
+\section{Prompts}
+\label{app:prompt}
+
+\begin{center}
+\captionof{example}{SFT Prompt.} 
+\label{fig:sft_prompt}
+\begin{tcolorbox}[
+        breakable,          
+        colback=gray!5,    
+        colframe=black, 
+        arc=2mm,  
+        boxrule=0.5pt,
+        fontupper=\footnotesize
+    ]
+\begin{Verbatim}[breaklines=true, breakanywhere=true]
+You are a time series expert. Analyze ONLY the given time series data and answer the question.
+# Output Schema
+<think> your reasoning and how you came to the answer.</think>
+<answer>
+[Direct answer ONLY - the first line must be exactly one letter from the set of available options.]
+</answer>
+# Rules (MANDATORY)
+- No text outside <think> and <answer>.
+- In <think>, explain your reasoning and reference the time series.
+- In <answer>, the first line must be exactly one letter from the set of available options.
+# Time Series
+### Segment 0: Timesteps [0, {ts_len}]
+<TS_DATA>
+# Question
+{context}
+\end{Verbatim}
+\end{tcolorbox}
+\end{center}
+
+\begin{center}
+\captionof{example}{Reasoner Prompt.} 
+\label{fig:reasoner_prompt}
+\begin{tcolorbox}[
+        breakable,          
+        colback=gray!5,    
+        colframe=black, 
+        arc=2mm,  
+        boxrule=0.5pt,
+        fontupper=\footnotesize
+    ]
+\begin{Verbatim}[breaklines=true, breakanywhere=true]
+You are a time series expert. Analyze ONLY the given time series data and answer the question.
+
+# Output Schema
+<think>One-two sentences describing your reasoning and how you came to the answer.</think>
+<answer>
+[Direct answer ONLY - the first line must be exactly one letter.
+</answer>
+
+# Rules (MANDATORY)
+- No text outside <think> and <answer>.
+- In <think>, explain you reasoning, how you came to the answer, and reference segments by number (e.g., "Seg 2 rises ~0.3 at t=150-200").
+- if evidence is insufficient, state the most likely answer and reflect uncertainty (consicely. i.e I'm not sure about the answer because...).
+- In <answer>:
+- first line is exactly A, B, C, or D.
+
+# Time Series Segments
+{segments_section}
+
+# Question
+{question}
+\end{Verbatim}
+\end{tcolorbox}
+\end{center}
+
+\begin{center}
+\captionof{example}{Controller Prompt.} 
+\label{fig:controller_prompt}
+\begin{tcolorbox}[
+        breakable,          
+        colback=gray!5,    
+        colframe=black, 
+        arc=2mm,  
+        boxrule=0.5pt,
+        fontupper=\footnotesize
+    ]
+\begin{Verbatim}[breaklines=true, breakanywhere=true]
+You are a time series analysis expert. Your task is to decide which time series segments an LLM needs to accurately answer a question related to a time series.
+
+## Instructions
+1. You receive the FULL time series embedding, the question, the segments that were given to the LLM so far, and the LLM's answer.
+2. Review the question and the LLM's answer, and analyze the full time series embedding.
+3. Evaluate if the LLM's answer is accurate and if the available segments provide sufficient information to answer the question accurately - you can try answering the question yourself to understand what is missing.
+4. Make ONE of two decisions:
+- Retrieve an additional segment: If you think that the answer is not accurate and/or there is critical information missing, use the tool to get an additional segment of time series data for the LLM.
+- Accept the LLM's answer as final: If you think the LLM's answer is accurate and the information provided is sufficient.
+
+## Full Time Series Embedding
+<TS_DATA>
+
+## Current Status
+- Time series length: X timesteps
+- Question: {question}
+- Segments provided to the LLM so far:
+{CURR_SEG_LIST_TEXT}
+
+LLM's PREVIOUS ANSWER:
+{REASONER_ANS}
+
+## Output Format
+You MUST respond in ONE of the following two formats:
+
+Option 1: Retrieve an additional segment
+Make a tool call asking for a specific segment of the time series data:
+<think> includes your concise reasoning for why you are retrieving this segment and what information is missing </think>
+<tool_call>
+{{"name": "timeseries_selection_tool", "arguments": {{"ts_seg": [start, end]}}}}
+</tool_call>
+
+Option 2: Accept the LLM's answer as final
+You should answer with the following format:
+<think> includes your concise reasoning for why you are accepting the answer </think>
+<answer>ACCEPT</answer>
+
+## Important Rules
+1. You can only call 'timeseries_selection_tool' ONCE per turn
+2. Specify segments as integers: [100, 200] means timesteps 100 to 200 inclusive
+4. Do NOT request segments outside valid range [0, {ts_len - 1}]
+5. If you output "ACCEPT", the process will immediately conclude with the LLM's current answer
+
+Make your decision now:
+\end{Verbatim}
+\end{tcolorbox}
+\end{center}
+
+\section{Modality Analysis on Sleep-QA}
+\label{app:sleepqa_modality}
+Sleep-QA is the most challenging dataset in our analyis for reasoning models that consume the signal as a tokenized sequence, while vision-language baselines that operate on plotted signals perform better on it (Tables~\ref{tab:multi_task_results} and~\ref{tab:image_based_baseline}). This pattern suggests that the gap may stem from the input modality used to encode the EEG signal rather than from the segment-selection and reasoning mechanism itself. To test this hypothesis, we replace the \algoname backbone (Qwen3-4B) with a vision-language backbone (Qwen2.5-VL-3B) and represent the time series as rendered plots rather than as a tokenized sequence. All other components are kept unchanged. For this analysis we perform supervised fine-tuning only; full SFT+RL training under the vision-based representation is left to future work.
+
+Table~\ref{tab:sleepqa_modality} reports accuracy and F1 on Sleep-QA. Under the vision-based representation, \algoname substantially outperforms both its tokenized-input counterpart and TimeMaster (the strongest baseline) under the same SFT-only training regime. This confirms that the performance gap on Sleep-QA is primarily driven by the input modality used to encode EEG signals, rather than by the segment selection or reasoning components of \algoname.
+
+
+\begin{table}[h]
+\centering
+\small
+\caption{\textbf{Modality analysis on Sleep-QA (\%).} }
+\label{tab:sleepqa_modality}
+\setlength{\tabcolsep}{8pt}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Method} & \textbf{Acc} & \textbf{F1} \\
+\midrule
+\rowcolor{lightpurple}
+\algoname (VLM backbone, SFT) & \textbf{65.00} & \textbf{39.22} \\
+\algoname (tokenized, SFT)   & 28.13 & 17.94 \\
+TimeMaster              & 47.51 & 32.98 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Comparison with Dynamic Visual Search}
+\label{app:visual_search_comparison}
+
+To assess whether dynamic visual search methods developed for vision-language reasoning transfer to time series reasoning, we compare \algoname against PixelReasoner~\cite{wang2025pixel}, a curiosity-driven pixel-space reasoning method that iteratively selects informative image regions. We adapt PixelReasoner to our setting by replacing its Qwen-VL backbone with the same Qwen3-4B backbone used by \algoname, keeping the rest of its training and inference pipeline unchanged. We evaluate both methods on the ECG-QA dataset.
+
+\begin{table}[h]
+\centering
+\small
+\caption{\textbf{Comparison with dynamic visual search on ECG-QA (\%).}}
+\label{tab:visual_search_comparison}
+\setlength{\tabcolsep}{8pt}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Method} & \textbf{Acc} & \textbf{F1} \\
+\midrule
+PixelReasoner & 60.15 & 51.52 \\
+\rowcolor{lightpurple}
+\algoname & \textbf{69.81} & \textbf{52.67} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% \algoname outperforms PixelReasoner by 9.66 accuracy points on ECG-QA, indicating that transferring visual search mechanisms designed for images does not directly translate into effective time-series reasoning. We attribute this gap to two factors. First, time-series reasoning lacks the region-level supervision (e.g., bounding boxes) typically available in vision tasks, so PixelReasoner's reliance on visual-grounding-style learning signals is weaker in this setting. Second, \algoname's hierarchical optimization assigns trajectory-level credit to the controller across multiple interaction rounds, which is better matched to building an informative \emph{set} of temporal segments than methods that treat each region selection in isolation.
+
+% \section{Robustness to SFT Trace Quality}
+% \label{app:sft_noise}
+
+% The supervised fine-tuning traces used by \algoname are generated by prompting GPT-5 to produce structured reasoning conditioned on rendered time-series visualizations (Appendix~\ref{app:sft_cot_data}). A natural concern is whether \algoname relies on access to a strong ``oracle'' model for producing these traces. To assess this, we measure how \algoname's downstream performance changes as we inject noise into the training traces.
+
+% We construct noisy training sets by corrupting a fraction of the SFT traces in two ways: (i) replacing time-series descriptors with their semantic opposites (e.g., flipping ``increase'' to ``decrease'', ``stable'' to ``variable''), and (ii) injecting hallucinated observations by inserting fabricated statements into the reasoning traces. We then perform SFT on the ETI dataset using the resulting corrupted traces and report accuracy and F1 averaged over 8 inference runs.
+
+% Table~\ref{tab:sft_noise} shows that \algoname's performance remains stable across a wide range of noise levels, with accuracy varying by at most 2.1 percentage points across 0--30\% noise. This indicates that \algoname does not critically depend on having highest-quality reasoning traces from a frontier model, and that the controller-reasoner framework is robust to substantial noise in the SFT cold-start data.
+
+% \begin{table}[h]
+% \centering
+% \small
+% \caption{\textbf{Effect of SFT trace noise on \algoname performance on ETI (\%).} A fraction of SFT traces is corrupted via descriptor flipping and hallucinated observations.}
+% \label{tab:sft_noise}
+% \setlength{\tabcolsep}{8pt}
+% \begin{tabular}{lcc}
+% \toprule
+% \textbf{Noise \%} & \textbf{Acc} & \textbf{F1} \\
+% \midrule
+% \rowcolor{lightpurple}
+% 0\%  & 85.12 & 85.11 \\
+% 6\%  & 84.50 & 84.16 \\
+% 12\% & 83.00 & 85.50 \\
+% 25\% & 85.60 & 85.30 \\
+% 30\% & 85.06 & 85.08 \\
+% \bottomrule
+% \end{tabular}
+% \end{table}
+
+
+% \section{Sensitivity to Maximum Interaction Rounds}
+% \label{app:L_sensitivity}
+
+% \algoname's controller-reasoner interaction proceeds for up to $L$ rounds before the controller is required to accept the reasoner's answer as final. We study how \algoname's performance depends on this maximum-rounds budget by varying $L \in \{1, 2, 3\}$ and evaluating on the ETI dataset. 
+% Table~\ref{tab:L_sensitivity} shows that accuracy improves monotonically with $L$, with the largest gain from $L = 1$ to $L = 2$ (+2.5 points), confirming that even a single additional round of segment selection meaningfully improves performance. A further increase to $L = 3$ yields an additional improvement of 0.5 points, consistent with the model needing only a small number of targeted segments per question (see also Figure~\ref{fig:usage_vs_acc}).
+
+% \begin{table}[h]
+% \centering
+% \small
+% \caption{\textbf{Sensitivity to the maximum number of controller-reasoner interaction rounds $L$ on ETI (\%).}}
+% \label{tab:L_sensitivity}
+% \setlength{\tabcolsep}{8pt}
+% \begin{tabular}{ccc}
+% \toprule
+% \textbf{$L$} & \textbf{Acc} & \textbf{F1} \\
+% \midrule
+% 1 & 84.00 & 84.62 \\
+% 2 & 86.50 & 85.60 \\
+% \rowcolor{lightpurple}
+% 3 & \textbf{87.03} & \textbf{87.10} \\
+% \bottomrule
+% \end{tabular}
+% \end{table}
+
+
+% \section{Comparison with Full-TS Highlighting}
+% \label{app:highlight}
+
+% A natural alternative to providing the reasoner with only the controller-selected segments is to provide it with the full time series, with the controller-selected regions highlighted. We compare \algoname against this design across two benchmarks (ETI and TRQA), keeping all other components fixed.
+
+% Table~\ref{tab:highlight} shows that \algoname consistently outperforms the highlighting variant, with a particularly large gap on TRQA (+8.22 accuracy). We attribute this to a coupled failure mode between the two roles. First, when the reasoner has access to the entire signal, it can produce a correct answer by attending to non-highlighted regions and effectively ignoring uninformative controller selections. Because the controller's learning signal is derived from the reasoner's reliability under the selected segments (Equation~\ref{eq:reliability_reward}, when applicable), this can falsely indicate that uninformative selections are useful, hampering the controller's ability to improve. Second, once the controller stops producing increasingly informative segments, the reasoner is further incentivized to ignore the highlights, and the method degrades toward a fixed full-sequence encoding of the input.
+
+% This effect is consistent with the larger gap observed on TRQA, where the time series are longer on average than ETI (Table~\ref{tab:datasets_overview_full}) and irrelevant-segment dilution matters more for downstream reasoning.
+
+% \begin{table}[h]
+% \centering
+% \small
+% \caption{\textbf{Comparison between \algoname and the full-TS highlighting variant (\%).} The highlighting variant provides the reasoner with the entire time series with controller-selected regions highlighted, rather than only the selected segments.}
+% \label{tab:highlight}
+% \setlength{\tabcolsep}{6pt}
+% \begin{tabular}{lcccc}
+% \toprule
+% & \multicolumn{2}{c}{\textbf{ETI}} & \multicolumn{2}{c}{\textbf{TRQA}} \\
+% \cmidrule(lr){2-3} \cmidrule(lr){4-5}
+% \textbf{Method} & \textbf{Acc} & \textbf{F1} & \textbf{Acc} & \textbf{F1} \\
+% \midrule
+% \rowcolor{lightpurple}
+% \algoname & \textbf{87.03} & \textbf{87.10} & \textbf{83.06} & \textbf{78.02} \\
+% Highlight Segments & 85.56 & 85.52 & 74.84 & 72.95 \\
+% \bottomrule
+% \end{tabular}
+% \end{table}
+\section{Inference Cost Analysis}
+\label{app:inference_cost}
+
+\algoname's controller-reasoner interaction issues multiple model calls per question, which introduces additional inference cost compared to baselines that process the time series in a single forward pass. We measure per-example inference time on TRQA, ETI, and ECG-QA against the two strongest fine-tuned baselines from Table~\ref{tab:multi_task_results} (OpenTSLM-4B and ITFormer-4B). All measurements are taken on a single NVIDIA H100 GPU.
+
+Following our evaluation protocol, each example is evaluated with 8 independent runs to compute average accuracy and F1; reported times are aggregate per-example wall-clock over these 8 runs. Table~\ref{tab:inference_cost} reports per-example inference time alongside accuracy and F1.
+\begin{table}[h]
+\centering
+\small
+\caption{\textbf{Per-example inference cost and accuracy on TRQA, ETI, and ECG-QA.} }
+\label{tab:inference_cost}
+\setlength{\tabcolsep}{6pt}
+\begin{tabular}{llccc}
+\toprule
+\textbf{Dataset} & \textbf{Method} & \textbf{Acc} & \textbf{F1} & \textbf{Time/example, 8 runs (min)} \\
+\midrule
+\multirow{3}{*}{TRQA}
+& \algoname    & \textbf{83.06} & \textbf{78.02} & 1.68 \\
+& OpenTSLM-4B  & 76.25 & 69.36 & 1.26 \\
+& ITFormer-4B  & 80.12 & 74.22 & 1.29 \\
+\midrule
+\multirow{3}{*}{ETI}
+& \algoname    & \textbf{87.03} & \textbf{87.10} & 2.08 \\
+& OpenTSLM-4B  & 82.69 & 82.66 & 1.05 \\
+& ITFormer-4B  & 84.62 & 84.60 & 1.27 \\
+\midrule
+\multirow{3}{*}{ECG-QA}
+& \algoname    & \textbf{69.81} & \textbf{52.67} & 2.00 \\
+& OpenTSLM-4B  & 69.50 & 41.00 & 0.78 \\
+& ITFormer-4B  & 57.31 & 49.91 & 0.98 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Scalability to Long Sequences}
+\label{app:scalability}
+
+\algoname is designed so that the reasoner conditions only on the controller-selected segments and the controller localizes task-relevant regions rather than encoding the full signal at each step. As a result, the computational cost of an interaction trajectory is dominated by the number and length of selected segments, rather than the total sequence length $H$. We test whether this design preserves \algoname's selective-utilization benefits as the input becomes substantially longer than what was seen during training.
+
+\xhdr{Experimental setup}
+We construct extended-length variants of RCW, our longest dataset (original length 4{,}000). For each test sample, we extend the time series to lengths 8{,}000 and 12{,}000 by appending tiled copies of the original signal beyond timestep 4{,}000, with small additive Gaussian noise. The original $[0, 4000)$ region remains unmodified and contains all task-relevant information, the appended region is uninformative. \algoname is not re-trained for these longer inputs, so this experiment evaluates whether the controller generalizes its segment selection behavior to sequences three times longer than those seen during training. All results are averaged over 8 independent runs per sample.
+
+\xhdr{Results}
+Table~\ref{tab:scalability} shows that accuracy varies by less than 1.5 percentage points across sequence lengths from 4K to 12K, indicating that the controller continues to localize the task-relevant region $[0, 4000)$ even when surrounded by three times as much uninformative signal. Per-example inference time increases by only 1.6\% when tripling the sequence length, since \algoname's computational cost is dominated by the controller-reasoner interaction over selected segments rather than by encoding the full time series.
+
+\begin{table}[h]
+\centering
+\small
+\caption{\textbf{\algoname's performance and inference cost on RCW under extended sequence lengths.}}
+\label{tab:scalability}
+\setlength{\tabcolsep}{6pt}
+\begin{tabular}{cccc}
+\toprule
+\textbf{TS Length} & \textbf{Acc} & \textbf{F1} & \textbf{Time/example, 8 runs (min)} \\
+\midrule
+4{,}000  & 77.00 & 50.00 & 1.880 \\
+8{,}000  & 75.66 & 51.21 & 1.895 \\
+12{,}000 & 76.11 & 48.37 & 1.910 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+This stability reflects a structural property of \algoname's hierarchical design. The reasoner is optimized over a single final-round interaction and is conditioned only on controller-selected segments, so increasing $H$ does not change the reasoner's input distribution. The controller is optimized over multiple interaction rounds to select segments until the reasoner has enough information to answer confidently. Since the number of task-relevant regions in a time series is typically determined by the question rather than by $H$, extending the time series does not increase the expected number of segments the controller selects, and therefore does not substantially change the number of interaction rounds per question.
+
+\section{Comparison with Time-Series Explainability Methods}
+\label{app:xai_comparison}
+
+Time-series explainability (XAI) methods such as TimeX~\cite{queen2023timex} and TimeX++~\cite{liu2024timexplusplus} identify timesteps relevant to a downstream prediction by producing continuous attribution maps over the input. While \algoname produces discrete segment selections in service of question answering rather than post-hoc explanations of a separate predictor, the regions \algoname's controller selects can be compared to the regions XAI methods identify as important. We perform this comparison on two synthetic benchmarks from the TimeX suite with ground-truth masks: FreqShape and SeqCombSingle.
+
+\xhdr{Evaluation protocol}
+TimeX and TimeX++ produce continuous attribution maps, while \algoname produces discrete segment selections that we represent as a binary mask (1 if a timestep lies inside any selected segment, 0 otherwise). Threshold-sweep metrics that are used in these studies are less suited to a direct comparison with \algoname. We therefore evaluate on the following metrics, computed against the ground-truth masks:
+
+\begin{itemize}
+    \item \textbf{Segment Hit Rate (SHR):} fraction of ground-truth regions that overlap with at least one selected segment.
+    \item \textbf{GT Coverage (GTC):} fraction of ground-truth timesteps contained in selected segments.
+    \item \textbf{Redundancy:} fraction of selected segments that do not overlap any ground-truth region.
+    \item \textbf{Segment-level Precision/Recall/F1/IoU:} computed after expanding each ground-truth point by $\pm k$ timesteps ($k \in \{5, 10\}$), evaluating whether each method localizes the correct temporal neighborhoods rather than requiring exact pointwise matches.
+    \item \textbf{Sufficient Evidence Rate (SER):} a task-specific metric that checks whether the selected regions contain enough ground-truth structure to answer the question. For FreqShape, this requires covering at least two consecutive spike clusters to determine the inter-spike interval. For SeqCombSingle, all discriminative subsequences must be covered, since the class label depends on their combination.
+\end{itemize}
+
+For TimeX and TimeX++, we binarize their soft masks at a threshold of $0.5$ before computing these metrics. We train both baselines on the original data splits (5-fold cross-validation) and evaluate all methods on the same 200-sample test subset. Results are reported as mean $\pm$ standard deviation across folds.
+
+\xhdr{Results}
+Tables~\ref{tab:xai_freqshape} and~\ref{tab:xai_seqcomb} report results on FreqShape and SeqCombSingle. \algoname is competitive with both XAI baselines. On FreqShape, \algoname achieves the best SHR, GTC, and redundancy, while remaining within 0.06 of TimeX++ on SER; in the segment-level metrics, TimeX and TimeX++ achieve higher precision but \algoname's recall, F1, and IoU are substantially higher across both tolerance levels. On SeqCombSingle, \algoname has lower SHR and SER than the XAI baselines but achieves the best GTC and redundancy, and dominates on segment-level precision, recall, F1, and IoU. Overall, the comparison suggests that the segments \algoname's controller selects to support question answering align well with regions identified as important by dedicated XAI methods, and exhibit complementary strengths: \algoname tends to produce fewer, more concentrated selections that cover ground-truth regions tightly, while XAI methods produce broader attributions with higher precision but lower recall.
+
+\begin{table}[h]
+\centering
+\small
+\caption{\textbf{Region-level comparison on FreqShape.} Mean $\pm$ std across 5 folds. Bold marks the best value per column.}
+\label{tab:xai_freqshape}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Method} & \textbf{SHR} $\uparrow$ & \textbf{GTC} $\uparrow$ & \textbf{Redundancy} $\downarrow$ & \textbf{SER} $\uparrow$ \\
+\midrule
+\rowcolor{lightpurple}
+\algoname & \textbf{0.7340 $\pm$ 0.0205} & \textbf{0.6804 $\pm$ 0.0189} & \textbf{0.0138 $\pm$ 0.0062} & 0.6250 $\pm$ 0.0342 \\
+TimeX     & 0.6252 $\pm$ 0.0065 & 0.5600 $\pm$ 0.0066 & 0.0826 $\pm$ 0.0198 & 0.6100 $\pm$ 0.0141 \\
+TimeX++   & 0.6430 $\pm$ 0.0092 & 0.5933 $\pm$ 0.0057 & 0.0601 $\pm$ 0.0217 & \textbf{0.6880 $\pm$ 0.0259} \\
+\bottomrule
+\end{tabular}
+
+\vspace{1em}
+
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lcccccccc}
+\toprule
+& \multicolumn{4}{c}{\textbf{Tolerance $\pm 5$}} & \multicolumn{4}{c}{\textbf{Tolerance $\pm 10$}} \\
+\cmidrule(lr){2-5} \cmidrule(lr){6-9}
+\textbf{Method} & \textbf{Prec.} & \textbf{Rec.} & \textbf{F1} & \textbf{IoU} & \textbf{Prec.} & \textbf{Rec.} & \textbf{F1} & \textbf{IoU} \\
+\midrule
+\rowcolor{lightpurple}
+\algoname & 0.8407 & \textbf{0.6195} & \textbf{0.6872} & \textbf{0.5661} & 0.9522 & \textbf{0.5588} & \textbf{0.6796} & \textbf{0.5568} \\
+TimeX     & 0.9559 & 0.1854 & 0.2950 & 0.1795 & 0.9973 & 0.1559 & 0.2587 & 0.1554 \\
+TimeX++   & \textbf{0.9753} & 0.1718 & 0.2810 & 0.1689 & \textbf{0.9988} & 0.1405 & 0.2384 & 0.1405 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\small
+\caption{\textbf{Region-level comparison on SeqCombSingle.} Mean $\pm$ std across 5 folds. Bold marks the best value per column.}
+\label{tab:xai_seqcomb}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Method} & \textbf{SHR} $\uparrow$ & \textbf{GTC} $\uparrow$ & \textbf{Redundancy} $\downarrow$ & \textbf{SER} $\uparrow$ \\
+\midrule
+\rowcolor{lightpurple}
+\algoname & 0.4900 $\pm$ 0.0137 & \textbf{0.3406 $\pm$ 0.0134} & \textbf{0.0067 $\pm$ 0.0066} & 0.6467 $\pm$ 0.0172 \\
+TimeX     & 0.7095 $\pm$ 0.0149 & 0.1793 $\pm$ 0.0225 & 0.0274 $\pm$ 0.0218 & 0.6690 $\pm$ 0.0297 \\
+TimeX++   & \textbf{0.7340 $\pm$ 0.0034} & 0.2006 $\pm$ 0.0238 & 0.0205 $\pm$ 0.0149 & \textbf{0.7180 $\pm$ 0.0067} \\
+\bottomrule
+\end{tabular}
+
+\vspace{1em}
+
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lcccccccc}
+\toprule
+& \multicolumn{4}{c}{\textbf{Tolerance $\pm 5$}} & \multicolumn{4}{c}{\textbf{Tolerance $\pm 10$}} \\
+\cmidrule(lr){2-5} \cmidrule(lr){6-9}
+\textbf{Method} & \textbf{Prec.} & \textbf{Rec.} & \textbf{F1} & \textbf{IoU} & \textbf{Prec.} & \textbf{Rec.} & \textbf{F1} & \textbf{IoU} \\
+\midrule
+\rowcolor{lightpurple}
+\algoname & \textbf{0.9310} & \textbf{0.2275} & \textbf{0.3537} & \textbf{0.2272} & \textbf{0.9367} & \textbf{0.1707} & \textbf{0.2794} & \textbf{0.1707} \\
+TimeX     & 0.7299 & 0.1087 & 0.1830 & 0.1066 & 0.7314 & 0.0809 & 0.1414 & 0.0796 \\
+TimeX++   & 0.7372 & 0.1223 & 0.2025 & 0.1195 & 0.7398 & 0.0916 & 0.1576 & 0.0899 \\
+\bottomrule
+\end{tabular}
+\end{table}

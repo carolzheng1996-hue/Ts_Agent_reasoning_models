@@ -1,0 +1,221 @@
+{
+   "sources" : [
+      {
+         "usage" : "toplevel",
+         "filename" : "snow_preprint_v1.tex"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "DR_failure/216_codex.txt"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "DR_failure/216_se.txt"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "Distractors/20.txt"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "Distractors/22.txt"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "Prompts/coding_agent_audit.txt"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "Prompts/difficulty_certainty.txt"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "Prompts/difficulty_domain_knowledge.txt"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "Prompts/difficulty_explicitness.txt"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "Prompts/difficulty_temporal_complexity.txt"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "Prompts/distractor_document_generation.txt"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "Prompts/entity_extraction.txt"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "Prompts/entity_profile_assignment.txt"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "Prompts/entity_profile_generation.txt"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "Prompts/gt_evidence_extraction.txt"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "Prompts/judge_distractor_documents.txt"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "Prompts/judge_entity_extraction.txt"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "Prompts/judge_gt_evidence.txt"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "Prompts/judge_reasoning_chain.txt"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "Prompts/judge_supporting_documents.txt"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "Prompts/reasoning_chain_expansion.txt"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "Prompts/supporting_document_metadata_extraction.txt"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "Prompts/supporting_document_metadata_to_content.txt"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "Prompts/time_series_distractor_item.txt"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "Prompts/time_series_distractor_specification.txt"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "_minted/01C23B5F2200B2D2E35A874F483C18D5.highlight.minted"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "_minted/137BA1DD245148BE285F672F1AD30E42.highlight.minted"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "_minted/1546762D1A3DCFBFAB4F4CCD9B6BC415.highlight.minted"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "_minted/1E5D39FEEC39210DCD22FCC03FA16733.highlight.minted"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "_minted/1F953B61FC508FD196BB60B6A7682486.highlight.minted"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "_minted/527DD1089811BA67ED5CB56FE180E8C8.highlight.minted"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "_minted/5A31FFFFAA3FBFA15D0EB3CCA9478627.highlight.minted"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "_minted/623EBCC60544177BD3C4E958D6150C05.highlight.minted"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "_minted/6A1C073FB3D4815AAE8A3C350136F1B4.highlight.minted"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "_minted/78B3CDD23CF379C11A49AA35EB5784E4.highlight.minted"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "_minted/849F598A92681503051F2E317F694A69.highlight.minted"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "_minted/8678B397F6140A48E536A19762251E10.highlight.minted"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "_minted/8B131EAD97DCC16AAE7DC4EE291B9B0E.highlight.minted"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "_minted/96BEE4143FE77D33E75567238D6A854F.highlight.minted"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "_minted/ACAA1748B95B9B4D9ECF1F238ECCFC8A.highlight.minted"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "_minted/B22493C95103CDF84BEE34872CF923D8.highlight.minted"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "_minted/C252ADC612522DE609FB9FF097157D3F.highlight.minted"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "_minted/CAEA2DBC5352F31CFD9EF7FDEBBAAD90.highlight.minted"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "_minted/D76D1653A7135EAF6EE44A82D2B105C7.highlight.minted"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "_minted/D78CC055CE0668DE68E71B8EB99A231A.highlight.minted"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "_minted/DFF0671F674577AB76B6E06FD29FE020.highlight.minted"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "_minted/E132533F095C8F8A300498CE91E8AEB6.highlight.minted"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "_minted/E41761E22E3E21759B9FFF8EBBF17407.highlight.minted"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "_minted/F2A560288209CBBC0BA8EF460A5C34CF.highlight.minted"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "_minted/F90E52F74E60745B2E1B1CDC55ADC8FA.highlight.minted"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "_minted/_78E6221F6393D1356681DB398F14CE6D.index.minted"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "_minted/default.style.minted"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "context_mode.txt"
+      }
+   ],
+   "spec_version" : 1,
+   "texlive_version" : "2025",
+   "process" : {
+      "compiler" : "pdflatex"
+   }
+}

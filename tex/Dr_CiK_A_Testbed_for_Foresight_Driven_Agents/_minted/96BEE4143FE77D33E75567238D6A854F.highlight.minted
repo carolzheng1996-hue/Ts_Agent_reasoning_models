@@ -1,0 +1,84 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+You are a distractor generation assistant.
+
+Your task is to convert a time\PYGZhy{}series\PYGZhy{}based distractor specification into a realistic but misleading textual distractor context.
+
+Input:
+
+context:
+```\PYGZob{}context\PYGZcb{}```
+
+time\PYGZus{}series\PYGZus{}mode:
+```time\PYGZus{}series\PYGZus{}\PYGZob{}scope\PYGZcb{}\PYGZus{}\PYGZob{}feature\PYGZus{}type\PYGZcb{}```
+
+distractor\PYGZus{}history\PYGZus{}description:
+```\PYGZob{}distractor\PYGZus{}history\PYGZus{}description\PYGZcb{}```
+
+distractor\PYGZus{}future\PYGZus{}pattern:
+```\PYGZob{}distractor\PYGZus{}future\PYGZus{}pattern\PYGZcb{}```
+
+Goal:
+Generate 1 distractor context that:
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }follows the incorrect time\PYGZhy{}series interpretation,
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }is realistic and natural,
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }preserves strong surface similarity with the original context, but with no specific timestamps,
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }and remains misleading for solving the true forecasting task.
+
+General requirements:
+\PYG{k}{1.} Your content must base only on distractor\PYGZus{}history\PYGZus{}description and distractor\PYGZus{}future\PYGZus{}pattern. The distractor must be realistic and natural, and should be expressed using ONE of the following narrative styles:
+
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }conditioned:
+  express the distractor as a conditional tendency grounded in the observed pattern  
+  (e.g., \PYGZdq{}when recent values stay within a moderate range without strong upward movement, the series is unlikely to produce a sharp spike\PYGZdq{},
+         \PYGZdq{}under a relatively stable local segment, short\PYGZhy{}term fluctuations typically do not escalate into sustained peaks\PYGZdq{})
+
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }summary:
+  express the distractor as a concise but slightly biased characterization of the observed history  
+  (e.g., \PYGZdq{}recent values remain within a relatively narrow range with only mild variation, without a clear buildup toward a surge\PYGZdq{},
+         \PYGZdq{}the series shows stable short\PYGZhy{}term fluctuations without a dominant upward or cyclical pattern\PYGZdq{})
+
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }implication:
+  express the distractor as an inferred future consequence of the observed pattern  
+  (e.g., \PYGZdq{}this pattern suggests that the upcoming period will remain within the current operating range rather than exhibit a sharp spike\PYGZdq{},
+         \PYGZdq{}the observed behavior points to continued moderate variation instead of a pronounced peak event\PYGZdq{})
+
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }comparative:
+  express the distractor as a relative judgment between plausible interpretations  
+  (e.g., \PYGZdq{}the recent behavior appears more consistent with stable fluctuation than with a buildup toward a sharp peak\PYGZdq{},
+         \PYGZdq{}the pattern is closer to a flat or weakly varying regime than to a strongly periodic or surge\PYGZhy{}driven structure\PYGZdq{})
+
+Do not introduce specific structural assumptions that are not directly supported by the observed time series (e.g., exact peak timing, fixed number of peaks, or rigid cycle forms). Prefer weakening or reframing an existing pattern over specifying a new one.
+The future description must be a natural consequence of the described time\PYGZhy{}series pattern.
+\PYG{g+gs}{**There should be a clear inferential connection between the provided characterization and the future behavior.**}
+The future behavior should be framed as depending exactly on the described pattern, so that it reads as the future pattern would follow if that characterization of the history is correct (e.g., phrased in a way similar to \PYGZdq{}when this specific pattern occurs, the future tends to exhibit ...\PYGZdq{} or \PYGZdq{}under this pattern, the future would show ...\PYGZdq{}).
+The distractor\PYGZsq{}s modified history description should not be stated as a false factual replacement of the true history. Instead, it should be written as a plausible but misleading description of the observed series, such as an empirical pattern, a typical tendency, or an expected mode of behavior.
+Avoid abrupt or unsupported transitions from history description to future claims.
+
+\PYG{k}{2.} It must not be obviously wrong or nonsensical.
+\PYG{k}{3.} In \PYG{l+s+sb}{`context`}, you can only use the background information, no any other details.
+\PYG{k}{4.} It must not allow recovery of the correct answer (scenarios described in the \PYG{l+s+sb}{`context`}).
+\PYG{k}{5.} It must remain faithful to the incorrect time\PYGZhy{}series interpretation.
+\PYG{k}{6.} It must contradict the true future implicitly through the wrong interpretation, not by explicitly stating it is wrong.
+\PYG{k}{7.} Do not restate the original future\PYGZhy{}driving claim from the context when that claim would make the distractor valid evidence for the true forecast.
+
+High\PYGZhy{}confusability requirement:
+\PYG{k}{8.} However, despite this similarity, the distractor must NOT become valid evidence.
+
+Output format:
+Return a JSON object:
+
+\PYGZob{}
+  \PYGZdq{}distractors\PYGZdq{}: [
+    \PYGZob{}
+      \PYGZdq{}provides\PYGZdq{}: [\PYGZdq{}...\PYGZdq{}, ...],
+      \PYGZdq{}distractor\PYGZus{}type\PYGZdq{}: \PYGZdq{}timeseries\PYGZdq{},
+      \PYGZdq{}reason\PYGZdq{}: \PYGZdq{}short explanation of why this is a distractor and how it differs from the correct interpretation\PYGZdq{},
+      \PYGZdq{}time\PYGZus{}series\PYGZus{}scope\PYGZdq{}: \PYGZdq{}\PYGZob{}scope\PYGZcb{}\PYGZdq{},
+      \PYGZdq{}time\PYGZus{}series\PYGZus{}feature\PYGZus{}type\PYGZdq{}: \PYGZdq{}\PYGZob{}feature\PYGZus{}type\PYGZcb{}\PYGZdq{}
+    \PYGZcb{}
+  ]
+\PYGZcb{}
+
+The \PYGZdq{}provides\PYGZdq{} field should be a list of plain\PYGZhy{}text elements describing each detail the distractor content contains, without any formatting or meta instructions. The content should be directly usable as a document body without any post\PYGZhy{}processing. Do not follow the format of the Input in the \PYGZdq{}provides\PYGZdq{} content.
+The \PYGZdq{}provides\PYGZdq{} part should base solely on the distractor\PYGZus{}history\PYGZus{}description and distractor\PYGZus{}future\PYGZus{}pattern and the entity information.
+\end{MintedVerbatim}

@@ -1,0 +1,594 @@
+% Training Hyperparameters moved to main text (Section 4)
+\section{Dataset Construction}
+\label{app:dataset}
+
+Table~\ref{tab:qa_params} lists the QA generation parameters used for constructing FinTSR-Bench.
+All tasks use a 120-day input window of daily closing prices.
+Assessment tasks evaluate the current state and have no prediction horizon.
+For prediction tasks, Event Response and Support/Resistance use a 10-day forward horizon, while Drawdown Recovery, Volatility Forecast, Relative Performance, and Pair Convergence use a 20-day forward horizon.
+Table~\ref{tab:class_dist} shows the training set class distribution, confirming that all tasks are approximately balanced via undersampling.
+
+
+\begin{table}[h]
+\centering
+\caption{QA generation parameters.}
+\label{tab:qa_params}
+\vspace{5pt}
+\adjustbox{max width=\textwidth}{
+\begin{tabular}{ll}
+\toprule
+\textbf{Parameter} & \textbf{Value} \\
+\midrule
+Window length & 120 trading days \\
+Samples per task (raw) & 100{,}000 \\
+Cap per task (train) & 3{,}500 \\
+Cap per task (test) & 1{,}000 \\
+Correlation thresholds & pos $>$ 0.30, neg $<$ $-$0.10 \\
+Event threshold & $|z|$ $>$ 2.5 \\
+Rel.\ Perf.\ margin & 5\% \\
+Rel.\ Perf.\ forward window & 20 days \\
+S/R breakout margin & 3\% \\
+Drawdown Recovery min drawdown & 5\% \\
+Volatility Forecast change threshold & 25\% \\
+Pair Convergence spread margin & 3\% \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{\textbf{Training set class distribution.} All tasks are approximately class-balanced via undersampling (3,500 samples per task).}
+\label{tab:class_dist}
+\vspace{5pt}
+\adjustbox{max width=\textwidth}{
+\begin{tabular}{l|c|l}
+\toprule
+\textbf{Task} & \textbf{Classes} & \textbf{Distribution (\%)} \\
+\midrule
+Drawdown & 4 & A: 24.2, B: 24.3, C: 26.0, D: 25.5 \\
+Volatility Regime & 3 & A: 33.5, B: 33.1, C: 33.4 \\
+Trend Direction & 5 & A: 20.2, B: 20.4, C: 19.6, D: 21.0, E: 18.7 \\
+Correlation & 3 & A: 32.9, B: 34.2, C: 32.9 \\
+\midrule
+Event Response & 2 & A: 49.0, B: 51.0 \\
+Support/Resistance & 2 & A: 50.1, B: 49.9 \\
+Drawdown Recovery & 2 & A: 49.0, B: 51.0 \\
+Volatility Forecast & 2 & A: 48.9, B: 51.1 \\
+Relative Performance & 2 & A: 51.4, B: 48.6 \\
+Pair Convergence & 2 & A: 50.5, B: 49.5 \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\clearpage
+\textbf{Label construction algorithms.}
+We detail the labeling procedure for each prediction task to ensure reproducibility.
+\begin{itemize}
+\item \textbf{Event Response.} We compute daily returns and their z-scores over the 120-day window. A trading day with $|z| > 2.5$ is flagged as an ``event.'' The label is determined by comparing the 10-day post-event return direction with the event-day return: same direction $\rightarrow$ Persistence, opposite $\rightarrow$ Mean-reversion.
+\item \textbf{Support/Resistance.} We identify support (resistance) as the minimum (maximum) closing price over a rolling 60-day lookback window. If the current price is within 5\% of a key level, the sample is included. The label is determined by whether the price moves beyond the level by $>$3\% (Breakout) or stays within it (Bounce) over the next 10 days.
+\item \textbf{Drawdown Recovery.} We compute peak price as the running maximum over the window. Stocks with drawdown $>$5\% from peak are included. The label is Recovery if the price moves $>$3\% toward the peak over the next 20 days, and Deepens otherwise.
+\item \textbf{Volatility Forecast.} We compute the ratio of 20-day to 120-day return standard deviation. The label is Increase if the 20-day volatility computed at $t{+}20$ exceeds the current 20-day volatility by $>$25\%, and Decrease otherwise.
+\item \textbf{Relative Performance.} Given two stocks, the label is determined by which stock achieves a higher cumulative return over the next 20 days. Pairs with $<$5\% return difference are excluded to avoid ambiguous labels.
+\item \textbf{Pair Convergence.} We compute the normalized spread as $(P_A - P_B) / (P_A + P_B)$, where $P_A$ and $P_B$ are the closing prices. The label is Convergence if $|\text{spread}_{t+20}| < |\text{spread}_t|$, and Divergence otherwise. Pairs with spread $<$3\% are excluded.
+\end{itemize}
+To avoid overlapping-window leakage, each task uses a task-specific random seed for sample selection, and we enforce a minimum gap of 20 trading days between consecutive samples from the same stock.
+
+\clearpage
+\section{Forecasting Baseline Protocol}
+\label{app:forecast_protocol}
+
+All forecasting baselines use the same 120-day input window as FinSTaR and predict over the task-specific horizon (10 or 20 days).
+No exogenous covariates are used; all models receive only univariate closing prices.
+Predicted price trajectories are converted to classification labels using the same thresholds as the QA generation (e.g., direction of predicted return for Event Response, predicted volatility ratio for Volatility Forecast).
+
+\textbf{Statistical methods} (applied without hyperparameter tuning):
+\begin{itemize}
+\item \textbf{Last Value.} Predicts the last observed value for all future steps (naive baseline).
+\item \textbf{Moving Average (MA).} Predicts the mean of the last $k$ observations ($k{=}20$).
+\item \textbf{Exponential Smoothing (ETS)~\cite{ets}.} Weighted average with exponentially decaying weights; captures level and trend.
+\item \textbf{Drift.} Extrapolates a linear trend from the first to the last observed value.
+\item \textbf{Momentum.} Predicts continuation of the recent return direction over the past 20 days.
+\end{itemize}
+
+\textbf{Deep learning models} (trained per-task using AutoGluon TimeSeries with default hyperparameters and early stopping):
+\begin{itemize}
+\item \textbf{DLinear~\cite{dlinear}.} Decomposes TS into trend and remainder via moving average, then applies linear layers.
+\item \textbf{DeepAR~\cite{deepar}.} Autoregressive RNN that produces probabilistic forecasts via learned likelihood parameters.
+\item \textbf{PatchTST~\cite{patchtst}.} Patch-based Transformer that segments TS into subseries-level patches for efficient attention.
+\item \textbf{TFT~\cite{tft}.} Temporal Fusion Transformer with variable selection, gating, and multi-horizon attention.
+\item \textbf{TiDE~\cite{tide}.} MLP-based encoder-decoder with dense residual connections for long-term forecasting.
+\end{itemize}
+
+\textbf{Pre-trained forecasting models} (zero-shot, no fine-tuning):
+\begin{itemize}
+\item \textbf{Chronos-1~\cite{chronos2024}.} Tokenizes TS values into discrete bins and uses a T5-based language model for forecasting.
+\item \textbf{Chronos-2~\cite{chronos2024}.} Updated version with improved tokenization and larger pre-training corpus.
+\end{itemize}
+
+\clearpage
+\section{Scenario Templates}
+\label{app:scenario_templates}
+
+Table~\ref{tab:scenario_templates} lists the scenario templates used in Scenario-Aware CoT for all six prediction tasks. For each task and answer, we define three scenarios (base, adverse, favorable) grounded in financial domain knowledge. Assessment tasks (Drawdown, Volatility Regime, Trend Direction, Correlation) use deterministic Compute-in-CoT and do not require scenario templates.
+
+\begin{table}[h]
+\centering
+\caption{\textbf{Scenario templates for prediction tasks.} Each (task, answer) pair has three domain-specific scenarios.}
+\label{tab:scenario_templates}
+\vspace{6pt}
+\adjustbox{max width=\textwidth}{
+\footnotesize
+\begin{tabular}{l|l|p{4cm}|p{4cm}|p{4cm}}
+\toprule
+\textbf{Task} & \textbf{Answer} & \textbf{Base Case} & \textbf{Adverse} & \textbf{Favorable} \\
+\midrule
+\multirow{4.5}{*}{\textbf{Event Response}} & Mean-reversion & Extreme move partially reverses as market recognizes overreaction & Secondary catalyst reinforces shock direction & Positive news accelerates recovery \\
+\cmidrule{2-5}
+ & Persistence & Shock reflects genuine new information being priced in & Mean-reversion forces prove it was an overreaction & Additional confirming news amplifies the move \\
+\midrule
+\multirow{4.5}{*}{\textbf{Support/Resistance}} & Breakout & Price breaks through with sustained momentum & False breakout traps traders, price reverses & High volume accelerates move beyond level \\
+\cmidrule{2-5}
+ & Bounce & Key level holds as institutional orders defend it & Sustained pressure overwhelms the level & Strong bounce triggers significant reversal \\
+\midrule
+\multirow{4.5}{*}{\textbf{Drawdown Recovery}} & Recovery & Drawdown stabilizes, value buyers accumulate & Cause worsens (earnings revision, guidance cut) & Positive catalyst triggers V-shaped recovery \\
+\cmidrule{2-5}
+ & Further decline & Selling pressure continues, drawdown deepens & Surprise positive development reverses decline & Risk-off sentiment compounds weakness \\
+\midrule
+\multirow{4.5}{*}{\textbf{Volatility Forecast}} & Increase & Volatility clustering continues, uncertainty persists & Uncertainty resolves, volatility collapses & New uncertainty compounds existing volatility \\
+\cmidrule{2-5}
+ & Decrease & Volatility mean-reverts as shock dissipates & Unexpected event triggers new spike & Broad market calming accelerates compression \\
+\midrule
+\multirow{4.5}{*}{\textbf{Relative Performance}} & Stock A & Momentum trends persist, Stock A continues trajectory & Stock A headwind, Stock B catalyst reverses gap & Sector tailwinds boost Stock A's advantage \\
+\cmidrule{2-5}
+ & Stock B & Stock B strengthening continues, Stock A fades & Stock A recovers, re-establishing outperformance & Stock B catalyst (upgrade, M\&A) widens lead \\
+\midrule
+\multirow{4.5}{*}{\textbf{Pair Convergence}} & Converge & Spread narrows as co-movement reasserts & Structural change sustains divergence & Common catalyst forces rapid convergence \\
+\cmidrule{2-5}
+ & Diverge & Different fundamentals sustain widening spread & Common catalyst narrows the spread & Company-specific event accelerates divergence \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\clearpage
+\section{Full Task Examples}
+\label{app:tasks}
+
+We present actual model input, generated CoT reasoning, and output for all ten tasks. Each example shows a correctly predicted sample from Test~A, with the corresponding price series visualization.
+
+\subsection{Assessment Tasks (Compute-in-CoT)}
+
+%%% F1 DRAWDOWN %%%
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/example_F1_drawdown.pdf}
+\vspace{4pt}
+
+\textbf{Task: Drawdown --- Ticker: PEP --- GT: (B) Pullback} \\[4pt]
+\begin{minipage}{0.95\textwidth}
+\fbox{\parbox{\dimexpr\textwidth-2\fboxsep-2\fboxrule}{
+\textbf{Input:} You are analyzing the stock PEP. Below are the daily closing prices for the most recent 120 trading days: [\textit{prices shown above}]. Based on these prices, assess the current drawdown phase. \\
+\hspace{6pt}(A) At/Near Peak ($<$3\%) \\
+\hspace{6pt}(B) Pullback (3--10\%) \\
+\hspace{6pt}(C) Correction (10--20\%) \\
+\hspace{6pt}(D) Severe Decline ($>$20\%)
+}} \\[4pt]
+\fbox{\parbox{\dimexpr\textwidth-2\fboxsep-2\fboxrule}{
+\textbf{Output:} \\[6pt]
+\texttt{<think>} \\[4pt]
+Step 1 --- Find the peak price: \\
+Scanning the 120-day series, the highest price is 170.39 (around day 32). \\[6pt]
+Step 2 --- Current price: \\
+The last price in the series is 162.65. \\[6pt]
+Step 3 --- Calculate drawdown: \\
+Drawdown = (Peak $-$ Current) / Peak = (170.39 $-$ 162.65) / 170.39 = 4.5\% \\[6pt]
+Step 4 --- Classify: \\
+4.5\% is between 3\% and 10\%, which corresponds to (B) Pullback. \\[4pt]
+\texttt{</think>} \\
+\texttt{<answer>(B)</answer>}
+}}
+\end{minipage}
+\caption{(Single-Assessment) Example of Drawdown task.}
+\vspace{15pt}
+\end{figure}
+
+%%% F2 CORRELATION %%%
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/example_F2_correlation.pdf}
+\vspace{4pt}
+
+\textbf{Task: Correlation --- Tickers: AMT vs CDNS --- GT: (B) Negative correlation} \\[4pt]
+\begin{minipage}{0.95\textwidth}
+\fbox{\parbox{\dimexpr\textwidth-2\fboxsep-2\fboxrule}{
+\textbf{Input:} You are analyzing the relationship between two stocks. Stock A (AMT) and Stock B (CDNS) daily closing prices (120 days each): [\textit{prices shown above}]. Determine the correlation between their daily returns. \\
+\hspace{6pt}(A) Positive \\
+\hspace{6pt}(B) Negative \\
+\hspace{6pt}(C) No significant correlation
+}} \\[4pt]
+\fbox{\parbox{\dimexpr\textwidth-2\fboxsep-2\fboxrule}{
+\textbf{Output:} \\[6pt]
+\texttt{<think>} \\[4pt]
+Step 1 --- Compare price changes in 12 periods ($\sim$10 days each): \\
+\hspace{1em}Days 1-10: A=+1.6\%, B=$-$6.0\% \\
+\hspace{1em}Days 11-20: A=+7.8\%, B=+3.2\% \\
+\hspace{1em}Days 21-30: A=$-$1.0\%, B=+4.5\% \\
+\hspace{1em}Days 31-40: A=+2.3\%, B=$-$5.1\% \\
+\hspace{1em}Days 41-50: A=$-$0.8\%, B=+1.9\% \\
+\hspace{1em}Days 51-60: A=+3.1\%, B=$-$2.4\% \\
+\hspace{1em}Days 61-70: A=$-$2.6\%, B=+4.0\% \\
+\hspace{1em}Days 71-80: A=+1.5\%, B=$-$1.8\% \\
+\hspace{1em}Days 81-90: A=$-$1.9\%, B=+2.7\% \\
+\hspace{1em}Days 91-100: A=+0.4\%, B=$-$0.6\% \\
+\hspace{1em}Days 101-110: A=$-$1.5\%, B=+2.2\% \\
+\hspace{1em}Days 111-120: A=+2.4\%, B=$-$3.1\% \\[6pt]
+Step 2 --- Pattern: \\
+When A rises, B tends to fall, and when A falls, B tends to rise. The two stocks move in opposite directions across most periods. \\[6pt]
+Step 3 --- negative correlation $\rightarrow$ (B). \\[4pt]
+\texttt{</think>} \\
+\texttt{<answer>(B)</answer>}
+}}
+\end{minipage}
+\caption{(Multi-Assessment) Example of Correlation task.}
+\end{figure}
+
+%%% F5 VOLATILITY %%%
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/example_F5_volatility.pdf}
+\vspace{4pt}
+
+\textbf{Task: Volatility Regime --- Ticker: COF --- GT: (B) Normal volatility} \\[4pt]
+\begin{minipage}{0.95\textwidth}
+\fbox{\parbox{\dimexpr\textwidth-2\fboxsep-2\fboxrule}{
+\textbf{Input:} You are analyzing the stock COF. Below are the daily closing prices (120 days): [\textit{prices shown above}]. Compute the ratio of recent (last 20 days) to overall (120-day) volatility. \\
+\hspace{6pt}(A) Low ($<$0.6) \\
+\hspace{6pt}(B) Normal (0.6--1.6) \\
+\hspace{6pt}(C) High ($>$1.6)
+}} \\[4pt]
+\fbox{\parbox{\dimexpr\textwidth-2\fboxsep-2\fboxrule}{
+\textbf{Output:} \\[6pt]
+\texttt{<think>} \\[4pt]
+Step 1 --- Compute daily returns from prices: \\
+\hspace{1em}e.g., (54.32$\rightarrow$54.51): +0.35\%, (54.51$\rightarrow$54.10): $-$0.75\%, (54.10$\rightarrow$54.78): +1.26\% \\
+\hspace{1em}\ldots \\[6pt]
+Step 2 --- Overall volatility (std of all returns): 2.02\% \\[6pt]
+Step 3 --- Recent 20-day volatility: 1.50\% \\[6pt]
+Step 4 --- Ratio = 1.50 / 2.02 = 0.74 \\
+Recent volatility is close to the long-term average --- normal conditions. \\
+$\rightarrow$ (B) normal volatility. \\[4pt]
+\texttt{</think>} \\
+\texttt{<answer>(B)</answer>}
+}}
+\end{minipage}
+\caption{(Single-Assessment) Example of Volatility Regime task.}
+\vspace{15pt}
+\end{figure}
+
+%%% F6 TREND %%%
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/example_F6_trend.pdf}
+\vspace{4pt}
+
+\textbf{Task: Trend Direction --- Ticker: INTC --- GT: (E) Strong Downtrend} \\[4pt]
+\begin{minipage}{0.95\textwidth}
+\fbox{\parbox{\dimexpr\textwidth-2\fboxsep-2\fboxrule}{
+\textbf{Input:} You are analyzing the stock INTC. Below are the daily closing prices (120 days): [\textit{prices shown above}]. Classify the overall trend direction. \\
+\hspace{6pt}(A) Strong Uptrend ($>$20\%) \\
+\hspace{6pt}(B) Mild Uptrend (5--20\%) \\
+\hspace{6pt}(C) Sideways ($-$5\% to +5\%) \\
+\hspace{6pt}(D) Mild Downtrend (5--20\% decline) \\
+\hspace{6pt}(E) Strong Downtrend ($>$20\% decline)
+}} \\[4pt]
+\fbox{\parbox{\dimexpr\textwidth-2\fboxsep-2\fboxrule}{
+\textbf{Output:} \\[6pt]
+\texttt{<think>} \\[4pt]
+Step 1 --- Read start and end prices: \\
+Start (day 1): 30.27 \\
+End (day 120): 22.47 \\[6pt]
+Step 2 --- Compute cumulative return: \\
+Return = (22.47 $-$ 30.27) / 30.27 = $-$25.8\% \\[6pt]
+Step 3 --- Classify: \\
+$-$25.8\% $\rightarrow$ (E) Strong Downtrend ($<-$20\%). \\[4pt]
+\texttt{</think>} \\
+\texttt{<answer>(E)</answer>}
+}}
+\end{minipage}
+\caption{(Single-Assessment) Example of Trend Direction task.}
+\end{figure}
+
+\clearpage
+\subsection{Prediction Tasks (Scenario-Aware CoT)}
+
+%%% F3 EVENT %%%
+\begin{figure}[h]
+\vspace{-10pt}
+\centering
+\includegraphics[width=0.73\textwidth]{figures/example_F3_event.pdf}
+\vspace{1pt}
+
+\textbf{Task: Event Response --- Ticker: C --- GT: (B) Persistence} \\[4pt]
+\begin{minipage}{0.95\textwidth}
+\fbox{\parbox{\dimexpr\textwidth-2\fboxsep-2\fboxrule}{
+\textbf{Input:} You are analyzing the stock C. Below are the daily closing prices (120 days): [\textit{prices shown above}]. The stock just experienced a significant positive shock. Predict the outcome over the next 10 days. \\
+\hspace{6pt}(A) Mean-reversion \\
+\hspace{6pt}(B) Persistence
+}} \\[4pt]
+\fbox{\parbox{\dimexpr\textwidth-2\fboxsep-2\fboxrule}{
+\textbf{Output:} \\[6pt]
+\texttt{<think>} \\[4pt]
+Step 1 --- Event: positive shock, z=2.20, return=+1.85\%. \\[6pt]
+Step 2 --- Pre-event trend: flat. \\[6pt]
+Step 3 --- Scenario analysis: \\
+\hspace{2em}$\bullet$ \textit{Base case} (most probable --- no major external events): \\
+\hspace{2.7em}The positive shock reflects genuine new information being priced in. The market continues to absorb the news over the following days, sustaining the move in the same direction. \\[4pt]
+\hspace{2em}$\bullet$ \textit{Adverse scenario} (external shock reverses expectation): \\
+\hspace{2.7em}Mean-reversion forces kick in as profit-taking and overreaction corrections pull the price back toward pre-event levels. \\[4pt]
+\hspace{2em}$\bullet$ \textit{Favorable scenario} (catalyst strengthens expectation): \\
+\hspace{2.7em}Additional confirming news (e.g., earnings beat, upgrade) amplifies the move and accelerates persistence. \\[6pt]
+Step 4 --- Scenario assessment: \\
+The base case and favorable scenario (2 of 3) support Persistence. \\
+The adverse scenario requires a specific external trigger not present in current data. \\
+Without new information, the base case is the most probable outcome. \\[6pt]
+Step 5 --- Judgment: Base case favors Persistence $\rightarrow$ (B). \\[4pt]
+\texttt{</think>} \\
+\texttt{<answer>(B)</answer>}
+}}
+\end{minipage}
+\caption{(Single-Prediction) Example of Event Response task.}
+\vspace{-40pt}
+\end{figure}
+
+%%% F7 S/R %%%
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/example_F7_breakout.pdf}
+\vspace{4pt}
+
+\textbf{Task: Support/Resistance --- Ticker: MET --- GT: (B) Bounce} \\[4pt]
+\begin{minipage}{0.95\textwidth}
+\fbox{\parbox{\dimexpr\textwidth-2\fboxsep-2\fboxrule}{
+\textbf{Input:} You are analyzing the stock MET. Below are the daily closing prices (120 days): [\textit{prices shown above}]. The stock is currently near a key support level. Predict the behavior over the next 10 days. \\
+\hspace{6pt}(A) Breakout \\
+\hspace{6pt}(B) Bounce
+}} \\[4pt]
+\fbox{\parbox{\dimexpr\textwidth-2\fboxsep-2\fboxrule}{
+\textbf{Output:} \\[6pt]
+\texttt{<think>} \\[4pt]
+Step 1 --- Key level: support at 64.47. \\[6pt]
+Step 2 --- Proximity: 1.9\%. \\[6pt]
+Step 3 --- Scenario analysis: \\
+\hspace{2em}$\bullet$ \textit{Base case} (most probable --- no major external events): \\
+\hspace{2.7em}The key level holds as institutional orders defend it. Price reverses direction after testing the level. \\[4pt]
+\hspace{2em}$\bullet$ \textit{Adverse scenario} (external shock reverses expectation): \\
+\hspace{2.7em}Sustained pressure eventually overwhelms the level, leading to a delayed breakout. \\[4pt]
+\hspace{2em}$\bullet$ \textit{Favorable scenario} (catalyst strengthens expectation): \\
+\hspace{2.7em}A strong bounce off the level triggers a significant reversal move in the opposite direction. \\[6pt]
+Step 4 --- Scenario assessment: \\
+The base case and favorable scenario (2 of 3) support Bounce. \\
+The adverse scenario requires a specific external trigger not present in current data. \\
+Without new information, the base case is the most probable outcome. \\[6pt]
+Step 5 --- Judgment: Base case favors Bounce $\rightarrow$ (B). \\[4pt]
+\texttt{</think>} \\
+\texttt{<answer>(B)</answer>}
+}}
+\end{minipage}
+\caption{(Single-Prediction) Example of Support/Resistance task.}
+\end{figure}
+
+%%% F4 MOMENTUM %%%
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/example_F4_momentum.pdf}
+\vspace{4pt}
+
+\textbf{Task: Relative Performance --- Tickers: MPC vs COF --- GT: (A) Stock A outperforms} \\[4pt]
+\begin{minipage}{0.95\textwidth}
+\fbox{\parbox{\dimexpr\textwidth-2\fboxsep-2\fboxrule}{
+\textbf{Input:} You are comparing two stocks. Stock A (MPC) and Stock B (COF) daily closing prices (120 days each): [\textit{prices shown above}]. Predict which stock will have a higher return over the next 20 days. \\
+\hspace{6pt}(A) Stock A outperforms \\
+\hspace{6pt}(B) Stock B outperforms
+}} \\[4pt]
+\fbox{\parbox{\dimexpr\textwidth-2\fboxsep-2\fboxrule}{
+\textbf{Output:} \\[6pt]
+\texttt{<think>} \\[4pt]
+Step 1 --- Comparing MPC vs COF. \\[6pt]
+Step 2 --- Forward window: 20 days. \\[6pt]
+Step 3 --- Scenario analysis: \\
+\hspace{2em}$\bullet$ \textit{Base case} (most probable --- no major external events): \\
+\hspace{2.7em}Stock A's recent strengthening continues, while Stock B's momentum fades. The relative performance gap widens further in A's favor. \\[4pt]
+\hspace{2em}$\bullet$ \textit{Adverse scenario} (external shock reverses expectation): \\
+\hspace{2.7em}A company-specific headwind hits Stock A (e.g., earnings miss, regulatory issue), eroding its lead. \\[4pt]
+\hspace{2em}$\bullet$ \textit{Favorable scenario} (catalyst strengthens expectation): \\
+\hspace{2.7em}Sector tailwinds (e.g., favorable commodity prices) boost Stock A and widen its outperformance. \\[6pt]
+Step 4 --- Scenario assessment: \\
+The base case and favorable scenario (2 of 3) support Stock A outperforms. \\
+The adverse scenario requires a specific external trigger not present in current data. \\
+Without new information, the base case is the most probable outcome. \\[6pt]
+Step 5 --- Judgment: Base case favors Stock A outperforms $\rightarrow$ (A). \\[4pt]
+\texttt{</think>} \\
+\texttt{<answer>(A)</answer>}
+}}
+\end{minipage}
+\caption{(Multi-Prediction) Example of Relative Performance task.}
+\vspace{15pt}
+\end{figure}
+
+%%% F8 DD RECOVERY %%%
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/example_F8_drawdown_recovery.pdf}
+\vspace{4pt}
+
+\textbf{Task: Drawdown Recovery --- Ticker: IVZ --- GT: (B) Deepens} \\[4pt]
+\begin{minipage}{0.95\textwidth}
+\fbox{\parbox{\dimexpr\textwidth-2\fboxsep-2\fboxrule}{
+\textbf{Input:} You are analyzing the stock IVZ. Below are the daily closing prices: [\textit{prices shown above}]. The stock has experienced a drawdown of 25.4\% from its recent peak. Predict the behavior over the next 20 days. \\
+\hspace{6pt}(A) Recovery \\
+\hspace{6pt}(B) Deepens
+}} \\[4pt]
+\fbox{\parbox{\dimexpr\textwidth-2\fboxsep-2\fboxrule}{
+\textbf{Output:} \\[6pt]
+\texttt{<think>} \\[4pt]
+Step 1 --- Drawdown: 25.4\% (peak=16.18, current=12.07). \\[6pt]
+Step 2 --- Peak was 62 days ago. \\[6pt]
+Step 3 --- Scenario analysis: \\
+\hspace{2em}$\bullet$ \textit{Base case} (most probable --- no major external events): \\
+\hspace{2.7em}Selling pressure continues as the fundamental weakness persists. The drawdown deepens before eventually finding a floor. \\[4pt]
+\hspace{2em}$\bullet$ \textit{Adverse scenario} (external shock reverses expectation): \\
+\hspace{2.7em}A surprise positive development reverses the decline --- but this requires a specific external trigger. \\[4pt]
+\hspace{2em}$\bullet$ \textit{Favorable scenario} (catalyst strengthens expectation): \\
+\hspace{2.7em}The decline accelerates as market-wide risk-off sentiment compounds the stock-specific weakness. \\[6pt]
+Step 4 --- Scenario assessment: \\
+The base case and favorable scenario (2 of 3) support Deepens. \\
+The adverse scenario requires a specific external trigger not present in current data. \\
+Without new information, the base case is the most probable outcome. \\[6pt]
+Step 5 --- Judgment: Base case favors Deepens $\rightarrow$ (B). \\[4pt]
+\texttt{</think>} \\
+\texttt{<answer>(B)</answer>}
+}}
+\end{minipage}
+\caption{(Single-Prediction) Example of Drawdown Recovery task.}
+\end{figure}
+
+%%% F9 VOL FORECAST %%%
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/example_F9_volatility_forecast.pdf}
+\vspace{4pt}
+
+\textbf{Task: Volatility Forecast --- Ticker: LIN --- GT: (B) Volatility decreases} \\[4pt]
+\begin{minipage}{0.95\textwidth}
+\fbox{\parbox{\dimexpr\textwidth-2\fboxsep-2\fboxrule}{
+\textbf{Input:} You are analyzing the stock LIN. Below are the daily closing prices: [\textit{prices shown above}]. The current volatility ratio (recent 20-day vs overall) is 1.43. Predict how volatility will change over the next 20 days. \\
+\hspace{6pt}(A) Increases \\
+\hspace{6pt}(B) Decreases
+}} \\[4pt]
+\fbox{\parbox{\dimexpr\textwidth-2\fboxsep-2\fboxrule}{
+\textbf{Output:} \\[6pt]
+\texttt{<think>} \\[4pt]
+Step 1 --- Vol: recent=2.59\%, long=1.81\%, ratio=1.43. \\[6pt]
+Step 2 --- Volatility pattern assessed. \\[6pt]
+Step 3 --- Scenario analysis: \\
+\hspace{2em}$\bullet$ \textit{Base case} (most probable --- no major external events): \\
+\hspace{2.7em}Volatility mean-reverts toward the long-run level as the recent shock dissipates and the market normalizes. \\[4pt]
+\hspace{2em}$\bullet$ \textit{Adverse scenario} (external shock reverses expectation): \\
+\hspace{2.7em}A new source of uncertainty (earnings, macro news) triggers another volatility spike. \\[4pt]
+\hspace{2em}$\bullet$ \textit{Favorable scenario} (catalyst strengthens expectation): \\
+\hspace{2.7em}Market calming accelerates as uncertainty resolves, pushing volatility down faster than baseline. \\[6pt]
+Step 4 --- Scenario assessment: \\
+The base case and favorable scenario (2 of 3) support Vol decreases. \\
+The adverse scenario requires a specific external trigger not present in current data. \\
+Without new information, the base case is the most probable outcome. \\[6pt]
+Step 5 --- Judgment: Base case favors Vol decreases $\rightarrow$ (B). \\[4pt]
+\texttt{</think>} \\
+\texttt{<answer>(B)</answer>}
+}}
+\end{minipage}
+\caption{(Single-Prediction) Example of Volatility Forecast task.}
+\vspace{15pt}
+\end{figure}
+
+%%% F10 PAIR CONVERGENCE %%%
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/example_F10_pair_convergence.pdf}
+\vspace{4pt}
+
+\textbf{Task: Pair Convergence --- Tickers: AMD vs HD --- GT: (B) Divergence} \\[4pt]
+\begin{minipage}{0.95\textwidth}
+\fbox{\parbox{\dimexpr\textwidth-2\fboxsep-2\fboxrule}{
+\textbf{Input:} You are comparing two stocks. Stock A (AMD) and Stock B (HD) daily closing prices: [\textit{prices shown above}]. The price spread (normalized difference) is 0.113. Predict how the spread will change over the next 20 days. \\
+\hspace{6pt}(A) Convergence \\
+\hspace{6pt}(B) Divergence
+}} \\[4pt]
+\fbox{\parbox{\dimexpr\textwidth-2\fboxsep-2\fboxrule}{
+\textbf{Output:} \\[6pt]
+\texttt{<think>} \\[4pt]
+Step 1 --- Pair: AMD, HD. \\[6pt]
+Step 2 --- Current spread: 0.113. \\[6pt]
+Step 3 --- Scenario analysis: \\
+\hspace{2em}$\bullet$ \textit{Base case} (most probable --- no major external events): \\
+\hspace{2.7em}Different fundamentals sustain the widening spread. The divergence continues as the two stocks respond to distinct sector dynamics. \\[4pt]
+\hspace{2em}$\bullet$ \textit{Adverse scenario} (external shock reverses expectation): \\
+\hspace{2.7em}A common catalyst (e.g., index rebalancing, macro shock) narrows the spread by forcing temporary co-movement. \\[4pt]
+\hspace{2em}$\bullet$ \textit{Favorable scenario} (catalyst strengthens expectation): \\
+\hspace{2.7em}Company-specific events accelerate the divergence further as one stock's fundamentals diverge from the other's. \\[6pt]
+Step 4 --- Scenario assessment: \\
+The base case and favorable scenario (2 of 3) support Divergence. \\
+The adverse scenario requires a specific external trigger not present in current data. \\
+Without new information, the base case is the most probable outcome. \\[6pt]
+Step 5 --- Judgment: Base case favors Divergence $\rightarrow$ (B). \\[4pt]
+\texttt{</think>} \\
+\texttt{<answer>(B)</answer>}
+}}
+\end{minipage}
+\caption{(Multi-Prediction) Example of Pair Convergence task.}
+\end{figure}
+
+
+
+
+% \clearpage
+% \section{Prediction Calibration}
+% \label{app:calibration}
+%
+% The Brier score~\cite{brier1950} is a proper scoring rule that measures the accuracy of probabilistic predictions.
+% For a binary classification task, it is defined as:
+% \[
+% \text{BS} = \frac{1}{N} \sum_{i=1}^{N} (f_i - o_i)^2
+% \]
+% where $f_i \in [0, 1]$ is the predicted probability and $o_i \in \{0, 1\}$ is the actual outcome.
+% Lower Brier scores indicate better calibration, with 0 representing perfect prediction and 0.25 corresponding to random guessing on a balanced binary task.
+% Since our framework outputs hard classification labels rather than soft probabilities, we set $f_i = 1$ when the model predicts the correct class and $f_i = 0$ otherwise, reducing the Brier score to $(1 - \text{accuracy})$.
+%
+% Table~\ref{tab:brier} reports per-task Brier scores on the six binary prediction tasks for FinSTaR and two zero-shot baselines.
+% FinSTaR achieves the best Brier score on all six tasks, with the largest improvements on Support/Resistance and Volatility Forecast.
+% Extending to soft probabilistic outputs (e.g., via confidence calibration) is a promising direction for future work.
+%
+% \begin{table}[h]
+% \centering
+% \caption{\textbf{Brier scores on prediction tasks (Test A).} Lower is better. FinSTaR achieves the best score on all six tasks.}
+% \label{tab:brier}
+% \vspace{5pt}
+% \adjustbox{max width=\textwidth}{
+% \begin{tabular}{l|cc|cc|cc}
+% \toprule
+%  & \multicolumn{2}{c|}{\textbf{Qwen2.5-7B (ZS)}} & \multicolumn{2}{c|}{\textbf{TimeOmni-1 (ZS)}} & \multicolumn{2}{c}{\textbf{FinSTaR (Ours)}} \\
+% \cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
+% \textbf{Task} & \textbf{Acc.} & \textbf{Brier} & \textbf{Acc.} & \textbf{Brier} & \textbf{Acc.} & \textbf{Brier} \\
+% \midrule
+% Event Response & 52.2 & 0.478 & 49.1 & 0.509 & \textbf{57.2} & \textbf{0.428} \\
+% Support/Resistance & 51.2 & 0.488 & 54.1 & 0.459 & \textbf{80.5} & \textbf{0.195} \\
+% Relative Performance & 49.2 & 0.508 & 50.7 & 0.493 & \textbf{51.5} & \textbf{0.485} \\
+% Drawdown Recovery & 54.1 & 0.459 & 59.3 & 0.407 & \textbf{74.4} & \textbf{0.256} \\
+% Volatility Forecast & 44.9 & 0.551 & 58.2 & 0.418 & \textbf{79.5} & \textbf{0.205} \\
+% Pair Convergence & 50.4 & 0.496 & 48.4 & 0.516 & \textbf{65.8} & \textbf{0.342} \\
+% \midrule
+% Average & 50.3 & 0.497 & 53.3 & 0.467 & \textbf{68.2} & \textbf{0.319} \\
+% \bottomrule
+% \end{tabular}
+% }
+% \end{table}
+
+% \begin{figure}[h]
+% \centering
+% \begin{subfigure}[t]{0.48\textwidth}
+% \includegraphics[width=\textwidth]{figures/placeholder_epoch_assess.pdf}
+% \caption{Assessment tasks converge by EP1--2.}
+% \end{subfigure}
+% \hfill
+% \begin{subfigure}[t]{0.48\textwidth}
+% \includegraphics[width=\textwidth]{figures/placeholder_epoch_predict.pdf}
+% \caption{Prediction tasks improve until EP3--4.}
+% \end{subfigure}
+% \caption{\textbf{Epoch progression.} Assessment tasks saturate early, while prediction tasks require more training to internalize scenario reasoning.}
+% \label{fig:epoch}
+% \end{figure}
+
+% Data Efficiency table moved to main text (Section 6)
+
+\input{sections/appendix_qualitative}

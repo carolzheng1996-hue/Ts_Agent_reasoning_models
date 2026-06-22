@@ -1,0 +1,99 @@
+\section{FinTSR-Bench}
+\label{sec:benchmark}
+
+We instantiate the proposed $2 \times 2$ taxonomy in the financial domain as \textbf{FinTSR-Bench}, both a training dataset and evaluation benchmark for Financial TSRMs.
+As shown in Table~\ref{tab:task_spec}, the proposed
+ten tasks
+cover all four capability categories in our taxonomy.
+
+
+% \setlength{\columnsep}{1.5pt} 
+% \begin{wraptable}{r}{0.49\textwidth}
+% \vspace{-12pt}
+% \centering
+% \caption{Data splits for OOD evaluation.}
+% \label{tab:splits}
+% \adjustbox{max width=0.43\textwidth}{
+% \begin{tabular}{lcccc}
+% \toprule
+% \textbf{Split} & \textbf{Stocks} & \textbf{Period} & \textbf{Universe} & \textbf{Period} \\
+% \midrule
+% Train & 200 & 2010--2022 & --- & --- \\
+% \cmidrule(lr){1-5}
+% Test A & 200 & 2023--2025 & ID & OOD \\
+% Test B & 50 & 2010--2022 & OOD & ID \\
+% Test C & 50 & 2023--2025 & OOD & OOD \\
+% \bottomrule
+% \end{tabular}
+% }
+% \vspace{-10pt}
+% \end{wraptable}
+\setlength{\columnsep}{9pt} 
+\begin{wraptable}{r}{0.47\textwidth}
+\vspace{-12pt}
+\centering
+\caption{\textbf{Data splits of FinTSR-Bench.} Three test sets systematically vary stock universe and time period to evaluate both \textcolor{red}{ID} and \textcolor{blue}{OOD}.}
+\label{tab:splits}
+\adjustbox{max width=0.47\textwidth}{
+\begin{tabular}{cc|cc|cc}
+\toprule
+\multicolumn{2}{c} {\textbf{Split}} & \textbf{\# Stocks} & \textbf{Period} & \textbf{Universe} & \textbf{Period} \\
+\midrule
+\multicolumn{2}{c|}{Train} & \textcolor{red}{200} & \textcolor{red}{2010--2022} & --- & --- \\
+\cmidrule(lr){1-6}
+Test & A & \textcolor{red}{200} & \textcolor{blue}{2023--2025} & ID & OOD \\
+Test & B & \textcolor{blue}{50} & \textcolor{red}{2010--2022} & OOD & ID \\
+Test & C & \textcolor{blue}{50} & \textcolor{blue}{2023--2025} & OOD & OOD \\
+\bottomrule
+\end{tabular}
+}
+\vspace{-10pt}
+\end{wraptable}
+We use the top 250 S\&P~500 stocks by market capitalization as of January 2024, with daily closing prices from 2010--2025 (${\sim}3{,}750$ trading days).
+The top 200 stocks serve as in-domain (ID) training data, while the remaining 50 are held out for OOD evaluation.
+As shown in Table~\ref{tab:splits}, we split along both the stock universe and time period axes, yielding three test sets that 
+%systematically 
+vary ID vs.\ OOD conditions.
+Each task has ${\sim}3{,}500$ training samples
+%(class-balanced via undersampling)
+and ${\sim}1{,}000$ test samples per split, totaling ${\sim}35{,}000$ for training and ${\sim}10{,}000$ per test set.
+All label definitions (prediction horizons, thresholds, and class distributions balanced via undersampling) are provided in Appendix~\ref{app:dataset}, along with task examples in Appendix~\ref{app:tasks}.
+%, respectively.
+
+
+\begin{table}[t]
+\vspace{-15pt}
+\centering
+\caption{
+%\textbf{FinTSR-Bench task specifications.} 
+\textbf{Task specifications of FinTSR-Bench.} 
+Ten tasks span four capability categories across two axes: 
+(data) single-stock vs. multi-stock and (temporal) assessment vs. prediction.
+Matching symbols ($^\dagger$, $^\ddagger$, $^\S$) denote assessment--prediction pairs that share the same underlying financial skill.}
+\label{tab:task_spec}
+\vspace{5pt}
+\adjustbox{max width=\textwidth}{
+\begin{tabular}{c|c|l|c|l}
+\toprule
+\multicolumn{2}{c|}{\textbf{Task category}} & \multicolumn{1}{c|}{\multirow{2.5}{*}{\textbf{Task}}} & \multirow{2.5}{*}{\textbf{Classes}} & \multicolumn{1}{c}{\multirow{2.5}{*}{\textbf{Description}}} \\
+\cmidrule(lr){1-2}
+\textbf{Type} & \textbf{\# Stock} & & & \\
+\midrule
+\multirow{4.5}{*}{Assessment} & \multirow{3}{*}{Single} & Drawdown$^\dagger$ & 4 & Classify peak-to-trough decline severity \\
+ & & Volatility Regime$^\ddagger$ & 3 & Classify recent vs.\ overall volatility ratio \\
+ & & Trend Direction & 5 & Classify 120-day cumulative return regime \\
+\cmidrule{2-5}
+& Multi & Correlation$^\S$ & 3 & Classify return correlation of two stocks \\
+\midrule
+\multirow{6.5}{*}{Prediction} & \multirow{4}{*}{Single} & Event Response & 2 & Mean-reversion or persistence after extreme move \\
+ & & Support/Resistance & 2 & Breakout or bounce near key technical level \\
+ & & Drawdown Recovery$^\dagger$ & 2 & Recovery toward peak or further decline \\
+ & & Volatility Forecast$^\ddagger$ & 2 & Volatility increase or decrease \\
+\cmidrule{2-5}
+ & \multirow{2}{*}{Multi} & Relative Performance & 2 & Which stock delivers higher returns \\
+ & & Pair Convergence$^\S$ & 2 & Price spread converges or diverges \\
+\bottomrule
+\end{tabular}
+}
+\vspace{-8pt}
+\end{table}

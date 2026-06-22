@@ -1,0 +1,156 @@
+
+\section{Experimental Details}
+\label{appx:experiment_details}
+
+\subsection{Datasets and splits}
+
+We evaluate our method on eight widely used benchmark datasets that collectively cover a broad range of real-world time series forecasting scenarios (Table~\ref{tab:dataset}). The benchmarks span diverse application domains, including electricity transformer temperature monitoring (ETTm1, ETTm2, ETTh1, ETTh2), power consumption analysis (Electricity), transportation systems (Traffic), meteorological forecasting (Weather), and foreign exchange markets (Exchange-rate). All datasets contain multivariate time series with different dimensionalities and sequence lengths, and are split into training/validation/testing sets following standard protocols. They also exhibit heterogeneous temporal characteristics: the sampling frequency ranges from 15-minute intervals to daily observations, and the underlying series present distinct periodic patterns that reflect real-world dynamics.
+
+\input{tables/dataset-details}
+
+\noindent\textbf{Dataset descriptions.}
+\begin{itemize}[leftmargin=*]
+\item \textbf{ETT}: Four datasets (ETTh1, ETTh2, ETTm1, ETTm2) containing two years of electricity transformer temperature data collected from two counties in China. ETTh1/ETTh2 provide hourly measurements, while ETTm1/ETTm2 have 15-minute resolution. Each dataset contains seven variables: six power load features and one target oil temperature variable.
+  \item \textbf{Traffic}: Hourly road occupancy rates from 862 sensors deployed on the freeway system in the San Francisco Bay Area. The dataset captures traffic flow patterns and congestion dynamics across multiple road segments.
+  \item \textbf{Weather}: Meteorological measurements from 21 weather stations in Germany, recorded every 10 minutes over one year. The dataset includes 21 atmospheric indicators such as air temperature, humidity, atmospheric pressure, and wind conditions.
+  \item \textbf{Electricity}: Hourly electricity consumption records from 321 customers (residential and commercial). The dataset exhibits complex daily and seasonal usage patterns driven by heterogeneous user behaviors.
+  \item \textbf{Exchange-rate}: A multivariate foreign exchange dataset with daily exchange rates of eight currencies against the U.S.\ dollar. It contains 7,588 time steps and 8 variables (Australia, UK, Canada, Switzerland, China, Japan, New Zealand, and Singapore). This dataset is widely used to benchmark long-horizon multivariate forecasting under non-stationarity and regime shifts.
+\end{itemize}
+
+\noindent\textbf{Periodicity encoding.}
+The \textit{Periodicity} column in Table~\ref{tab:dataset} reports the dataset-specific periodicity hyperparameter $P$ used in our periodicity encoding. This parameter is chosen to reflect the dominant cyclic structure of each dataset (e.g., daily or weekly cycles) given its sampling frequency. Concretely, ETTm1/ETTm2 (15-minute sampling) use $P=96$ to represent one day ($24\times4$ samples), while ETTh1/ETTh2, Electricity, and Traffic (hourly sampling) use $P=24$ for daily periodicity. Weather (10-minute sampling) uses $P=144$ ($24\times6$ samples) to capture a full day. Exchange-rate (daily sampling) uses $P=7$ to model weekly periodicity. We adopt the following trigonometric formulation:
+\begin{equation}
+  \text{encoding}(t)=\left[\sin\left(\frac{2\pi t}{P}\right),\ \cos\left(\frac{2\pi t}{P}\right)\right],
+\end{equation}
+where $t$ is the discrete time index and $P$ is the dataset-specific period. The resulting sinusoidal features are concatenated with the original time series representation to improve the model’s ability to capture both short-term dependencies and long-range periodic patterns.
+
+\subsection{Evaluation metrics.}
+For long-term forecasting, we report Mean Squared Error (MSE), Mean Absolute Error (MAE)~\cite{hyndman2006another}, and the Continuous Ranked Probability Score (CRPS)~\cite{gneiting2007strictly}:
+\begin{align}
+\text{MSE} &= \frac{1}{H}\sum_{h=1}^{H} \left(\mathbf{Y}_{h}-\hat{\mathbf{Y}}_{h}\right)^2, \label{equ:mse}\\
+\text{MAE} &= \frac{1}{H}\sum_{h=1}^{H}\left|\mathbf{Y}_{h}-\hat{\mathbf{Y}}_{h}\right|, \label{equ:mae}\\
+\text{CRPS}(\mathcal{D},\mathbf{Y}) &= \int_{\mathbb{R}} \left(F_{\mathcal{D}}(x) - \mathbb{I}\{x \ge \mathbf{Y}\}\right)^2 \, dx. \label{equ:crps}
+\end{align}
+
+
+where $H$ is the prediction horizon, and $\mathbf{Y}_{h}$ and $\hat{\mathbf{Y}}_{h}$ denote the ground-truth and predicted values at step $h$, respectively. For CRPS, $F_{\mathcal{D}}$ denotes the cumulative distribution function of the forecast distribution $\mathcal{D}$ and $\mathbb{I}{\cdot}$ is the Heaviside step (indicator) function. For multivariate series, the squared and absolute operations are applied element-wise and averaged across variables. Following standard practice, we approximate CRPS using the mean weighted quantile loss when only a finite set of predictive quantiles is available~\cite{park2022learning}.
+
+
+\subsection{Frozen Backbones}
+\noindent\textbf{Backbone models and frozen setting.}
+We evaluate TS-Memory on four representative Time Series Foundation Models with publicly released pretrained checkpoints, including ChronosBolt~\cite{ansari2024chronos}, TimesFM~\cite{das2024decoder}, Chronos2~\cite{ansari2025chronos}, and Sundial~\cite{liu2025sundial}.
+These backbones are chosen (i) to ensure reproducibility, (ii) to cover multiple generations of TSFM development from earlier to more recent releases, and (iii) to provide empirically strong zero-shot forecasters such that any improvement remains meaningful.
+All selected TSFMs expose a compatible probabilistic forecasting interface that returns a fixed set of predictive quantiles, enabling plug-and-play adaptation under a unified evaluation setup.
+In all experiments, the backbone is strictly frozen.
+Given a context window $X_t$, a backbone $f_{\theta}$ outputs quantile forecasts
+$\widehat{\mathbf{Q}}^{\text{base}}_{t}=f_{\theta}(X_t) \in \mathbb{R}^{Q \times H \times C}$,
+where $Q$ is the number of quantile levels, $H$ is the forecast horizon, and $C$ is the number of variables.
+No backbone parameters are updated; any performance change comes solely from the adaptation strategy.
+
+\noindent\textbf{Long-horizon inference protocol.}
+Following the standard long-horizon forecasting setup, we evaluate multiple horizons and report averaged results across $H \in \{96,192,336,720\}$ with a fixed look-back window of $L=512$ unless specified otherwise.
+When a backbone produces forecasts in shorter blocks, we use a rolling strategy: predicted values are appended to the context and forecasting is repeated until the target horizon is reached.
+We apply the same rollout protocol to \textit{Origin}, online retrieval baselines, and TS-Memory to ensure a fair comparison in both accuracy and latency.
+
+\noindent\textbf{ChronosBolt.}
+ChronosBolt is included primarily because it provides a comprehensive collection of released pretrained checkpoints across multiple model sizes.
+This enables controlled scaling studies under a single adaptation protocol and facilitates accuracy--latency analyses without confounding changes in model families.
+
+\noindent\textbf{TimesFM.}
+TimesFM serves as an earlier and widely adopted TSFM baseline that anchors our evaluation.
+Including TimesFM ensures that conclusions are not restricted to only the latest model families and helps verify whether the proposed adaptation yields consistent gains on an established backbone.
+
+\noindent\textbf{Chronos2.}
+Chronos2 represents more recent advances within the Chronos family and is widely regarded as a strong contemporary TSFM.
+Evaluating on Chronos2 helps verify that gains persist on competitive backbones rather than arising only on weaker models.
+
+\noindent\textbf{Sundial.}
+Sundial is chosen as another recent and high-performing TSFM that complements the Chronos line and increases backbone diversity.
+Covering multiple strong TSFMs reduces the risk that results are overly tied to a single architectural design and highlights the robustness of TS-Memory across backbones.
+
+
+
+
+
+\subsection{Adaptation Baselines}
+\noindent\textbf{Baselines overview.}
+We compare TS-Memory with (i) \textit{Origin}, which directly applies each frozen TSFM without adaptation;
+(ii) online retrieval augmentation baselines that perform test-time $k$NN retrieval of similar context--future exemplars and fuse retrieved evidence into the final forecast, including TS-RAG~\cite{ning2025ts} and a RAFT-style retrieval baseline~\cite{han2025retrieval}; and
+(iii) LoRA~\cite{hu2022lora}, a parameter-efficient fine-tuning baseline on ChronosBolt.
+
+\noindent\textbf{Leakage-safe retrieval corpus.}
+For all online retrieval baselines, the retrieval corpus is constructed strictly from the training split to prevent information leakage.
+Specifically, we build a knowledge base of context--future pairs
+$\mathcal{K}=\{(X^{(i)},Y^{(i)})\}_{i=1}^{N_{\text{train}}}$,
+where each indexed window is fully contained inside the training segment.
+The same leakage-safe restriction applies when constructing the offline retrieval teacher for TS-Memory, ensuring that online baselines and TS-Memory rely on comparable information.
+
+\noindent\textbf{Common probabilistic fusion interface.}
+Both online retrieval baselines return retrieved future windows together with similarity/distance scores.
+To enable probabilistic evaluation, we treat retrieved futures as weighted samples, compute retrieved quantiles
+$\widehat{\mathbf{Q}}^{\text{ret}}_t \in \mathbb{R}^{Q\times H\times C}$ using weighted empirical quantiles, and fuse them with the TSFM quantile forecast via quantile-wise interpolation:
+\begin{equation*}
+\widehat{\mathbf{Q}}^{\text{fuse}}_t=(1-\beta)\widehat{\mathbf{Q}}^{\text{base}}_t+\beta\widehat{\mathbf{Q}}^{\text{ret}}_t,\quad \beta\in[0,1].
+\end{equation*}
+The fusion weight $\beta$ is tuned on the validation split and fixed for test evaluation.
+
+\noindent\textbf{RAFT-style correlation retrieval.}
+RAFT~\cite{han2025retrieval} was originally proposed as a standalone retrieval-augmented forecaster; we adapt its retrieval mechanism into an online module compatible with frozen TSFMs.
+Given a query context, RAFT computes multi-granularity representations by summarizing non-overlapping blocks at different temporal scales and performing offset removal at the final step.
+We retrieve top-$k$ neighbors based on mean-centered cosine similarity averaged across granularities.
+Retrieval weights are computed via softmax (temperature tuned on validation), and retrieved futures are converted to quantiles using the common probabilistic interface before fusion with TSFM outputs.
+
+\noindent\textbf{TS-RAG-style embedding retrieval.}
+TS-RAG~\cite{ning2025ts} performs nearest neighbor retrieval in an embedding space using a frozen embedding model.
+Following the public implementation, we pre-compute embeddings for training contexts and build a FAISS index for fast $k$NN search using $\ell_2$ distance.
+At inference, we retrieve top-$k$ neighbors for each query context, reconstruct the corresponding context-plus-future sequences, compute retrieved quantiles with the same weighting scheme, and fuse them with TSFM outputs through the common probabilistic interface.
+This baseline represents a typical embedding-based retrieval pipeline, contrasting RAFT's correlation retrieval that does not rely on a learned embedding space.
+
+\noindent\textbf{LoRA fine-tuning.}
+LoRA~\cite{hu2022lora} was proposed for parameter-efficient fine-tuning of large language models; we apply it to ChronosBolt as an adaptation baseline.
+Following standard practice, we inject low-rank updates into attention projection layers while freezing backbone weights.
+Each projection is augmented by a rank-$r$ update scaled by $\alpha/r$, with $r$ chosen to match the trainable-parameter budget of PlugMem.
+We initialize injected weights to preserve model behavior at step 0 and train only the low-rank parameters.
+
+\noindent\textbf{Hyper-parameter tuning.}
+For both retrieval baselines, we tune the number of neighbors and the fusion weight on the validation split.
+For RAFT-style retrieval, we additionally tune the softmax temperature, while keeping the multi-granularity decomposition consistent with the reference implementation.
+For LoRA, we tune learning rate and training epochs on validation.
+All baselines use the same split and validation protocol to ensure fair comparison.
+
+
+\subsection{TS-Memory Module}
+\noindent\textbf{PlugMem architecture.}
+TS-Memory augments a frozen TSFM with a lightweight memory module $g_{\phi}$, referred to as PlugMem.
+PlugMem is implemented as an encoder--decoder Transformer that consumes only the context window $X_t$ and does not access backbone internals, enabling plug-and-play integration across different TSFMs.
+We apply per-window Instance Normalization on $X_t$, partition the normalized sequence into non-overlapping patches of length $p$,
+project patches into $d$-dimensional tokens, and encode them with a Transformer encoder.
+A Transformer decoder uses $H$ horizon queries (one per forecast step) to attend over the encoded memory and produce horizon-conditioned features.
+A quantile head maps each feature to $Q$ quantile values, and Instance Normalization is inverted to restore the original scale.
+While trained with probabilistic outputs, PlugMem also supports point forecasting by taking the median quantile at each horizon as the point estimate, so the same module can serve both probabilistic and point-prediction settings.
+
+\noindent\textbf{Retrieval-free inference and $\alpha$ tuning.}
+At test time, TS-Memory is strictly retrieval-free:
+we compute $\widehat{\mathbf{Q}}^{\text{base}}_t=f_{\theta}(X_t)$ and $\widehat{\mathbf{Q}}^{\text{mem}}_t=g_{\phi}(X_t)$, then fuse them via quantile-wise interpolation
+\begin{equation}
+    \widehat{\mathbf{Q}}^{\text{final}}_t=(1-\alpha)\widehat{\mathbf{Q}}^{\text{base}}_t+\alpha \widehat{\mathbf{Q}}^{\text{mem}}_t, \quad \alpha \in [0,1].
+\end{equation}
+When point forecasts are required, we extract the median quantile from $\widehat{\mathbf{Q}}^{\text{base}}_t$ and $\widehat{\mathbf{Q}}^{\text{mem}}_t$ to obtain point predictions and apply the same interpolation rule.
+We tune $\alpha$ on the validation split for each dataset--backbone pair and keep it fixed for test-time evaluation.
+Inference requires only two forward passes and introduces no retrieval index maintenance or nearest-neighbor search overhead.
+
+\noindent\textbf{Offline teacher construction (privileged supervision).}
+Retrieval is used \emph{only} during offline training as privileged supervision.
+For each supervised window $(X_t,Y_t)$, we construct an auxiliary teacher dataset
+$\mathcal{D}_{\text{teach}}=\{(X_t,Y_t,\widehat{\mathbf{Q}}^{e}_t,\text{Conf}_t)\}$
+from a leakage-safe knowledge base built on the training split.
+Following the method in Appendix~A, candidates are retrieved in a frozen embedding space and then shift-aligned via a trailing-mean adjustment over the last $m$ steps to mitigate level offsets.
+Aligned candidates are re-ranked, and top-$K$ neighbors are aggregated via softmax weights.
+Teacher quantile targets $\widehat{\mathbf{Q}}^{e}_t$ are computed as weighted empirical quantiles over aligned retrieved futures, and retrieval confidence is the concentration of retrieval weights ($\text{Conf}_t=\max_k w_k$).
+For point forecasting, the same retrieved futures induce a teacher point target via the weighted empirical median, consistent with using the median quantile as the point estimate.
+
+\noindent\textbf{Training objective.}
+PlugMem is trained with frozen backbone, using a composite objective that combines: (i) task supervision on ground-truth futures via quantile regression, (ii) confidence-gated distillation that aligns PlugMem to teacher quantiles more strongly when retrieval is confident and beneficial, and (iii) stability regularization that discourages over-correction and prevents quantile crossing.
+Concretely, distillation is activated only when the teacher improves over frozen backbone (with a margin) and is weighted by a confidence-scaled coefficient, while regularization anchors PlugMem to conservative behavior when retrieval is unreliable.
+This encourages PlugMem to internalize retrieval benefits when helpful, while remaining robust to noisy or uninformative retrieval.
+

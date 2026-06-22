@@ -1,0 +1,29 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYGZob{}context\PYGZcb{}
+
+You are given one causal evidence bundle from a forecasting task.
+
+Your job is to reconstruct exactly one plausible standalone real\PYGZhy{}world source that could directly contain this information.
+
+Requirements:
+
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Produce exactly one source metadata object.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Use only information directly supported by the provided bundle.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Do NOT add inferred background, broader causes, forecasts, or unstated implications.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }The source must be realistic, self\PYGZhy{}contained, and independently plausible.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }Prefer a source that naturally contains all of the information in this bundle with minimal extra scope.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+s+sb}{`provides`} should contain self\PYGZhy{}contained atomic facts.
+\PYG{k}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+s+sb}{`source\PYGZus{}content\PYGZus{}length`} should be a realistic approximate target length for the final reconstructed source content.
+For calibration, typical ranges include: short alerts or log entries (\PYGZti{}80\PYGZhy{}150 words), emails or internal chat summaries (\PYGZti{}40\PYGZhy{}120 words), internal memos or brief reports (\PYGZti{}300\PYGZhy{}500 words), news articles or public bulletins (\PYGZti{}500\PYGZhy{}800 words), technical or operational reports (\PYGZti{}550\PYGZhy{}600 words), policy documents or official statements (\PYGZti{}400\PYGZhy{}600 words), and longer formal reports, audits, or multi\PYGZhy{}section documents (\PYGZti{}700+ words); choose an appropriate range based on the source type and issuer rather than minimizing length.
+
+Return valid JSON only with exactly this schema:
+
+\PYGZob{}
+  \PYGZdq{}name\PYGZdq{}: \PYGZdq{}...\PYGZdq{},
+  \PYGZdq{}type\PYGZdq{}: \PYGZdq{}...\PYGZdq{},
+  \PYGZdq{}issuer\PYGZdq{}: \PYGZdq{}...\PYGZdq{},
+  \PYGZdq{}provides\PYGZdq{}: [\PYGZdq{}...\PYGZdq{}],
+  \PYGZdq{}notes\PYGZdq{}: \PYGZdq{}Scope of this source and what it does NOT include\PYGZdq{},
+  \PYGZdq{}source\PYGZus{}content\PYGZus{}length\PYGZdq{}: \PYGZdq{}? words\PYGZdq{}
+\PYGZcb{}
+\end{MintedVerbatim}
