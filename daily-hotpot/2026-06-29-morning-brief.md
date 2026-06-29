@@ -1,15 +1,27 @@
 # 2026-06-29 时间序列 Agent / Reasoning / Foundation Model 晨间简报
 
-检索时间：2026-06-29 08:00-08:08 Asia/Shanghai  
+检索时间：2026-06-29 08:00-10:42 Asia/Shanghai  
 时间窗口：2026-03-29 至 2026-06-29  
-筛选口径：优先保留 arXiv、官方项目页、GitHub 仓库中可确认日期的条目；超过三个月的内容不纳入主条目；日期无法确认的条目标注为“不确定”并降低优先级。
+筛选口径：优先保留 arXiv、官方项目页、GitHub 仓库中可确认日期的条目；额外补检 `DailyArXiv` 仓库。用户指定的 `timeseries` 分支当前未公开可访问，实际回退检查其 `master` 分支中的 `Time Series` 板块与 2026-06-29 自动更新提交；超过三个月的内容不纳入主条目；日期无法确认的条目标注为“不确定”并降低优先级。
 
 ## 今日摘要
 
 - 时间序列基础模型近一个月的主线已经很清楚：一条是把 TSFM 做成更通用的 token 化语言接口，另一条是把 TSFM 放进金融、医疗、RAN 这类更垂直、更难的真实场景里检验泛化与可靠性。
 - 时间序列 Agent 研究正在从“会不会调用工具”转向“有没有完整 harness、memory、validation 和可审计轨迹”。`TimeClaw`、`Nexus`、`TSAG` 分别代表运行时、任务分解和金融工具增强三条路线。
 - 时间序列 reasoning 研究在 5-6 月明显加速，最新工作已经从单轮 QA 走向 multi-turn benchmark、认知任务分解和 coding-agent 诊断，说明社区开始把时序推理当作独立能力而不只是 forecasting 的附属品。
+- `DailyArXiv` 的 2026-06-29 自动更新补进了一批 2026-06-25 的时间序列论文，其中最值得并入今天观察的是 `How Good Can Linear Models Be for Time-Series Forecasting?`、`Speaking Numbers to LLMs` 和层级预测/对账工具链相关工作。
 - GitHub 上真正值得跟踪的项目还不算多，但 `TimeClaw`、`aion`、`TimeSeriesExamAgent` 已经体现出“bench + tool + harness + reproducibility”的工程走向。
+
+## 0. DailyArXiv 补检结论
+
+- 检查时间：2026-06-29 10:42 Asia/Shanghai
+- 来源：[DailyArXiv 仓库](https://github.com/zezhishao/DailyArXiv) / [2026-06-29 自动更新提交](https://github.com/zezhishao/DailyArXiv/commit/4c73ad96fed180db407f5061fe6aad1331281afe)
+- 分支状态：GitHub API 当前仅返回 `master` 分支，未发现公开可访问的 `timeseries` 分支；本次实际检查对象是 `master` 下的 `Time Series` 板块。
+- 补检结果：2026-06-29 的自动更新把一批 2026-06-25 的 time-series 论文纳入列表。与本晨报主题最相关的新增/补充条目是：
+  - `How Good Can Linear Models Be for Time-Series Forecasting?`（2026-06-25，arXiv:2606.27282）：提醒近期 foundation model/大模型热度下，强预处理的线性基线依然可能在标准 benchmark 上击败 Transformer/MLP/CNN。相关性判断：中高。它不是 Agent/Reasoning 论文，但对后续评测 harness 的 baseline 选择非常重要。
+  - `Speaking Numbers to LLMs: Multi-Wavelet Number Embeddings for Time Series Forecasting`（2026-06-25，arXiv:2606.26487）：提出 TempoWave，把数值映射为 multi-wavelet digit embeddings，增强 LLM 对连续数值和多尺度结构的表达。相关性判断：高。它直接连接 LLM 接口与时序数字建模，是 reasoning/agent 能否稳定读懂数值序列的关键问题。
+  - `End-to-end probabilistic hierarchical forecasting of large hierarchies via probabilistic top-down`（2026-06-25，arXiv:2606.26774）：针对大规模层级时序给出更快的概率 top-down 路线。相关性判断：中。它更偏 forecasting 系统，但对多层级业务 Agent 的 coherent forecast 汇总有现实价值。
+  - `FoReco and FoRecoML: A Unified Toolbox for Forecast Reconciliation in R`（2026-06-25，arXiv:2604.27696）：统一 cross-sectional / temporal / cross-temporal reconciliation 工具链。相关性判断：中。更像实用工具箱，但值得在时序 Agent 的后处理与约束一致性环节留意。
 
 ## 1. 时间序列基础模型最新研究
 
@@ -33,6 +45,20 @@
 - 来源：[arXiv](https://arxiv.org/abs/2606.06881)
 - 简短摘要：在 15 个糖尿病相关公开数据集、1117 名个体上系统评测 Chronos-2、TimesFM 等 TSFM 以及传统监督模型，覆盖 zero-shot、few-shot、full-shot、上下文长度和预测步长变化。结果显示 TSFM 在低样本场景有优势，但数据充分时轻量 LSTM 仍然很强。
 - 相关性判断：中高。它提供了一个高价值垂直 benchmark，适合拿来思考 Agent 在医疗时序场景里如何做风险提示、个体差异建模和置信度表达。
+
+### Speaking Numbers to LLMs: Multi-Wavelet Number Embeddings for Time Series Forecasting
+
+- 日期：2026-06-25
+- 来源：[arXiv](https://arxiv.org/abs/2606.26487) / [DailyArXiv 2026-06-29 更新](https://github.com/zezhishao/DailyArXiv/commit/4c73ad96fed180db407f5061fe6aad1331281afe)
+- 简短摘要：提出 TempoWave，把每个标量观测编码成 multi-wavelet、digit-wise embedding，并直接覆盖标准 token 表征，从而让 LLM 更稳定地处理连续数值、局部波动与全局结构。论文在五个 context-enriched forecasting benchmark 上报告了优于标准数值 tokenization 的结果。
+- 相关性判断：高。它不是传统 TS foundation model，但非常接近“LLM 作为 time-series interface”这一层，直接影响时序 reasoning/agent 能否读对数值、保留顺序和尺度信息。
+
+### How Good Can Linear Models Be for Time-Series Forecasting?
+
+- 日期：2026-06-25
+- 来源：[arXiv](https://arxiv.org/abs/2606.27282) / [DailyArXiv 2026-06-29 更新](https://github.com/zezhishao/DailyArXiv/commit/4c73ad96fed180db407f5061fe6aad1331281afe)
+- 简短摘要：系统搜索 lookback、local normalization、regularization 和 augmentation 等超参后，作者发现经过认真调参的 Ridge 基线可在八个 benchmark 中的大多数数据集-预测步组合上超过既有线性方法，并在六个 benchmark 上优于 Transformer、MLP、CNN 基线。
+- 相关性判断：中高。它本身不是 foundation model，但对 foundation model/Agent 研究的实验设计很关键：如果 baseline 不够强，后续关于 Agent 或 TSFM 的结论会被高估。
 
 ### WaveMoE: A Wavelet-Enhanced Mixture-of-Experts Foundation Model for Time Series Forecasting
 
@@ -141,6 +167,7 @@
 ## 观察与下一步
 
 - 近三个月最强组合主题是：`TSFM 真实场景评测` + `time-series-native harness` + `multi-turn reasoning benchmark`。
+- `DailyArXiv` 补检说明，近期时间序列新论文的增量主要仍集中在 forecasting 本体、层级预测和数值接口层；真正直接命中 agent/reasoning 的新增条目仍然稀疏，因此今天主线判断没有被推翻，但数值表示与强 baseline 的重要性被明显放大。
 - 若只选三项优先跟踪，建议顺序是：`TimeClaw`、`TSCognition/TSAlign`、`Nexus`。
 - 若本仓库后续要做自己的时序 Agent/reasoning 体系，短期最值得复用的是：
   - `TimeClaw` 的 MCP 工具与 memory bank 设计
@@ -150,5 +177,6 @@
 ## 检索记录
 
 - 论文查询：`site:arxiv.org "time series foundation model" 2026`、`site:arxiv.org "time series agent" 2026`、`site:arxiv.org "time series reasoning" 2026` 以及各论文标题精确检索。
+- `DailyArXiv` 补检：检查其 GitHub API 分支列表、2026-06-29 自动更新提交，以及 `README.md` 中的 `Time Series` 板块；确认当前公开仓库未暴露 `timeseries` 分支，因此实际以 `master` 作为替代来源。
 - 项目查询：优先检查论文中的官方代码链接，再补充查看 GitHub 仓库主页与 README 中可确认日期的 news/release 信息。
 - 排除项：2026-03-29 之前的论文或项目动态未纳入主条目，例如较早版本的 TSRBench 动态未计入本次晨报。
