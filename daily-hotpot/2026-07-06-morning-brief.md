@@ -1,9 +1,11 @@
 # 2026-07-06 时间序列 Agent / Reasoning / Foundation Model 晨间简报
 
-检索时间：2026-07-06 10:40-12:40 Asia/Shanghai  
+检索时间：2026-07-06 15:32-15:58 Asia/Shanghai  
 时间窗口：2026-04-06 至 2026-07-06  
 筛选口径：优先检索 arXiv、OpenReview、ACL、NeurIPS、ICLR、ICML、KDD、AAAI、官方项目页、机构博客、GitHub 与 `DailyArXiv` README；主条目只保留过去三个月内可确认日期的内容。GitHub 项目优先使用仓库 `created_at`；无法再次核验详情或日期时不列为主条目。  
 本次重点检索词：`time series foundation model`, `TSFM`, `time series agent`, `time series reasoning`, `Zeus`, `TiRex-2`, `AION`, `TimeClaw`, `KairosAgent`, `TSCognition`, `TFRBench`, `photovoltaic forecasting`, `DailyArXiv Time Series`。
+
+本次复核说明：本文件在今日第二次自动化运行中重新核对了 `DailyArXiv` README、arXiv 近窗论文与 GitHub 公开仓库页；未发现比当前主条目更强的新公开内容，因此保留主列表，只刷新检索时间与补检说明。
 
 ## 今日摘要
 
@@ -16,7 +18,7 @@
 
 ## 0. DailyArXiv 补检结论
 
-- 检查时间：2026-07-06 12:05 Asia/Shanghai
+- 检查时间：2026-07-06 15:45 Asia/Shanghai
 - 来源：[zezhishao/DailyArXiv README](https://github.com/zezhishao/DailyArXiv)
 - 仓库状态：README 标注 `Last update: 2026-07-06`。
 - `Time Series` 板块内、且与本主题高相关的近窗条目：
