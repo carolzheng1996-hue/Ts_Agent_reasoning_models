@@ -1,6 +1,6 @@
 # 2026-07-09 时间序列 Agent / Reasoning / Foundation Model 晨间简报
 
-检索时间：2026-07-09 07:10-08:06 Asia/Shanghai  
+检索时间：2026-07-09 15:08-15:36 Asia/Shanghai  
 时间窗口：2026-04-09 至 2026-07-09  
 筛选口径：优先检索 arXiv、DailyArXiv README、官方项目页与 GitHub 官方仓库元数据。主条目仅保留过去三个月内可确认日期的内容；GitHub 项目统一以 `created_at` 为准。若无法确认日期，则标注为 `不确定` 并降低优先级。  
 本次重点检索词：`time series foundation model`、`TSFM`、`time series agent`、`agentic time series`、`time series reasoning`、`irregular TSQA`、`time-series harness`、`AutoML agent`、`photovoltaic forecasting`。
@@ -8,26 +8,29 @@
 ## 今日摘要
 
 - 今天最值得补记的新论文有两篇，且都来自 `2026-07-07`：一篇是 TSFM 数据侧工作 [RMISC](https://arxiv.org/abs/2607.06504)，另一篇是面向零样本 IoT 预测的 agentic 框架 [TopoBrick](https://arxiv.org/abs/2607.06349)。前者回答“真实多变量预训练语料是否真能提升 TSFM”，后者回答“Agent 如何在部署时为时序预测自动挑选外生变量”。
-- 基础模型主线里，过去一周最强信号已经从单纯比 benchmark，进一步转向“真实部署是否值得”和“预训练语料该怎么建”：代表条目分别是 [When Do Foundation Models Pay Off?](https://arxiv.org/abs/2607.04919)、[Forecasting Realized Volatility with Time Series Foundation Models](https://arxiv.org/abs/2607.05291) 与今天新增的 [RMISC](https://arxiv.org/abs/2607.06504)。
+- 基础模型主线里，过去一周最强信号已经从单纯比 benchmark，进一步转向“真实部署是否值得”“预训练语料该怎么建”以及“能源类 covariate-driven 真实场景里能不能稳住”：代表条目分别是 [When Do Foundation Models Pay Off?](https://arxiv.org/abs/2607.04919)、[Forecasting Realized Volatility with Time Series Foundation Models](https://arxiv.org/abs/2607.05291)、[RMISC](https://arxiv.org/abs/2607.06504) 与 [Evaluating Time Series Foundation Models for Electricity Price Forecasting](https://arxiv.org/abs/2607.02623)。
 - Agent 主线今天新增的 [TopoBrick](https://arxiv.org/abs/2607.06349) 虽然不是通用 LLM analyst，但它把 `agentic selection` 用在时序预测部署链路里，和 [TimeClaw](https://arxiv.org/abs/2606.05404)、[AION](https://arxiv.org/abs/2605.25045)、[KairosAgent](https://arxiv.org/abs/2605.30002) 一起，基本覆盖了 runtime、tooling、reasoner-forecaster fusion 与 deployment-time routing 四种路线。
 - Reasoning 主线今天没有比 [TSCognition](https://arxiv.org/abs/2606.22126) 更新且更强的总览型论文，但 [Towards Verifiable Agentic Data Science: Solving Irregular TSQA Via Tool-Grounded Reasoning](https://arxiv.org/abs/2606.15107) 值得补进，因为它把不规则采样、多工具验证和可复现实验协议绑在了一起。
-- GitHub 侧今天没有检出比昨天更近、且相关性更高的新仓库；窗口内最新且最值得继续跟踪的仍是 [ChamoLu/TSAD-Agent](https://github.com/ChamoLu/TSAD-Agent)、[tachyurgy/observability-assistant](https://github.com/tachyurgy/observability-assistant)、[idriss-aaidoun/emads](https://github.com/idriss-aaidoun/emads)。
+- GitHub 侧今天没有检出比昨天更近、且相关性更高的新仓库；结合仓库 `created_at` 元数据复核，窗口内最新且最值得继续跟踪的仍是 [ChamoLu/TSAD-Agent](https://github.com/ChamoLu/TSAD-Agent)、[tachyurgy/observability-assistant](https://github.com/tachyurgy/observability-assistant)、[idriss-aaidoun/emads](https://github.com/idriss-aaidoun/emads)。
 
 ## 0. DailyArXiv 补检结论
 
-- 检查时间：2026-07-09 07:32 Asia/Shanghai
+- 检查时间：2026-07-09 15:24 Asia/Shanghai
 - 来源：[zezhishao/DailyArXiv README](https://github.com/zezhishao/DailyArXiv) / [README 原文](https://raw.githubusercontent.com/zezhishao/DailyArXiv/master/README.md)
 - 仓库状态：README 标注 `Last update: 2026-07-09`。
 - 今天在 `Time Series` 板块里，最值得补记的高相关近窗条目有：
   - [RMISC: A Large-scale Real-world Multivariate Corpus for Time Series Foundation Models](https://arxiv.org/abs/2607.06504)，日期 `2026-07-07`。
   - [TopoBrick: Agentic Topology Sampling of Exogenous Variables for Zero-Shot Building IoT Forecasting](https://arxiv.org/abs/2607.06349)，日期 `2026-07-07`。
   - [When Do Foundation Models Pay Off? A Break-Even Analysis of Pretrained Time Series Forecasters](https://arxiv.org/abs/2607.04919)，日期 `2026-07-06`。
+- DailyArXiv 同页还能确认两篇近窗、但与本次主题属于“相邻能源场景”的 TSFM 条目：
+  - [Evaluating Time Series Foundation Models for Electricity Price Forecasting: Contamination Risk, Distributional Shifts, and Covariate Dependence](https://arxiv.org/abs/2607.02623)，日期 `2026-07-02`。
+  - [Probabilistic Low-Voltage Peak Load Forecasting with Time Series Foundation Models Evaluated on Application-Oriented Metrics](https://arxiv.org/abs/2607.01966)，日期 `2026-07-02`。
 - DailyArXiv 仍未充分覆盖或凸显的高相关条目包括：
   - [Forecasting Realized Volatility with Time Series Foundation Models: A Comparison with Econometric Benchmarks](https://arxiv.org/abs/2607.05291)，日期 `2026-07-06`。
   - [Harnessing Generalist Agents for Contextualized Time Series](https://arxiv.org/abs/2606.05404)，日期 `2026-06-03`。
   - [AION: Next-Generation Tasks and Practical Harness for Time Series](https://arxiv.org/abs/2605.25045)，日期 `2026-05-24`。
   - [From Recognition to Understanding: Unlocking Cognitive Time Series Reasoning with LLMs](https://arxiv.org/abs/2606.22126)，日期 `2026-06-20`。
-- 结论：DailyArXiv 今天补到了两个值得记的新增项 `RMISC` 和 `TopoBrick`，对 TSFM 与 deployment-oriented agent 仍有补检价值；但它对时序 harness、reasoning benchmark 与 GitHub 工程落地的覆盖依然不够，因此今天继续把它视为次级发现源，而不是主监控源。
+- 结论：DailyArXiv 今天补到了两个最值得记的新增项 `RMISC` 和 `TopoBrick`，并且还能补到两篇相邻能源场景 TSFM 论文；但它对时序 harness、reasoning benchmark 与 GitHub 工程落地的覆盖依然不够，因此今天继续把它视为次级发现源，而不是主监控源。
 
 ## 1. 时间序列基础模型最新研究
 
@@ -58,6 +61,13 @@
 - 来源：[arXiv](https://arxiv.org/abs/2607.01918) / [DailyArXiv](https://github.com/zezhishao/DailyArXiv)
 - 简短摘要：提出统一的 tuning-free TSFM，结合多尺度 Transformer 与 `Multi-Objective Temporal Masking`，试图在 extrapolation、interpolation 和 global abstraction 等任务间共享一个无需任务专调的基座模型。
 - 相关性判断：高。它代表“一个 TSFM 覆盖多类分析任务”的近期强信号。
+
+### [2026-07-02] Evaluating Time Series Foundation Models for Electricity Price Forecasting: Contamination Risk, Distributional Shifts, and Covariate Dependence
+
+- 日期：2026-07-02
+- 来源：[arXiv](https://arxiv.org/abs/2607.02623) / [DailyArXiv](https://github.com/zezhishao/DailyArXiv)
+- 简短摘要：针对电价预测这一强 covariate、强分布漂移场景，构建双数据集评测框架以降低 contamination 风险，并比较 TSFM、领域方法与简单集成在点预测、概率预测和尾部风险上的表现。
+- 相关性判断：高。它对“TSFM 在真实部署里会不会被 covariates 和 regime shift 打回原形”给出了更贴近生产环境的答案。
 
 ### [2026-07-01] TiRex-2: Generalizing TiRex to Multivariate Data and Streaming
 
@@ -242,7 +252,7 @@
 - 今日未检出 `2026-04-09` 之后创建、且与光伏功率预测 Agent / harness / AutoML 直接相关、优先级足够高的 GitHub 或 HuggingFace 新项目。
 - 保留观察：窗口内论文主线比代码主线更新更快，当前更值得跟踪的是论文与是否后续开源。
 
-## 5. 光伏功率预测最新研究
+## 5. 光功率 / 光伏功率预测最新研究
 
 ### [2026-06-23] Towards Continuous Power Forecasting: Practical Continual Learning for Real-World Energy Systems in Nonstationary Time Series
 
@@ -258,8 +268,23 @@
 - 简短摘要：针对新投运光伏站点缺少历史功率数据的问题，用站点元数据与气象协变量生成 physics-informed synthetic history，再让 TSFM 在 zero-shot / feedback 设置下做冷启动预测。
 - 相关性判断：最高。它是当前窗口内最直接连接 TSFM 与光伏功率预测落地的论文，也是冷启动能源预测最值得继续跟踪的工作。
 
+### [2026-04-27] SolarTformer: A Transformer Based Deep Learning Approach for Short Term Solar Power Forecasting
+
+- 日期：2026-04-27
+- 来源：[arXiv](https://arxiv.org/abs/2604.24306)
+- 简短摘要：使用 attention-based transformer 结合气象特征与电站元数据做短时太阳能功率预测，强调跨站点、跨季节和阴晴条件变化下的泛化稳定性。
+- 相关性判断：中高。它不是 foundation-model 路线，但可以作为近窗光伏短时预测的重要领域基线。
+
+### [2026-04-23] Empirical Assessment of Time-Series Foundation Models For Power System Forecasting Applications
+
+- 日期：2026-04-23
+- 来源：[arXiv](https://arxiv.org/abs/2604.22077)
+- 简短摘要：在 ERCOT 高分辨率电力系统数据上，系统比较 TimesFM、Chronos Bolt、Moirai、MOMENT、TTM 与传统深度模型在 solar、wind、load forecasting 上的 zero-shot、fine-tuning、概率预测和跨站点泛化表现。
+- 相关性判断：高。它虽然覆盖的不只光伏，但对“TSFM 在真实电力与新能源预测里到底值不值”提供了非常直接的实证基线。
+
 ## 6. 备注
 
 - 今天没有检出比 `2026-07-06` 更新、且明显强于现有列表的 GitHub 高相关新仓库。
+- DailyArXiv 今天还能补到两篇 `2026-07-02` 的相邻能源场景 TSFM 论文，但它们更偏电价与低压负荷预测，因此未挤掉本简报主线的 TSFM / Agent / 光伏优先条目。
 - `TFRBench` 的 arXiv 日期为 `2026-04-07`，早于本轮窗口起点 `2026-04-09`，因此今天继续不纳入主清单。
 - 今天未检出可确认日期且优先级足够高的 OpenReview / ICLR / ICML / NeurIPS / ACL 新公开条目，主信号仍然来自 arXiv 与官方项目仓库。
