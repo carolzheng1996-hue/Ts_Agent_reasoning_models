@@ -1,6 +1,6 @@
 # 2026-07-13 时间序列 Agent / Reasoning / Foundation Model 晨间简报
 
-检索时间：2026-07-13 08:30-09:45 Asia/Shanghai  
+检索时间：2026-07-13 08:30-15:35 Asia/Shanghai（含 `DailyArXiv` 与 GitHub API 补检）  
 时间窗口：2026-04-13 至 2026-07-13  
 筛选口径：优先保留能在 arXiv 摘要页、官方项目页、GitHub 官方仓库页或 GitHub API metadata 中确认日期的条目；三个月外内容不列为主条目。  
 本次重点检索词：`time series foundation model`、`TSFM`、`time series agent`、`agentic time series reasoning`、`TSQA`、`time-series harness`、`AutoML time series`、`photovoltaic power forecasting`、`solar power forecasting`。
@@ -10,7 +10,7 @@
 - 过去 72 小时里，最值得补进主线的新论文不是又一个通用 TSFM，而是 `2026-07-10` 的 [Neuro-Agentic Control](https://arxiv.org/abs/2607.09076)，它把 `LLM planner + frozen TimesFM sentinel` 明确做成了可拒绝幻觉动作的工业控制框架。
 - 光伏主线出现了更近的新条目：`2026-07-09` 的 [PARA-PV](https://arxiv.org/abs/2607.08079) 把 physics-aware retrieval、冻结的 Chronos 先验和分布漂移校正绑在一起，适合继续跟踪。
 - Agent / reasoning 方向，本轮最重要的补录项是 `2026-05-31` 的 [TimeSage-MT](https://arxiv.org/abs/2606.01498)。它把多轮对话、记忆、证据积累和决策型任务正式带进时间序列 agent benchmark。
-- GitHub 侧最近三天里可以确认日期的新项目主要是 `2026-07-11` 的 [mcp-trajectory-evals](https://github.com/Lkhanaajav/mcp-trajectory-evals) 和 `2026-07-10` 的 [dagistankaradeniz/automl](https://github.com/dagistankaradeniz/automl)，但二者与时间序列主线都属于间接相关；真正贴题的仓库仍是 `TSAD-Agent`、`forecast-playground`、`timee`、`TimeClaw`。
+- GitHub 侧这次补检后，`2026-07-11` 的 [timeseries-mcp](https://github.com/Lkhanaajav/timeseries-mcp) 和 `2026-04-16` 但今天仍在更新的 [TSF](https://github.com/jaeukmoon/TSF) 比通用 AutoML 仓库更贴近主线；`mcp-trajectory-evals` 保留为 verifier / harness 旁支参考。
 - 由于今天的窗口起点已经变为 `2026-04-13`，`TimeSeriesExamAgent`（`2026-04-11`）和 `ztxtech/aion` 仓库（`created_at=2026-04-12`）从 GitHub / reasoning 主清单移出；但 [AION 论文](https://arxiv.org/abs/2605.25045) 仍在窗口内。
 
 ## 0. 检索结论
@@ -19,6 +19,7 @@
   - arXiv 摘要页与提交日期。
   - 官方项目页：`KairosAgent`、`AION`。
   - GitHub 官方仓库页与 GitHub API `created_at` / `updated_at` metadata。
+  - `zezhishao/DailyArXiv` 的 `master` 分支 README `## Time Series` 原文。
 - 本次没有纳入主条目的情况：
   - 只能找到搜索摘要、无法回到论文页或仓库页确认日期的内容。
   - GitHub 仓库虽然是最近创建，但主题更偏通用 agent infra、监控或课程项目，和时间序列 Agent / reasoning / harness 主线距离较远。
@@ -28,6 +29,19 @@
   - `Agent runtime 如何组织 tool / memory / validator`;
   - `时间序列 reasoning 能否被 benchmark 和 verifier 真正审计`;
   - `能源 / 光伏场景里，TSFM 与物理先验、检索和校正模块该如何组合`。
+
+### DailyArXiv 补检结论
+
+- 已直接核验 [`DailyArXiv` README](https://github.com/zezhishao/DailyArXiv/blob/master/README.md) 的 `## Time Series` 条目。
+- 在 `2026-04-13` 至 `2026-07-13` 窗口内、且与本简报主题直接相关的条目有：
+  - `2026-07-09` [PARA-PV](https://arxiv.org/abs/2607.08079)
+  - `2026-07-08` [TimEE](https://arxiv.org/abs/2607.07500)
+  - `2026-07-08` [Rethinking Multimodal Time-Series Forecasting Evaluation](https://arxiv.org/abs/2607.06973)
+  - `2026-07-07` [RMISC](https://arxiv.org/abs/2607.06504)
+  - `2026-07-07` [TopoBrick](https://arxiv.org/abs/2607.06349)
+  - `2026-07-02` [Evaluating Time Series Foundation Models for Electricity Price Forecasting](https://arxiv.org/abs/2607.02623)
+- `DailyArXiv` 对 `time series foundation model` 和 `forecasting` 新条目的覆盖较好，但对 `agentic reasoning` 主线并不完整；`TimeSage-MT`、`KairosAgent`、`AION`、`TSCognition`、`TimeClaw`、`FinSTaR` 未在本次 README 命中结果里直接看到。
+- 本轮未发现与上述条目相关的日期冲突；也未发现“主题强相关但超出三个月窗口、仍需要保留为主条目”的 `DailyArXiv` README 记录。
 
 ## 1. 时间序列基础模型最新研究
 
@@ -158,6 +172,13 @@
 
 ### 时间序列
 
+#### [2026-07-11] Lkhanaajav/timeseries-mcp
+
+- 日期：2026-07-11（GitHub API `created_at`）
+- 来源：[GitHub](https://github.com/Lkhanaajav/timeseries-mcp)
+- 简短摘要：提供面向 AI agents 的 deterministic time-series MCP tools，覆盖 anomaly detection、changepoint、decomposition、trend tests 和 data-quality auditing，强调 typed interface 与无代码执行。
+- 相关性判断：高。它比通用 agent infra 更贴近“时序 Agent 的工具层与可审计统计能力”。
+
 #### [2026-07-11] Lkhanaajav/mcp-trajectory-evals
 
 - 日期：2026-07-11（GitHub API `created_at`）
@@ -165,12 +186,12 @@
 - 简短摘要：为 tool-using agents 提供 trajectory-level eval harness，逐步评分工具选择、参数、grounding 和效率，强调可接 CI 的回归门禁。
 - 相关性判断：中。它不是时间序列专用仓库，但对构建时序 Agent 的 verifier / harness 层有直接借鉴价值。
 
-#### [2026-07-10] dagistankaradeniz/automl
+#### [2026-07-08] Naveen-Boddepalli/time-series-autoML
 
-- 日期：2026-07-10（GitHub API `created_at`）
-- 来源：[GitHub](https://github.com/dagistankaradeniz/automl)
-- 简短摘要：一个 web 化 AutoML 平台，支持 AutoGluon、H2O、FLAML、TPOT、PyCaret 的训练、比较、推理和漂移监控。
-- 相关性判断：中低。与时间序列没有显式绑定，但对 AutoML 工作台和模型治理链路有参考意义。
+- 日期：2026-07-08（GitHub API `created_at`）
+- 来源：[GitHub](https://github.com/Naveen-Boddepalli/time-series-autoML)
+- 简短摘要：一个面向时间序列 forecasting 的 AutoML web 工具，提供数据上传、模型运行和可视化入口，并公开了独立站点。
+- 相关性判断：中。工程深度暂时有限，但至少显式绑定了 `time-series + AutoML` 主线。
 
 #### [2026-07-06] ChamoLu/TSAD-Agent
 
@@ -207,6 +228,13 @@
 - 简短摘要：围绕 `The Landscape of Agentic Time Series Systems` 维护论文清单，聚合时间序列 agentic systems 的架构、可靠性和前沿话题。
 - 相关性判断：中高。它不是可执行框架，但作为情报聚合点很有用，更新频率也比很多单仓库更稳定。
 
+#### [2026-04-16] jaeukmoon/TSF
+
+- 日期：2026-04-16（GitHub API `created_at`，`updated_at=2026-07-13`）
+- 来源：[GitHub](https://github.com/jaeukmoon/TSF)
+- 简短摘要：一个 plug-and-play 的 time-series foundation model benchmark harness，主打 `LTSF + GIFT-Eval` 评测管线。
+- 相关性判断：高。虽然不是本周新建，但它是窗口内仍在活跃更新、且更贴近 `TSFM harness` 的仓库。
+
 ### 光伏功率预测
 
 - 本轮未检出在 `2026-04-13` 至 `2026-07-13` 窗口内、同时又高度贴合 `光伏功率预测 + Agent / harness / reasoning` 的新 GitHub 或 HuggingFace 项目；因此本栏不强行补录低相关仓库。
@@ -219,6 +247,13 @@
 - 来源：[arXiv](https://arxiv.org/abs/2607.08079)
 - 简短摘要：提出 physics-aware retrieval-augmented PV 预测框架，先检索形态相似且物理一致的历史片段，再用冻结的 Chronos 先验和轻量残差适配器校准预测，最后做分布漂移校正。
 - 相关性判断：最高。它是最近三个月里把 `物理先验 + 检索 + TSFM prior + shift correction` 结合得最完整的光伏新工作之一。
+
+### [2026-06-05] Time series Foundation Models based on Physics-Informed Synthetic Histories for Cold-Start Photovoltaic Forecasting
+
+- 日期：2026-06-05
+- 来源：[arXiv](https://arxiv.org/abs/2606.07457)
+- 简短摘要：针对新投运光伏站点缺少历史观测的问题，先用 plant metadata 与气象协变量生成 physics-informed synthetic histories，再让多种 TSFM 在 cold-start 条件下做推断式预测。
+- 相关性判断：高。它把 `冷启动 PV forecasting + TSFM + 物理先验生成上下文` 明确联到一起，和部署场景非常贴近。
 
 ### [2026-05-18] Learning Long-Term Temporal Dependencies in Photovoltaic Power Output Prediction Through Multi-Horizon Forecasting
 
@@ -248,7 +283,7 @@
 - 今天的时间窗口起点是 `2026-04-13`，因此以下条目从主表移出：
   - `TimeSeriesExamAgent`（`2026-04-11`）；
   - `ztxtech/aion` GitHub 仓库（`created_at=2026-04-12`）。
-- 对 `DailyArXiv` 的公开 README 路径，本轮没有拿到可稳定复核的公开原文，因此今天只采用 arXiv、官方项目页和 GitHub 官方仓库 / API 作为主证据来源。
+- `DailyArXiv` 本轮已完成 README 原文补检，因此今天的 foundation-model / forecasting 相关主条目可以回溯到 README 原文、arXiv 摘要页与 GitHub 官方元数据三类证据。
 
 ## 推荐阅读顺序
 
