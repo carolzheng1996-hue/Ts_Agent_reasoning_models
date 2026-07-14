@@ -1,35 +1,50 @@
 # 2026-07-14 时间序列 Agent / Reasoning / Foundation Model 晨间简报
 
-检索时间：2026-07-14 08:23-09:05 Asia/Shanghai（含 `DailyArXiv`、GitHub API 与官方项目页补检）  
+检索时间：2026-07-14 15:32-15:37 Asia/Shanghai（含 arXiv API、GitHub API、`DailyArXiv` raw README 补检）  
 时间窗口：2026-04-14 至 2026-07-14  
 筛选口径：优先保留能在 arXiv 摘要页、官方项目页、GitHub 官方仓库页或 GitHub API metadata 中确认日期的条目；三个月外内容不列为主条目。  
 本次重点检索词：`time series foundation model`、`TSFM`、`time series agent`、`agentic time series reasoning`、`TSQA`、`time-series harness`、`AutoML time series`、`photovoltaic power forecasting`、`solar power forecasting`。
 
 ## 今日摘要
 
-- `2026-07-14` 时点没有检出比 `2026-07-10` 的 [Neuro-Agentic Control](https://arxiv.org/abs/2607.09076)、`2026-07-09` 的 [PARA-PV](https://arxiv.org/abs/2607.08079)、`2026-07-08` 的 [TimEE](https://arxiv.org/abs/2607.07500) 更新且更贴题的新主线论文。
-- foundation model 主线仍然最值得盯的，是 `RMISC` 的预训练语料证据、`Break-Even Analysis` 的部署阈值、`Electricity Price Forecasting` 的污染与漂移评测，以及 `CITRAS-FM` 这种更轻量、可协变量驱动的 TSFM 设计。
-- agent 主线没有换挡，最强的系统性参考仍是 [TopoBrick](https://arxiv.org/abs/2607.06349)、[TimeClaw](https://arxiv.org/abs/2606.05404)、[KairosAgent](https://arxiv.org/abs/2605.30002) 与 [AION](https://arxiv.org/abs/2605.25045)。
-- reasoning 主线继续收敛在 `benchmark + verifier + tool-grounding`：即 [TSCognition](https://arxiv.org/abs/2606.22126)、[Can LLM Coding Agents Reason About Time Series?](https://arxiv.org/abs/2606.16545)、[IRTS-ToolBench](https://arxiv.org/abs/2606.15107)、[TimeSage-MT](https://arxiv.org/abs/2606.01498)。
-- GitHub 侧今天没有比 `2026-07-11` 的 [timeseries-mcp](https://github.com/Lkhanaajav/timeseries-mcp) / [mcp-trajectory-evals](https://github.com/Lkhanaajav/mcp-trajectory-evals) 更近且更高相关的新仓库；窗口内仍值得跟踪的是 `timeseries-mcp`、`TSAD-Agent`、`forecast-playground`、`time-series-autoML`、`autoresearch-timeseries-agent`、`TSF`。
+- 相比仓库里今天早上的版本，这轮复检最值得补录的是 reasoning 侧两条更近的主线：`2026-07-10` 的 [CLIR-Bench](https://arxiv.org/abs/2607.09880) 和 `2026-07-09` 的 [TSRouter](https://arxiv.org/abs/2607.08940)。前者把不规则临床时序 QA 做成可核验证据链 benchmark，后者则把 `LLM/VLM 选择 + 成本约束` 明确建模成时序 reasoning 的动态路由问题。
+- `DailyArXiv` 的 [`README`](https://github.com/zezhishao/DailyArXiv/blob/master/README.md) 当前 `Last update` 已是 `2026-07-14`，并且在 `Time Series` 板块里确实出现了 `CITRAS-FM`、`Neuro-Agentic Control`、`TSRouter`、`PARA-PV`、`TimEE`、`RMISC`、`TopoBrick` 等相关论文；但它仍没有覆盖 `KairosAgent`、`AION`、`TimeClaw`、`TimeSage-MT`、`TSCognition` 等更偏 agent/harness/reasoning 的代表作。
+- foundation model 主线没有发生更近的范式变化，今天仍然最值得盯的是 `RMISC` 的预训练语料证据、`Break-Even Analysis` 的部署阈值、`Electricity Price Forecasting` 的污染与漂移评测，以及 `CITRAS-FM` 这种更轻量、可协变量驱动的 TSFM 设计。
+- GitHub 侧没有比 `2026-07-11` 的 [timeseries-mcp](https://github.com/Lkhanaajav/timeseries-mcp) / [mcp-trajectory-evals](https://github.com/Lkhanaajav/mcp-trajectory-evals) 更近且更高相关的新时序 Agent 工具仓库；但本轮补检新增确认了 `rnop/numerai-mcp-autoresearch` 这类更偏 `research harness + AutoML loop` 的可执行项目。
+- 光伏主线仍然是 [PARA-PV](https://arxiv.org/abs/2607.08079)、[Cold-Start PV Forecasting with Physics-Informed Synthetic Histories](https://arxiv.org/abs/2606.07457)、[ERCOT Power System Forecasting Assessment](https://arxiv.org/abs/2604.22077) 这三条最硬；GitHub 侧能确认到少量近窗实现，但相关性普遍低于论文信号。
 
 ## 0. 检索结论
 
 - 本次优先使用的一手来源：
-  - arXiv 摘要页与版本日期。
+  - arXiv API 的 `published` / `updated` 元数据。
   - 官方项目页：`KairosAgent`、`AION`。
-  - GitHub 官方仓库页与 GitHub API `created_at` / `updated_at` metadata。
-  - [`zezhishao/DailyArXiv`](https://github.com/zezhishao/DailyArXiv/blob/master/README.md) 的 `## Time Series` 原文。
-- `DailyArXiv` 已于 `2026-07-14` 更新，但新出现的 `2026-07-10` 条目大多偏一般 forecasting / anomaly detection，并没有比现有 agent / reasoning / TSFM 主线更强的新信号。
+  - GitHub API `created_at` / `updated_at` / `description` metadata。
+  - [`zezhishao/DailyArXiv`](https://github.com/zezhishao/DailyArXiv/blob/master/README.md) 的 `master` 分支 raw README。
 - 本次没有纳入主条目的情况：
   - 只能找到搜索摘要、无法回到论文页或仓库页确认日期的内容。
-  - 新建 GitHub 仓库虽然在窗口内，但更偏课程作业、通用 demo 或主题过宽，和时间序列 Agent / harness / reasoning 主线距离较远。
+  - GitHub 仓库虽然最近创建，但主题更偏课程作业、单点 demo 或泛监控工具，与时间序列 Agent / reasoning / harness 主线距离较远。
 - 总判断：截至 `2026-07-14`，过去三个月内最稳定的主线仍然是五条：
   - `TSFM 的部署价值和 break-even`;
   - `预训练语料质量、污染风险与分布漂移`;
   - `Agent runtime 如何组织 tool / memory / validator`;
-  - `时间序列 reasoning 能否被 benchmark 和 verifier 真正审计`;
+  - `时间序列 reasoning 能否被 benchmark、router 和 verifier 真正审计`;
   - `能源 / 光伏场景里，TSFM 与物理先验、检索和校正模块该如何组合`。
+
+### DailyArXiv 补检结论
+
+- 已直接核验 [`DailyArXiv` README](https://github.com/zezhishao/DailyArXiv/blob/master/README.md)；当前 raw 文件头部 `Last update: 2026-07-14`。
+- 在 `2026-04-14` 至 `2026-07-14` 窗口内、且与本简报主题直接相关的条目，能在 `Time Series` 板块中直接看到：
+  - `2026-07-10` [CITRAS-FM](https://arxiv.org/abs/2606.10798)
+  - `2026-07-10` [Neuro-Agentic Control](https://arxiv.org/abs/2607.09076)
+  - `2026-07-09` [TSRouter](https://arxiv.org/abs/2607.08940)
+  - `2026-07-09` [PARA-PV](https://arxiv.org/abs/2607.08079)
+  - `2026-07-08` [TimEE](https://arxiv.org/abs/2607.07500)
+  - `2026-07-07` [RMISC](https://arxiv.org/abs/2607.06504)
+  - `2026-07-07` [TopoBrick](https://arxiv.org/abs/2607.06349)
+- `DailyArXiv` 没有在本次命中结果里直接出现的主条目包括：`CLIR-Bench`、`KairosAgent`、`AION`、`TimeClaw`、`TimeSage-MT`、`TSCognition`、`FinSTaR`。这说明它对 `time series forecasting / foundation model` 覆盖较好，但对 `agentic reasoning / harness` 主线仍不完整。
+- 日期口径说明：
+  - `CITRAS-FM` 在 `DailyArXiv` 中显示为 `2026-07-10`，但 arXiv 原始 `published` 日期是 `2026-06-09`，`updated` 日期是 `2026-07-10`。正文因此按 `2026-06-09` 排序，并注明 `v2 更新于 2026-07-10`，避免把修订版误当成新论文。
+- 本轮未发现 `DailyArXiv` 中“主题强相关但超出三个月窗口、仍需要保留为主条目”的记录；也未发现需要因为日期冲突而完全剔除的相关条目。
 
 ## 1. 时间序列基础模型最新研究
 
@@ -77,7 +92,7 @@
 
 ### [2026-06-09，v2 更新于 2026-07-10] CITRAS-FM: Tiny Time Series Foundation Model for Covariate-Informed Zero-Shot Forecasting
 
-- 日期：2026-06-09（arXiv v2 更新于 2026-07-10）
+- 日期：2026-06-09（arXiv `updated=2026-07-10`）
 - 来源：[arXiv](https://arxiv.org/abs/2606.10798) / [GitHub](https://github.com/hitachi-ais/citras-fm)
 - 简短摘要：提出仅 7M 参数的 covariate-aware TSFM，通过 `Shifted Attention + CovSynth` 同时支持单变量、多变量和协变量驱动的 zero-shot forecasting，并强调 CPU 实时推理。
 - 相关性判断：高。它代表了“更小、更便宜、对已知未来协变量更友好”的 TSFM 设计方向。
@@ -120,6 +135,20 @@
 - 相关性判断：最高。若目标是建设可复用时序 Agent 平台，它仍然是最系统化的参考之一。
 
 ## 3. 时间序列 reasoning 模型最新研究
+
+### [2026-07-10] CLIR-Bench: Benchmarking Multimodal Question Answering over Irregular Clinical Time Series
+
+- 日期：2026-07-10
+- 来源：[arXiv](https://arxiv.org/abs/2607.09880)
+- 简短摘要：围绕稀疏、不规则、异步的临床时序构建 6600 个 QA 样本，并把显式时间证据和答案推导规则绑定到每个问题上，以便同时评估答案正确性与证据使用。
+- 相关性判断：高。它虽是临床垂域，但正中“不规则时序 + 可核验 reasoning”这条主线。
+
+### [2026-07-09] TSRouter: Dynamic Modality-Model Selection for Time Series Reasoning
+
+- 日期：2026-07-09
+- 来源：[arXiv](https://arxiv.org/abs/2607.08940) / [GitHub](https://github.com/tianyi-lab/TSRouter)
+- 简短摘要：把时间序列 reasoning 中的 `文本模式 LLM` 与 `图像模式 VLM` 选择问题显式建成异构图路由任务，并在性能-成本约束下动态选择最优 `modality-model pair`。
+- 相关性判断：最高。它非常接近未来时序 Agent 的 runtime router 和 cost-aware orchestration 设计。
 
 ### [2026-06-20] From Recognition to Understanding: Unlocking Cognitive Time Series Reasoning with LLMs
 
@@ -179,7 +208,7 @@
 - 日期：2026-07-08（GitHub API `created_at`）
 - 来源：[GitHub](https://github.com/Naveen-Boddepalli/time-series-autoML)
 - 简短摘要：一个面向时间序列 forecasting 的 AutoML web 工具，提供数据上传、模型运行和可视化入口，并独立部署到站点。
-- 相关性判断：中。工程深度暂时有限，但它是窗口内最贴题、日期也最新的 `time-series + AutoML` 明确项目之一。
+- 相关性判断：中。工程深度暂时有限，但它是窗口内最贴题、日期也较新的 `time-series + AutoML` 明确项目之一。
 
 #### [2026-07-06] ChamoLu/TSAD-Agent
 
@@ -195,19 +224,26 @@
 - 简短摘要：提供面向 AI forecasting 的 `time-masked retrieval harness`，强调 leak-free 的 as-of tools 和 forecaster scaffold。
 - 相关性判断：高。它非常贴近“防泄漏工具层 + 评测场”的核心工程问题。
 
+#### [2026-06-30] automl/timee
+
+- 日期：2026-06-30（GitHub API `created_at`，`updated_at=2026-07-13`）
+- 来源：[GitHub](https://github.com/automl/timee)
+- 简短摘要：`TimEE` 官方代码仓库，对应近期 end-to-end time-series ICL foundation model，并且在窗口内保持活跃更新。
+- 相关性判断：中高。更偏 foundation-model 实现，但与 `AutoML + time series model selection` 社区连接最直接。
+
+#### [2026-05-24] rnop/numerai-mcp-autoresearch
+
+- 日期：2026-05-24（GitHub API `created_at`，`updated_at=2026-07-12`）
+- 来源：[GitHub](https://github.com/rnop/numerai-mcp-autoresearch)
+- 简短摘要：一个面向 Numerai 的 autonomous research harness，结合实验循环、Bayesian optimization、time-series cross-validation 与自定义 MCP server。
+- 相关性判断：中高。虽然偏金融竞赛场景，但它是本轮补检里最像 `research harness + AutoML loop` 的可执行工程之一。
+
 #### [2026-06-17] AkshajKashyap/autoresearch-timeseries-agent
 
 - 日期：2026-06-17（GitHub API `created_at`）
 - 来源：[GitHub](https://github.com/AkshajKashyap/autoresearch-timeseries-agent)
 - 简短摘要：提供本地可复现的时间序列 forecasting benchmark，支持 synthetic/CSV 数据、基线模型、诊断报告、绘图和 config-driven experiment loop。
 - 相关性判断：中高。它更像 benchmark scaffold，但对本地时序 Agent 试验台搭建很有参考价值。
-
-#### [2026-06-01] TROUBADOUR000/Awesome-Agentic-Time-Series
-
-- 日期：2026-06-01（GitHub API `created_at`，`updated_at=2026-07-12`）
-- 来源：[GitHub](https://github.com/TROUBADOUR000/Awesome-Agentic-Time-Series)
-- 简短摘要：围绕 `The Landscape of Agentic Time Series Systems` 维护论文清单，聚合时间序列 agentic systems 的架构、可靠性和前沿话题。
-- 相关性判断：中高。它不是可执行框架，但作为情报聚合点很有用，且活跃度明显高于多数个人 demo 仓库。
 
 #### [2026-04-16] jaeukmoon/TSF
 
@@ -218,9 +254,21 @@
 
 ### 光伏功率预测
 
-- 本轮未检出在 `2026-04-14` 至 `2026-07-14` 窗口内、同时又高度贴合 `光伏功率预测 + Agent / harness / reasoning` 的新 GitHub 或 HuggingFace 项目；因此本栏不强行补录低相关仓库。
+#### [2026-07-07] Keshav95299/PV-Power-Forecasting-and-Fault-Detection
 
-## 5. 光伏功率预测最新研究
+- 日期：2026-07-07（GitHub API `created_at`）
+- 来源：[GitHub](https://github.com/Keshav95299/PV-Power-Forecasting-and-Fault-Detection)
+- 简短摘要：一个以 MATLAB 实现的短期光伏功率预测与故障检测仓库，额外包含 split conformal prediction。
+- 相关性判断：中低。它贴近光伏预测，但更像单项目实现，并不属于 Agent / harness 主线。
+
+#### [2026-07-05] danielr0815/balcony-solar-forecast
+
+- 日期：2026-07-05（GitHub API `created_at`）
+- 来源：[GitHub](https://github.com/danielr0815/balcony-solar-forecast)
+- 简短摘要：面向 Home Assistant 的阳台光伏自学习预测组件，强调多平面 PV 场景下的本地部署。
+- 相关性判断：低。工程上是近窗新项目，但与研究型时序 Agent / reasoning 的距离较远，因此仅作低优先级补录。
+
+## 5. 光功率 / 光伏功率预测相关最新研究
 
 ### [2026-07-09] PARA-PV: Physics-Aware Retrieval-Augmented PV Prediction Based on Frozen Foundation Model and Distribution Shift Correction
 
@@ -236,12 +284,19 @@
 - 简短摘要：针对新投运光伏站点缺少历史观测的问题，先用 plant metadata 与气象协变量生成 physics-informed synthetic histories，再让多种 TSFM 在 cold-start 条件下做推断式预测。
 - 相关性判断：高。它把 `冷启动 PV forecasting + TSFM + 物理先验生成上下文` 明确联到一起，和部署场景非常贴近。
 
-### [2026-05-18] Learning Long-Term Temporal Dependencies in Photovoltaic Power Output Prediction Through Multi-Horizon Forecasting
+### [2026-05-27] Inpainting-Style Conditional Diffusion for Multivariable Time Series Forecasting
 
-- 日期：2026-05-18
-- 来源：[arXiv](https://arxiv.org/abs/2605.19074)
-- 简短摘要：提出从单步预测转向 multi-horizon forecasting 的训练范式，联合利用天空图像与历史 PV 发电数据来捕获跨步长的长期依赖。
-- 相关性判断：高。它直接贴近光伏功率预测本身，而且强调训练目标设计，而不是单一架构堆叠。
+- 日期：2026-05-27
+- 来源：[arXiv](https://arxiv.org/abs/2605.28324)
+- 简短摘要：把多变量太阳能功率预测改写为条件扩散式 inpainting 问题，用掩码和历史窗口恢复未来区域，并在 GEFCom2014 PV 数据上验证短期预测能力。
+- 相关性判断：中高。它不走 TSFM/Agent 路线，但属于窗口内较新的光伏 forecasting 方法论文。
+
+### [2026-04-27] SolarTformer: A Transformer Based Deep Learning Approach for Short Term Solar Power Forecasting
+
+- 日期：2026-04-27
+- 来源：[arXiv](https://arxiv.org/abs/2604.24306)
+- 简短摘要：使用 attention-based transformer 和电站 metadata 来提升跨站点的短期太阳能功率预测，对晴天与阴天场景都强调泛化表现。
+- 相关性判断：中。它贴近任务本身，但与 Agent / reasoning / foundation model 的联系弱于上面几条。
 
 ### [2026-04-23] Empirical Assessment of Time-Series Foundation Models For Power System Forecasting Applications
 
