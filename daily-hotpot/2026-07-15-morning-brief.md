@@ -1,24 +1,24 @@
 # 2026-07-15 时间序列 Agent / Reasoning / Foundation Model 晨间简报
 
-检索时间：2026-07-15 07:32-08:04 Asia/Shanghai（含 `DailyArXiv` raw README、GitHub Search/API、昨日已核验 arXiv / 项目页链接复核）  
+检索时间：2026-07-15 15:05-15:34 Asia/Shanghai（含 arXiv 检索、公开可访问的 `DailyArXiv` GitHub README 页面复核、仓库内既有晨报交叉核对）  
 时间窗口：2026-04-15 至 2026-07-15  
-筛选口径：优先保留能在 arXiv 摘要页、官方项目页、GitHub 官方仓库页或 GitHub API metadata 中确认日期的条目；三个月外内容不列为主条目。  
+筛选口径：优先保留能在 arXiv 摘要页、官方项目页、GitHub 官方仓库页或公开可访问 README 中确认日期的条目；三个月外内容不列为主条目。  
 本次重点检索词：`time series foundation model`、`TSFM`、`time series agent`、`agentic time series reasoning`、`TSQA`、`time-series harness`、`AutoML time series`、`photovoltaic power forecasting`、`solar power forecasting`。
 
 ## 今日摘要
 
-- 截至 `2026-07-15`，`DailyArXiv` 的 [`README`](https://github.com/zezhishao/DailyArXiv/blob/master/README.md) 已更新到 `Last update: 2026-07-15`；但在 `2026-07-14` 到 `2026-07-15` 之间，没有检出比 `CLIR-Bench`、`TSRouter`、`Neuro-Agentic Control`、`PARA-PV`、`TimEE`、`RMISC`、`TopoBrick` 更近且更贴题的新主线论文。
+- 今天公开可访问的 [`DailyArXiv` README 页面](https://github.com/zezhishao/DailyArXiv/blob/master/README.md) 显示 `Last update: 2026-04-15`，且 `Time Series` 板块仅能稳定复核到 `2026-04-13` 的旧条目；这与仓库内前几天晨报记录的“7 月条目”不一致，因此本轮把 `DailyArXiv` 降为低优先级补充来源，不把其 7 月记录直接当作今日本轮新增依据。
 - 今天最值得补录的新增论文是 `2026-07-13` 的 [Bet on Features](https://arxiv.org/abs/2607.11653)，它把 forecaster auditing 做成 anytime-valid、feature-aware 的连续审计框架，直接补强了时序 Agent / harness 所需的 verifier 与 deployment guardrail 视角。
-- foundation model 主线仍然集中在四个问题：`预训练语料质量`、`部署 break-even`、`高噪声金融/能源场景下的失效边界`、`小模型 + covariate-aware 的可部署 TSFM`。
+- foundation model 主线仍然集中在四个问题：`预训练语料质量`、`部署 break-even`、`高噪声金融/能源场景下的失效边界`、`小模型 + covariate-aware 的可部署 TSFM`；其中 [MACROCAST](https://arxiv.org/abs/2606.28670) 代表了“严格 vintage-consistent、无泄漏训练协议”的一条很实用分支。
 - GitHub 侧，我用 `created:2026-07-11..2026-07-15` 对 `timeseries agent`、`time-series harness`、`AutoML time series`、`forecast timeseries` 做了增量搜索；新增命中主要是 portfolio、case study 或数据库类仓库，没有比 [timeseries-mcp](https://github.com/Lkhanaajav/timeseries-mcp)、[mcp-trajectory-evals](https://github.com/Lkhanaajav/mcp-trajectory-evals)、[TSAD-Agent](https://github.com/ChamoLu/TSAD-Agent) 更强的新项目。
 - 光伏主线没有变化，仍以 [PARA-PV](https://arxiv.org/abs/2607.08079)、[Cold-Start PV Forecasting with Physics-Informed Synthetic Histories](https://arxiv.org/abs/2606.07457)、[Empirical Assessment of Time-Series Foundation Models For Power System Forecasting Applications](https://arxiv.org/abs/2604.22077) 为主。
 
 ## 0. 检索结论
 
 - 本次优先使用的一手来源：
-  - arXiv 摘要页与 `DailyArXiv` raw README 的日期记录。
+  - arXiv 摘要页的 `published` 日期与论文摘要。
   - 官方项目页：`KairosAgent`、`AION`。
-  - GitHub Search API 与 GitHub Repository API 的 `created_at` / `updated_at` / `description` metadata。
+  - GitHub 官方仓库页与公开可访问的 [`DailyArXiv` README 页面](https://github.com/zezhishao/DailyArXiv/blob/master/README.md)。
 - 本次没有纳入主条目的情况：
   - 只能找到搜索命中、无法回到论文页或仓库页确认日期的内容。
   - GitHub 新仓库虽然创建时间更近，但内容主要是课程项目、portfolio、单点 forecasting demo，和时序 Agent / reasoning / harness 主线距离较远。
@@ -31,21 +31,10 @@
 
 ### DailyArXiv 补检结论
 
-- 已直接核验 [`DailyArXiv` README](https://github.com/zezhishao/DailyArXiv/blob/master/README.md)；当前 raw 文件头部 `Last update: 2026-07-15`。
-- 在 `2026-04-15` 至 `2026-07-15` 窗口内、且与本简报主题直接相关的条目，`Time Series` 板块仍能直接看到：
-  - `2026-07-13` [Bet on Features](https://arxiv.org/abs/2607.11653)
-  - `2026-07-10` [CLIR-Bench](https://arxiv.org/abs/2607.09880)
-  - `2026-07-10` [CITRAS-FM](https://arxiv.org/abs/2606.10798)
-  - `2026-07-10` [Neuro-Agentic Control](https://arxiv.org/abs/2607.09076)
-  - `2026-07-09` [TSRouter](https://arxiv.org/abs/2607.08940)
-  - `2026-07-09` [PARA-PV](https://arxiv.org/abs/2607.08079)
-  - `2026-07-08` [TimEE](https://arxiv.org/abs/2607.07500)
-  - `2026-07-07` [RMISC](https://arxiv.org/abs/2607.06504)
-  - `2026-07-07` [TopoBrick](https://arxiv.org/abs/2607.06349)
-- `DailyArXiv` 仍没有完整覆盖 `KairosAgent`、`AION`、`TimeClaw`、`TSCognition`、`IRTS-ToolBench`、`TimeSage-MT`、`FinSTaR` 这些更偏 agent / harness / reasoning 的代表作，因此正文继续补充这些条目。
-- 日期口径说明：
-  - `CITRAS-FM` 在 `DailyArXiv` 中显示为 `2026-07-10`，但对应 arXiv 论文是 `2026-06-09` 发布、`2026-07-10` 更新；正文仍按首发日期 `2026-06-09` 排序，并保留更新说明。
-- 本轮未纳入 `不确定` 条目；所有主清单都能确认到日期。
+- 已直接核验公开可访问的 [`DailyArXiv` README 页面](https://github.com/zezhishao/DailyArXiv/blob/master/README.md)；当前页面显示 `Last update: 2026-04-15`。
+- 该页面 `Time Series` 板块当前可稳定复核到的最新条目是 `2026-04-13` 的 `MSTN` 与 `TempusBench`，均早于本轮窗口起点 `2026-04-15`，因此今天不把 `DailyArXiv` 作为窗口内新增条目的主要来源。
+- 仓库内前几天晨报曾记录过 `Bet on Features`、`TSRouter`、`PARA-PV`、`RMISC` 等“来自 DailyArXiv Time Series 板块”的 7 月条目；但由于今天公开页面无法复核到这些记录，且日期口径与当前页面不一致，这部分结论统一标注为 `不确定` 并降优先级处理。
+- 结论：`DailyArXiv` 今天对本简报的作用仅限于“确认公开 README 页面存在 `Time Series` 板块，但当前可见条目已超窗”；正文主条目继续以 arXiv / 官方项目页 / GitHub 仓库页为准。
 
 ## 1. 时间序列基础模型最新研究
 
@@ -97,6 +86,13 @@
 - 来源：[arXiv](https://arxiv.org/abs/2607.02623)
 - 简短摘要：面向电价预测构建降低 contamination risk 的评测框架，比较 TSFM、领域方法与简单集成在点预测、概率预测和尾部风险上的表现。
 - 相关性判断：高。它非常贴近真实部署环境，尤其适合指导能源场景里的 validator 设计。
+
+### [2026-06-27] MACROCAST: A Vintage-Consistent Time Series Foundation Model for Real-Time Macroeconomic Forecasting
+
+- 日期：2026-06-27
+- 来源：[arXiv](https://arxiv.org/abs/2606.28670)
+- 简短摘要：提出强调 `vintage-consistent` 和 `no leakage` 的宏观预测 TSFM，把真实发布时间与可获得性边界显式写入训练和评测协议，并报告对 Chronos-2 与传统宏观模型的对比结果。
+- 相关性判断：高。它对需要严格回测一致性、时间戳合规和无泄漏实验设计的时序 Agent / harness 很有参考价值。
 
 ### [2026-06-09，v2 更新于 2026-07-10] CITRAS-FM: Tiny Time Series Foundation Model for Covariate-Informed Zero-Shot Forecasting
 
@@ -317,4 +313,5 @@
 
 - 今天不是周五（`2026-07-15`，周三），因此本次不生成 `weekly-brief-2026-WW.md`。
 - 当前窗口起点是 `2026-04-15`；`2026-04-14` 及更早条目继续排除，不回流到主清单。
+- `ssh-add --apple-use-keychain ~/.ssh/id_ed25519_github_demo_agent_pg` 在当前受限环境中返回 `Error connecting to agent: Operation not permitted`，随后单独执行 `git pull --ff-only` 也因 `ssh: connect to host github.com port 22: Operation not permitted` 失败；因此本轮无法从远端拉取或推送。
 - GitHub 增量搜索中命中的 `StrikeDB`、`TimeSeries-Forecasting-Projects` 等仓库虽然创建时间更新，但与时间序列 Agent / reasoning / harness 的相关性偏弱，因此未纳入主表。
