@@ -1,6 +1,6 @@
 # 2026-07-16 时间序列 Agent / Reasoning / Foundation Model 晨间简报
 
-检索时间：2026-07-16 15:10-15:57 Asia/Shanghai（含 arXiv、GitHub API、官方项目页、公开可访问的 `DailyArXiv` README 页面复核）  
+检索时间：2026-07-16 07:10-08:09 Asia/Shanghai（含 arXiv、GitHub API、官方项目页、公开可访问的 `DailyArXiv` README 页面复核）  
 时间窗口：2026-04-16 至 2026-07-16  
 筛选口径：优先保留能在 arXiv 摘要页、官方项目页、GitHub 官方仓库页或 GitHub API 中确认日期的条目；三个月外内容不列为主条目。  
 本次重点检索词：`time series foundation model`、`TSFM`、`time series agent`、`agentic time series`、`time series reasoning`、`TSQA`、`time-series harness`、`AutoML time series`、`machine learning timeseries`。
