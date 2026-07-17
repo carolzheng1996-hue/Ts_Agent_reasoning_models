@@ -1,6 +1,6 @@
 # 2026-07-17 时间序列 Agent / Reasoning / Foundation Model 晨间简报
 
-检索时间：2026-07-17 08:40-16:30 Asia/Shanghai  
+检索时间：2026-07-17 08:40-17:35 Asia/Shanghai  
 时间窗口：2026-04-17 至 2026-07-17  
 优先来源：arXiv 摘要页 / arXiv API、官方项目页、GitHub 官方仓库页 / GitHub API、公开可访问的 `DailyArXiv` README  
 检索词：`time series foundation model`、`time series agent`、`agentic time series`、`time series reasoning`、`TSQA`、`time-series harness`、`AutoML time series`、`photovoltaic power forecasting`、`solar power forecasting`
@@ -10,8 +10,8 @@
 - 今天最值得补进主线的新信号不是“又一个更大的 TSFM”，而是 `2026-07-14` 的 [The Spectrum Is Not Enough](https://arxiv.org/abs/2607.13006) 与 [Exploring Zero-Shot Foundation Models for Multivariate Time Series Anomaly Detection](https://arxiv.org/abs/2607.12454)。前者直接回答“什么时候额外上下文、检索或 foundation model 真能带来增益”，后者则更清楚地划出了 `TimesFM` 在多变量异常检测上的失效边界。
 - `DailyArXiv` 今天可直接复核到 `Last update: 2026-07-17`，`Time Series` 板块里确实包含 `2026-07-15` 的 [The Spectrum Is Not Enough](https://arxiv.org/abs/2607.13006v2) 等近窗条目；因此它本轮恢复为中等优先级补检来源，但正文排序仍以 arXiv 原始 `published/submitted` 日期为准。
 - Agent / reasoning 方向过去三个月最稳的骨架没有变化，仍是 `TimeClaw + KairosAgent + AION + TimeSage-MT + TSRouter + IRTS-ToolBench` 这条线；今天的增量更偏“怎么做 deployment audit / routing / guardrail”，而不是出现更强的新 benchmark。
-- GitHub 侧，这周最值得继续跟的仍是 [timeseries-mcp](https://github.com/Lkhanaajav/timeseries-mcp)、[mcp-trajectory-evals](https://github.com/Lkhanaajav/mcp-trajectory-evals)、[time-series-autoML](https://github.com/Naveen-Boddepalli/time-series-autoML)、[forecast-playground](https://github.com/xavierdurawa/forecast-playground) 和 [TSAD-Agent](https://github.com/ChamoLu/TSAD-Agent)。它们分别覆盖 `统计工具层`、`trajectory eval harness`、`AutoML UI scaffold`、`leak-free forecasting playground` 和 `异常检测 Agent`。
-- 光伏方向过去三个月最有跟踪价值的仍是 [PARA-PV](https://arxiv.org/abs/2607.08079)、[Cold-Start Photovoltaic Forecasting](https://arxiv.org/abs/2606.07457)、[Empirical Assessment of Time-Series Foundation Models For Power System Forecasting Applications](https://arxiv.org/abs/2604.22077) 三条线，分别对应 `检索增强 + 物理约束`、`零样本冷启动`、`电力系统部署评测`。
+- GitHub 侧，今天新出现的 [swarm-ai-research/blf-forecaster](https://github.com/swarm-ai-research/blf-forecaster) 值得补进观察列表；再加上 [timeseries-mcp](https://github.com/Lkhanaajav/timeseries-mcp)、[mcp-trajectory-evals](https://github.com/Lkhanaajav/mcp-trajectory-evals)、[time-series-autoML](https://github.com/Naveen-Boddepalli/time-series-autoML)、[forecast-playground](https://github.com/xavierdurawa/forecast-playground) 和 [TSAD-Agent](https://github.com/ChamoLu/TSAD-Agent)，本周 GitHub 信号继续集中在 `forecasting harness + stats tools + eval + AutoML scaffold`。
+- 光伏方向除了 [PARA-PV](https://arxiv.org/abs/2607.08079)、[Cold-Start Photovoltaic Forecasting](https://arxiv.org/abs/2606.07457)、[Empirical Assessment of Time-Series Foundation Models For Power System Forecasting Applications](https://arxiv.org/abs/2604.22077) 三条线，今天还应补上 `2026-07-14` 的 [Robustness of Deep Learning Models for PV Power Forecasting under NWP Forecast Errors](https://arxiv.org/abs/2607.12954)，它更直接回答工程部署里 `天气预报误差会怎样传导到 PV 预测模型`。
 
 ## 0. 检索结论
 
@@ -95,6 +95,13 @@
 - 来源：[arXiv](https://arxiv.org/abs/2607.02623)
 - 简短摘要：围绕电价预测建立更严格的评测框架，重点检查 contamination risk、分布漂移与协变量依赖，并比较 TSFM、领域方法与简单集成在点预测、概率预测和尾部风险上的表现。
 - 相关性判断：高。对能源类时序 Agent 的 validator 设计非常直接。
+
+### [2026-07-02] Zeus: Towards Tuning-Free Foundation Model for Time Series Analysis
+
+- 日期：2026-07-02
+- 来源：[arXiv](https://arxiv.org/abs/2607.01918)
+- 简短摘要：提出统一的 tuning-free TSFM，通过 `multi-scale Transformer + Multi-Objective Temporal Masking` 在 extrapolation、interpolation 和 global abstraction 等多任务上维持无需任务特定微调的泛化能力。
+- 相关性判断：高。它代表了一条与 `Chronos / Moirai` 不同的“多任务统一、少调参部署”路线，适合作为 Agent 默认底座候选来跟踪。
 
 ## 2. 时间序列建模 Agent 最新研究
 
@@ -186,6 +193,13 @@
 
 ## 4. 光伏功率预测最新研究
 
+### [2026-07-14] Robustness of Deep Learning Models for PV Power Forecasting under NWP Forecast Errors: A Spatiotemporal and Physically Interpretable Analysis
+
+- 日期：2026-07-14
+- 来源：[arXiv](https://arxiv.org/abs/2607.12954)
+- 简短摘要：围绕数值天气预报误差如何沿着 PV forecasting pipeline 传导，构建了受物理约束的鲁棒性评测框架，并比较 PatchTST、GRU、N-HITS、LightGBM 等模型在不同扰动强度下的稳健性与计算开销。
+- 相关性判断：高。它不属于 foundation model 路线，但对 `光伏预测模型上线时如何评估天气输入误差敏感性` 很关键。
+
 ### [2026-07-09] PARA-PV: Physics-Aware Retrieval-Augmented PV Prediction Based on Frozen Foundation Model and Distribution Shift Correction
 
 - 日期：2026-07-09
@@ -210,6 +224,13 @@
 ## 5. GitHub 和 HuggingFace 上值得跟踪的新项目
 
 ### 时间序列
+
+#### [2026-07-17] swarm-ai-research/blf-forecaster
+
+- 日期：2026-07-17（GitHub API `created_at`）
+- 来源：[GitHub](https://github.com/swarm-ai-research/blf-forecaster)
+- 简短摘要：一个面向 AI forecasting 的 belief-state agent loop 实现，绑定了 multi-trial aggregation、hierarchical calibration、time-series tools 和 ForecastBench eval harness。
+- 相关性判断：中高。它不是时间序列专用研究项目，但和 `forecasting agent + harness + calibration` 的工程主线很贴近，而且是今天新出现的仓库。
 
 #### [2026-07-11] Lkhanaajav/timeseries-mcp
 
