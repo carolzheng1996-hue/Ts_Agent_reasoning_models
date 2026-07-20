@@ -1,6 +1,6 @@
 # 2026-07-20 时间序列 Agent / Reasoning / Foundation Model 晨间简报
 
-检索时间：2026-07-20 08:45-09:05 Asia/Shanghai  
+检索时间：2026-07-20 08:45-09:05、15:20-15:35 Asia/Shanghai  
 时间窗口：2026-04-20 至 2026-07-20  
 优先来源：arXiv 摘要页、官方项目页、GitHub 官方仓库页 / GitHub API、公开可访问的 `DailyArXiv` README  
 检索词：`time series foundation model`、`time series agent`、`agentic time series`、`time series reasoning`、`TSQA`、`time-series harness`、`AutoML time series`、`photovoltaic power forecasting`、`solar power forecasting`
@@ -9,6 +9,7 @@
 
 - 今天最值得补进主线的是 `2026-07-16` 的 [VLT](https://arxiv.org/abs/2607.14510)。它把视觉、语言与时间序列放进同一工业多模态 foundation model 里，比单纯 forecasting backbone 更接近未来时序 Agent 的统一感知底座。
 - [`DailyArXiv` README](https://github.com/zezhishao/DailyArXiv) 当前公开页已更新到 `Last update: 2026-07-20`，`Time Series` 板块仍能稳定补到 `VLT`、`The Spectrum Is Not Enough`、`TSRouter` 等近窗论文；但 `Adaptive Time Series Reasoning via Segment Selection (ARTIST)` 在 README 里显示为 `2026-07-16`，其 arXiv 原始提交页却是 `2026-02-24`，本轮只保留为补检线索，不纳入正文主排序。
+- 15:35 复检补进了 `2026-05-23` 的 [Assessing the Operational Viability of Foundation Models for Time Series Forecasting](https://arxiv.org/abs/2605.24381)。这篇把 TSFM 的适用场景拆成可操作的 deployment regime，并给出 `Complexity Router` 作为选型思路。
 - 过去三个月里，时间序列基础模型的增量重点仍然不是“更大参数”，而是 `何时值得启用更长上下文 / retrieval / TSFM`、`如何做持续审计`、`以及多模态或任务级 ICL 是否真的带来稳定收益`。
 - Agent / reasoning 方向的新信号仍集中在 `runtime + router + verifier + benchmark`：`TimeClaw`、`KairosAgent`、`AION`、`TSRouter`、`CLIR-Bench` 和 `IRTS-ToolBench` 依旧是最直接影响时序 Agent 实作的公开基线。
 - GitHub 项目本轮新增信号主要还是轻量工具层：`blf-forecaster`、`timeseries-mcp`、`mcp-trajectory-evals`、`time-series-autoML`、`forecast-playground`。高质量、近窗、且真正聚焦“PV forecasting agent/harness”的新仓库依然偏少，官方代码里最值得跟的仍是 [PARA-PV](https://github.com/weican1103/PARA-PV)。
@@ -30,6 +31,8 @@
   - `时间序列 reasoning` 是否能被 benchmark、router 与 verifier 真正审计；
   - GitHub 上开始出现更接近 `trajectory eval harness / deterministic stats tools / AutoML scaffold` 的轻量实现；
   - 光伏预测里，foundation model 仍然要和 `retrieval / physics constraints / shift correction / cold-start prior` 结合才更实用。
+- 复检增量：
+  - 增补了 `2026-05-23` 的 `Assessing the Operational Viability of Foundation Models for Time Series Forecasting`，因为它直接回答了 `TSFM 何时值得部署、何时该回退到 specialist`。
 
 ### DailyArXiv 补检结论
 
@@ -96,6 +99,13 @@
 - 来源：[arXiv](https://arxiv.org/abs/2607.01918)
 - 简短摘要：提出统一的 tuning-free TSFM，通过多尺度建模与多目标时间掩码，覆盖 extrapolation、interpolation 与 global abstraction 等多类任务。
 - 相关性判断：高。它代表了一条“尽量少调参、统一多任务”的部署路线。
+
+### [2026-05-23] Assessing the Operational Viability of Foundation Models for Time Series Forecasting
+
+- 日期：2026-05-23
+- 来源：[arXiv](https://arxiv.org/abs/2605.24381)
+- 简短摘要：系统比较 foundation model 与 supervised specialist 在周期性业务、物理约束系统、金融市场与异质需求预测等不同 operational regime 下的表现，并提出 `Complexity Router` 在精度与推理成本之间做选择。
+- 相关性判断：最高。它不是新 backbone，但对 `TSFM 是否该上线、何时退回专用模型` 的部署决策非常直接。
 
 ## 2. 时间序列建模 Agent 最新研究
 
