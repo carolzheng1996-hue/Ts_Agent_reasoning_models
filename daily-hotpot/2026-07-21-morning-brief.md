@@ -1,6 +1,6 @@
 # 2026-07-21 时间序列 Agent / Reasoning / Foundation Model 晨间简报
 
-检索时间：2026-07-21 10:58 CST，Asia/Shanghai  
+检索时间：2026-07-21 15:33 CST，Asia/Shanghai  
 时间窗口：2026-04-21 至 2026-07-21  
 优先来源：arXiv 摘要页、官方项目页、GitHub 官方仓库页 / GitHub API、公开可访问的 `DailyArXiv` README  
 检索词：`time series foundation model`、`time series agent`、`agentic time series`、`time series reasoning`、`TSQA`、`time-series harness`、`AutoML time series`、`photovoltaic power forecasting`
@@ -8,7 +8,7 @@
 ## 今日摘要
 
 - 截至 `2026-07-21`，过去 24 小时内没有检出比 `2026-07-20` 更强、且日期可直接确认的新论文主线条目；基础模型、Agent、reasoning 三条主线仍由 `VLT`、`The Spectrum Is Not Enough`、`TimeClaw`、`KairosAgent`、`AION`、`TSRouter`、`TimeSage-MT` 等工作主导。
-- [`DailyArXiv` README](https://github.com/zezhishao/DailyArXiv) 当前显示 `Last update: 2026-07-21`，`Time Series` 板块新增可见的最新条目主要落在 `2026-07-17`，但更偏一般时序建模与异常检测，和 `timeseries foundation model / agent / reasoning` 主线的直接相关性有限。
+- [`DailyArXiv` README](https://github.com/zezhishao/DailyArXiv) 通过 GitHub API 复核后可确认当前 `Last update: 2026-07-21`；`Time Series` 板块最近可见条目主要落在 `2026-07-17`，但更偏一般时序建模、异常检测与负荷预测，和 `timeseries foundation model / agent / reasoning / PV forecasting` 主线的直接相关性有限。
 - GitHub 侧今天确实出现了少量新仓库信号，其中 `goodekang/tsar-anonymous-src`（`2026-07-19`）和 `manu458-dev/SMAAI-DFS`（`2026-07-21`）与时序 Agent 主线最相关，但都缺少成熟文档或论文背书，因此仅列为低优先级观察对象。
 - 过去三个月里最值得持续跟踪的结构性方向没有变化：`TSFM 的部署诊断与审计`、`时序 Agent runtime / harness`、`时序 reasoning 的 router / benchmark / verifier`、以及 `PV forecasting 中 retrieval + physics constraints + frozen foundation model` 的组合路线。
 
@@ -236,7 +236,14 @@
 - 简短摘要：匿名代码发布，仓库描述为 `TSAR multimodal agentic time series forecasting`。
 - 相关性判断：中。标题与主题高度相关，但缺少配套论文页或详细说明，暂列低置信度观察对象。
 
-## 6. 结论
+## 6. DailyArXiv 补检结论
+
+- 补检来源：[DailyArXiv README](https://github.com/zezhishao/DailyArXiv)；本次通过 GitHub API 返回的 README 内容复核到 `Last update: 2026-07-21`。
+- `Time Series` 板块最近可见条目主要集中在 `2026-07-17`，从标题与摘要看以一般时序理论、异常检测、负荷预测等方向为主。
+- 本次未发现比正文已列条目更强、且能稳定归入 `foundation model / agent / reasoning / 光伏功率预测` 四条主线的新论文，因此未单独新增 `DailyArXiv` 来源条目。
+- 若某些标题在 `DailyArXiv` 中看起来相关，但其原始 arXiv 日期超出三个月窗口、或无法快速稳定确认与主线的直接相关性，则本次统一降优先级处理，不写入正文主列表。
+
+## 7. 结论
 
 - 截至 `2026-07-21`，最值得追踪的研究主线没有改变：
   - `TSFM 部署诊断与审计`：`The Spectrum Is Not Enough`、`Bet on Features`、`Assessing the Operational Viability...`
