@@ -1,36 +1,58 @@
 # 2026-07-22 时间序列 Agent / Reasoning / Foundation Model 晨间简报
 
-检索时间：2026-07-22 08:25 CST，Asia/Shanghai  
+检索时间：2026-07-22 15:36 CST，Asia/Shanghai  
 时间窗口：2026-04-22 至 2026-07-22  
-优先来源：arXiv 摘要页、官方项目页、GitHub 官方仓库页 / GitHub API  
-检索词：`time series foundation model`、`time series agent`、`agentic time series`、`time series reasoning`、`TSQA`、`time-series harness`、`AutoML time series`、`photovoltaic forecasting`
+优先来源：arXiv 摘要页、官方项目页、GitHub 官方仓库页 / GitHub API、`DailyArXiv` README  
+检索词：`time series foundation model`、`time series agent`、`agentic time series`、`time series reasoning`、`TSQA`、`time-series harness`、`AutoML time series`、`photovoltaic power forecasting`
 
 ## 今日摘要
 
-- 截至 `2026-07-22`，过去 24 小时内没有检出比 `2026-07-21` 更强、且日期清晰的新主线论文；基础模型、Agent、reasoning 三条主线仍由 `VLT`、`The Spectrum Is Not Enough`、`TimeClaw`、`KairosAgent`、`AION`、`TSRouter`、`TimeSage-MT` 等工作主导。
-- 今天的净增量主要来自补检而非全新发布：基础模型侧补入了 [`When Do Foundation Models Pay Off?`](https://arxiv.org/abs/2607.04919)，Agent 侧补入了 [`Nexus: An Agentic Framework for Time Series Forecasting`](https://arxiv.org/abs/2605.09534)。两者都在三个月窗口内，且和 `路由 / planner / forecaster` 主线直接相关。
-- GitHub 侧近两周最值得跟踪的不是“大而全”的新时序 Agent，而是 `tool layer + eval harness + forecasting scaffold`：[`timeseries-mcp`](https://github.com/Lkhanaajav/timeseries-mcp)、[`mcp-trajectory-evals`](https://github.com/Lkhanaajav/mcp-trajectory-evals)、[`forecast-playground`](https://github.com/xavierdurawa/forecast-playground)、[`blf-forecaster`](https://github.com/swarm-ai-research/blf-forecaster) 形成了比较清晰的工具链。
-- 光伏方向没有出现比 [`PARA-PV`](https://arxiv.org/abs/2607.08079) 更完整的新方案，当前最有价值的组合仍是 `frozen TSFM prior + retrieval + physics constraints + shift correction`。
+- 截至 `2026-07-22`，过去 24 小时没有出现比 `VLT`、`TimeClaw`、`KairosAgent`、`AION`、`TSRouter`、`TimeSage-MT` 更强的新主线 Agent / reasoning 论文。
+- 今天最有价值的新增信号主要来自 `DailyArXiv` 补检：`Time Series` 板块在 `2026-07-20` 新挂出了 3 篇 TSFM 部署向论文，分别聚焦 `special-event crowd forecasting`、`drought forecasting wrapper` 和 `residual refinement`。
+- 基础模型方向今天最值得补入的是 [`When Do Foundation Models Pay Off?`](https://arxiv.org/abs/2607.04919)、[`Towards Reliable Zero-Shot Crowd Forecasting`](https://arxiv.org/abs/2607.17758)、[`Lightweight Wrappers for Adapting TSFMs to Regional Drought Forecasting`](https://arxiv.org/abs/2607.17511)。
+- GitHub 侧近两周仍然是 `tool layer + trajectory eval + forecasting scaffold` 最清晰：`timeseries-mcp`、`mcp-trajectory-evals`、`forecast-playground`、`blf-forecaster` 组合起来，已经接近一套可运行的时序 Agent 基础设施。
+- 光伏方向暂时没有比 [`PARA-PV`](https://arxiv.org/abs/2607.08079) 更完整的新方案；当前最强路线仍是 `frozen TSFM prior + retrieval + physics constraints + shift correction`。
 
 ## 0. 检索说明
 
 - 只保留 `2026-04-22` 至 `2026-07-22` 三个月窗口内的内容。
-- 论文日期优先采用 arXiv 摘要页 `published` 日期；仓库日期优先采用 GitHub API `created_at`。
-- 若同一工作同时有 arXiv 与项目页，正文优先给出 arXiv，并补充官方项目页或代码仓库。
-- 若仓库文档稀疏、描述很短或缺少论文 / 项目页支撑，则降低优先级；本日报未纳入日期不确定条目。
+- 论文日期优先采用 arXiv 摘要页 `Submitted on` 日期；如 `DailyArXiv` 使用的是后续版本日期，会在补检结论里单独说明。
+- 仓库日期优先采用 GitHub API `created_at`。本轮匿名 GitHub API 在中途限流；对少数仍保留的仓库创建日期，沿用今日文件已有的前序 API 复核结果，并在相关性判断中适当降置信阅读。
+- `DailyArXiv` 仅用来补检新标题，不替代原始 arXiv / 官方项目页。
 
 ## 1. 时间序列基础模型最新研究
+
+### [2026-07-20] Towards Reliable Zero-Shot Crowd Forecasting: Evaluating Time Series Foundation Models for Special Event Pedestrian Forecasting
+
+- 日期：2026-07-20
+- 来源：[arXiv](https://arxiv.org/abs/2607.17758)
+- 简短摘要：评估 pretrained TSFM 在稀历史、强波动的特殊事件人流预测场景中的零样本概率预测能力，并给出何时还能保持运营可靠性的经验边界。
+- 相关性判断：中高。不是新 backbone，但对 `零样本 TSFM 的可上线边界` 很有参考价值。
+
+### [2026-07-20] Lightweight Wrappers for Adapting Time Series Foundation Models to Regional Drought Forecasting
+
+- 日期：2026-07-20
+- 来源：[arXiv](https://arxiv.org/abs/2607.17511)
+- 简短摘要：提出不改 backbone 权重的推理期 wrapper，用多分辨率残差修正和 block bootstrap 方式增强 frozen TSFM 在区域干旱预测上的适配能力。
+- 相关性判断：中高。它证明 `frozen TSFM + inference-time adapter` 可以在资源受限场景下落地。
+
+### [2026-07-20] Residual-Guided Multi-Resolution Refinement of Foundation Models: A Case Study in Drought Forecasting
+
+- 日期：2026-07-20
+- 来源：[arXiv](https://arxiv.org/abs/2607.17507)
+- 简短摘要：把专家式的多尺度诊断与 residual refinement 显式加到 TSFM 推理流程里，在 drought forecasting 上稳定降低误差。
+- 相关性判断：中。更偏气候应用，但对 `foundation model 部署侧 refinement` 很有启发。
 
 ### [2026-07-16] VLT: A Vision-Language-Time Series Multimodal Foundation Model for Industrial Intelligence
 
 - 日期：2026-07-16
 - 来源：[arXiv](https://arxiv.org/abs/2607.14510)
-- 简短摘要：提出统一建模工业时间序列、视觉频谱表示与文本知识的多模态 foundation model，通过共享表征空间支持监测、诊断与解释任务。
+- 简短摘要：联合建模工业时间序列、频谱视觉表示与文本知识，通过共享表征空间支持监测、诊断与解释任务。
 - 相关性判断：最高。它比单任务 forecasting backbone 更接近未来时序 Agent 的多模态底座。
 
 ### [2026-07-14] The Spectrum Is Not Enough: When Context Helps Time-Series Forecasting
 
-- 日期：2026-07-14
+- 日期：2026-07-14（v2 更新于 2026-07-15）
 - 来源：[arXiv](https://arxiv.org/abs/2607.13006)
 - 简短摘要：指出频谱特征不足以判断 `长上下文 / retrieval / pretrained TSFM` 何时真正有用，并提出 `coverage deficit` 作为无标签部署诊断量。
 - 相关性判断：最高。它直接服务于时序 Agent 的上下文开关、retrieval 触发与模型路由决策。
@@ -53,42 +75,21 @@
 
 - 日期：2026-07-06
 - 来源：[arXiv](https://arxiv.org/abs/2607.04919)
-- 简短摘要：从精度、推理成本与使用频率的角度分析 pretrained time-series forecaster 的 break-even 区间，回答“什么时候 foundation model 比专用模型更值得部署”。
+- 简短摘要：从精度、推理成本与样本规模的角度分析 pretrained forecaster 的 break-even 区间，给出何时 TSFM 比经典方法更值得部署的规则。
 - 相关性判断：最高。它非常适合转化为时序 Agent 的模型路由和成本控制规则。
 
 ### [2026-07-02] Zeus: Towards Tuning-Free Foundation Model for Time Series Analysis
 
 - 日期：2026-07-02
 - 来源：[arXiv](https://arxiv.org/abs/2607.01918)
-- 简短摘要：提出 tuning-free TSFM，通过多尺度 Transformer 与统一时间掩码目标覆盖 extrapolation、interpolation 与 global abstraction 等多类任务。
+- 简短摘要：提出 tuning-free TSFM，通过多尺度 Transformer 与统一时间掩码目标覆盖 extrapolation、interpolation 和 global abstraction 等任务。
 - 相关性判断：高。它代表了“统一多任务、尽量少调参”的 TSFM 部署路线。
-
-### [2026-05-23] Assessing the Operational Viability of Foundation Models for Time Series Forecasting
-
-- 日期：2026-05-23
-- 来源：[arXiv](https://arxiv.org/abs/2605.24381)
-- 简短摘要：按业务周期性、物理约束、金融时变性与需求异质性等 regime 比较 TSFM 与 specialist，并提出 `Complexity Router` 做精度与成本权衡。
-- 相关性判断：最高。它对 `TSFM 何时值得上线、何时应回退专用模型` 的回答最直接。
 
 ## 2. 时间序列建模 Agent 最新研究
 
-### [2026-07-10] Neuro-Agentic Control: A Deep Learning-based LLM-Powered Agentic AI Framework for Controlling Security Controls
-
-- 日期：2026-07-10
-- 来源：[arXiv](https://arxiv.org/abs/2607.09076)
-- 简短摘要：用 `LLM planner + TimesFM sentinel` 形成闭环控制，并在执行前通过反事实物理注入与约束检查拦截高风险策略。
-- 相关性判断：中高。虽然场景偏工业控制安全，但架构上很像时序 Agent 的 `plan + simulate + gate`。
-
-### [2026-07-07] TopoBrick: Agentic Topology Sampling of Exogenous Variables for Zero-Shot Building IoT Forecasting
-
-- 日期：2026-07-07
-- 来源：[arXiv](https://arxiv.org/abs/2607.06349)
-- 简短摘要：通过楼宇知识图谱与 `agentic topology sampler` 在部署时选择外生变量，不依赖训练即可做零样本楼宇 IoT 预测。
-- 相关性判断：高。它把 agentic selection 真正嵌进时序部署链路。
-
 ### [2026-06-17] DeXposure-Claw: An Agentic System for DeFi Risk Supervision
 
-- 日期：2026-06-17
+- 日期：2026-06-17（v2 更新于 2026-06-29）
 - 来源：[arXiv](https://arxiv.org/abs/2606.19501) / [GitHub](https://github.com/EVIEHub/DeXposure-Claw)
 - 简短摘要：用图时序 foundation model 预测暴露网络，再结合 deterministic monitor、stress scenario 与 confidence gate 生成可审计风险票据。
 - 相关性判断：最高。它仍是近窗里最像生产监督系统的时序 Agent 公开实现之一。
@@ -132,7 +133,7 @@
 
 ### [2026-07-09] TSRouter: Dynamic Modality-Model Selection for Time Series Reasoning
 
-- 日期：2026-07-09
+- 日期：2026-07-09（v2 更新于 2026-07-18）
 - 来源：[arXiv](https://arxiv.org/abs/2607.08940) / [GitHub](https://github.com/tianyi-lab/TSRouter)
 - 简短摘要：将时序 reasoning 中 `文本模式 LLM` 与 `图像模式 VLM` 的选择显式建成异构图路由问题，按性能与成本偏好选择最优组合。
 - 相关性判断：最高。它几乎就是未来时序 Agent runtime router 的直接原型。
@@ -188,22 +189,20 @@
 - 简短摘要：系统比较 TSFM 与深度学习基线在负荷、风电、光伏等电力系统任务上的零样本、微调、上下文窗口与泛化表现。
 - 相关性判断：高。它仍是“能源时序里 TSFM 到底值不值得上”的基础参照。
 
-## 5. GitHub 和 HuggingFace 上值得跟踪的新项目
+## 5. GitHub 上值得跟踪的新项目
 
-- 本轮未检出需要单列写入的高优先级 HuggingFace 新项目；以下条目均来自 GitHub 官方仓库页 / GitHub API。
-
-### 5.1 时间序列
+- 本轮未检出需要单列写入的高优先级 HuggingFace 新项目；以下条目以 GitHub 官方仓库页和前序 API 复核结果为主。
 
 ### [2026-07-17] swarm-ai-research/blf-forecaster
 
-- 日期：2026-07-17（GitHub API `created_at`）
+- 日期：2026-07-17（GitHub API `created_at`，沿用前序复核结果）
 - 来源：[GitHub](https://github.com/swarm-ai-research/blf-forecaster)
-- 简短摘要：实现 `belief-state agent loop + multi-trial logit aggregation + hierarchical Platt calibration + ForecastBench eval harness`，并明确接入 time-series tools。
+- 简短摘要：复现 `belief-state agent loop + multi-trial aggregation + hierarchical calibration + ForecastBench eval harness`，并显式接入 time-series tools。
 - 相关性判断：高。它虽不是纯时序仓库，但很像 `forecasting agent + eval harness` 的轻量实验台。
 
 ### [2026-07-11] Lkhanaajav/timeseries-mcp
 
-- 日期：2026-07-11（GitHub API `created_at`）
+- 日期：2026-07-11（GitHub API `created_at`，沿用 2026-07-21 复核结果）
 - 来源：[GitHub](https://github.com/Lkhanaajav/timeseries-mcp)
 - 简短摘要：提供给 AI agents 的 deterministic time-series statistics MCP 工具，覆盖异常检测、变点、分解、趋势检验与数据质量审计。
 - 相关性判断：最高。它非常接近“给时序 Agent 一个稳定、可审计统计工具层”的实用方向。
@@ -217,44 +216,49 @@
 
 ### [2026-07-08] tianyi-lab/TSRouter
 
-- 日期：2026-07-08（GitHub API `created_at`）
+- 日期：2026-07-08（GitHub API `created_at`，沿用前序复核结果）
 - 来源：[GitHub](https://github.com/tianyi-lab/TSRouter)
 - 简短摘要：`TSRouter` 论文官方代码仓库，公开了时序 reasoning 中的 modality-model routing 实现。
 - 相关性判断：高。它把 reasoning router 从论文推进到了可复现代码层。
 
 ### [2026-07-08] Naveen-Boddepalli/time-series-autoML
 
-- 日期：2026-07-08（GitHub API `created_at`）
+- 日期：2026-07-08（GitHub API `created_at`，沿用前序复核结果）
 - 来源：[GitHub](https://github.com/Naveen-Boddepalli/time-series-autoML)
-- 简短摘要：面向时间序列任务的轻量 AutoML Web scaffold，最近一次更新在 `2026-07-20`，说明仓库仍在活跃演进。
+- 简短摘要：面向时间序列任务的轻量 AutoML Web scaffold，最近一次更新在 `2026-07-20`。
 - 相关性判断：中。主题贴合 `AutoML + time series`，但当前技术深度与评测支撑仍弱于工具层仓库。
 
 ### [2026-07-06] ChamoLu/TSAD-Agent
 
-- 日期：2026-07-06（GitHub API `created_at`）
+- 日期：2026-07-06（GitHub API `created_at`，沿用前序复核结果）
 - 来源：[GitHub](https://github.com/ChamoLu/TSAD-Agent)
 - 简短摘要：将时间序列异常检测输出的异常分数、窗口和指标交给 LLM 做解释与分析结论生成。
 - 相关性判断：中高。它更偏单一任务 Agent，但主题贴得很近，适合作为 anomaly-analysis workflow 参考。
 
 ### [2026-07-03] xavierdurawa/forecast-playground
 
-- 日期：2026-07-03（GitHub API `created_at`）
+- 日期：2026-07-03（GitHub API `created_at`，沿用前序复核结果）
 - 来源：[GitHub](https://github.com/xavierdurawa/forecast-playground)
 - 简短摘要：提供 `time-masked retrieval harness` 和 `leak-free as-of tools`，用于评测和搭建 forecasting agents。
 - 相关性判断：高。它对构建时序 Agent 的数据访问安全边界和评测 scaffold 很有参考价值。
 
-### 5.2 光伏功率预测
-
 ### [2026-07-09] weican1103/PARA-PV
 
-- 日期：2026-07-09（GitHub API `created_at`）
+- 日期：2026-07-09（GitHub API `created_at`，沿用前序复核结果）
 - 来源：[GitHub](https://github.com/weican1103/PARA-PV)
 - 简短摘要：`PARA-PV` 官方代码仓库，围绕 retrieval、冻结 TSFM 先验和分布漂移校正实现 PV forecasting pipeline。
 - 相关性判断：高。它把论文中的 `retrieval + shift correction` 方案落到了代码层。
 
-## 6. 明日优先跟踪项
+## 6. DailyArXiv 补检结论
 
-- 继续检查 `2026-07-22` 至 `2026-07-23` 是否出现比 `VLT`、`TSRouter`、`TimeClaw` 更强的新论文或官方代码发布。
-- 跟踪 [`time-series-autoML`](https://github.com/Naveen-Boddepalli/time-series-autoML) 是否补齐更明确的 benchmark、模型搜索策略或结果对比。
-- 对照 [`AION`](https://ztxtech.github.io/aion/)、[`TimeClaw`](https://github.com/iDEA-iSAIL-Lab-UIUC/TimeClaw)、[`timeseries-mcp`](https://github.com/Lkhanaajav/timeseries-mcp)、[`mcp-trajectory-evals`](https://github.com/Lkhanaajav/mcp-trajectory-evals)，整理一版可复用的 `task schema + tool layer + trajectory eval` 框架。
-- 跟进 [`PARA-PV`](https://github.com/weican1103/PARA-PV) 是否继续放出更完整的训练 / 检索 / 评测代码。
+- 补检来源：[DailyArXiv README](https://github.com/zezhishao/DailyArXiv)；本次直接复核到 `Last update: 2026-07-22`。
+- 当前 `Time Series` 板块在近窗内最值得补入的相关条目是 `2026-07-20` 的 `Towards Reliable Zero-Shot Crowd Forecasting`、`Lightweight Wrappers for Adapting TSFMs to Regional Drought Forecasting` 和 `Residual-Guided Multi-Resolution Refinement...`。这三条都已并入正文基础模型部分。
+- `TSRouter` 也出现在当前 README 中，但 `DailyArXiv` 记录的是 `2026-07-18`，对应的是 arXiv `v2` 修订日期；正文仍以原始提交日 `2026-07-09` 为准，因此在 `DailyArXiv` 维度把它视作“日期口径不一致但主题高度相关”的补检信号，而不是全新论文。
+- 本次没有在 `DailyArXiv` 当前可见的 `Time Series` 行中发现比正文已列条目更强、且能直接归入 `Agent / reasoning / PV forecasting` 主线的新论文标题。
+
+## 7. 结论
+
+- 今日真正的增量不在 Agent 主体，而在 `TSFM 部署诊断与适配`。如果接下来要选一个最值得继续追的短线方向，优先级应放在 `break-even analysis`、`context/retrieval 何时有用`、以及 `frozen TSFM inference-time adaptation`。
+- 时间序列 Agent 主线短期内仍由 `TimeClaw + AION + KairosAgent + Nexus + DeXposure-Claw` 组成：分别对应 `runtime`、`harness`、`semantic fusion`、`forecast workflow` 和 `risk-supervision system`。
+- reasoning 主线最稳的组合仍是 `TSRouter + TSCognition + TimeSage-MT + IRTS-ToolBench`，即 `router + benchmark + multi-turn eval + verifier/tool grounding`。
+- 工具侧值得继续观察的是 `timeseries-mcp` 和 `mcp-trajectory-evals`。如果仓库后续要落地自己的时序 Agent 评测栈，这两个项目比再追一个新 forecasting demo 更有复用价值。
