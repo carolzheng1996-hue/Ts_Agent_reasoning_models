@@ -1,24 +1,25 @@
 # 2026-07-22 时间序列 Agent / Reasoning / Foundation Model 晨间简报
 
-检索时间：2026-07-22 15:36 CST，Asia/Shanghai  
-时间窗口：2026-04-22 至 2026-07-22  
-优先来源：arXiv 摘要页、官方项目页、GitHub 官方仓库页 / GitHub API、`DailyArXiv` README  
+检索时间：2026-07-22 23:58 CST，Asia/Shanghai
+时间窗口：2026-04-22 至 2026-07-22
+优先来源：arXiv 摘要页、官方项目页、GitHub 官方仓库页 / GitHub API、`DailyArXiv` 公共页面
 检索词：`time series foundation model`、`time series agent`、`agentic time series`、`time series reasoning`、`TSQA`、`time-series harness`、`AutoML time series`、`photovoltaic power forecasting`
 
 ## 今日摘要
 
 - 截至 `2026-07-22`，过去 24 小时没有出现比 `VLT`、`TimeClaw`、`KairosAgent`、`AION`、`TSRouter`、`TimeSage-MT` 更强的新主线 Agent / reasoning 论文。
-- 今天最有价值的新增信号主要来自 `DailyArXiv` 补检：`Time Series` 板块在 `2026-07-20` 新挂出了 3 篇 TSFM 部署向论文，分别聚焦 `special-event crowd forecasting`、`drought forecasting wrapper` 和 `residual refinement`。
+- 今天最有价值的论文增量仍然是 `2026-07-20` 这组 TSFM 部署向论文，分别聚焦 `special-event crowd forecasting`、`drought forecasting wrapper` 和 `residual refinement`；本轮没有检出更强的新 foundation-model 标题。
 - 基础模型方向今天最值得补入的是 [`When Do Foundation Models Pay Off?`](https://arxiv.org/abs/2607.04919)、[`Towards Reliable Zero-Shot Crowd Forecasting`](https://arxiv.org/abs/2607.17758)、[`Lightweight Wrappers for Adapting TSFMs to Regional Drought Forecasting`](https://arxiv.org/abs/2607.17511)。
 - GitHub 侧近两周仍然是 `tool layer + trajectory eval + forecasting scaffold` 最清晰：`timeseries-mcp`、`mcp-trajectory-evals`、`forecast-playground`、`blf-forecaster` 组合起来，已经接近一套可运行的时序 Agent 基础设施。
+- 本轮 GitHub 真正值得新增写入的只有 [`SMAAI-DFS`](https://github.com/manu458-dev/SMAAI-DFS)；它更像 `multi-agent demand sensing / forecasting` 概念验证，相关但证据链明显弱于上面那条工具栈主线。
 - 光伏方向暂时没有比 [`PARA-PV`](https://arxiv.org/abs/2607.08079) 更完整的新方案；当前最强路线仍是 `frozen TSFM prior + retrieval + physics constraints + shift correction`。
 
 ## 0. 检索说明
 
 - 只保留 `2026-04-22` 至 `2026-07-22` 三个月窗口内的内容。
-- 论文日期优先采用 arXiv 摘要页 `Submitted on` 日期；如 `DailyArXiv` 使用的是后续版本日期，会在补检结论里单独说明。
-- 仓库日期优先采用 GitHub API `created_at`。本轮匿名 GitHub API 在中途限流；对少数仍保留的仓库创建日期，沿用今日文件已有的前序 API 复核结果，并在相关性判断中适当降置信阅读。
-- `DailyArXiv` 仅用来补检新标题，不替代原始 arXiv / 官方项目页。
+- 论文日期优先采用 arXiv 摘要页 `Submitted on` 日期；如页面同时给出修订版日期，仅在正文中作为补充说明。
+- 仓库日期优先采用 GitHub API `created_at`；本轮对正文中的 GitHub 条目重新做了逐仓库元数据复核，并补做了 `agent / harness / AutoML / forecasting agent` 定向搜索。
+- `DailyArXiv` 仅用来补检新标题，不替代原始 arXiv / 官方项目页；若该来源的更新时间无法直接确认，则只保留为低优先级旁证。
 
 ## 1. 时间序列基础模型最新研究
 
@@ -193,54 +194,33 @@
 
 - 本轮未检出需要单列写入的高优先级 HuggingFace 新项目；以下条目以 GitHub 官方仓库页和前序 API 复核结果为主。
 
+### [2026-07-21] manu458-dev/SMAAI-DFS
+
+- 日期：2026-07-21（GitHub API `created_at`）
+- 来源：[GitHub](https://github.com/manu458-dev/SMAAI-DFS)
+- 简短摘要：一个围绕 `demand sensing + forecasting` 的多 Agent 概念验证仓库，描述中明确提到 foundation models 与 tools 协同，但当前主要还是案例性 workflow 展示。
+- 相关性判断：中。主题贴近时间序列 Agent，但文档、评测和可复现深度明显弱于 `TimeClaw / AION / timeseries-mcp` 这条主线。
+
 ### [2026-07-17] swarm-ai-research/blf-forecaster
 
-- 日期：2026-07-17（GitHub API `created_at`，沿用前序复核结果）
+- 日期：2026-07-17（GitHub API `created_at`，2026-07-22 复核）
 - 来源：[GitHub](https://github.com/swarm-ai-research/blf-forecaster)
 - 简短摘要：复现 `belief-state agent loop + multi-trial aggregation + hierarchical calibration + ForecastBench eval harness`，并显式接入 time-series tools。
 - 相关性判断：高。它虽不是纯时序仓库，但很像 `forecasting agent + eval harness` 的轻量实验台。
 
 ### [2026-07-11] Lkhanaajav/timeseries-mcp
 
-- 日期：2026-07-11（GitHub API `created_at`，沿用 2026-07-21 复核结果）
+- 日期：2026-07-11（GitHub API `created_at`，2026-07-22 复核）
 - 来源：[GitHub](https://github.com/Lkhanaajav/timeseries-mcp)
 - 简短摘要：提供给 AI agents 的 deterministic time-series statistics MCP 工具，覆盖异常检测、变点、分解、趋势检验与数据质量审计。
 - 相关性判断：最高。它非常接近“给时序 Agent 一个稳定、可审计统计工具层”的实用方向。
 
 ### [2026-07-11] Lkhanaajav/mcp-trajectory-evals
 
-- 日期：2026-07-11（GitHub API `created_at`）
+- 日期：2026-07-11（GitHub API `created_at`，2026-07-22 复核）
 - 来源：[GitHub](https://github.com/Lkhanaajav/mcp-trajectory-evals)
 - 简短摘要：面向 tool-using agents 的 trajectory-level eval harness，逐步评分工具选择、参数、grounding 与效率，并支持 CI regression gate。
 - 相关性判断：高。它正好补上时序 Agent 当前最缺的 `trajectory eval` 基础设施。
-
-### [2026-07-08] tianyi-lab/TSRouter
-
-- 日期：2026-07-08（GitHub API `created_at`，沿用前序复核结果）
-- 来源：[GitHub](https://github.com/tianyi-lab/TSRouter)
-- 简短摘要：`TSRouter` 论文官方代码仓库，公开了时序 reasoning 中的 modality-model routing 实现。
-- 相关性判断：高。它把 reasoning router 从论文推进到了可复现代码层。
-
-### [2026-07-08] Naveen-Boddepalli/time-series-autoML
-
-- 日期：2026-07-08（GitHub API `created_at`，沿用前序复核结果）
-- 来源：[GitHub](https://github.com/Naveen-Boddepalli/time-series-autoML)
-- 简短摘要：面向时间序列任务的轻量 AutoML Web scaffold，最近一次更新在 `2026-07-20`。
-- 相关性判断：中。主题贴合 `AutoML + time series`，但当前技术深度与评测支撑仍弱于工具层仓库。
-
-### [2026-07-06] ChamoLu/TSAD-Agent
-
-- 日期：2026-07-06（GitHub API `created_at`，沿用前序复核结果）
-- 来源：[GitHub](https://github.com/ChamoLu/TSAD-Agent)
-- 简短摘要：将时间序列异常检测输出的异常分数、窗口和指标交给 LLM 做解释与分析结论生成。
-- 相关性判断：中高。它更偏单一任务 Agent，但主题贴得很近，适合作为 anomaly-analysis workflow 参考。
-
-### [2026-07-03] xavierdurawa/forecast-playground
-
-- 日期：2026-07-03（GitHub API `created_at`，沿用前序复核结果）
-- 来源：[GitHub](https://github.com/xavierdurawa/forecast-playground)
-- 简短摘要：提供 `time-masked retrieval harness` 和 `leak-free as-of tools`，用于评测和搭建 forecasting agents。
-- 相关性判断：高。它对构建时序 Agent 的数据访问安全边界和评测 scaffold 很有参考价值。
 
 ### [2026-07-09] weican1103/PARA-PV
 
@@ -249,12 +229,40 @@
 - 简短摘要：`PARA-PV` 官方代码仓库，围绕 retrieval、冻结 TSFM 先验和分布漂移校正实现 PV forecasting pipeline。
 - 相关性判断：高。它把论文中的 `retrieval + shift correction` 方案落到了代码层。
 
+### [2026-07-08] tianyi-lab/TSRouter
+
+- 日期：2026-07-08（GitHub API `created_at`，2026-07-22 复核）
+- 来源：[GitHub](https://github.com/tianyi-lab/TSRouter)
+- 简短摘要：`TSRouter` 论文官方代码仓库，公开了时序 reasoning 中的 modality-model routing 实现。
+- 相关性判断：高。它把 reasoning router 从论文推进到了可复现代码层。
+
+### [2026-07-08] Naveen-Boddepalli/time-series-autoML
+
+- 日期：2026-07-08（GitHub API `created_at`，2026-07-22 复核）
+- 来源：[GitHub](https://github.com/Naveen-Boddepalli/time-series-autoML)
+- 简短摘要：面向时间序列任务的轻量 AutoML Web scaffold；仓库在 `2026-07-22` 仍有推送，说明作者仍在快速迭代。
+- 相关性判断：中。主题贴合 `AutoML + time series`，但当前技术深度与评测支撑仍弱于工具层仓库。
+
+### [2026-07-06] ChamoLu/TSAD-Agent
+
+- 日期：2026-07-06（GitHub API `created_at`，2026-07-22 复核）
+- 来源：[GitHub](https://github.com/ChamoLu/TSAD-Agent)
+- 简短摘要：将时间序列异常检测输出的异常分数、窗口和指标交给 LLM 做解释与分析结论生成。
+- 相关性判断：中高。它更偏单一任务 Agent，但主题贴得很近，适合作为 anomaly-analysis workflow 参考。
+
+### [2026-07-03] xavierdurawa/forecast-playground
+
+- 日期：2026-07-03（GitHub API `created_at`，2026-07-22 复核）
+- 来源：[GitHub](https://github.com/xavierdurawa/forecast-playground)
+- 简短摘要：提供 `time-masked retrieval harness` 和 `leak-free as-of tools`，用于评测和搭建 forecasting agents。
+- 相关性判断：高。它对构建时序 Agent 的数据访问安全边界和评测 scaffold 很有参考价值。
+
 ## 6. DailyArXiv 补检结论
 
-- 补检来源：[DailyArXiv README](https://github.com/zezhishao/DailyArXiv)；本次直接复核到 `Last update: 2026-07-22`。
-- 当前 `Time Series` 板块在近窗内最值得补入的相关条目是 `2026-07-20` 的 `Towards Reliable Zero-Shot Crowd Forecasting`、`Lightweight Wrappers for Adapting TSFMs to Regional Drought Forecasting` 和 `Residual-Guided Multi-Resolution Refinement...`。这三条都已并入正文基础模型部分。
-- `TSRouter` 也出现在当前 README 中，但 `DailyArXiv` 记录的是 `2026-07-18`，对应的是 arXiv `v2` 修订日期；正文仍以原始提交日 `2026-07-09` 为准，因此在 `DailyArXiv` 维度把它视作“日期口径不一致但主题高度相关”的补检信号，而不是全新论文。
-- 本次没有在 `DailyArXiv` 当前可见的 `Time Series` 行中发现比正文已列条目更强、且能直接归入 `Agent / reasoning / PV forecasting` 主线的新论文标题。
+- 补检来源：[DailyArXiv 网站](https://dailyarxiv.com/) / [GitHub 仓库页](https://github.com/zezhishao/DailyArXiv)。
+- 本次尝试直接抓取 GitHub README 原文时，预期路径返回 `404`，因此无法像前几轮那样稳定确认 `Last update` 的精确日期；该来源本轮只保留为低优先级旁证，不作为正文日期依据。
+- 从公开可访问页面能确认的补检结论看，本轮没有发现比正文已列条目更强、且能直接归入 `Agent / reasoning / PV forecasting` 主线的新标题。
+- 因此，`DailyArXiv` 在这次更新中的作用仅限于支持“未见更强新增”的判断，而不是提供独立的新主条目。
 
 ## 7. 结论
 
