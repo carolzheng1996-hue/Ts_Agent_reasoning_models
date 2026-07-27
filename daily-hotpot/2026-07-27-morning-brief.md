@@ -1,6 +1,6 @@
 # 2026-07-27 时间序列 Agent / Reasoning / Foundation Model 晨间简报
 
-检索时间：2026-07-27 08:49 CST，Asia/Shanghai  
+检索时间：2026-07-27 15:34 CST，Asia/Shanghai  
 时间窗口：2026-04-27 至 2026-07-27  
 优先来源：arXiv、官方项目页、GitHub 官方仓库页 / GitHub API、DailyArXiv 公开 README  
 检索词：`time series foundation model`、`time series agent`、`agentic time series`、`time series reasoning`、`TSQA`、`time-series harness`、`time-series AutoML`、`photovoltaic power forecasting`
@@ -234,7 +234,14 @@
 - 简短摘要：面向时间序列预测的 AutoML Web 应用，自动比较 XGBoost、Prophet、Random Forest 和 LSTM，并导出带区间的预测结果。
 - 相关性判断：中高。它不是 Agent 框架，但补上了本轮主题里 `timeseries + AutoML` 的新项目样本。
 
-## 6. 观察结论
+## 6. DailyArXiv 补检结论
+
+- 补检来源：[zezhishao/DailyArXiv README](https://github.com/zezhishao/DailyArXiv)；公开页可见 `Last update: 2026-05-27`，因此它更适合作为补检索引，不适合作为比 arXiv 原始页面更高优先级的日期来源。
+- 三个月窗口内，与本晨报主题最高相关且可直接纳入主清单的 DailyArXiv `Time Series` 条目仍是 [Assessing the Operational Viability of Foundation Models for Time Series Forecasting](https://arxiv.org/abs/2605.24381)；该文原始 arXiv 日期为 `2026-05-23`，正文已纳入。
+- [HEPA: A Self-Supervised Horizon-Conditioned Event Predictive Architecture for Time Series](https://arxiv.org/abs/2605.11130) 在 README 中可见且日期显示为 `2026-05-25`；但原始 arXiv 页面显示其 `Submitted on` 为 `2026-05-11`、最新修订为 `2026-06-03`。它在时间窗口内，但主题更偏 `self-supervised event prediction`，与 `TS Agent / reasoning / PV forecasting` 主轴相关性较弱，因此降优先级，不进入主清单。
+- 本次未发现 DailyArXiv `Time Series` 板块中“日期在窗口内、且主相关性高、但正文尚未覆盖”的独有新增条目；若 README 日期与原始 arXiv 日期冲突，正文一律以 arXiv `Submitted on` 为准。
+
+## 7. 观察结论
 
 - 学术前沿已经明显从“训练更大的 TSFM”转向“让 TSFM 更可路由、更可反馈、更可验证、更能接入 Agent”。
 - `routing` 是当前最核心的工程主题，分别出现在 `TimeRouter`、`TSRouter`、`The Spectrum Is Not Enough` 与 `Assessing the Operational Viability...` 这几条线里。
