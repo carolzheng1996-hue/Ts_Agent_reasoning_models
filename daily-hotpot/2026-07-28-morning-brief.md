@@ -3,12 +3,12 @@
 检索时间：2026-07-28 08:56 CST，Asia/Shanghai  
 时间窗口：2026-04-28 至 2026-07-28  
 优先来源：arXiv、OpenReview、官方项目页、机构博客、GitHub 官方仓库页 / GitHub API  
-检索词：`time series foundation model`、`time series agent`、`agentic time series forecasting`、`time series reasoning`、`timeseries agent`、`timeseries harness`、`time-series AutoML`、`photovoltaic power forecasting`
+检索词：`time series foundation model`、`time series agent`、`agentic time series forecasting`、`time series reasoning`、`data science agent`、`timeseries harness`、`machine learning agent`、`time-series AutoML`、`photovoltaic power forecasting`
 
 ## 今日摘要
 
 - 过去三个月里，时间序列基础模型的增量重点明显从“继续扩底座”转向“如何做 post-training、数据配方优化、检索增强和部署校准”。
-- Agent 方向的新增工作开始更明确地把 `LLM reasoning`、`TSFM forecasting`、`技能库` 与 `self-evolving workflow` 拆成可组合部件，而不是单一端到端模型。
+- Agent 方向现在可以明显分成两条线：一条是 `LLM + TSFM` 的时间序列建模 Agent，另一条是更通用的 `autonomous data science agent`，后者正在快速补齐 `world model`、`skill learning` 和 `test-time scaling`。
 - reasoning 方向最值得跟踪的是 `Can LLM Coding Agents Reason About Time Series?`、`ARTIST` 和 `TimeSage-MT`：一个测编码代理是否真会做时序推理，一个做自适应片段选择，一个把推理任务系统化成 benchmark。
 - GitHub 上最近三周的新增项目更偏工程基建：`timeseries-mcp`、`agent-harness-4-ml-research`、`time-series-autoML` 这类仓库都在靠近“可调用工具层 + 评测/编排层 + 自动建模层”。
 - 今天是周二，按规则不生成周报文件。
@@ -49,7 +49,21 @@
 - 简短摘要：通过周期性感知的频谱分解来重整 TSFM 对复杂周期结构的建模，使基础模型在长周期、多频率序列上的表示更加稳定。
 - 相关性判断：高。它属于“如何补齐 TSFM 对时间结构理解缺口”的典型工作。
 
-## 2. 时间序列建模 Agent 最新研究
+## 2. 时间序列建模 Agent + 数据科学 Agent 最新研究
+
+### [2026-07-17] [DSWorld: A Data Science World Model for Efficient Autonomous Agents](https://arxiv.org/abs/2607.15901)
+
+- 日期：2026-07-17
+- 来源：[arXiv](https://arxiv.org/abs/2607.15901)
+- 简短摘要：把数据科学执行环境建模成一个可预测状态转移的 `world model`，让 Agent 在真正执行昂贵训练或分析动作之前，先模拟下一步状态，从而减少 trial-and-error 成本。
+- 相关性判断：高。它不是专门做时间序列，但对 `time-series data science agent` 的执行效率、路由和规划都很关键。
+
+### [2026-07-15] [CIPHER: A Decoupled Exploration-Selection Framework for Test-Time Scaling of Data Science Agents](https://arxiv.org/abs/2607.14386)
+
+- 日期：2026-07-15
+- 来源：[arXiv](https://arxiv.org/abs/2607.14386)
+- 简短摘要：针对数据科学 Agent 容易被单个初始状态带偏的问题，提出把候选初始状态生成与并行执行选择解耦，用 test-time scaling 提升开放式分析任务稳定性。
+- 相关性判断：高。它很适合迁移到时间序列 Agent 的 `multi-hypothesis planning` 与并行搜索场景。
 
 ### [2026-06-08] [Self-Evolving Time-Series Agent (SE-TSA): A Strategic Data-Driven Decision Support System](https://zenodo.org/records/15677619)
 
@@ -57,6 +71,20 @@
 - 来源：[Zenodo 项目页](https://zenodo.org/records/15677619) / [GitHub](https://github.com/manojjosephv/se-tsa)
 - 简短摘要：提出可自演化的时间序列 Agent，把预测、异常诊断、上下文理解与策略建议放在同一工作流里，并强调持续反馈驱动的自我改进。
 - 相关性判断：高。它更接近完整决策支持 Agent，而不是单点 forecasting 模块。
+
+### [2026-06-03] [Towards Persistent Case-Based Memory for Autonomous Data Science: A CBR-Augmented R&D-Agent with a Locally Deployable Small Language Model](https://arxiv.org/abs/2606.05250)
+
+- 日期：2026-06-03
+- 来源：[arXiv](https://arxiv.org/abs/2606.05250)
+- 简短摘要：把持久化 case-based memory 接进数据科学 Agent，通过结构化案例、代码快照和质量过滤机制，测试小模型骨干在多轮自治数据科学流程中的跨任务复用能力。
+- 相关性判断：中高。它不是时序专用方案，但对构建 `有记忆的时间序列数据科学 Agent` 很有启发。
+
+### [2026-06-02] [EvoDS: Self-Evolving Autonomous Data Science Agent with Skill Learning and Context Management](https://arxiv.org/abs/2606.03841)
+
+- 日期：2026-06-02
+- 来源：[arXiv](https://arxiv.org/abs/2606.03841)
+- 简短摘要：提出 `Autonomous Skill Acquisition` 和 `Adaptive Context Compression`，让数据科学 Agent 在长流程中自动学习可执行技能，并主动压缩长期上下文，减少工具选择错误和上下文爆炸。
+- 相关性判断：最高。虽然面向通用数据科学，但它的 `skill learning + context management` 设计和时间序列 Agent 非常贴近。
 
 ### [2026-05-28] [KairosAgent: Agentic Time Series Forecasting with Fused Semantic Reasoning](https://arxiv.org/abs/2605.30002)
 
@@ -175,6 +203,6 @@
 
 ## 6. 观察与建议
 
-- 如果后续要做你自己的 `TS Agent + reasoning` 研究线，最近三个月最值得持续追的核心组合是：`KairosAgent + TimeSage-MT + Can LLM Coding Agents Reason About Time Series? + Post-Training in TSFMs`。
-- 工程落地方向可以重点跟踪 `timeseries-mcp` 和两类 `ml-harness` 仓库，因为它们最接近未来实验平台需要的工具层与可回放评测层。
+- 如果后续要做你自己的 `TS Agent + reasoning` 研究线，最近三个月最值得持续追的核心组合可以调整为：`KairosAgent + EvoDS + DSWorld + TimeSage-MT + Post-Training in TSFMs`。
+- 工程落地方向可以重点跟踪 `timeseries-mcp`、两类 `ml-harness` 仓库，以及 `DSWorld / EvoDS` 这类数据科学 Agent 论文，因为它们分别覆盖工具层、可回放评测层和长流程自治能力。
 - 光伏分支短期内建议继续盯 `PARA-PV` 和 `physics-informed synthetic histories` 这两条线；它们与 foundation model、retrieval 和 deployment 约束的结合度最高。
