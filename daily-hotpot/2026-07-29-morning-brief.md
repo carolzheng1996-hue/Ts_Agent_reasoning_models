@@ -1,13 +1,13 @@
 # 2026-07-29 时间序列 Agent / Reasoning / Foundation Model 晨间简报
 
-检索时间：2026-07-29 16:20 CST，Asia/Shanghai  
+检索时间：2026-07-29 15:33 CST，Asia/Shanghai  
 时间窗口：2026-04-29 至 2026-07-29  
 优先来源：arXiv、OpenReview、GitHub 官方仓库页、Hugging Face 官方页、官方项目页、GitHub `zezhishao/DailyArXiv` README  
 检索词：`time series foundation model`、`time series agent`、`agentic time series`、`time series reasoning`、`timeseries harness`、`time series AutoML`、`photovoltaic power forecasting`
 
 ## 今日摘要
 
-- 过去三个月里，时间序列基础模型的重心继续从“大规模预训练”转向“上线可用性”：`Post-Training in TSFMs`、`Zeus`、`MACROCAST`、`Operational Viability` 都在回答如何把 TSFM 真正部署到复杂业务环境。
+- 过去三个月里，时间序列基础模型的重心继续从“大规模预训练”转向“上线可用性”：`Foundation Models and Fine-Tuning`、`Post-Training in TSFMs`、`Zeus`、`MACROCAST`、`Operational Viability` 都在回答如何把 TSFM 真正部署到复杂业务环境。
 - 时间序列建模 Agent 的最近增量更偏系统设计而不是单模型刷榜：`TopoBrick` 做外生变量 agentic 选择，`TimeRouter` 做 TSFM 路由，`TimeClaw` 与 `AION` 做 runtime / harness，`GenAutoML` 则把架构搜索自动化。
 - reasoning 方向的最新强信号仍然是“显式路由 + 多轮评测 + 工具执行体检”：`TSRouter`、`TimeSage-MT`、`Can LLM Coding Agents Reason About Time Series?`、`TS-Skill` 形成了一条很完整的研究链。
 - GitHub / Hugging Face 上最值得跟踪的公开资产仍是 `TimeRouter`、`TimeClaw`、`AION`、`TimeSage-MT`、`ARTIST` 与 `Awesome-Agentic-Time-Series`；其中一部分仓库页不能稳定给出创建日期，已在条目里标成日期代理或不确定。
@@ -21,6 +21,13 @@
 - 今天是周三，不生成每周简报文件。
 
 ## 1. 时间序列基础模型最新研究
+
+### [2026-07-25] [Foundation Models and Fine-Tuning: Toward a New Generation of Models for Time Series Forecasting](https://arxiv.org/abs/2607.23146)
+
+- 日期：2026-07-25
+- 来源：[arXiv](https://arxiv.org/abs/2607.23146)
+- 简短摘要：回顾当前主流 TSFM 的架构、预训练策略与优化方法，并额外验证 post-pretraining fine-tuning 往往能稳定优于纯 zero-shot 基线，强调“底座模型不是部署终点，还需要任务侧适配”。
+- 相关性判断：高。它是近几天最直接的 TSFM 总结性更新，也能和 `post-training` 主线形成互补。
 
 ### [2026-07-22] [Post-Training in Time Series Foundation Models: A Unifying Framework](https://arxiv.org/abs/2607.20002)
 
@@ -244,9 +251,11 @@
 ## 6. DailyArXiv 补检结论
 
 - 检查对象：[zezhishao/DailyArXiv](https://github.com/zezhishao/DailyArXiv)
-- 当前公开页显示 `Last update: 2026-07-29`，并保留 `Time Series` 板块。
-- 最近 24 小时在公开 README 中能看到新的 broader time-series 条目，但与本晨报最强相关的近三个月核心条目仍主要集中在 `Post-Training in TSFMs`、`TSRouter`、`CLIR-Bench`、`TimeRouter`、`TimeClaw`、`AION`、`TimeSage-MT` 这一组。
-- 结论：`DailyArXiv` 适合作为补检入口，但真正落入 `timeseries agent / reasoning / foundation model` 主线的高价值条目仍需要回到原始 arXiv / OpenReview 页面确认日期与摘要。
+- 当前公开页显示 `Last update: 2026-07-29`，`README` 的 `Time Series` 板块已不是前几天检索时常见的 `2026-05-27` 旧快照。
+- 三个月窗口内、且与本晨报主题直接相关的命中，公开页可确认至少包括 `Foundation Models and Fine-Tuning: Toward a New Generation of Models for Time Series Forecasting`（2026-07-25）、`Assessing the Operational Viability of Foundation Models for Time Series Forecasting`（2026-05-23）、`TS-Skill`（2026-05-23）与 `AION`（2026-05-24）；本期已据此补充或交叉验证。
+- 同一板块今天能看到的 `Causal-TS`（2026-07-27）更偏时序因果发现工具库，与 `agent / reasoning / TSFM / 光伏预测` 主线只有邻接关系，因此降优先级，不纳入正文主清单。
+- 本次 `DailyArXiv` 补检没有额外发现“窗内但日期冲突”的高优先级核心条目；对 `ARTIST`、`FinSTaR`、`TimeRouter`、`TimeClaw` 等核心论文，最终仍以原始 arXiv / OpenReview 页面日期为准。
+- 结论：`DailyArXiv` 现在值得继续作为补检入口，但更适合发现候选条目；正式入选仍必须回到原始论文页核对日期、摘要与相关性。
 
 ## 7. 观察与建议
 
