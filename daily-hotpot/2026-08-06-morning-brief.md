@@ -1,16 +1,16 @@
 # 2026-08-06 时间序列 Agent / Reasoning / Foundation Model 晨间简报
 
-检索时间：2026-08-06 08:47 CST，Asia/Shanghai  
+检索时间：2026-08-06 15:41 CST，Asia/Shanghai  
 时间窗口：2026-05-06 至 2026-08-06  
 优先来源：arXiv、GitHub 官方仓库页 / GitHub API、DailyArXiv 公开 README  
 检索主题：`time series foundation model`、`time series agent`、`agentic forecasting`、`time series reasoning`、`timeseries harness`、`AutoML forecasting`、`photovoltaic power forecasting`
 
 ## 今日摘要
 
-- 今天没有检到比昨天更近、且相关性高于 [`TimeRLM`](https://arxiv.org/abs/2608.03391)、[`CastFSR`](https://arxiv.org/abs/2608.03031)、[`ReasonCast`](https://arxiv.org/abs/2608.01875)、[`FinVerse`](https://arxiv.org/abs/2608.03259) 的新主条目，因此这四条仍是本周最值得跟踪的主线。
-- reasoning 方向补入一条昨天未写入、但窗口内相关性较高的新论文：[`TRACE-TS`](https://arxiv.org/abs/2608.00200)。它把 wearable sensor 时序理解写成“带证据出处的可追踪推理”，比普通解释生成更贴近可验证 reasoning。
-- GitHub 侧今天最值得记录的变化是 [`OpenTSLM/TimeRLM`](https://github.com/OpenTSLM/TimeRLM) 在 `2026-08-05` 仍有新推送；此外新增关注 [`sureshkvn/inContextML`](https://github.com/sureshkvn/inContextML)，它把 forecasting / regression 包装成面向 Agent 的 MCP server。
-- `DailyArXiv` 今日公开 README 已明确收录 [`CastFSR`](https://arxiv.org/abs/2608.03031)、[`ReasonCast`](https://arxiv.org/abs/2608.01875) 和 [`ClinPRISM`](https://arxiv.org/abs/2607.25947)。这意味着 `CastFSR` 已从“只在 arXiv 首发”进入公开聚合列表，优先级进一步提高。
+- 基础模型方向今天新增一条更近的主条目：[`Personalized Federated Sparse Adaptation of Time-Series Foundation Models`](https://arxiv.org/abs/2608.04695)，首发于 `2026-08-05`。它把 `TSFM + federated learning + sparse MoE personalization` 直接落到建筑能耗预测，是过去 24 小时里最值得补入的新论文。
+- reasoning 方向今天没有出现比 [`ReasonCast`](https://arxiv.org/abs/2608.01875) 更强的新主线，但需要保留 [`TRACE-TS`](https://arxiv.org/abs/2608.00200) 作为“可验证时序推理”的补充；`DailyArXiv` 中出现的 [`TS-Reasoner`](https://arxiv.org/abs/2510.03519) 与主题高度相关，但 arXiv 首发是 `2025-10-03`，超出三个月窗口，因此只在补检结论中降优先级说明。
+- GitHub 侧今天最值得记录的变化是 [`OpenTSLM/TimeRLM`](https://github.com/OpenTSLM/TimeRLM) 在 `2026-08-05` 仍有新推送；光伏方向则新增一个当天创建的项目 [`Bhavin2127/Day-Ahead-AI-Driven-Photovoltaic-Energy-Forecasting-A-Physics-and-Data-Driven-Approach`](https://github.com/Bhavin2127/Day-Ahead-AI-Driven-Photovoltaic-Energy-Forecasting-A-Physics-and-Data-Driven-Approach)，但它更像论文/学位项目落地仓库，优先级低于 `solarbench` 和 `PARA-PV`。
+- `DailyArXiv` 今日公开 README 已明确收录 [`TimeRLM`](https://arxiv.org/abs/2608.03391)、[`FinVerse`](https://arxiv.org/abs/2608.03259)、[`CastFSR`](https://arxiv.org/abs/2608.03031)、[`ReasonCast`](https://arxiv.org/abs/2608.01875) 和 [`ClinPRISM`](https://arxiv.org/abs/2607.25947)。这说明本周主线条目已经进入公开聚合列表，跟踪优先级进一步提高。
 - 光伏预测主线没有出现更强的新论文，仍以 [`An AI-Based Decision-Support Pipeline for Day-Ahead Photovoltaic Forecasting`](https://arxiv.org/abs/2608.02088)、[`PARA-PV`](https://arxiv.org/abs/2607.08079) 和 cold-start TSFM 路线为主。
 
 ## 0. 检索口径
@@ -24,6 +24,13 @@
 - 今天是周四，不生成周报文件。
 
 ## 1. 时间序列基础模型最新研究
+
+### [2026-08-05] [Personalized Federated Sparse Adaptation of Time-Series Foundation Models](https://arxiv.org/abs/2608.04695)
+
+- 日期：2026-08-05
+- 来源：[arXiv](https://arxiv.org/abs/2608.04695)
+- 简短摘要：面向建筑能耗预测，把预训练 TSFM 后接 heterogeneous temporal MoE adapter，并在联邦场景里做 client-aware、backbone-aware 的稀疏个性化适配。
+- 相关性判断：最高。它不仅是新的 TSFM 论文，还把 `federated deployment + personalization + energy time series` 这组实际约束放进统一框架里。
 
 ### [2026-08-04] [FinVerse: Financial Time-Series Benchmark](https://arxiv.org/abs/2608.03259)
 
@@ -205,6 +212,13 @@
 
 ### 4.2 光伏功率预测
 
+#### [2026-08-06] [Bhavin2127/Day-Ahead-AI-Driven-Photovoltaic-Energy-Forecasting-A-Physics-and-Data-Driven-Approach](https://github.com/Bhavin2127/Day-Ahead-AI-Driven-Photovoltaic-Energy-Forecasting-A-Physics-and-Data-Driven-Approach)
+
+- 日期：2026-08-06（GitHub API `created_at`）
+- 来源：[GitHub 仓库](https://github.com/Bhavin2127/Day-Ahead-AI-Driven-Photovoltaic-Energy-Forecasting-A-Physics-and-Data-Driven-Approach)
+- 简短摘要：当天创建的光伏日 ahead 预测仓库，按描述聚焦真实运行数据上的三条路线对比与 thesis 复现。
+- 相关性判断：中。它胜在足够新，但更像单论文/学位项目配套代码，工程可复用性暂时弱于 `solarbench`、`Helios-Forecast` 和 `PARA-PV`。
+
 #### [2026-08-05] [ReikanYsora/Helios-Forecast](https://github.com/ReikanYsora/Helios-Forecast)
 
 - 日期：2026-08-05（GitHub API `pushed_at`；仓库创建于 2026-06-11）
@@ -273,9 +287,11 @@
 ## 6. DailyArXiv 补检结论
 
 - 检查对象：[zezhishao/DailyArXiv](https://github.com/zezhishao/DailyArXiv) `master` 分支 README，2026-08-06 公开快照。
-- 在 `Time Series` 板块中，今天确认公开收录了三条与本次主题强相关、且仍在三个月窗口内的论文：
+- 在 `Time Series` 板块中，今天确认公开收录了五条与本次主题强相关、且仍在三个月窗口内的论文：
+  - [`TimeRLM`](https://arxiv.org/abs/2608.03391)，README 日期为 `2026-08-04`，与 arXiv 首发日期一致。
+  - [`FinVerse`](https://arxiv.org/abs/2608.03259)，README 日期为 `2026-08-04`，与 arXiv 首发日期一致。
   - [`CastFSR`](https://arxiv.org/abs/2608.03031)，README 日期为 `2026-08-04`，与 arXiv 首发日期一致。
   - [`ReasonCast`](https://arxiv.org/abs/2608.01875)，README 日期为 `2026-08-03`，与 arXiv 首发日期一致。
   - [`A Cost-Effective Multimodal LLM Reasoning Framework for Question Answering over Irregular Clinical Time Series`](https://arxiv.org/abs/2607.25947)，README 日期为 `2026-07-28`，与 arXiv 首发日期一致。
-- README 中也出现了 [`TS-Reasoner`](https://arxiv.org/abs/2510.03519) 等强相关历史工作，但其首发时间早于 `2026-05-06`，因此按本简报规则不纳入正文。
+- README 中也出现了 [`TS-Reasoner`](https://arxiv.org/abs/2510.03519)，其 README 日期为 `2026-08-01`，但 arXiv 首次公开日期实际是 `2025-10-03`，只是在 `2026-08-01` 更新到 `v2`；因此它与主题相关，但超出三个月窗口，不纳入正文并降优先级处理。
 - 同一快照里还出现了 `PRISM`、`POEM` 等更新的通用 forecasting / anomaly detection 条目，但与 `Agent / reasoning / TSFM / 光伏预测` 主线相关性较弱，因此未放入正文。
