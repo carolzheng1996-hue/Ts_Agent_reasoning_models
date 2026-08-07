@@ -5,16 +5,18 @@
 
 ## 本周重点
 
-1. **基础模型方向**：本周最强的新信号是 [`Personalized Federated Sparse Adaptation of Time-Series Foundation Models`](https://arxiv.org/abs/2608.04695)、[`FinVerse`](https://arxiv.org/abs/2608.03259) 和 [`FedChronos`](https://arxiv.org/abs/2608.01290)。主线已经从“更大的 TSFM”进一步转向 `personalization + federated deployment + domain-aware evaluation`。
+1. **基础模型方向**：本周最强的新信号是 [`Align-RAG`](https://arxiv.org/abs/2608.05571)、[`Personalized Federated Sparse Adaptation of Time-Series Foundation Models`](https://arxiv.org/abs/2608.04695) 和 [`FinVerse`](https://arxiv.org/abs/2608.03259)。主线已经从“更大的 TSFM”进一步转向 `retrieval in-context learning + personalization + domain-aware evaluation`。
 2. **Agent / Harness 方向**：本周最重要的新增是 [`TimeRLM`](https://arxiv.org/abs/2608.03391) 和 [`CastFSR`](https://arxiv.org/abs/2608.03031)。它们分别代表 `recursive tool-using agent` 与 `Fast-Slow-Reflect forecasting agent` 两条更具体、可实现的时序 Agent 路线。
 3. **Reasoning 方向**：本周最重要的新增是 [`ReasonCast`](https://arxiv.org/abs/2608.01875) 和 [`TRACE-TS`](https://arxiv.org/abs/2608.00200)。焦点已经从“能否给解释”推进到 `forecast + reasoning joint generation` 与 `可验证证据链`。
 4. **光伏主线**：本周新增了 [`An AI-Based Decision-Support Pipeline for Day-Ahead Photovoltaic Forecasting`](https://arxiv.org/abs/2608.02088) 与 [`solarbench`](https://github.com/shahoismael/solarbench)。`PARA-PV` 仍是研究主线，`solarbench` 则补上了更接近统一评测协议的工程入口。
-5. **聚合源状态**：本周确认公开可访问的 [`DailyArXiv` README](https://github.com/zezhishao/DailyArXiv) 最近更新时间为 `2026-08-06`，已经收录 `TimeRLM`、`FinVerse`、`CastFSR`、`ReasonCast` 等高优先级主线；但它混用更新日期与原始首发日期，因此仍需二次核对 arXiv `published`。
+5. **聚合源状态**：本周确认公开可访问的 [`DailyArXiv` README](https://github.com/zezhishao/DailyArXiv) 最近更新时间为 `2026-08-06`，已经收录 `TimeRLM`、`FinVerse`、`CastFSR`、`ReasonCast`、`TRACE-TS`、`ClinPRISM` 等高优先级主线；但 `Align-RAG` 尚未进入公开 README，而 `TS-Reasoner` 虽被收录却对应 `2025-10-03` 的 arXiv 首发，因此仍需二次核对 arXiv `published`。
 
 ## 本周新增论文主线
 
 ### 基础模型 / 部署
 
+- [2026-08-06] [Align-RAG: Alignment Is All You Need for TSFM In-Context Learning](https://arxiv.org/abs/2608.05571)
+  - 价值：用 closed-form 对齐替代 learned retrieval adapter，说明冻结 TSFM 已经具备比预期更强的动态 in-context retrieval 能力，是本周最值得补入的新 TSFM 结果。
 - [2026-08-05] [Personalized Federated Sparse Adaptation of Time-Series Foundation Models](https://arxiv.org/abs/2608.04695)
   - 价值：把 `TSFM + federated learning + sparse personalization` 落到建筑能耗预测，是本周最强的“真实部署约束”型新增工作。
 - [2026-08-04] [FinVerse: Financial Time-Series Benchmark](https://arxiv.org/abs/2608.03259)

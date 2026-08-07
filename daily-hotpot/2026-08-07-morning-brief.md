@@ -1,17 +1,18 @@
 # 2026-08-07 时间序列 Agent / Reasoning / Foundation Model 晨间简报
 
-检索时间：2026-08-07 08:44 CST，Asia/Shanghai  
+检索时间：2026-08-07 15:40 CST，Asia/Shanghai  
 时间窗口：2026-05-07 至 2026-08-07  
 优先来源：arXiv、GitHub 官方仓库页 / GitHub API、DailyArXiv 公开 README、官方项目页  
 检索主题：`time series foundation model`、`time series agent`、`agentic forecasting`、`time series reasoning`、`timeseries harness`、`AutoML forecasting`、`photovoltaic power forecasting`
 
 ## 今日摘要
 
-- 截至 `2026-08-07` 08:44 CST，没有确认到比 `2026-08-05` 更晚、且与主题高度相关的新 arXiv / DailyArXiv 条目；`DailyArXiv` 公开 README 的最近更新时间仍是 `2026-08-06`，因此今天的高优先级主线仍由 [`Personalized Federated Sparse Adaptation of Time-Series Foundation Models`](https://arxiv.org/abs/2608.04695)、[`TimeRLM`](https://arxiv.org/abs/2608.03391)、[`CastFSR`](https://arxiv.org/abs/2608.03031) 和 [`ReasonCast`](https://arxiv.org/abs/2608.01875) 构成。
-- 基础模型方向这两天最值得补入的新条目是 [`Personalized Federated Sparse Adaptation of Time-Series Foundation Models`](https://arxiv.org/abs/2608.04695)。它把 `TSFM + federated learning + sparse personalization` 直接推进到建筑能耗预测，说明 TSFM 研究正在快速转向真实部署约束。
+- 截至 `2026-08-07` 15:40 CST，基础模型方向确认出现了一个比昨稿更晚的新主条目：[`Align-RAG: Alignment Is All You Need for TSFM In-Context Learning`](https://arxiv.org/abs/2608.05571)，arXiv 首发于 `2026-08-06`。它直接挑战“检索增强 TSFM 必须依赖可训练 fusion adapter”的默认假设，是今天最需要补入的新论文。
+- 基础模型方向当前最值得连续跟踪的三条线是 [`Align-RAG`](https://arxiv.org/abs/2608.05571)、[`Personalized Federated Sparse Adaptation of Time-Series Foundation Models`](https://arxiv.org/abs/2608.04695) 和 [`FinVerse`](https://arxiv.org/abs/2608.03259)。主线已经从“更大的 TSFM”进一步转向 `retrieval in-context learning + deployment personalization + domain-aware evaluation`。
 - Agent / harness 方向本周最强的新框架仍是 [`TimeRLM`](https://arxiv.org/abs/2608.03391) 与 [`CastFSR`](https://arxiv.org/abs/2608.03031)。前者代表 `recursive interaction + code execution + evidence retrieval`，后者代表 `Fast-Slow-Reflect` 这类显式慢思考 forecasting agent。
 - reasoning 方向仍以 [`ReasonCast`](https://arxiv.org/abs/2608.01875)、[`TRACE-TS`](https://arxiv.org/abs/2608.00200) 与 [`ClinPRISM`](https://arxiv.org/abs/2607.25947) 最值得跟。它们分别覆盖 `forecast + explanation joint generation`、`可追踪证据链` 与 `不规则临床时序推理` 三条路线。
 - GitHub 侧今天最值得记录的新增变化是光伏工程仓库 [`Bhavin2127/Day-Ahead-AI-Driven-Photovoltaic-Energy-Forecasting-A-Physics-and-Data-Driven-Approach`](https://github.com/Bhavin2127/Day-Ahead-AI-Driven-Photovoltaic-Energy-Forecasting-A-Physics-and-Data-Driven-Approach) 于 `2026-08-06` 新建；时间序列 Agent / AutoML 侧则继续由 [`OpenTSLM/TimeRLM`](https://github.com/OpenTSLM/TimeRLM)、[`Naveen-Boddepalli/time-series-autoML`](https://github.com/Naveen-Boddepalli/time-series-autoML)、[`sureshkvn/inContextML`](https://github.com/sureshkvn/inContextML) 和 [`Lkhanaajav/timeseries-mcp`](https://github.com/Lkhanaajav/timeseries-mcp) 维持最高跟踪优先级。
+- `DailyArXiv` README 最新公开更新时间仍是 `2026-08-06`。本次确认其 `Time Series` 栏已收录 `TimeRLM`、`FinVerse`、`CastFSR`、`ReasonCast`、`TRACE-TS`、`ClinPRISM` 和 `TS-Reasoner`；其中 `TS-Reasoner` 虽然主题高度相关，但 arXiv 编号对应首发为 `2025-10-03`，超出三个月窗口，因此只在补检结论中降优先级说明。`Align-RAG` 截至本次检索尚未在公开 README 中检到。
 - 今天是周五，除日报外一并生成 `weekly-brief-2026-W32.md`。
 
 ## 0. 检索口径
@@ -25,6 +26,13 @@
 - 无法确认日期的条目应标记为 `不确定` 并降低优先级；本次正文未纳入日期不确定条目。
 
 ## 1. 时间序列基础模型最新研究
+
+### [2026-08-06] [Align-RAG: Alignment Is All You Need for TSFM In-Context Learning](https://arxiv.org/abs/2608.05571)
+
+- 日期：2026-08-06
+- 来源：[arXiv](https://arxiv.org/abs/2608.05571)
+- 简短摘要：提出训练自由的 `Align-RAG`，在把检索到的 past-future windows 注入冻结 TSFM 前，先做 closed-form 幅度缩放和整数 lag 对齐；在冻结 `Chronos-Bolt` 与其他 TSFM 上，不用 learned fusion module 也能稳定超过现有 retrieval adapter。
+- 相关性判断：最高。它直接命中 `TSFM + retrieval + in-context learning`，而且把“是否必须训练额外融合器”这个关键假设翻了过来，和时间序列 Agent 的外部记忆设计也强相关。
 
 ### [2026-08-05] [Personalized Federated Sparse Adaptation of Time-Series Foundation Models](https://arxiv.org/abs/2608.04695)
 
@@ -263,3 +271,10 @@
 - 来源：[arXiv](https://arxiv.org/abs/2606.07457)
 - 简短摘要：先根据站点元数据与气象协变量生成 physics-informed synthetic histories，再让 TSFM 通过推理时条件化完成冷启动 PV 预测。
 - 相关性判断：高。它说明 TSFM 在零样本或冷启动光伏场景里确实具备部署价值。
+
+## 6. DailyArXiv 补检结论
+
+- 补检时间：2026-08-07 15:40 CST。
+- 公开 README 最近更新时间为 `2026-08-06`，`Time Series` 栏已确认收录 [`TimeRLM`](https://arxiv.org/abs/2608.03391)、[`FinVerse`](https://arxiv.org/abs/2608.03259)、[`CastFSR`](https://arxiv.org/abs/2608.03031)、[`ReasonCast`](https://arxiv.org/abs/2608.01875)、[`TRACE-TS`](https://arxiv.org/abs/2608.00200) 和 [`ClinPRISM`](https://arxiv.org/abs/2607.25947)。
+- [`TS-Reasoner`](https://arxiv.org/abs/2510.03519) 也在 `Time Series` 栏，但其 arXiv 编号对应首发日期是 `2025-10-03`，与 README 中的 `2026-08-01` 更新日期不是同一语义；因此判定为“聚合相关、日期超窗”，本期不纳入正文主条目。
+- [`Align-RAG`](https://arxiv.org/abs/2608.05571) 截至本次检索尚未在公开 README 中检到，说明它比聚合源更新更快；因此今天正文优先采用 arXiv 首发日期而不是等待聚合收录。
