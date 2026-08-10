@@ -1,18 +1,18 @@
 # 2026-08-10 时间序列 Agent / Reasoning / Foundation Model 晨间简报
 
-检索时间：2026-08-10 09:51 CST，Asia/Shanghai  
+检索时间：2026-08-10 15:38 CST，Asia/Shanghai  
 时间窗口：2026-05-10 至 2026-08-10  
 优先来源：arXiv、OpenReview、GitHub 官方仓库页 / GitHub API、官方项目页、DailyArXiv README  
 检索主题：`time series foundation model`、`time series agent`、`agentic forecasting`、`time series reasoning`、`timeseries harness`、`AutoML forecasting`、`photovoltaic power forecasting`
 
 ## 今日摘要
 
-- 截至 `2026-08-10` 09:51 CST，论文侧仍以 `2026-08-06` 的 [`Align-RAG`](https://arxiv.org/abs/2608.05571) 和 `2026-08-05` 的 [`Personalized Federated Sparse Adaptation of Time-Series Foundation Models`](https://arxiv.org/abs/2608.04695) 为最近且最值得跟踪的 TSFM 新条目；今天未检到比它们更晚、且相关性更高的时间序列 foundation model 新论文。
+- 截至 `2026-08-10` 15:38 CST，论文侧仍以 `2026-08-06` 的 [`Align-RAG`](https://arxiv.org/abs/2608.05571) 和 `2026-08-05` 的 [`Personalized Federated Sparse Adaptation of Time-Series Foundation Models`](https://arxiv.org/abs/2608.04695) 为最近且最值得跟踪的 TSFM 新条目；本轮复检仍未检到比它们更晚、且相关性更高的时间序列 foundation model 新论文。
 - Agent / harness 方向的主线没有变化，仍由 [`TimeRLM`](https://arxiv.org/abs/2608.03391)、[`CastFSR`](https://arxiv.org/abs/2608.03031)、[`TopoBrick`](https://arxiv.org/abs/2607.06349)、[`TimeClaw`](https://arxiv.org/abs/2606.05404) 和 [`AION`](https://arxiv.org/abs/2605.25045) 组成，覆盖 `recursive interaction`、`Fast-Slow-Reflect`、`agentic variable selection`、`generalist-agent harness` 与 `task/workspace/validator` 基础设施。
 - reasoning 方向当前最强的近窗组合仍是 [`ReasonCast`](https://arxiv.org/abs/2608.01875)、[`TRACE-TS`](https://arxiv.org/abs/2608.00200)、[`ClinPRISM`](https://arxiv.org/abs/2607.25947)、[`TSRouter`](https://arxiv.org/abs/2607.08940) 与 [`TimeSage-MT`](https://arxiv.org/abs/2606.01498)，分别代表 `forecast + reasoning joint generation`、`traceable evidence`、`irregular clinical QA`、`runtime routing` 和 `multi-turn evaluation`。
 - GitHub 侧今天没有出现比 `2026-08-06` 更高信号的新建 time-series agent 项目，但 [`OpenTSLM/TimeRLM`](https://github.com/OpenTSLM/TimeRLM)、[`Naveen-Boddepalli/time-series-autoML`](https://github.com/Naveen-Boddepalli/time-series-autoML)、[`jhondados/time-series-forecasting-platform`](https://github.com/jhondados/time-series-forecasting-platform)、[`Xiaoyu-Tao/CastFSR`](https://github.com/Xiaoyu-Tao/CastFSR)、[`seunghan96/reasoncast`](https://github.com/seunghan96/reasoncast) 和 [`Lkhanaajav/timeseries-mcp`](https://github.com/Lkhanaajav/timeseries-mcp) 仍是最值得继续跟踪的仓库组合。
-- 光伏功率预测方向没有检到比 [`AutoPV`](https://www.sciencedirect.com/science/article/pii/S0306261926005039) 更强的新近 `AutoML / NAS + forecasting` 主线，但 [`Bhavin2127/...Photovoltaic...`](https://github.com/Bhavin2127/Day-Ahead-AI-Driven-Photovoltaic-Energy-Forecasting-A-Physics-and-Data-Driven-Approach) 这类工程仓库仍值得继续跟踪。
-- `DailyArXiv` 公开 `README` 今天已更新到 `2026-08-10`；`Time Series` 板块可直接核对到 [`CastFSR`](https://arxiv.org/abs/2608.03031)、[`ReasonCast`](https://arxiv.org/abs/2608.01875) 与 [`TS-Reasoner`](https://arxiv.org/abs/2510.03519) 等条目，但截至本次聚焦检索，仍未发现比 `Align-RAG / TimeRLM / CastFSR / ReasonCast` 更晚且更高相关的新主线。`TS-Reasoner` 首次公开超出三个月窗口，因此继续仅作降优先级记录。
+- 光伏功率预测方向补检到 `2026-08-01` 的新论文 [`A novel physics-inspired method for efficient and robust ultra-short-term photovoltaic power forecasting`](https://www.sciencedirect.com/science/article/pii/S0960148126008980)，但整体上仍未出现比 [`AutoPV`](https://www.sciencedirect.com/science/article/pii/S0306261926005039) 更强的 `AutoML / NAS + forecasting` 主线；[`Bhavin2127/...Photovoltaic...`](https://github.com/Bhavin2127/Day-Ahead-AI-Driven-Photovoltaic-Energy-Forecasting-A-Physics-and-Data-Driven-Approach) 这类工程仓库仍值得继续跟踪。
+- `DailyArXiv` 公开 `README` 今天已更新到 `2026-08-10`；`Time Series` 板块现可直接核对到 [`Align-RAG`](https://arxiv.org/abs/2608.05571)、[`CastFSR`](https://arxiv.org/abs/2608.03031)、[`ReasonCast`](https://arxiv.org/abs/2608.01875) 与 [`TS-Reasoner`](https://arxiv.org/abs/2510.03519)。其中 `TS-Reasoner` 在 README 中列为 `2026-08-01`，但其 arXiv 首次公开时间早于三个月窗口，因此继续仅作降优先级记录。
 
 ## 0. 检索口径
 
@@ -234,6 +234,13 @@
 
 ## 5. 光功率 / 光伏功率预测相关最新研究
 
+### [2026-08-01] [A novel physics-inspired method for efficient and robust ultra-short-term photovoltaic power forecasting](https://www.sciencedirect.com/science/article/pii/S0960148126008980)
+
+- 日期：2026-08-01
+- 来源：[ScienceDirect / Renewable Energy](https://www.sciencedirect.com/science/article/pii/S0960148126008980)
+- 简短摘要：提出物理启发式的超短期光伏功率预测方法，把可解释的机理约束与数据驱动建模结合起来，目标是同时提升效率、鲁棒性和复杂天气条件下的稳定性。
+- 相关性判断：高。它不是 Agent 工作，但对光伏功率预测中“物理先验 + 数据建模”这条主线很关键，也适合作为后续 reasoning-aware PV 系统的强基线。
+
 ### [2026-07-26] [Toward Trustworthy AI Software Evaluation: A Controlled Benchmark of Deep Learning Architectures for 24-h Photovoltaic Power Forecasting](https://www.mdpi.com/2073-431X/15/8/474)
 
 - 日期：2026-07-26
@@ -273,14 +280,15 @@
 
 - 直接核对 `zezhishao/DailyArXiv` 当前公开 `README`，页面 `Last update` 已更新到 `2026-08-10`。
 - 当前 `Time Series` 板块可直接确认的相关条目包括：
+  - `2026-08-06` [`Align-RAG`](https://arxiv.org/abs/2608.05571)
   - `2026-08-04` [`CastFSR`](https://arxiv.org/abs/2608.03031)
   - `2026-08-03` [`ReasonCast`](https://arxiv.org/abs/2608.01875)
-  - `超窗降级` [`TS-Reasoner`](https://arxiv.org/abs/2510.03519)
-- 当前公开页抓取中仍未稳定检到 [`Align-RAG`](https://arxiv.org/abs/2608.05571)，因此它继续是今天正文里最值得手动补入的 TSFM 新论文。
-- `README` 还出现了 [`AegisTS`](https://arxiv.org/abs/2605.04902) 等 agent 相关旧条目，但当前公开页只稳定确认到新版列表项，未额外给出首次公开日期校正；考虑到其 arXiv 编号接近窗口左边界，本次不提升进正文主条目。
+  - `README 日期 2026-08-01，但首次公开超窗` [`TS-Reasoner`](https://arxiv.org/abs/2510.03519)
+- `Align-RAG / CastFSR / ReasonCast` 与正文核验结果一致，可以直接视为 `DailyArXiv` 在三个月窗口内的有效补检命中。
+- `TS-Reasoner` 虽在 `README` 中以 `2026-08-01` 出现，但其 arXiv 编号对应的首次公开时间早于本次三个月窗口，因此继续降优先级，不抬升到正文主条目。
 
 ## 7. 额外备注
 
 - 今天是周一（`2026-08-10`），按要求本次不生成周报。
 - 本次未检到需要以 `日期不确定` 纳入正文的候选条目。
-- 本次主条目主要来自 arXiv、GitHub API、ScienceDirect / MDPI 官方页与 DailyArXiv 公开 README；未发现窗口内更强的新 Hugging Face 独立项目卡片。
+- 本次主条目主要来自 arXiv、GitHub API、ScienceDirect / MDPI 官方页与 DailyArXiv 公开 README；本轮复检仍未发现窗口内更强的新 Hugging Face 独立项目卡片。
