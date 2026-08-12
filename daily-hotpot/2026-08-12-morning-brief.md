@@ -1,6 +1,6 @@
 # 2026-08-12 时间序列 Agent / Reasoning / Foundation Model 晨间简报
 
-检索时间：2026-08-12 08:46 CST，Asia/Shanghai  
+检索时间：2026-08-12 15:36 CST，Asia/Shanghai  
 时间窗口：2026-05-12 至 2026-08-12  
 优先来源：arXiv、官方项目页、GitHub 官方仓库页 / GitHub API  
 检索主题：`time series foundation model`、`time series agent`、`agentic forecasting`、`time series reasoning`、`timeseries harness`、`timeseries mcp`、`time series AutoML`、`photovoltaic forecasting`
@@ -9,8 +9,9 @@
 
 - 过去一周的 `TSFM` 新动向非常集中：`GTN-R`、`TS-RAG`、`Align-RAG`、`FedChronos`、`Federated Sparse Adaptation` 连续出现，说明重心已明显从“预训练更大模型”转向“后训练、检索增强、联邦/隐私适配、部署期对齐”。
 - `Agent / harness` 方向的主线已经很清晰：`TimeRLM` 强调递归工具使用，`CastFSR` 强调 `Fast-Slow-Reflect` 工作流，`TimeClaw` 与 `AION` 强调完整运行时与验证机制，`GenAutoML` 则把时序模型设计问题直接代理化。
-- `Reasoning` 方向在近三个月内持续升温：`ReasonCast` 把预测与解释合并到同一生成过程，`TRACE-TS` 和 `CLIR-Bench / ClinPRISM` 把“证据可追溯”与“不规则时序问答”推到更前面，`TSRouter` 则开始研究 runtime 层面的模态/模型路由。
+- `Reasoning` 方向在近三个月内持续升温：`REATS` 开始把 `LLM reasoning` 用到自适应集成权重分配，`ReasonCast` 把预测与解释合并到同一生成过程，`TRACE-TS` 和 `CLIR-Bench / ClinPRISM` 把“证据可追溯”与“不规则时序问答”推到更前面，`TSRouter` 则开始研究 runtime 层面的模态/模型路由。
 - GitHub 近窗内最值得跟踪的新仓库包括 `align-rag`、`reasoncast`、`CastFSR`、`TimeRLM`、`timeseries-mcp`、`TSRouter`，以及偏工程平台的 `time-series-autoML` 和 `time-series-forecasting-platform`。
+- `DailyArXiv` 已补检到 `2026-08-12` 的最新 README；其 `Time Series` 板块对本期核心主题覆盖偏弱，因此正文仍以 arXiv 原始条目、官方项目页和 GitHub API 为主证据。
 - 本次未纳入 `日期不确定` 条目；无法在正文中确认首次公开日期的内容一律降级或剔除。
 
 ## 0. 检索口径
@@ -138,6 +139,13 @@
 
 ## 3. 时间序列 Reasoning 最新研究
 
+### [2026-08-10] [REATS: LLM Reasoning-based Ensemble Learning for Adaptive Time Series Forecasting](https://arxiv.org/abs/2608.10149)
+
+- 日期：2026-08-10
+- 来源：[arXiv](https://arxiv.org/abs/2608.10149)
+- 简短摘要：把 `LLM reasoning` 用作时序集成学习的样本级路由器，同时联合文本化时序模式描述与数值特征，输出可解释的动态 ensemble 权重。
+- 相关性判断：高。它不是完整 agent/harness，但直接展示了 `reasoning model` 如何介入 forecasting runtime 的模型选择与加权。
+
 ### [2026-08-03] [ReasonCast: Towards Explainable Time Series Forecasting with Reasoning](https://arxiv.org/abs/2608.01875)
 
 - 日期：2026-08-03
@@ -202,6 +210,20 @@
 - 来源：[arXiv](https://arxiv.org/abs/2608.02088)
 - 简短摘要：面向冷启动与有限站点历史场景，构建带时间戳校正、物理特征与 stacking 的日 ahead PV 预测流水线。
 - 相关性判断：高。它不属于 Agent 论文，但很适合作为 `time-series agent` 的下游任务模板。
+
+### [2026-07-14] [Robustness of Deep Learning Models for PV Power Forecasting under NWP Forecast Errors: A Spatiotemporal and Physically Interpretable Analysis](https://arxiv.org/abs/2607.12954)
+
+- 日期：2026-07-14
+- 来源：[arXiv](https://arxiv.org/abs/2607.12954)
+- 简短摘要：系统评估多类深度时序模型在 `NWP` 误差扰动下的鲁棒性，结合受物理约束的扰动模拟与 `SHAP / IG` 解释，分析模型何时会从未来天气转而依赖历史观测与物理先验。
+- 相关性判断：高。它虽然不是 foundation model 论文，但对光伏预测系统在真实部署中的稳健性评估非常关键。
+
+### [2026-07-09] [PARA-PV: Physics-Aware Retrieval-Augmented PV Prediction Based on Frozen Foundation Model and Distribution Shift Correction](https://arxiv.org/abs/2607.08079)
+
+- 日期：2026-07-09
+- 来源：[arXiv](https://arxiv.org/abs/2607.08079)
+- 简短摘要：提出物理感知的检索增强光伏预测框架，先基于 patch 与 analog trajectory 做物理一致的检索，再用冻结 `Chronos` 先验和残差校正模块处理分布偏移。
+- 相关性判断：最高。它直接把 `retrieval + frozen TSFM + physics-aware correction` 结合到 PV forecasting，是本期最贴合主线的光伏论文之一。
 
 ### [2026-06-05] [Time series Foundation Models based on Physics-Informed Synthetic Histories for Cold-Start Photovoltaic Forecasting](https://arxiv.org/abs/2606.07457)
 
@@ -290,9 +312,17 @@
 
 - 本次未发现近三个月内同时满足“与光伏功率预测直接相关”“项目形态较完整”“GitHub 创建日期可确认”的高优先级新仓库；因此该小节保留为空结果说明，不强行纳入低质量项目。
 
-## 6. 需要继续跟踪的信号
+## 6. DailyArXiv 补检结论
+
+- 已直接检查 `zezhishao/DailyArXiv` 的 GitHub README 页面；当前页面显示 `Last update: 2026-08-12`，且 `Time Series` 板块前列可见条目主要是通用 forecasting、benchmark、anomaly diagnosis 与 compliance 相关内容。
+- 直接打开当天 README 时，未在前列可见内容中确认 `GTN-R`、`TimeRLM`、`CastFSR`、`ReasonCast`、`TSRouter`、`REATS` 等更贴合本期主题的 8 月新作，因此 `DailyArXiv` 对“timeseries agent / reasoning / foundation model / PV forecasting”主线的即刻覆盖偏弱。
+- 通过 GitHub 搜索摘要补检，`DailyArXiv` 当前与本主题较相关且仍在三个月窗口内的条目主要包括 `TS-Skill`（2026-05-23，偏时序问答 reasoning 评测）以及 `ChronoVAE-HOPE`、`KairosHope`（均为 2026-05-23，偏 TSFM 分类技术报告）。
+- 上述 `2026-05-23` 条目虽在窗口内，但与本期关注的 forecasting agent、reasoning runtime、TSFM 后训练、PV forecasting 相比相关性次级，因此本期未将其抬升到正文高优先级列表。
+- 本次未发现必须因 `DailyArXiv` 而新增的“高相关但日期超窗”条目；若后续 README 中出现与 arXiv 首发日期不一致的情况，应继续以 arXiv `published` 时间为准并降优先级处理。
+
+## 7. 需要继续跟踪的信号
 
 - `TSFM post-training`：重点继续盯 `RL post-training`、`retrieval alignment`、`federated / personalized adaptation` 三条支线。
 - `Agent runtime`：重点继续盯 `TimeRLM`、`CastFSR`、`TimeClaw`、`AION` 后续是否补 benchmark、代码更新和更完整实验。
-- `Reasoning evaluation`：重点继续盯 `ReasonCast`、`TimeSage-MT`、`CLIR-Bench`、`TSRouter` 是否形成更统一的时序 reasoning 评测协议。
+- `Reasoning evaluation`：重点继续盯 `REATS`、`ReasonCast`、`TimeSage-MT`、`CLIR-Bench`、`TSRouter` 是否形成更统一的时序 reasoning 评测协议。
 - `GitHub projects`：下次优先检查 `align-rag`、`reasoncast`、`TimeRLM`、`timeseries-mcp` 是否在 2026-08-12 之后出现实质性提交或新增文档。
