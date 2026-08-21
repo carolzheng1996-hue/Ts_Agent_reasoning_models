@@ -5,11 +5,11 @@
 
 ## 本周重点
 
-1. **基础模型方向**：本周最强的新信号集中在 [`LiveHouse-TS`](https://arxiv.org/abs/2608.17299)、[`Forecast Collapse in Time-Series Foundation Models`](https://arxiv.org/abs/2608.14106)、[`Model-agnostic Retrieval-Augmented Extended Forecasting for time series`](https://arxiv.org/abs/2608.14054) 和 [`Into the ORBIT for Time Series`](https://arxiv.org/abs/2608.13262)。主线已经非常明确地从“更大 TSFM”转向 `live evaluation + failure mode analysis + retrieval adaptation + training regime control`。
-2. **Agent 方向**：[`TimeSage-EV`](https://arxiv.org/abs/2608.14270) 仍是本周最关键的 benchmark 底座，而 [`EvoTS-Agent`](https://arxiv.org/abs/2608.17933) 则把“验证反馈驱动的自演化实验搜索”真正落到时间序列建模任务上。
-3. **Reasoning 方向**：[`ReasonCast`](https://arxiv.org/abs/2608.15291)、[`REATS`](https://arxiv.org/abs/2608.10149) 与 [`TimeRLM`](https://arxiv.org/abs/2608.03391) 共同说明，时间序列 reasoning 已经不只是生成解释，而是在直接介入 `是否推理、如何路由模型、如何多轮操作信号`。
-4. **工程 / GitHub 侧**：本周稳定复核到的最新值得跟踪仓库主要是 [`OpenTSLM/TimeRLM`](https://github.com/OpenTSLM/TimeRLM)、[`MS_Azure_Machine_Learning_Many_Models_1`](https://github.com/dmitrii-govorukhin/MS_Azure_Machine_Learning_Many_Models_1)、[`time-series-autoML`](https://github.com/Naveen-Boddepalli/time-series-autoML) 和 [`COLDSTART`](https://github.com/priestly-ops/COLDSTART)。其中前两者更像“论文代码/快速工程入口”，后两者更像“平台或 harness 雏形”。
-5. **本周工作口径变化**：从周中开始，晨报明确切换到“只按论文首发日期 / 仓库创建日期排序”的规则，聚合页收录时间不再参与主排序，因此本周列表比之前更保守，但时间窗口更干净。
+1. **基础模型方向**：本周最强的新信号集中在 [`LiveHouse-TS`](https://arxiv.org/abs/2608.17299)、[`Forecast Collapse in Time-Series Foundation Models`](https://arxiv.org/abs/2608.14106)、[`Model-agnostic Retrieval-Augmented Extended Forecasting for time series`](https://arxiv.org/abs/2608.14054) 和 [`Into the ORBIT for Time Series`](https://arxiv.org/abs/2608.13262)。主线已经非常明确地从“更大 TSFM”转向 `live evaluation + failure-mode analysis + retrieval adaptation + training regime control`。
+2. **Agent 方向**：[`EvoTS-Agent`](https://arxiv.org/abs/2608.17933) 是本周最新、也最像自演化实验研究员的时间序列 agent；[`SCENARIODIFF`](https://arxiv.org/abs/2608.17164) 则展示了多模态 forecasting 的分层场景 agent 结构；[`TimeSage-EV`](https://arxiv.org/abs/2608.14270) 继续是最关键的 live benchmark 底座。
+3. **Reasoning 方向**：[`Mechanistic Interpretability of Structure-Aware Numerical Reasoning in LLaMA 3.1 8B`](https://arxiv.org/abs/2608.18419)、[`ReasonCast`](https://arxiv.org/abs/2608.15291)、[`REATS`](https://arxiv.org/abs/2608.10149) 与 [`TimeRLM`](https://arxiv.org/abs/2608.03391) 共同说明，时间序列 reasoning 已经进入 `结构机制解释 + 选择性语义推理 + 样本级路由 + 多轮工具调用` 四条并行路线。
+4. **工程 / GitHub 侧**：本周稳定复核到的最新值得跟踪仓库，按创建日期从近到远主要是 [`building-agentic-automl`](https://github.com/lucalullo/building-agentic-automl)、[`MS_Azure_Machine_Learning_Many_Models_1`](https://github.com/dmitrii-govorukhin/MS_Azure_Machine_Learning_Many_Models_1)、[`Agentic-AutoML-MCP`](https://github.com/Harishrajan77/Agentic-AutoML-MCP)、[`TimeSage-EV`](https://github.com/TimeSage-Series/TimeSage-EV)。
+5. **光伏方向**：本周没有比 [`A Low-Cost IoT Device for Environmental Monitoring and Embedded Solar Forecasting with On-Device Incremental Learning`](https://arxiv.org/abs/2608.14698) 更晚的新高相关公开论文进入主列表，但 [`solarbench`](https://github.com/shahoismael/solarbench)、[`An AI-Based Decision-Support Pipeline for Day-Ahead Photovoltaic Forecasting`](https://arxiv.org/abs/2608.02088) 和 [`PARA-PV`](https://arxiv.org/abs/2607.08079) 仍是最值得保留的近三个月跟踪对象。
 
 ## 本周新增论文主线
 
@@ -48,39 +48,43 @@
 
 ## 本周新增纳入跟踪的 GitHub 项目
 
+- [2026-08-19] [lucalullo/building-agentic-automl](https://github.com/lucalullo/building-agentic-automl)
+  - 定位：从 baseline 到 senior ML agent 的 agentic AutoML 研发仓。
+  - 判断：中高相关。偏通用 AutoML，但与 `agent + ML` 主线直接相关。
+
 - [2026-08-17] [dmitrii-govorukhin/MS_Azure_Machine_Learning_Many_Models_1](https://github.com/dmitrii-govorukhin/MS_Azure_Machine_Learning_Many_Models_1)
   - 定位：Azure AutoML 的时间序列预测样例仓。
   - 判断：中高相关。适合作为云端 AutoML forecasting workflow 快速入口。
 
-- [2026-07-14] [OpenTSLM/TimeRLM](https://github.com/OpenTSLM/TimeRLM)
-  - 定位：`TimeRLM` 官方代码。
-  - 判断：最高相关。本周最值得直接复现的 time-series reasoning / agent 代码仓之一。
+- [2026-08-17] [Harishrajan77/Agentic-AutoML-MCP](https://github.com/Harishrajan77/Agentic-AutoML-MCP)
+  - 定位：基于 LangGraph 与 MCP 的 agentic AutoML 平台。
+  - 判断：高相关。对 time-series agent 的工具层设计有直接参考价值。
 
-- [2026-07-08] [Naveen-Boddepalli/time-series-autoML](https://github.com/Naveen-Boddepalli/time-series-autoML)
-  - 定位：面向时序场景的 AutoML workflow / UI 平台。
-  - 判断：中高相关。更偏平台工程，但与 AutoML 主题直接相关。
+- [2026-08-05] [TimeSage-Series/TimeSage-EV](https://github.com/TimeSage-Series/TimeSage-EV)
+  - 定位：`TimeSage-EV` live benchmark 官方仓库。
+  - 判断：最高相关。它是最值得直接跟踪的 time-series agent benchmark 项目。
 
-- [2026-06-22] [priestly-ops/COLDSTART](https://github.com/priestly-ops/COLDSTART)
-  - 定位：带 `timeseries` 主题标签的 leakage-safe benchmarking framework。
-  - 判断：中相关。更偏 benchmark / harness，而不是 forecasting 模型。
+## 本周光伏方向保留项
 
-## 日期待复核但值得继续盯的项目
+- [2026-08-09] [A Low-Cost IoT Device for Environmental Monitoring and Embedded Solar Forecasting with On-Device Incremental Learning](https://arxiv.org/abs/2608.14698)
+  - 判断：中高相关。偏部署与设备侧学习，但工程价值高。
+- [2026-08-04] [shahoismael/solarbench](https://github.com/shahoismael/solarbench)
+  - 判断：最高相关。跨气候带统一协议的光伏功率预测 benchmark。
+- [2026-08-03] [An AI-Based Decision-Support Pipeline for Day-Ahead Photovoltaic Forecasting](https://arxiv.org/abs/2608.02088)
+  - 判断：最高相关。最贴近真实站点部署的 PV 预测流水线之一。
+- [2026-07-09] [PARA-PV: Physics-Aware Retrieval-Augmented Adaptation of Frozen Time-Series Foundation Models for Robust Photovoltaic Forecasting](https://arxiv.org/abs/2607.08079)
+  - 判断：最高相关。直接连接 TSFM 与光伏预测场景。
 
-- [TimeSage-Series/TimeSage-EV](https://github.com/TimeSage-Series/TimeSage-EV)
-  - 说明：官方代码仓已知存在，但本周末 GitHub API 触发速率限制，本轮未再次复核创建日期。
-  - 判断：最高相关。后续若做 live benchmark 复现，它仍是优先入口。
+## DailyArXiv 补检结论
 
-- [Xiaoyu-Tao/CastFSR](https://github.com/Xiaoyu-Tao/CastFSR)
-  - 说明：已知是 `CastFSR` 官方实现，本轮未再次复核创建日期。
-  - 判断：最高相关。适合梳理 `fast-slow-reflect` forecasting agent workflow。
-
-- [tianyi-lab/TSRouter](https://github.com/tianyi-lab/TSRouter)
-  - 说明：与论文对应关系明确，但本轮未再次复核创建日期。
-  - 判断：高相关。对 reasoning router 设计很重要。
+- 本周检查了 [`DailyArXiv README`](https://github.com/zezhishao/DailyArXiv/blob/master/README.md) 的 `Time Series` 板块；页面在 2026-08-21 显示 `Last update: 2026-08-21`。
+- 当前快照里能稳定确认的直接相关命中包括 [`Mechanistic Interpretability of Structure-Aware Numerical Reasoning in LLaMA 3.1 8B`](https://arxiv.org/abs/2608.18419)。
+- 但 [`LiveHouse-TS`](https://arxiv.org/abs/2608.17299)、[`EvoTS-Agent`](https://arxiv.org/abs/2608.17933)、[`TimeSage-EV`](https://arxiv.org/abs/2608.14270)、[`ReasonCast`](https://arxiv.org/abs/2608.15291)、[`REATS`](https://arxiv.org/abs/2608.10149) 等本周核心条目未在今天的 README 快照里稳定出现。
+- 结论：`DailyArXiv` 适合做补检和回溯，但不能替代本周正文的主排序依据。
 
 ## 下周跟踪项
 
 - 检查 [`LiveHouse-TS`](https://arxiv.org/abs/2608.17299) 是否放出代码、leaderboard 或月度更新协议，因为它很可能成为 TSFM 新默认评测入口。
 - 跟进 [`EvoTS-Agent`](https://arxiv.org/abs/2608.17933) 是否公开代码，以便与 [`TimeRLM`](https://github.com/OpenTSLM/TimeRLM) 和 [`TimeSage-EV`](https://arxiv.org/abs/2608.14270) 组合出一版“benchmark + self-evolving solver”的实验路线。
 - 对照 [`ReasonCast`](https://arxiv.org/abs/2608.15291)、[`REATS`](https://arxiv.org/abs/2608.10149) 和 [`TSRouter`](https://github.com/tianyi-lab/TSRouter)，整理一版 `semantic reasoning + model routing + validation` 的可复用框架草图。
-- 继续监控 [`OpenTSLM/TimeRLM`](https://github.com/OpenTSLM/TimeRLM)、[`time-series-autoML`](https://github.com/Naveen-Boddepalli/time-series-autoML) 和 [`MS_Azure_Machine_Learning_Many_Models_1`](https://github.com/dmitrii-govorukhin/MS_Azure_Machine_Learning_Many_Models_1) 的新增 commit 与文档完善情况。
+- 继续监控 [`building-agentic-automl`](https://github.com/lucalullo/building-agentic-automl)、[`MS_Azure_Machine_Learning_Many_Models_1`](https://github.com/dmitrii-govorukhin/MS_Azure_Machine_Learning_Many_Models_1)、[`Agentic-AutoML-MCP`](https://github.com/Harishrajan77/Agentic-AutoML-MCP) 和 [`solarbench`](https://github.com/shahoismael/solarbench) 的新增 commit 与文档完善情况。
