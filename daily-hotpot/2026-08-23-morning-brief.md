@@ -1,8 +1,8 @@
 # 2026-08-23 时间序列 Agent / Reasoning / Foundation Model 晨间简报
 
-检索时间：2026-08-23 11:27 CST，Asia/Shanghai  
-时间窗口：2026-05-23 至 2026-08-23  
-优先来源：arXiv 官方 API / `abs` 页面、GitHub 官方仓库 API / 仓库页、[`DailyArXiv README`](https://github.com/zezhishao/DailyArXiv/blob/master/README.md)  
+检索时间：2026-08-23 16:53 CST，Asia/Shanghai<br>
+时间窗口：2026-05-23 至 2026-08-23<br>
+优先来源：arXiv 官方 API / `abs` 页面、GitHub 官方仓库 API / 仓库页、[`DailyArXiv README`](https://github.com/zezhishao/DailyArXiv/blob/master/README.md)<br>
 检索主题：`time series foundation model`、`time series agent`、`time series reasoning`、`agentic forecasting`、`timeseries harness`、`machine learning agent`、`AutoML`、`photovoltaic forecasting`
 
 ## 今日摘要
@@ -10,7 +10,7 @@
 - 基础模型方向今天最重要的新增信号是 [`SATS`](https://arxiv.org/abs/2608.20005) 和 [`TabPFN-TS` 热负荷零样本评测](https://arxiv.org/abs/2608.20024)。前者直接讨论 TSFM 预训练中的尺度对齐，后者说明 zero-shot TSFM 已经在能源负荷场景进入系统化评测阶段。
 - Agent 方向主线没有变：[`EvoTS-Agent`](https://arxiv.org/abs/2608.17933)、[`SCENARIODIFF`](https://arxiv.org/abs/2608.17164)、[`TimeSage-EV`](https://arxiv.org/abs/2608.14270) 仍是时间序列研究 agent、分层 forecasting agent、live benchmark 三条最清楚的路线。
 - Reasoning 方向仍以 [`Mechanistic Interpretability of Structure-Aware Numerical Reasoning in LLaMA 3.1 8B`](https://arxiv.org/abs/2608.18419)、[`ReasonCast`](https://arxiv.org/abs/2608.15291)、[`REATS`](https://arxiv.org/abs/2608.10149)、[`TimeRLM`](https://arxiv.org/abs/2608.03391) 为主，重点落在结构推理机制、选择性语义干预、样本级路由和多轮工具调用。
-- GitHub 侧今天最值得新纳入的是 [`sriixz/agentic-timeseries`](https://github.com/sriixz/agentic-timeseries)（2026-08-22 创建）和 [`SubhadeepSarkar04/Mutli_Agent_Autonomous_Data_Analyzer`](https://github.com/SubhadeepSarkar04/Mutli_Agent_Autonomous_Data_Analyzer)（2026-08-21 创建）；前者是极新的 time-series multi-agent 原型，后者是 AutoML agent pipeline。
+- GitHub 侧今天最值得新纳入的是 [`sriixz/agentic-timeseries`](https://github.com/sriixz/agentic-timeseries)（2026-08-22 创建）、[`SubhadeepSarkar04/Mutli_Agent_Autonomous_Data_Analyzer`](https://github.com/SubhadeepSarkar04/Mutli_Agent_Autonomous_Data_Analyzer)（2026-08-21 创建）以及补检确认的 [`Jesse-dry/AutoML-Agent`](https://github.com/Jesse-dry/AutoML-Agent)（2026-07-12 创建，2026-08-23 仍在更新）；三者分别对应 time-series multi-agent 原型、通用 AutoML agent pipeline、以及面向电力负荷预测的时序 AutoML agent。
 - 光伏方向没有比昨天更晚的新论文，但 [`A Low-Cost IoT Device for Environmental Monitoring and Embedded Solar Forecasting with On-Device Incremental Learning`](https://arxiv.org/abs/2608.14698)、[`An AI-Based Decision-Support Pipeline for Day-Ahead Photovoltaic Forecasting`](https://arxiv.org/abs/2608.02088)、[`Time series Foundation Models based on Physics-Informed Synthetic Histories for Cold-Start Photovoltaic Forecasting`](https://arxiv.org/abs/2606.07457) 仍是近三个月最值得跟踪的三条线。
 - 今天是周日，不触发周五周报更新条件，因此本轮只生成晨报。
 
@@ -20,6 +20,7 @@
 - 论文日期优先采用 arXiv `published` 日期；GitHub 项目日期优先采用官方 API `created_at`。
 - 若只能确认项目最近更新时间而无法确认创建时间，则不进入主列表；本轮主列表未纳入日期不确定条目。
 - `DailyArXiv` 只作为补检与交叉核验来源，不替代论文首发日期和仓库创建日期。
+- HuggingFace 近三个月补检未发现比正文现有论文与 GitHub 项更高优先级、且日期更明确的独立新条目，因此本轮不单列 HuggingFace 项。
 
 ## 1. 时间序列基础模型最新研究
 
@@ -150,6 +151,13 @@
 - 简短摘要：`TimeSage-EV` live benchmark 官方仓库，主题标签明确包含 `agent`、`benchmark`、`timeseries`。
 - 相关性判断：最高。它是当前窗口里最值得直接跟踪的 time-series agent benchmark 项目。
 
+### [2026-07-12] [Jesse-dry/AutoML-Agent](https://github.com/Jesse-dry/AutoML-Agent)
+
+- 日期：2026-07-12（创建），2026-08-23（最近一次 push）
+- 来源：[GitHub Repo API](https://api.github.com/repos/Jesse-dry/AutoML-Agent) / [GitHub 仓库](https://github.com/Jesse-dry/AutoML-Agent)
+- 简短摘要：一个面向短期电力负荷预测的 LLM-driven AutoML agent，覆盖自动特征工程、超参搜索与实验迭代。
+- 相关性判断：高。它同时命中 `time series + AutoML + agent`，比一般性 AutoML 项目更贴近本仓库关注面。
+
 ### [2026-05-31] [adamthuvesen/agentic-ml-loop](https://github.com/adamthuvesen/agentic-ml-loop)
 
 - 日期：2026-05-31（创建），2026-08-17（最近一次 push）
@@ -192,7 +200,7 @@
 ## 6. DailyArXiv 补检结论
 
 - 检查对象：[`zezhishao/DailyArXiv`](https://github.com/zezhishao/DailyArXiv) 官方 README；本次抓取显示 `Last update: 2026-08-21`。
-- 在本次可见的 `Time Series` 快照里，能稳定确认到与本主题直接相关且仍在三个月窗口内的条目包括 [`Mechanistic Interpretability of Structure-Aware Numerical Reasoning in LLaMA 3.1 8B`](https://arxiv.org/abs/2608.18419)。
+- 在本次可见的 `Time Series` 快照里，能稳定确认到与本主题直接相关且仍在三个月窗口内的条目包括 [`Mechanistic Interpretability of Structure-Aware Numerical Reasoning in LLaMA 3.1 8B`](https://arxiv.org/abs/2608.18419)、[`EvoTS-Agent`](https://arxiv.org/abs/2608.17933)、[`LiveHouse-TS`](https://arxiv.org/abs/2608.17299)、[`ReasonCast`](https://arxiv.org/abs/2608.15291)、[`TimeSage-EV`](https://arxiv.org/abs/2608.14270)、[`Forecast Collapse in Time-Series Foundation Models`](https://arxiv.org/abs/2608.14106)。
 - 同一份可见快照前列还出现了更泛化的时序论文，如 `Lévy Attention`、`MDTIM` 等，但它们与 `time-series agent / reasoning / foundation model / photovoltaic forecasting` 的直接重合度低于正文主列表。
-- 在本次可见快照中，没有稳定看到今天最关键的新增或主线条目，如 [`Scale-Aware Pretraining of Time Series Foundation Models via Multi-Patch Token Alignment and Hybrid Masking`](https://arxiv.org/abs/2608.20005)、[`LiveHouse-TS`](https://arxiv.org/abs/2608.17299)、[`EvoTS-Agent`](https://arxiv.org/abs/2608.17933)、[`TimeSage-EV`](https://arxiv.org/abs/2608.14270)、[`ReasonCast`](https://arxiv.org/abs/2608.15291)、[`REATS`](https://arxiv.org/abs/2608.10149)。
-- 结论：`DailyArXiv` 仍适合做回溯和补检，但对 `2026-08-14` 之后的 time-series agent / reasoning / TSFM 关键条目覆盖滞后，因此本轮继续把它作为次级交叉核验来源。
+- 在本次可见快照中，仍未稳定看到 [`Scale-Aware Pretraining of Time Series Foundation Models via Multi-Patch Token Alignment and Hybrid Masking`](https://arxiv.org/abs/2608.20005)、[`Systematic Evaluation of TabPFN-TS for Zero-Shot Probabilistic Heat Load Forecasting in District Heating Networks`](https://arxiv.org/abs/2608.20024)、[`REATS`](https://arxiv.org/abs/2608.10149)、[`TimeRLM`](https://arxiv.org/abs/2608.03391) 等正文条目。
+- 结论：`DailyArXiv` 对 8 月中下旬的关键 time-series agent / reasoning / TSFM 论文已有部分覆盖，但仍不是完整源；本轮继续把它作为次级交叉核验来源，而不是主检索入口。
