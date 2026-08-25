@@ -1,16 +1,16 @@
 # 2026-08-25 时间序列 Agent / Reasoning / Foundation Model 晨间简报
 
-检索时间：2026-08-25 09:14 CST，Asia/Shanghai<br>
+检索时间：2026-08-25 15:38 CST，Asia/Shanghai<br>
 时间窗口：2026-05-25 至 2026-08-25<br>
 优先来源：arXiv 官方 `abs` 页面、GitHub 官方 Repo API / 仓库页、OpenReview / 顶会官方页面<br>
 检索主题：`time series foundation model`、`time series agent`、`time series reasoning`、`timeseries harness`、`AutoML agent`、`photovoltaic power forecasting`、`solar power forecasting`
 
 ## 今日摘要
 
-- 截至 `2026-08-25 09:14 CST`，没有检出比 `2026-08-20` 更晚、且相关性更高的 time-series foundation model / agent / reasoning 新论文；今天的高优先级主线仍然是 [`SATS`](https://arxiv.org/abs/2608.20005)、[`LiveHouse-TS`](https://arxiv.org/abs/2608.17299)、[`EvoTS-Agent`](https://arxiv.org/abs/2608.17933)、[`TRACE-CASH`](https://arxiv.org/abs/2608.16410) 和 [`ReasonCast`](https://arxiv.org/abs/2608.15291)。
+- 截至 `2026-08-25 15:38 CST`，没有检出比 `2026-08-20` 更晚、且相关性显著高于当前主线的 time-series foundation model / agent 新论文；但 `DailyArXiv` 官方 README 今日补检出了 [`ConceptTS`](https://arxiv.org/abs/2608.21277)，其 `2026-08-21` 首发日期落在窗口内，值得补入 reasoning / interpretable forecasting 观察线。
 - 研究趋势上，`TSFM 训练范式与稳健性评测`、`agentic benchmark / live evaluation`、`reasoning 何时介入 forecasting runtime` 是当前最密集的三条线。
-- GitHub 侧今天最值得跟踪的新项目仍是 [`sriixz/agentic-timeseries`](https://github.com/sriixz/agentic-timeseries)、[`SubhadeepSarkar04/Mutli_Agent_Autonomous_Data_Analyzer`](https://github.com/SubhadeepSarkar04/Mutli_Agent_Autonomous_Data_Analyzer)、[`Jesse-dry/AutoML-Agent`](https://github.com/Jesse-dry/AutoML-Agent) 和 [`RuiCkg/ai-powered-energy-forecasting`](https://github.com/RuiCkg/ai-powered-energy-forecasting)。
-- `DailyArXiv` 公开 README 在今天两次抓取均超时，因此本轮没有把它作为稳定主来源；论文与项目日期全部回落到 arXiv 官方页和 GitHub 官方 API 校验。
+- GitHub 侧今天最值得跟踪的新项目仍是 [`sriixz/agentic-timeseries`](https://github.com/sriixz/agentic-timeseries)、[`SubhadeepSarkar04/Mutli_Agent_Autonomous_Data_Analyzer`](https://github.com/SubhadeepSarkar04/Mutli_Agent_Autonomous_Data_Analyzer)、[`cw-wan/SELA`](https://github.com/cw-wan/SELA)、[`Jesse-dry/AutoML-Agent`](https://github.com/Jesse-dry/AutoML-Agent) 和 [`RuiCkg/ai-powered-energy-forecasting`](https://github.com/RuiCkg/ai-powered-energy-forecasting)。
+- `DailyArXiv` 官方 GitHub API 与 README 已核验：仓库默认分支为 `master`，README `Last update` 为 `2026-08-25`，最近一次自动更新提交时间为 `2026-08-24T17:06:37Z`；因此本轮将其作为补检与交叉核验来源使用，而不直接覆盖 arXiv 首发日期。
 - 今天是周二，不触发周五周报更新条件，因此本轮只生成晨报。
 
 ## 0. 检索口径
@@ -96,6 +96,13 @@
 
 ## 3. 时间序列 reasoning 模型最新研究
 
+### [2026-08-21] [ConceptTS: LLM-Guided Concept Bottlenecks for Interpretable Multivariate Time-Series Forecasting](https://arxiv.org/abs/2608.21277)
+
+- 日期：2026-08-21
+- 来源：[arXiv](https://arxiv.org/abs/2608.21277)
+- 简短摘要：提出 `ConceptTS`，用 LLM 自动提出任务相关概念并生成可执行标注规则，把预测过程拆成历史上下文、局部区间与完整 horizon 三类可读概念瓶颈，从而提升多变量预测的可解释性与可干预性。
+- 相关性判断：中高。它不是 agent 系统，但把 LLM 引入时序预测内部表示与概念级干预，对“forecasting 是否能具备可解释 reasoning”这一问题很直接。
+
 ### [2026-08-19] [Mechanistic Interpretability of Structure-Aware Numerical Reasoning in LLaMA 3.1 8B](https://arxiv.org/abs/2608.18419)
 
 - 日期：2026-08-19
@@ -148,6 +155,13 @@
 - 来源：[GitHub Repo API](https://api.github.com/repos/SubhadeepSarkar04/Mutli_Agent_Autonomous_Data_Analyzer) / [GitHub 仓库](https://github.com/SubhadeepSarkar04/Mutli_Agent_Autonomous_Data_Analyzer)
 - 简短摘要：基于 LangGraph 的多 agent AutoML pipeline，覆盖自动 EDA、特征工程、Optuna 调参、SHAP explainability 与 self-healing sandboxed code execution。
 - 相关性判断：高。虽然不是时间序列专用，但对 `agent + AutoML + ML workflow` 很直接。
+
+#### [2026-08-21] [cw-wan/SELA](https://github.com/cw-wan/SELA)
+
+- 日期：2026-08-21（创建），2026-08-22（最近一次 push）
+- 来源：[GitHub Repo API](https://api.github.com/repos/cw-wan/SELA) / [GitHub 仓库](https://github.com/cw-wan/SELA)
+- 简短摘要：`SELA` 是一个面向多变量时间序列事件检测的 neuro-symbolic VLM agent 项目仓库，README 明确给出 `MomentFM`、`Chronos` 等 TS foundation model baseline 的训练与评测脚本。
+- 相关性判断：高。底层论文首发早于三个月窗口，但仓库本身在 `2026-08-21` 新建，且主题直接命中 `time-series agent + explainable detection + TSFM baselines`。
 
 #### [2026-08-05] [TimeSage-Series/TimeSage-EV](https://github.com/TimeSage-Series/TimeSage-EV)
 
@@ -225,6 +239,8 @@
 
 ## 6. 补检与不确定性说明
 
-- `DailyArXiv`：今天通过公开 README 做补检时，两次抓取均超时，因此本轮不把它作为稳定来源；仅以 arXiv 主页面和 GitHub Repo API 作为主证据链。
+- `DailyArXiv`：已通过官方 GitHub API 核验到仓库默认分支为 `master`，README `Last update` 为 `2026-08-25`，最近一次自动更新提交时间为 `2026-08-24T17:06:37Z`。当前 `Time Series` 区能直接确认与本主题高度相关且仍在三个月窗口内的条目包括 [`ConceptTS`](https://arxiv.org/abs/2608.21277)、[`EvoTS-Agent`](https://arxiv.org/abs/2608.17933)、[`LiveHouse-TS`](https://arxiv.org/abs/2608.17299)、[`TRACE-CASH`](https://arxiv.org/abs/2608.16410)、[`Mechanistic Interpretability of Structure-Aware Numerical Reasoning in LLaMA 3.1 8B`](https://arxiv.org/abs/2608.18419)。
+- `DailyArXiv` 中今天还出现了 [`Perseus`](https://arxiv.org/abs/2510.09930v2) 与 [`TS-Reasoner`](https://arxiv.org/abs/2510.03519v3)；两者 README 展示日期分别为 `2026-08-21` 与 `2026-08-19`，但 arXiv 编号都指向 `2025-10` 首发，因此本轮将其判定为“相关但超窗或日期不一致”的补检条目，不纳入三个月主列表。
+- 当前 `DailyArXiv` `Time Series` 快照没有稳定检出 [`ReasonCast`](https://arxiv.org/abs/2608.15291)、[`Forecast Collapse in Time-Series Foundation Models`](https://arxiv.org/abs/2608.14106) 与 [`TimeSage-EV`](https://arxiv.org/abs/2608.14270)，说明它仍然适合作为补检入口，而不是完整主检索入口。
 - `OpenReview / 顶会页面`：今天没有检出比上述 arXiv 条目更晚、且相关性更高的 time-series foundation model / agent / reasoning 新公开条目，因此未单列顶会正式版补充。
 - 不确定日期条目：本轮没有将日期无法由官方源确认的内容纳入主列表。
