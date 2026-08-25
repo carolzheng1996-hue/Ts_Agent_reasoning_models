@@ -1,13 +1,13 @@
 # 2026-08-25 时间序列 Agent / Reasoning / Foundation Model 晨间简报
 
-检索时间：2026-08-25 09:24 CST，Asia/Shanghai<br>
+检索时间：2026-08-25 09:14 CST，Asia/Shanghai<br>
 时间窗口：2026-05-25 至 2026-08-25<br>
 优先来源：arXiv 官方 `abs` 页面、GitHub 官方 Repo API / 仓库页、OpenReview / 顶会官方页面<br>
 检索主题：`time series foundation model`、`time series agent`、`time series reasoning`、`timeseries harness`、`AutoML agent`、`photovoltaic power forecasting`、`solar power forecasting`
 
 ## 今日摘要
 
-- 截至 `2026-08-25 09:24 CST`，没有检出比 `2026-08-20` 更晚、且相关性更高的 time-series foundation model / agent / reasoning 新论文；今天的高优先级主线仍然是 [`SATS`](https://arxiv.org/abs/2608.20005)、[`LiveHouse-TS`](https://arxiv.org/abs/2608.17299)、[`EvoTS-Agent`](https://arxiv.org/abs/2608.17933)、[`TRACE-CASH`](https://arxiv.org/abs/2608.16410) 和 [`ReasonCast`](https://arxiv.org/abs/2608.15291)。
+- 截至 `2026-08-25 09:14 CST`，没有检出比 `2026-08-20` 更晚、且相关性更高的 time-series foundation model / agent / reasoning 新论文；今天的高优先级主线仍然是 [`SATS`](https://arxiv.org/abs/2608.20005)、[`LiveHouse-TS`](https://arxiv.org/abs/2608.17299)、[`EvoTS-Agent`](https://arxiv.org/abs/2608.17933)、[`TRACE-CASH`](https://arxiv.org/abs/2608.16410) 和 [`ReasonCast`](https://arxiv.org/abs/2608.15291)。
 - 研究趋势上，`TSFM 训练范式与稳健性评测`、`agentic benchmark / live evaluation`、`reasoning 何时介入 forecasting runtime` 是当前最密集的三条线。
 - GitHub 侧今天最值得跟踪的新项目仍是 [`sriixz/agentic-timeseries`](https://github.com/sriixz/agentic-timeseries)、[`SubhadeepSarkar04/Mutli_Agent_Autonomous_Data_Analyzer`](https://github.com/SubhadeepSarkar04/Mutli_Agent_Autonomous_Data_Analyzer)、[`Jesse-dry/AutoML-Agent`](https://github.com/Jesse-dry/AutoML-Agent) 和 [`RuiCkg/ai-powered-energy-forecasting`](https://github.com/RuiCkg/ai-powered-energy-forecasting)。
 - `DailyArXiv` 公开 README 在今天两次抓取均超时，因此本轮没有把它作为稳定主来源；论文与项目日期全部回落到 arXiv 官方页和 GitHub 官方 API 校验。
