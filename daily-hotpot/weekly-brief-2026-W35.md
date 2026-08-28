@@ -8,7 +8,8 @@
 1. **基础模型方向**：本周最强的新信号集中在 [`Causal Analysis for Time Series Foundation Models`](https://arxiv.org/abs/2608.24303)、[`Do Time-Series Foundation Models Pay Off for Industrial Monitoring?`](https://arxiv.org/abs/2608.22968) 和前一周延续高热度的 [`LiveHouse-TS`](https://arxiv.org/abs/2608.17299)。主线已经非常明确地从“更大 TSFM”转向 `偏差审计 + live evaluation + 成本感知部署`。
 2. **Agent 方向**：[`MetaCaster`](https://arxiv.org/abs/2608.23473) 是本周最值得关注的新论文，它把 agent 定位成“少样本条件下自动造数并训练轻量 forecaster 的工程系统”；[`TimeSage-EV`](https://arxiv.org/abs/2608.14270) 继续是最关键的 live benchmark 底座；[`EvoTS-Agent`](https://arxiv.org/abs/2608.17933) 仍代表“自演化时序研究员”路线。
 3. **Reasoning 方向**：本周信号最强的不是单一“大模型”，而是三条并行路线：[`ReasonCast`](https://arxiv.org/abs/2608.15291) 的选择性语义干预、[`TimeRLM`](https://arxiv.org/abs/2608.03391) 的递归工具调用、[`ConceptTS`](https://arxiv.org/abs/2608.21277) / [`Towards A Unified Information Bottleneck Framework for Time Series Explanations`](https://arxiv.org/abs/2608.25897) 的解释与概念瓶颈。
-4. **工程 / GitHub 侧**：本周稳定复核后，最值得持续跟踪的项目仍是 [`TimeSage-EV`](https://github.com/TimeSage-Series/TimeSage-EV)、[`TimeRLM`](https://github.com/OpenTSLM/TimeRLM)、[`AutoML-Agent`](https://github.com/Jesse-dry/AutoML-Agent)、[`TSFM-Robustness-Benchmark`](https://github.com/Neuraxis-Labs/TSFM-Robustness-Benchmark)，以及更偏 tooling 的 [`timeseries-mcp`](https://github.com/Lkhanaajav/timeseries-mcp) 与 [`autoresearch-timeseries-agent`](https://github.com/AkshajKashyap/autoresearch-timeseries-agent)。
+4. **光伏 / 光功率预测方向**：本周新增信号没有改写主排序，最值得保留的仍是 [`An AI-Based Decision-Support Pipeline for Day-Ahead Photovoltaic Forecasting`](https://arxiv.org/abs/2608.02088)、[`A Low-Cost IoT Device for Environmental Monitoring and Embedded Solar Forecasting with On-Device Incremental Learning`](https://arxiv.org/abs/2608.14698) 和 [`Time series Foundation Models based on Physics-Informed Synthetic Histories for Cold-Start Photovoltaic Forecasting`](https://arxiv.org/abs/2606.07457)。这条支线的重点已经收敛到 `部署导向评测 + 低成本边缘学习 + 冷启动 TSFM`。
+5. **工程 / GitHub 侧**：本周稳定复核后，最值得持续跟踪的项目仍是 [`TimeSage-EV`](https://github.com/TimeSage-Series/TimeSage-EV)、[`TimeRLM`](https://github.com/OpenTSLM/TimeRLM)、[`AutoML-Agent`](https://github.com/Jesse-dry/AutoML-Agent)、[`TSFM-Robustness-Benchmark`](https://github.com/Neuraxis-Labs/TSFM-Robustness-Benchmark)，以及更偏 tooling 的 [`timeseries-mcp`](https://github.com/Lkhanaajav/timeseries-mcp) 与 [`autoresearch-timeseries-agent`](https://github.com/AkshajKashyap/autoresearch-timeseries-agent)。`DailyArXiv` 最新 README 更新时间仍停在 `2026-08-27`，因此本周补检只作为交叉核验，不覆盖 arXiv 首发日期。
 
 ## 本周工作日晨报轨迹
 
@@ -16,7 +17,7 @@
 - **2026-08-25（周二）**：通过官方来源补入 [`ConceptTS`](https://arxiv.org/abs/2608.21277)，使 `concept bottleneck / interpretable forecasting` 成为本周 reasoning 支线。
 - **2026-08-26（周三）**：[`Causal Analysis`](https://arxiv.org/abs/2608.24303) 成为本周基础模型方向最重要新增；同时 [`MetaCaster`](https://arxiv.org/abs/2608.23473) 与 [`Do Time-Series Foundation Models Pay Off for Industrial Monitoring?`](https://arxiv.org/abs/2608.22968) 共同把讨论推进到 “agent 负责训练编排、TSFM 负责被审计和被部署评估”。
 - **2026-08-27（周四）**：未检到更高优先级的新论文，主线判断稳定；GitHub 跟踪重点收敛到 [`TimeRLM`](https://github.com/OpenTSLM/TimeRLM)、[`TimeSage-EV`](https://github.com/TimeSage-Series/TimeSage-EV)、[`AutoML-Agent`](https://github.com/Jesse-dry/AutoML-Agent)、[`TSFM-Robustness-Benchmark`](https://github.com/Neuraxis-Labs/TSFM-Robustness-Benchmark)。
-- **2026-08-28（周五）**：官方 arXiv API 补入 [`Towards A Unified Information Bottleneck Framework for Time Series Explanations`](https://arxiv.org/abs/2608.25897) 与 [`Structured Frequency-Domain Evidence for LLM-Based Time-Series Anomaly Detection`](https://arxiv.org/abs/2608.24113)，作为 reasoning / explainability 的补充观察线，但未改变本周主排序。
+- **2026-08-28（周五）**：官方 arXiv API 补入 [`Towards A Unified Information Bottleneck Framework for Time Series Explanations`](https://arxiv.org/abs/2608.25897) 与 [`Structured Frequency-Domain Evidence for LLM-Based Time-Series Anomaly Detection`](https://arxiv.org/abs/2608.24113)，作为 reasoning / explainability 的补充观察线，但未改变本周主排序；同时复核光伏支线与 `DailyArXiv`，确认最新 README 更新时间仍为 `2026-08-27`。
 
 ## 本周新增论文主线
 
@@ -50,6 +51,15 @@
   - 价值：本周最贴近 `forecasting + reasoning + agent` 三者交集的论文。
 - [2026-08-04] [TimeRLM: Recursive Language Models Enable Precise Anomaly Localization in Long-Context Time-Series](https://arxiv.org/abs/2608.03391)
   - 价值：仍是最强的 `tool-using time-series reasoning` 公共实现之一。
+
+### 光伏 / 能源时序预测
+
+- [2026-08-09] [A Low-Cost IoT Device for Environmental Monitoring and Embedded Solar Forecasting with On-Device Incremental Learning](https://arxiv.org/abs/2608.14698)
+  - 价值：代表低成本、边缘侧、可增量学习的光伏部署路线。
+- [2026-08-03] [An AI-Based Decision-Support Pipeline for Day-Ahead Photovoltaic Forecasting](https://arxiv.org/abs/2608.02088)
+  - 价值：是本周最贴近真实站点部署与 rolling-origin 评测的 PV 论文。
+- [2026-06-05] [Time series Foundation Models based on Physics-Informed Synthetic Histories for Cold-Start Photovoltaic Forecasting](https://arxiv.org/abs/2606.07457)
+  - 价值：把 TSFM 与冷启动光伏场景直接绑定，是能源时序里最值得继续跟踪的 foundation-model 交叉项。
 
 ## 本周新增或重点复核的 GitHub 项目
 
@@ -90,4 +100,5 @@
 - 检查 [`Causal Analysis`](https://arxiv.org/abs/2608.24303) 是否放出代码或补充实验，因为它很可能影响后续 TSFM robustness benchmark 设计。
 - 跟进 [`MetaCaster`](https://arxiv.org/abs/2608.23473) 是否公开实现，以便和 [`AutoML-Agent`](https://github.com/Jesse-dry/AutoML-Agent) 做“agent 负责编排训练”的路线对比。
 - 持续监控 [`TimeSage-EV`](https://github.com/TimeSage-Series/TimeSage-EV)、[`TimeRLM`](https://github.com/OpenTSLM/TimeRLM) 和 [`TSFM-Robustness-Benchmark`](https://github.com/Neuraxis-Labs/TSFM-Robustness-Benchmark) 是否出现新增 commit、benchmark 说明或数据发布。
-- 如果下周出现更晚的新稿，优先看它是否继续沿着 `selective reasoning`、`structured evidence`、`live evaluation`、`robustness tooling` 这四条线扩展，而不是简单重复“LLM 做 forecasting”的旧套路。
+- 继续跟进光伏方向是否出现代码、数据协议或真实站点评测补充，尤其是 [`An AI-Based Decision-Support Pipeline for Day-Ahead Photovoltaic Forecasting`](https://arxiv.org/abs/2608.02088) 与 [`Time series Foundation Models based on Physics-Informed Synthetic Histories for Cold-Start Photovoltaic Forecasting`](https://arxiv.org/abs/2606.07457)。
+- 如果下周出现更晚的新稿，优先看它是否继续沿着 `selective reasoning`、`structured evidence`、`live evaluation`、`robustness tooling`、`PV deployment realism` 这五条线扩展，而不是简单重复“LLM 做 forecasting”的旧套路。

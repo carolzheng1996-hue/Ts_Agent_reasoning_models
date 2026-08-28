@@ -1,16 +1,18 @@
 # 2026-08-28 时间序列 Agent / Reasoning / Foundation Model 晨间简报
 
-检索时间：2026-08-28 09:06:33 CST，Asia/Shanghai<br>
+检索时间：2026-08-28 15:39:37 CST，Asia/Shanghai<br>
 时间窗口：2026-05-28 至 2026-08-28<br>
 优先来源：arXiv 官方 API / `abs` 页面、GitHub 官方 Repo API / 仓库页、GitHub Search、OpenReview / 会议官网补检<br>
 检索主题：`time series foundation model`、`time series agent`、`time series reasoning`、`timeseries harness`、`AutoML agent`、`machine learning harness`
 
 ## 今日摘要
 
-- 截至 `2026-08-28 09:06 CST`，没有检到 `2026-08-27` 或 `2026-08-28` 首发、且相关性高于当前主线的时间序列基础模型 / Agent / reasoning 新论文；当前最高信号仍是 [`Causal Analysis for Time Series Foundation Models`](https://arxiv.org/abs/2608.24303)、[`MetaCaster`](https://arxiv.org/abs/2608.23473)、[`TimeSage-EV`](https://arxiv.org/abs/2608.14270)、[`ReasonCast`](https://arxiv.org/abs/2608.15291) 和 [`TimeRLM`](https://arxiv.org/abs/2608.03391)。
+- 截至 `2026-08-28 15:39 CST`，没有检到 `2026-08-27` 或 `2026-08-28` 首发、且相关性高于当前主线的时间序列基础模型 / Agent / reasoning 新论文；当前最高信号仍是 [`Causal Analysis for Time Series Foundation Models`](https://arxiv.org/abs/2608.24303)、[`MetaCaster`](https://arxiv.org/abs/2608.23473)、[`TimeSage-EV`](https://arxiv.org/abs/2608.14270)、[`ReasonCast`](https://arxiv.org/abs/2608.15291) 和 [`TimeRLM`](https://arxiv.org/abs/2608.03391)。
 - 今天通过 arXiv 官方 API 补入两篇值得关注的晚 8 月条目：[`Towards A Unified Information Bottleneck Framework for Time Series Explanations`](https://arxiv.org/abs/2608.25897) 与 [`Structured Frequency-Domain Evidence for LLM-Based Time-Series Anomaly Detection`](https://arxiv.org/abs/2608.24113)。二者不改写主排序，但把 `explanation / evidence design` 补成了 reasoning 支线。
 - 近三个月的主线进一步收敛为三条：`TSFM robustness + live evaluation + cost-awareness`、`agent 负责编排/造数/自演化实验`、`reasoning 只在必要时介入并与工具调用或结构化证据绑定`。
 - GitHub 侧今天没有出现比 [`sriixz/agentic-timeseries`](https://github.com/sriixz/agentic-timeseries)、[`TimeSage-Series/TimeSage-EV`](https://github.com/TimeSage-Series/TimeSage-EV)、[`OpenTSLM/TimeRLM`](https://github.com/OpenTSLM/TimeRLM)、[`Jesse-dry/AutoML-Agent`](https://github.com/Jesse-dry/AutoML-Agent) 更高信号的新仓库；但 [`Lkhanaajav/timeseries-mcp`](https://github.com/Lkhanaajav/timeseries-mcp) 和 [`AkshajKashyap/autoresearch-timeseries-agent`](https://github.com/AkshajKashyap/autoresearch-timeseries-agent) 仍值得作为 harness/tooling 观察项保留。
+- 光伏 / 光功率预测方向今天没有比 [`A Low-Cost IoT Device for Environmental Monitoring and Embedded Solar Forecasting with On-Device Incremental Learning`](https://arxiv.org/abs/2608.14698)、[`An AI-Based Decision-Support Pipeline for Day-Ahead Photovoltaic Forecasting`](https://arxiv.org/abs/2608.02088) 和 [`Time series Foundation Models based on Physics-Informed Synthetic Histories for Cold-Start Photovoltaic Forecasting`](https://arxiv.org/abs/2606.07457) 更晚且更高相关的新论文；因此该支线继续以 `部署导向 pipeline + 冷启动 TSFM + 低成本边缘学习` 为主。
+- `DailyArXiv` 官方 README 当前可确认的最新更新时间仍是 `2026-08-27`，其 `Time Series` 区能补检到 [`Causal Analysis for Time Series Foundation Models`](https://arxiv.org/abs/2608.24303) 与 [`Structured Frequency-Domain Evidence for LLM-Based Time-Series Anomaly Detection`](https://arxiv.org/abs/2608.24113)；本轮没有发现比主列表更晚的新高相关补充项。
 - 今天是周五，`ISO week 35`，因此本轮除晨报外还同步更新周报 `weekly-brief-2026-W35.md`。
 
 ## 0. 检索口径
@@ -189,8 +191,40 @@
 - 简短摘要：一个可复现的本地 time-series forecasting benchmark 与 deterministic experiment agent，包含 synthetic / CSV 数据、baseline、diagnostics、report 和 CI。
 - 相关性判断：高。它更偏 research harness，但正符合 `timeseries agent / harness` 跟踪目标。
 
-## 5. 结论与下一个观察点
+## 5. 光伏功率预测最新研究
+
+### [2026-08-09] [A Low-Cost IoT Device for Environmental Monitoring and Embedded Solar Forecasting with On-Device Incremental Learning](https://arxiv.org/abs/2608.14698)
+
+- 日期：2026-08-09
+- 来源：[arXiv](https://arxiv.org/abs/2608.14698)
+- 简短摘要：提出低成本 IoT 环境监测与嵌入式 solar forecasting 一体化装置，在设备侧执行 24 小时太阳能电压预测，并支持部署后的增量学习。
+- 相关性判断：中高。它更偏边缘部署与设备侧学习，但对低成本光伏场景的落地价值很强。
+
+### [2026-08-03] [An AI-Based Decision-Support Pipeline for Day-Ahead Photovoltaic Forecasting](https://arxiv.org/abs/2608.02088)
+
+- 日期：2026-08-03
+- 来源：[arXiv](https://arxiv.org/abs/2608.02088)
+- 简短摘要：围绕真实站点 day-ahead PV 预测，构建 physics-aware、leakage-safe、stacking-based 的部署导向流水线，并强调 rolling-origin 评测。
+- 相关性判断：最高。它是窗口内最贴近真实站点部署的公开 PV 预测论文之一。
+
+### [2026-06-05] [Time series Foundation Models based on Physics-Informed Synthetic Histories for Cold-Start Photovoltaic Forecasting](https://arxiv.org/abs/2606.07457)
+
+- 日期：2026-06-05
+- 来源：[arXiv](https://arxiv.org/abs/2606.07457)
+- 简短摘要：用 physics-informed synthetic histories 为冷启动光伏站点构造可用上下文，再让 TSFM 在 zero-shot / feedback 条件下做 cold-start 预测。
+- 相关性判断：最高。它是近三个月里最直接把 TSFM 引入光伏冷启动场景的论文之一。
+
+## 6. DailyArXiv 补检结论
+
+- `DailyArXiv` 官方 README 当前 `Last update` 为 `2026-08-27`，到本轮检索时间 `2026-08-28 15:39:37 CST` 仍未见 `2026-08-28` 新快照，因此补检结论以 `2026-08-27` README 为准。
+- 在 `Time Series` 区，本轮可稳定确认且与主题直接相关的窗口内条目包括 [`Causal Analysis for Time Series Foundation Models`](https://arxiv.org/abs/2608.24303) 与 [`Structured Frequency-Domain Evidence for LLM-Based Time-Series Anomaly Detection`](https://arxiv.org/abs/2608.24113)；二者均已并入主列表，不再重复升权。
+- [`QABBA: Error-Guaranteed Symbolic Time-Series Compression via Integer-Quantized Aggregation`](https://arxiv.org/abs/2411.15209) 在最新 README `Time Series` 区可见，但它更偏符号压缩与 LLM-ready 表示，而不是 time-series agent / reasoning / foundation model / 光伏预测主线，因此只保留为边缘观察项并降优先级。
+- 过去两天反复核验中，`DailyArXiv` 能稳定覆盖 `Causal Analysis`、`MetaCaster`、`ConceptTS` 这类高相关新稿，但对 `ReasonCast`、`TimeRLM`、`TimeSage-EV` 这几条主线并不完整，因此本简报仍以 arXiv 官方首发日期和主题相关性作为主排序依据。
+- 本轮未稳定确认 `TS-Reasoner` 出现在最新 README 的 `Time Series` 区；若后续 README 新增且日期落窗，再补入主列表。
+
+## 7. 结论与下一个观察点
 
 - 如果只保留最值得优先读的五篇论文，今天建议依次看：[`Causal Analysis`](https://arxiv.org/abs/2608.24303)、[`MetaCaster`](https://arxiv.org/abs/2608.23473)、[`TimeSage-EV`](https://arxiv.org/abs/2608.14270)、[`ReasonCast`](https://arxiv.org/abs/2608.15291)、[`TimeRLM`](https://arxiv.org/abs/2608.03391)。
 - 如果只保留最值得复现的三个仓库，今天建议依次跟踪：[`TimeSage-EV`](https://github.com/TimeSage-Series/TimeSage-EV)、[`TimeRLM`](https://github.com/OpenTSLM/TimeRLM)、[`AutoML-Agent`](https://github.com/Jesse-dry/AutoML-Agent)。
-- 下一个需要重点监控的增量不是“再来一篇泛时序论文”，而是三类东西：`TSFM robustness benchmark 是否放出更完整代码`、`agent benchmark 是否出现真实长周期 leaderboard`、`reasoning 路线是否继续向 selective intervention / tool use / structured evidence 收敛`。
+- 光伏支线如果只挑一篇先读，优先级仍是 [`An AI-Based Decision-Support Pipeline for Day-Ahead Photovoltaic Forecasting`](https://arxiv.org/abs/2608.02088)；如果关注 TSFM 冷启动，则直接看 [`Time series Foundation Models based on Physics-Informed Synthetic Histories for Cold-Start Photovoltaic Forecasting`](https://arxiv.org/abs/2606.07457)。
+- 下一个需要重点监控的增量不是“再来一篇泛时序论文”，而是四类东西：`TSFM robustness benchmark 是否放出更完整代码`、`agent benchmark 是否出现真实长周期 leaderboard`、`reasoning 路线是否继续向 selective intervention / tool use / structured evidence 收敛`、`光伏论文是否释放可复现实验资产或真实站点数据协议`。
