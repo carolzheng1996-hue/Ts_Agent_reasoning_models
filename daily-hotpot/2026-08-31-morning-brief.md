@@ -1,26 +1,26 @@
 # 2026-08-31 时间序列 Agent / Reasoning / Foundation Model 晨间简报
 
-检索时间：2026-08-31 09:12:00 CST，Asia/Shanghai<br>
+检索时间：2026-08-31 15:39:14 CST，Asia/Shanghai<br>
 时间窗口：2026-05-31 至 2026-08-31<br>
-优先来源：arXiv 官方 `abs` 页面、GitHub 官方 Repo API / Search API、AI HOT 官方 API、OpenReview / ACL / NeurIPS / ICLR / ICML / KDD / AAAI 官网补检<br>
+优先来源：arXiv 官方 API / `abs` 页面、GitHub 官方 Repo API / Search API、`DailyArXiv` 官方 README、AI HOT 官方 API、OpenReview / ACL / NeurIPS / ICLR / ICML / KDD / AAAI 官网补检<br>
 检索主题：`time series foundation model`、`time series agent`、`time series reasoning`、`timeseries harness`、`machine learning agent`、`AutoML agent`、`photovoltaic forecasting`
 
 ## 今日摘要
 
-- 截至 `2026-08-31 09:12 CST`，没有检到 `2026-08-31` 首发且足以改写主排序的时间序列 foundation model / agent / reasoning 新论文；今天的有效变化主要是补入两条 `2026-08-25` 至 `2026-08-26` 的高相关论文，以及更新 GitHub 项目的最新活跃度。
-- 基础模型方向今天补入 [`EncoTESS`](https://arxiv.org/abs/2608.25019)。它是一个面向天文光变曲线的轻量 `TSFM`，虽然场景更垂直，但标题和方法都明确落在 time-series foundation model 主线内。
-- Agent 方向今天补入 [`LLM Agents for Time-Series: A Survey`](https://arxiv.org/abs/2608.26226)。它不是新 benchmark，但对最近三个月快速增殖的 time-series agent 设计空间给出了任务导向 taxonomy，适合当路线图阅读。
-- 论文主线仍以 [`Causal Analysis for Time Series Foundation Models`](https://arxiv.org/abs/2608.24303)、[`TraceBench`](https://arxiv.org/abs/2608.27182)、[`MetaCaster`](https://arxiv.org/abs/2608.23473)、[`ReasonCast`](https://arxiv.org/abs/2608.15291)、[`TimeRLM`](https://arxiv.org/abs/2608.03391) 为最高信号锚点，没有被今天的新检索结果替代。
-- GitHub 侧确认到 [`Jesse-dry/AutoML-Agent`](https://github.com/Jesse-dry/AutoML-Agent) 与 [`Neuraxis-Labs/TSFM-Robustness-Benchmark`](https://github.com/Neuraxis-Labs/TSFM-Robustness-Benchmark) 都在 `2026-08-30` 有新 push，说明这两条 `time-series + AutoML`、`TSFM robustness harness` 线仍在活跃推进。
-- 新增仓库中，[`allyyr/Tabular-AutoML-Agent`](https://github.com/allyyr/Tabular-AutoML-Agent) 与 [`ashandilgith/timeseries_prediction_agent-`](https://github.com/ashandilgith/timeseries_prediction_agent-) 都创建于 `2026-08-30`，但当前描述弱、star 为 `0`、仓库体量较小，因此只作为低优先级观察项，不进入主列表。
-- AI HOT 官方 `paper` 精选流近 7 天内未检到比主列表更高相关的时序论文；OpenReview / ACL / NeurIPS / ICLR / ICML / KDD / AAAI 官网补检也没有发现比当前主列表更晚且更强的新增项。
+- 截至 `2026-08-31 15:39 CST`，没有检到 `2026-08-31` 首发且足以改写主排序的时间序列 foundation model / agent / reasoning / 光伏预测新论文；今天的主变化主要来自 `DailyArXiv` 更新时间推进到 `2026-08-31`，以及 GitHub 项目的最新活跃度变化。
+- 基础模型方向今天新确认到 [`EncoTESS`](https://arxiv.org/abs/2608.25019)，它是一个面向天文光变曲线的轻量 `TSFM`；虽然应用场景更垂直，但仍属于窗口内、标题明确命中 time-series foundation model 的新增论文。
+- Agent 方向今天新确认到 [`LLM Agents for Time-Series: A Survey`](https://arxiv.org/abs/2608.26226)，它不是新 benchmark，但对最近三个月快速增长的 time-series agent 设计空间给出了清晰 taxonomy，适合作为路线图入口。
+- `DailyArXiv` 官方 README 当前 `Last update` 已推进到 `2026-08-31`。其中 `Time Series` 区可以稳定补检到 [`TraceBench`](https://arxiv.org/abs/2608.27182)、[`Towards A Unified Information Bottleneck Framework for Time Series Explanations`](https://arxiv.org/abs/2608.25897)、[`Causal Analysis for Time Series Foundation Models`](https://arxiv.org/abs/2608.24303)、[`Structured Frequency-Domain Evidence`](https://arxiv.org/abs/2608.24113) 等窗口内高相关论文；`SAGE`、`When Does Context Routing Help?`、`NVExplain` 也相关，但优先级低于主列表锚点。
+- GitHub 侧今天最值得记录的变化有三类：[`sriixz/agentic-timeseries`](https://github.com/sriixz/agentic-timeseries) 最近一次 `push` 已更新到 `2026-08-31`；[`Clive-Kang/automl-agent`](https://github.com/Clive-Kang/automl-agent) 于 `2026-08-31` 创建；[`allyyr/Tabular-AutoML-Agent`](https://github.com/allyyr/Tabular-AutoML-Agent) 于 `2026-08-30` 创建。后两者仍偏早期原型，保留观察但不抬升到最高优先级。
+- AI HOT 官方 API 本轮以 `time series` 和 `paper` 关键词补检，近 7 天未返回比主列表更高相关的新条目；HuggingFace 官方 API 连接 `huggingface.co` 超时，本轮无法稳定确认窗口内高优先级新模型卡，因此不单列 HF 新项目。
 - 今天是周一 `2026-08-31`，不是周五，因此本轮不更新周报。
 
 ## 0. 检索口径
 
-- 只保留论文 `submitted` 日期或 GitHub 仓库 `created_at` 落在 `2026-05-31` 至 `2026-08-31` 的条目。
-- 论文日期优先采用 arXiv 官方 `abs` 页面 `submission history`；GitHub 项目日期优先采用官方 Repo API 的 `created_at`，活跃度补充采用 `pushed_at` 或 `updated_at`。
-- AI HOT 仅作为近 7 天论文动态的补检信号；若与 arXiv 官方日期冲突，以 arXiv 为准。
+- 只保留论文 `published` 日期或 GitHub 仓库 `created_at` 落在 `2026-05-31` 至 `2026-08-31` 的条目。
+- 论文日期优先采用 arXiv 官方 API / `abs` 页面首发日期；GitHub 项目日期优先采用官方 Repo API 的 `created_at`，活跃度补充采用 `pushed_at` 或 `updated_at`。
+- `DailyArXiv` README 中展示的日期只视作“被日报收录的日期”，不能替代 arXiv 官方首发日期；若二者冲突，以 arXiv 官方日期为准。
+- AI HOT 仅作为近 7 天主题补检信号；若没有命中高相关条目，不单独升权。
 - OpenReview、ACL / NeurIPS / ICLR / ICML / KDD / AAAI 官网本轮用于补检，没有发现比主列表更晚且更高相关的新增项。
 - 日期无法稳定确认的候选项不进入主列表；本轮主列表无“不确定日期”条目。
 
@@ -31,7 +31,7 @@
 - 日期：2026-08-25
 - 来源：[arXiv](https://arxiv.org/abs/2608.25019)
 - 简短摘要：提出面向 `TESS` 天文光变曲线的轻量时间序列基础模型 `EncoTESS`，显式处理观测噪声、异方差、非规则采样和大缺口，并把编码映射到可用于恒星年龄推断与下游分类的固定潜变量空间。
-- 相关性判断：中高。它更偏垂直领域 TSFM，但属于今天新确认到的窗口内 foundation model 进展，说明 TSFM 正继续向“小模型 + 强领域结构”方向分化。
+- 相关性判断：中高。它更偏垂直领域 TSFM，但属于窗口内新增且方法形态清晰的 foundation model 进展，说明 TSFM 正继续向“小模型 + 强领域结构”方向分化。
 
 ### [2026-08-25] [Causal Analysis for Time Series Foundation Models](https://arxiv.org/abs/2608.24303)
 
@@ -128,6 +128,13 @@
 - 简短摘要：用 information bottleneck 统一 attribution 与 counterfactual explanation，避免 trivial explanations 和 out-of-distribution counterfactuals。
 - 相关性判断：中高。它更偏 explainability，但确实触及“时序模型如何给出稳定、可验证解释”的 reasoning 边界。
 
+### [2026-08-25] [NVExplain: Explaining Time Series Forecasting with Latent Trajectory Analysis and Structure-Preserving Surrogates](https://arxiv.org/abs/2608.25080)
+
+- 日期：2026-08-25
+- 来源：[arXiv](https://arxiv.org/abs/2608.25080)
+- 简短摘要：把 forecasting 的解释问题写成 latent trajectory 分析和 lag-horizon attribution，并通过 structure-preserving surrogate 生成更稳定、可读的时序解释。
+- 相关性判断：中高。它更偏解释层，但确实命中“时序推理结果如何被可验证地展开”这条支线。
+
 ### [2026-08-25] [Structured Frequency-Domain Evidence for LLM-Based Time-Series Anomaly Detection](https://arxiv.org/abs/2608.24113)
 
 - 日期：2026-08-25
@@ -170,70 +177,88 @@
 - 简短摘要：把 context-aware forecasting 写成 `Fast-Slow-Reflect` 三阶段流程：先选轻量 forecaster 建 prior，再检索上下文做慢思考，最后迭代反思和修正预测。
 - 相关性判断：高。它是近期最明确把“慢思考”写进时序 forecasting agent 工作流的一条实现路线。
 
-## 4. GitHub 上值得跟踪的最新项目
+## 4. GitHub 和 HuggingFace 上值得跟踪的新项目
 
-### [2026-08-28] [rvitmonisha/automl-researcher](https://github.com/rvitmonisha/automl-researcher)
+### 时间序列
 
-- 日期：2026-08-28（创建），2026-08-28（最近一次 push）
-- 来源：[GitHub Repo API](https://api.github.com/repos/rvitmonisha/automl-researcher) / [GitHub 仓库](https://github.com/rvitmonisha/automl-researcher)
-- 简短摘要：一个面向 `AutoML research platform` 的新仓库，组合 automated model selection、RAG 与 AI agents，目前体量不大但创建时间很新。
-- 相关性判断：中。它不直接面向 time-series，但命中本轮要求跟踪的 `AutoML + agent` 观察项。
+#### [2026-08-31] [sriixz/agentic-timeseries](https://github.com/sriixz/agentic-timeseries)
 
-### [2026-08-22] [sriixz/agentic-timeseries](https://github.com/sriixz/agentic-timeseries)
+- 日期：2026-08-22（创建），2026-08-31（最近一次 push）
+- 来源：[GitHub Search API](https://api.github.com/search/repositories?q=timeseries+agent+created:%3E=2026-05-31&sort=updated&order=desc&per_page=20) / [GitHub 仓库](https://github.com/sriixz/agentic-timeseries)
+- 简短摘要：面向时序分析的 prototype multi-agent workflow，组合 GPT、Claude 与金融数据工具；今天确认到新的 `2026-08-31` push。
+- 相关性判断：中高。成熟度有限，但它仍是窗口内最直接带 `agentic + timeseries` 标签且最近仍在活跃推进的新仓库之一。
 
-- 日期：2026-08-22（创建），2026-08-27（最近一次 push）
-- 来源：[GitHub Repo API](https://api.github.com/repos/sriixz/agentic-timeseries) / [GitHub 仓库](https://github.com/sriixz/agentic-timeseries)
-- 简短摘要：面向时序分析的 prototype multi-agent workflow，组合 GPT、Claude 与金融数据工具。
-- 相关性判断：中高。成熟度有限，但它仍是窗口内最直接带 `agentic + timeseries` 标签的新仓库之一。
+#### [2026-08-31] [Clive-Kang/automl-agent](https://github.com/Clive-Kang/automl-agent)
 
-### [2026-08-05] [TimeSage-Series/TimeSage-EV](https://github.com/TimeSage-Series/TimeSage-EV)
+- 日期：2026-08-31（创建），2026-08-31（最近一次 push）
+- 来源：[GitHub Search API](https://api.github.com/search/repositories?q=automl+agent+created:%3E=2026-05-31&sort=updated&order=desc&per_page=20) / [GitHub 仓库](https://github.com/Clive-Kang/automl-agent)
+- 简短摘要：一个新建的 `CrewAI` 风格 AutoML / NLP security 原型仓库，体量很小，但创建时间是今天。
+- 相关性判断：中低。它不直接面向 time-series，不过命中本轮要求跟踪的 `AutoML agent` 观察项，适合作为低优先级新动向记录。
 
-- 日期：2026-08-05（创建），2026-08-05（最近一次 push），2026-08-21（最近一次 API 更新时间）
-- 来源：[GitHub Repo API](https://api.github.com/repos/TimeSage-Series/TimeSage-EV) / [GitHub 仓库](https://github.com/TimeSage-Series/TimeSage-EV)
-- 简短摘要：`TimeSage-EV` live benchmark 官方仓库，直接面向 `agentic time series analysis in evolving environments`。
-- 相关性判断：最高。它仍是最值得直接复现的 time-series agent benchmark 工程资产。
+#### [2026-08-30] [allyyr/Tabular-AutoML-Agent](https://github.com/allyyr/Tabular-AutoML-Agent)
 
-### [2026-08-03] [Xiaoyu-Tao/CastFSR](https://github.com/Xiaoyu-Tao/CastFSR)
+- 日期：2026-08-30（创建），2026-08-30（最近一次 push）
+- 来源：[GitHub Search API](https://api.github.com/search/repositories?q=automl+agent+created:%3E=2026-05-31&sort=updated&order=desc&per_page=20) / [GitHub 仓库](https://github.com/allyyr/Tabular-AutoML-Agent)
+- 简短摘要：一个新建的 tabular AutoML agent 仓库，已有基础代码体量，但公开描述仍很弱。
+- 相关性判断：中低。可作为 AutoML agent 新项目观察项，但目前研究信号还不强。
 
-- 日期：2026-08-03（创建），2026-08-03（最近一次 push）
-- 来源：[GitHub Repo API](https://api.github.com/repos/Xiaoyu-Tao/CastFSR) / [GitHub 仓库](https://github.com/Xiaoyu-Tao/CastFSR)
-- 简短摘要：`CastFSR` 论文官方实现，围绕 context-aware forecasting 的 `Fast-Slow-Reflect` agent 工作流提供代码。
-- 相关性判断：高。它不是 benchmark，但非常适合拿来研究“慢思考 forecasting agent”到底如何编排。
-
-### [2026-07-14] [OpenTSLM/TimeRLM](https://github.com/OpenTSLM/TimeRLM)
-
-- 日期：2026-07-14（创建），2026-08-05（最近一次 push），2026-08-27（最近一次 API 更新时间）
-- 来源：[GitHub Repo API](https://api.github.com/repos/OpenTSLM/TimeRLM) / [GitHub 仓库](https://github.com/OpenTSLM/TimeRLM)
-- 简短摘要：`TimeRLM` 官方实现，围绕长上下文时间序列异常定位提供可运行代码与递归推理流程。
-- 相关性判断：最高。它同时命中 `time series reasoning`、`tool use` 和可复现实验资产。
-
-### [2026-07-12] [Jesse-dry/AutoML-Agent](https://github.com/Jesse-dry/AutoML-Agent)
+#### [2026-08-30] [Jesse-dry/AutoML-Agent](https://github.com/Jesse-dry/AutoML-Agent)
 
 - 日期：2026-07-12（创建），2026-08-30（最近一次 push）
 - 来源：[GitHub Repo API](https://api.github.com/repos/Jesse-dry/AutoML-Agent) / [GitHub 仓库](https://github.com/Jesse-dry/AutoML-Agent)
-- 简短摘要：面向短期电力负荷预测的 LLM-driven AutoML agent，覆盖自动特征工程、超参搜索与实验迭代。
-- 相关性判断：最高。它同时命中 `time series + AutoML + agent`，而且昨天刚有新 push，值得继续跟踪。
+- 简短摘要：面向短期电力负荷预测的 LLM-driven AutoML agent，覆盖自动特征工程、超参搜索与实验迭代；今天确认到 `2026-08-30` 新 push。
+- 相关性判断：最高。它同时命中 `time series + AutoML + agent`，而且最近仍有更新，值得继续跟踪。
 
-### [2026-07-12] [Neuraxis-Labs/TSFM-Robustness-Benchmark](https://github.com/Neuraxis-Labs/TSFM-Robustness-Benchmark)
+#### [2026-08-30] [Neuraxis-Labs/TSFM-Robustness-Benchmark](https://github.com/Neuraxis-Labs/TSFM-Robustness-Benchmark)
 
 - 日期：2026-07-12（创建），2026-08-30（最近一次 push）
 - 来源：[GitHub Repo API](https://api.github.com/repos/Neuraxis-Labs/TSFM-Robustness-Benchmark) / [GitHub 仓库](https://github.com/Neuraxis-Labs/TSFM-Robustness-Benchmark)
 - 简短摘要：系统化测试 `TSFM` edge cases 的 robustness benchmark 工具仓库，最近一次 push 更新到 `2026-08-30`。
 - 相关性判断：最高。它把“如何稳定评测 TSFM failure modes”推进成了持续活跃的工程资产。
 
-### [2026-07-11] [Lkhanaajav/timeseries-mcp](https://github.com/Lkhanaajav/timeseries-mcp)
+#### [2026-07-11] [Lkhanaajav/timeseries-mcp](https://github.com/Lkhanaajav/timeseries-mcp)
 
 - 日期：2026-07-11（创建），2026-07-11（最近一次 push）
 - 来源：[GitHub Repo API](https://api.github.com/repos/Lkhanaajav/timeseries-mcp) / [GitHub 仓库](https://github.com/Lkhanaajav/timeseries-mcp)
 - 简短摘要：为 AI agents 暴露 typed time-series statistics 工具，覆盖 anomaly detection、changepoint、decomposition、trend test 与 data-quality auditing。
 - 相关性判断：高。它更像工具层 / harness，而不是模型创新，但与 time-series agent 工作流直接相关。
 
-### [2026-06-17] [AkshajKashyap/autoresearch-timeseries-agent](https://github.com/AkshajKashyap/autoresearch-timeseries-agent)
+### 光伏功率预测
 
-- 日期：2026-06-17（创建），2026-06-17（最近一次 push）
-- 来源：[GitHub Repo API](https://api.github.com/repos/AkshajKashyap/autoresearch-timeseries-agent) / [GitHub 仓库](https://github.com/AkshajKashyap/autoresearch-timeseries-agent)
-- 简短摘要：一个可复现的本地 time-series forecasting benchmark 与 deterministic experiment agent，包含 synthetic / CSV 数据、baseline、diagnostics、report 和 CI。
-- 相关性判断：高。它更偏 research harness，但正符合 `timeseries agent / harness` 跟踪目标。
+#### [2026-08-31] [ReikanYsora/Helios-Forecast](https://github.com/ReikanYsora/Helios-Forecast)
+
+- 日期：2026-06-11（创建），2026-08-31（最近一次 push）
+- 来源：[GitHub Search API](https://api.github.com/search/repositories?q=photovoltaic+forecasting+OR+solar+forecasting+created:%3E=2026-05-31&sort=updated&order=desc&per_page=20) / [GitHub 仓库](https://github.com/ReikanYsora/Helios-Forecast)
+- 简短摘要：一个面向 Home Assistant 的 self-learning solar production forecast 项目，今天确认到 `2026-08-31` 新 push。
+- 相关性判断：中。它更偏实用工程，但能反映光伏功率预测在家庭与边缘场景的持续落地。
+
+#### [2026-08-30] [rastislavsk/solarcast](https://github.com/rastislavsk/solarcast)
+
+- 日期：2026-08-19（创建），2026-08-30（最近一次 push）
+- 来源：[GitHub Search API](https://api.github.com/search/repositories?q=photovoltaic+forecasting+OR+solar+forecasting+created:%3E=2026-05-31&sort=updated&order=desc&per_page=20) / [GitHub 仓库](https://github.com/rastislavsk/solarcast)
+- 简短摘要：一个无需后端的单文件 7 天光伏输出预测工具，强调可直接按地理位置生成 PV 预测。
+- 相关性判断：中。研究深度有限，但胜在工程完成度和近期活跃度都较高。
+
+#### [2026-08-29] [mostafamahmoudma789-cloud/Sunova-power-gen-forecasting](https://github.com/mostafamahmoudma789-cloud/Sunova-power-gen-forecasting)
+
+- 日期：2026-08-27（创建），2026-08-29（最近一次 push）
+- 来源：[GitHub Search API](https://api.github.com/search/repositories?q=photovoltaic+forecasting+OR+solar+forecasting+created:%3E=2026-05-31&sort=updated&order=desc&per_page=20) / [GitHub 仓库](https://github.com/mostafamahmoudma789-cloud/Sunova-power-gen-forecasting)
+- 简短摘要：双时域 `LSTM` 光伏发电预测平台，声明使用 51 个站点训练并带全球站点注册 Web 应用。
+- 相关性判断：中高。虽然更偏应用原型，但它确实命中了近期新建、代码体量较完整的 PV forecasting 工程项目。
+
+#### [2026-08-28] [FdehghanSoton/AI_Pipeline_PV_Forecasting](https://github.com/FdehghanSoton/AI_Pipeline_PV_Forecasting)
+
+- 日期：2026-06-15（创建），2026-08-28（最近一次 push）
+- 来源：[GitHub Search API](https://api.github.com/search/repositories?q=photovoltaic+forecasting+OR+solar+forecasting+created:%3E=2026-05-31&sort=updated&order=desc&per_page=20) / [GitHub 仓库](https://github.com/FdehghanSoton/AI_Pipeline_PV_Forecasting)
+- 简短摘要：对应 [`An AI-Based Decision-Support Pipeline for Day-Ahead Photovoltaic Forecasting`](https://arxiv.org/abs/2608.02088) 的官方代码仓库，最近一次 push 更新到 `2026-08-28`。
+- 相关性判断：最高。它是窗口内最贴近真实部署 PV 预测论文的直接复现实验资产。
+
+#### [2026-08-27] [silverisland/tabm4pv](https://github.com/silverisland/tabm4pv)
+
+- 日期：2026-07-28（创建），2026-08-27（最近一次 push）
+- 来源：[GitHub Repo API](https://api.github.com/repos/silverisland/tabm4pv) / [GitHub 仓库](https://github.com/silverisland/tabm4pv)
+- 简短摘要：使用 `Encoder + TabM` 做跨站超短期光伏功率预测的轻量实验代码。
+- 相关性判断：中高。它体量不大，但对“低成本跨站 PV 预测”这条工程路线有直接参考价值。
 
 ## 5. 光伏功率预测最新研究
 
@@ -265,10 +290,17 @@
 - 简短摘要：用 physics-informed synthetic histories 为冷启动光伏站点构造可用上下文，再让 TSFM 在 zero-shot / feedback 条件下做 cold-start 预测。
 - 相关性判断：最高。它仍是近三个月里最直接把 TSFM 引入光伏冷启动场景的论文之一。
 
-## 6. 补检与降优先级观察
+## 6. DailyArXiv 补检结论
 
-- AI HOT 官方 `paper` 精选流本轮未返回比主列表更高相关的时间序列论文，因此只作为近 7 天补检信号，不单独升权。
-- GitHub Search API 没有检到高质量且代码信号足够强的新 `timeseries harness` 仓库，最新命中的 `2026-08-30` 新仓库大多仍处在原型或空仓状态。
-- [`allyyr/Tabular-AutoML-Agent`](https://github.com/allyyr/Tabular-AutoML-Agent)：创建于 `2026-08-30`，但当前无描述、`stargazers_count=0`，仅作低优先级观察项。
-- [`ashandilgith/timeseries_prediction_agent-`](https://github.com/ashandilgith/timeseries_prediction_agent-)：创建于 `2026-08-30`，但当前无描述、`size=10`、`stargazers_count=0`，只说明“有新仓库出现”，不具备稳定研究信号。
-- 本轮尝试直接读取 `DailyArXiv` 官方 README 原始文件时，常见 raw 路径没有稳定返回可用内容，因此今天不依据 `DailyArXiv` 新增主列表条目；主列表完全基于 arXiv 官方页面和 GitHub 官方 API。
+- `DailyArXiv` 官方 README 当前 `Last update` 为 `2026-08-31`，默认分支为 `master`；本轮已按 `master` 分支 README 核验，而不是沿用昨天的 `2026-08-27` 状态。
+- 在 `Time Series` 区，本轮可稳定确认且与主题直接相关的窗口内条目包括 [`TraceBench`](https://arxiv.org/abs/2608.27182)、[`Towards A Unified Information Bottleneck Framework for Time Series Explanations`](https://arxiv.org/abs/2608.25897)、[`Causal Analysis for Time Series Foundation Models`](https://arxiv.org/abs/2608.24303)、[`Structured Frequency-Domain Evidence for LLM-Based Time-Series Anomaly Detection`](https://arxiv.org/abs/2608.24113)、[`MetaCaster`](https://arxiv.org/abs/2608.23473) 和 [`ConceptTS`](https://arxiv.org/abs/2608.21277)；这些都已并入主列表，不再重复升权。
+- [`SAGE: Variate-Wise Semantic Augmentation for Vision-Language Time Series Forecasting`](https://arxiv.org/abs/2608.26829)、[`When Does Context Routing Help?`](https://arxiv.org/abs/2608.25128)、[`NVExplain`](https://arxiv.org/abs/2608.25080) 都在窗口内且与主题相关，但分别更偏 `vision-language forecasting`、`multimodal fusion diagnosis`、`forecast explanation`，因此本轮只在补检结论或主列表边缘位置体现，不抬升为今日最高优先级锚点。
+- [`Time Series Forecasting via Reasoning: A Slow-Thinking Approach with Reinforcement Fine-Tuned LLMs`](https://arxiv.org/abs/2506.10630) 在 README 中以 `Time-R1` 形式出现，README 纳入日期为 `2026-08-24`，但 arXiv 官方首发日期为 `2025-06-12`，超出三个月窗口，因此仅保留为“补检命中但超窗”的降优先级说明。
+- [`Perseus: Interactive Time Series Segmentation with Sparse Supervision via Stateful Memory`](https://arxiv.org/abs/2510.09930) 在 README 中出现，但 arXiv 官方首发日期为 `2025-10-11`，同样超窗，因此不进入主列表。
+- [`QABBA`](https://arxiv.org/abs/2411.15209) 在最新 README 中仍排位靠前，但主题更偏 symbolic compression 与 LLM-friendly representation，不直接命中 `Agent / reasoning / foundation model / PV forecasting` 四条主线，因此继续降优先级。
+
+## 7. 补检与降优先级观察
+
+- AI HOT 官方 API 以 `mode=all`、`category=paper`、`q=time series` 补检近 7 天动态，返回 `0` 条命中，因此今天没有来自 AI HOT 的新增高相关论文。
+- GitHub Search API 检到的 `2026-08-30` 至 `2026-08-31` 新仓库中，[`urstrulysiddhu/agentic-automl-platform`](https://github.com/urstrulysiddhu/agentic-automl-platform) 当前 `size=0`，[`ashandilgith/timeseries_prediction_agent-`](https://github.com/ashandilgith/timeseries_prediction_agent-) 当前 `size=10` 且无描述，因此都只作为“有新仓库出现”的低优先级观察项。
+- HuggingFace 官方 API 本轮对 `timeseries`、`photovoltaic`、`time series foundation model` 的查询均因连接 `huggingface.co` 超时失败，无法稳定确认日期和最新度；因此本轮不单列 HF-only 新项目，避免把不完整结果写进主列表。
