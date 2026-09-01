@@ -1,24 +1,25 @@
 # 2026-09-01 时间序列 Agent / Reasoning / Foundation Model 晨间简报
 
-检索时间：2026-09-01 08:41:00 CST，Asia/Shanghai<br>
+检索时间：2026-09-01 15:38:04 CST，Asia/Shanghai<br>
 时间窗口：2026-06-01 至 2026-09-01<br>
-优先来源：arXiv 官方 API / `abs` 页面、GitHub 官方 Repo API / Search API、OpenReview / ACL / NeurIPS / ICLR / ICML / KDD / AAAI 官网补检、官方项目页、公开可访问 GitHub 项目页<br>
+优先来源：arXiv 官方 API / `abs` 页面、GitHub 官方 Repo API / Search API、`DailyArXiv` 官方 README、OpenReview / ACL / NeurIPS / ICLR / ICML / KDD / AAAI 官网补检、官方项目页、公开可访问 GitHub 项目页<br>
 检索主题：`time series foundation model`、`time series agent`、`time series reasoning`、`timeseries harness`、`machine learning agent`、`AutoML agent`、`photovoltaic power forecasting`
 
 ## 今日摘要
 
-- 截至 `2026-09-01 08:41 CST`，未检到 `2026-09-01` 当天首发、且足以重排主列表的时间序列 foundation model / agent / reasoning 新论文；今天的主要变化仍来自对 `8 月中下旬` arXiv 条目的补检确认，以及 GitHub 在 `9 月 1 日` 凌晨前后的活跃更新。
+- 截至 `2026-09-01 15:38 CST`，仍未检到 `2026-09-01` 当天首发、且足以重排主列表的时间序列 foundation model / agent / reasoning / 光伏预测新论文；本轮新增价值主要来自 `DailyArXiv` README 已更新到 `2026-09-01`，以及 GitHub 若干仓库在今天白天前后的更晚 push。
 - foundation model 主线没有比昨天更晚的新高相关论文；窗口内最高优先级条目仍是 [`Causal Analysis for Time Series Foundation Models`](https://arxiv.org/abs/2608.24303)、[`Do Time-Series Foundation Models Pay Off for Industrial Monitoring?`](https://arxiv.org/abs/2608.22968)、[`LiveHouse-TS`](https://arxiv.org/abs/2608.17299) 与 [`Forecast Collapse in Time-Series Foundation Models`](https://arxiv.org/abs/2608.14106)。
-- reasoning 主线今天补强了两篇更“直接”的时间序列推理论文：[`TSRouter`](https://arxiv.org/abs/2607.08940) 把不同模态和模型的时序推理路由写成动态图选择问题；[`TSCognition / TSAlign`](https://arxiv.org/abs/2606.22126) 则把 time-series reasoning 正式扩展为认知型 QA benchmark 与对齐框架。
-- Agent 方向仍由 [`TraceBench`](https://arxiv.org/abs/2608.27182)、[`MetaCaster`](https://arxiv.org/abs/2608.23473)、[`TimeSage-EV`](https://arxiv.org/abs/2608.14270)、[`EvoTS-Agent`](https://arxiv.org/abs/2608.17933) 构成最强公开主线；其中 `TraceBench` 和 `TimeSage-EV` 仍是最值得复现的 benchmark 资产。
-- GitHub 侧今天最值得记录的是三个“仍在动”的仓库：[`Neuraxis-Labs/TSFM-Robustness-Benchmark`](https://github.com/Neuraxis-Labs/TSFM-Robustness-Benchmark) 最近一次 `push` 为 `2026-09-01 00:04Z`，[`shukebeta/baton`](https://github.com/shukebeta/baton) 最近一次 `push` 为 `2026-09-01 00:34Z`，[`P2Enjoy/nvidia-ova-oss`](https://github.com/P2Enjoy/nvidia-ova-oss) 最近一次 `push` 为 `2026-09-01 00:33Z`。
-- 光伏功率预测方向本轮新增高相关论文锚点是 [`An AI-Based Decision-Support Pipeline for Day-Ahead Photovoltaic Forecasting`](https://arxiv.org/abs/2608.02088)、[`Robustness of Deep Learning Models for PV Power Forecasting under NWP Forecast Errors`](https://arxiv.org/abs/2607.12954) 与 [`Time series Foundation Models based on Physics-Informed Synthetic Histories for Cold-Start Photovoltaic Forecasting`](https://arxiv.org/abs/2606.07457)；项目侧则以 [`SUNOVA-Solar-Power-Forecasting-System`](https://github.com/youssefaboelmaged942-del/SUNOVA-Solar-Power-Forecasting-System) 为最晚新建仓库。
+- reasoning 主线今天仍以 [`TSRouter`](https://arxiv.org/abs/2607.08940) 与 [`TSCognition / TSAlign`](https://arxiv.org/abs/2606.22126) 为最“直接”的 time-series reasoning 论文；`DailyArXiv` 补检则额外确认其 `Time Series` 区已收录 [`TraceBench`](https://arxiv.org/abs/2608.27182)、[`MetaCaster`](https://arxiv.org/abs/2608.23473)、[`Structured Frequency-Domain Evidence`](https://arxiv.org/abs/2608.24113)、[`NVExplain`](https://arxiv.org/abs/2608.25080)、[`When Does Context Routing Help?`](https://arxiv.org/abs/2608.25128) 等窗口内相关条目。
+- Agent 方向新增补回边界条目 [`TimeSage-MT`](https://arxiv.org/abs/2606.01498)：它的 arXiv `published` 时间是 `2026-05-31 23:34Z`，按 `Asia/Shanghai` 口径落在 `2026-06-01`，因此进入本轮三个月窗口。
+- GitHub 侧今天最值得记录的是四个仍在更新的仓库：[`Neuraxis-Labs/TSFM-Robustness-Benchmark`](https://github.com/Neuraxis-Labs/TSFM-Robustness-Benchmark) `push` 到 `2026-09-01 00:04Z`，[`shukebeta/baton`](https://github.com/shukebeta/baton) `push` 到 `2026-09-01 07:32Z`，[`ahsiwt101/kairos-automl-research-agent`](https://github.com/ahsiwt101/kairos-automl-research-agent) `push` 到 `2026-09-01 06:47Z`，光伏侧 [`Shivam4905/pv-dimensionality-reduction`](https://github.com/Shivam4905/pv-dimensionality-reduction) `push` 到 `2026-09-01 07:19Z`。
+- 光伏功率预测方向本轮主论文锚点仍是 [`An AI-Based Decision-Support Pipeline for Day-Ahead Photovoltaic Forecasting`](https://arxiv.org/abs/2608.02088)、[`Robustness of Deep Learning Models for PV Power Forecasting under NWP Forecast Errors`](https://arxiv.org/abs/2607.12954) 与 [`Time series Foundation Models based on Physics-Informed Synthetic Histories for Cold-Start Photovoltaic Forecasting`](https://arxiv.org/abs/2606.07457)；项目侧今天更值得补记的是更新到 `2026-09-01` 的 [`pv-dimensionality-reduction`](https://github.com/Shivam4905/pv-dimensionality-reduction)。
 - 今天是周二 `2026-09-01`，不是周五，因此本轮不更新 `weekly-brief-2026-W36.md`。
 
 ## 0. 检索口径
 
-- 只保留论文 `published` 日期或 GitHub 仓库 `created_at` 落在 `2026-06-01` 至 `2026-09-01` 的条目。
+- 只保留论文 `published` 日期或 GitHub 仓库 `created_at` 落在 `2026-06-01` 至 `2026-09-01` 的条目；窗口边界按 `Asia/Shanghai` 本地日期解释。
 - 论文日期优先采用 arXiv 官方 API / `abs` 页面首发日期；GitHub 项目日期优先采用官方 Repo API 的 `created_at`，活跃度补充采用 `pushed_at` 或 `updated_at`。
+- `DailyArXiv` README 只作为补检源；其中表格日期仅表示“被日报收录的日期”，不能替代 arXiv 官方首发日期。
 - OpenReview、ACL、NeurIPS、ICLR、ICML、KDD、AAAI 官网本轮仅作为补检源；未发现比当前 arXiv 主列表更晚且更高相关的窗口内新增项。
 - 由于本轮没有稳定拿到窗口内更高优先级的 HuggingFace 新项目，`GitHub 和 HuggingFace` 栏目实际仅纳入 GitHub 条目，并在条目里明确来源。
 - 日期无法稳定确认的候选项不进入主列表；本轮主列表无 `不确定` 日期条目。
@@ -110,6 +111,13 @@
 - 来源：[arXiv](https://arxiv.org/abs/2606.16545)
 - 简短摘要：比较直接喂数值、让 LLM 做 coding agent、以及二者结合三种设置，发现可访问代码工具的 agent 在时序理解基准上更强，但错误率仍明显存在。
 - 相关性判断：最高。它仍是评估 `coding agent + time series` 能力边界的关键基线。
+
+### [2026-06-01] [TimeSage-MT: A Multi-Turn Benchmark for Evaluating Agentic Time Series Reasoning](https://arxiv.org/abs/2606.01498)
+
+- 日期：2026-06-01（按 `Asia/Shanghai` 口径；arXiv `published` 为 `2026-05-31 23:34Z`）
+- 来源：[arXiv](https://arxiv.org/abs/2606.01498)
+- 简短摘要：提出覆盖 `240` 个任务、`2,680` 轮对话的 multi-turn benchmark，把 time-series agent 的评测从单步预测/异常检测推进到多轮分析、记忆维护与决策支持。
+- 相关性判断：最高。它是本轮三个月窗口边界上最关键的 time-series agent benchmark 之一，特别适合和 `TraceBench`、`TimeSage-EV` 形成互补。
 
 ## 3. 时间序列 reasoning 模型最新研究
 
@@ -203,6 +211,27 @@
 - 简短摘要：系统测试 `TSFM` edge cases 的 robustness benchmark 工具仓库，最新一次 `push` 已推进到 `2026-09-01 00:04Z`。
 - 相关性判断：最高。它是 `time series + foundation model + benchmark harness` 的直接交集，且今天仍在活跃更新。
 
+#### [2026-09-01] [shukebeta/baton](https://github.com/shukebeta/baton)
+
+- 日期：2026-06-12（创建），2026-09-01（最近一次 push）
+- 来源：[GitHub Repo API](https://api.github.com/repos/shukebeta/baton) / [GitHub 仓库](https://github.com/shukebeta/baton)
+- 简短摘要：一个面向结构化 agent 协作的 AI-to-AI communication harness，最近一次 `push` 已推进到 `2026-09-01 07:32Z`。
+- 相关性判断：中高。它不特定于时序，但与 `timeseries agent harness` 的基础设施层高度相关，而且今天仍在快速迭代。
+
+#### [2026-09-01] [ahsiwt101/kairos-automl-research-agent](https://github.com/ahsiwt101/kairos-automl-research-agent)
+
+- 日期：2026-08-30（创建），2026-09-01（最近一次 push）
+- 来源：[GitHub Repo API](https://api.github.com/repos/ahsiwt101/kairos-automl-research-agent) / [GitHub 仓库](https://github.com/ahsiwt101/kairos-automl-research-agent)
+- 简短摘要：一个围绕“验证集是否在误导研究代理”的 autonomous ML research agent 原型，最近一次 `push` 已推进到 `2026-09-01 06:47Z`。
+- 相关性判断：中高。它不直接是时序项目，但与 `AutoML / research agent / harness` 高相关，且今天仍在活跃推进。
+
+#### [2026-08-31] [Sachithx/GraphMLE](https://github.com/Sachithx/GraphMLE)
+
+- 日期：2026-08-29（创建），2026-08-31（最近一次 push）
+- 来源：[GitHub Repo API](https://api.github.com/repos/Sachithx/GraphMLE) / [GitHub 仓库](https://github.com/Sachithx/GraphMLE)
+- 简短摘要：一个 autonomous ML research agent，强调 typed graph mutations、ablation-guided search、leakage checks 与 statistical validation。
+- 相关性判断：高。它不面向时序，但作为 `machine learning research agent` 的工程实现，比一般 showcase 仓库更接近可借鉴的实验编排基础设施。
+
 #### [2026-08-31] [sriixz/agentic-timeseries](https://github.com/sriixz/agentic-timeseries)
 
 - 日期：2026-08-22（创建），2026-08-31（最近一次 push）
@@ -216,13 +245,6 @@
 - 来源：[GitHub Repo API](https://api.github.com/repos/Jesse-dry/AutoML-Agent) / [GitHub 仓库](https://github.com/Jesse-dry/AutoML-Agent)
 - 简短摘要：面向短期电力负荷预测的 LLM-driven AutoML agent，覆盖自动特征工程、超参搜索与实验迭代。
 - 相关性判断：最高。它同时命中 `time series + AutoML + agent`，仍是本轮最值得继续观察的实作仓库。
-
-#### [2026-08-30] [ahsiwt101/kairos-automl-research-agent](https://github.com/ahsiwt101/kairos-automl-research-agent)
-
-- 日期：2026-08-30（创建），2026-08-31（最近一次 push）
-- 来源：[GitHub Repo API](https://api.github.com/repos/ahsiwt101/kairos-automl-research-agent) / [GitHub 仓库](https://github.com/ahsiwt101/kairos-automl-research-agent)
-- 简短摘要：一个围绕“验证集是否在误导研究代理”的 autonomous ML research agent 原型，最近一次 `push` 为 `2026-08-31 19:42Z`。
-- 相关性判断：中高。它不直接是时序项目，但与 `AutoML / research agent / harness` 高相关，适合作为外围观察项。
 
 #### [2026-08-24] [Pranavthatenough/mle-bench](https://github.com/Pranavthatenough/mle-bench)
 
@@ -238,37 +260,52 @@
 - 简短摘要：为 AI agents 提供异常检测、变点检测、分解、趋势检验和数据质量审计等 deterministic time-series 工具的 `MCP` 服务器。
 - 相关性判断：最高。它是目前最直接把时序分析能力打包成 agent-tooling 接口的新仓库之一。
 
-#### [2026-06-12] [shukebeta/baton](https://github.com/shukebeta/baton)
-
-- 日期：2026-06-12（创建），2026-09-01（最近一次 push）
-- 来源：[GitHub Repo API](https://api.github.com/repos/shukebeta/baton) / [GitHub 仓库](https://github.com/shukebeta/baton)
-- 简短摘要：一个面向结构化 agent 协作的 AI-to-AI communication harness，最近一次 `push` 为 `2026-09-01 00:34Z`。
-- 相关性判断：中高。它不特定于时序，但与 `timeseries agent harness` 的基础设施层高度相关。
-
-#### [2026-08-27] [P2Enjoy/nvidia-ova-oss](https://github.com/P2Enjoy/nvidia-ova-oss)
-
-- 日期：2026-08-27（创建），2026-09-01（最近一次 push）
-- 来源：[GitHub Repo API](https://api.github.com/repos/P2Enjoy/nvidia-ova-oss) / [GitHub 仓库](https://github.com/P2Enjoy/nvidia-ova-oss)
-- 简短摘要：一个由 `Agentic Software Factory harness` 驱动的论文复现型仓库，主题不是时序，但 `harness` 标签和持续 push 活跃度都很明确。
-- 相关性判断：中。它不直接面向 time series，不过对观察 agent harness 如何组织工程复现仍有参考价值。
-
 ### 光伏功率预测
 
-#### [2026-08-30] [youssefaboelmaged942-del/SUNOVA-Solar-Power-Forecasting-System](https://github.com/youssefaboelmaged942-del/SUNOVA-Solar-Power-Forecasting-System)
+#### [2026-09-01] [Shivam4905/pv-dimensionality-reduction](https://github.com/Shivam4905/pv-dimensionality-reduction)
+
+- 日期：2026-07-30（创建），2026-09-01（最近一次 push）
+- 来源：[GitHub Repo API](https://api.github.com/repos/Shivam4905/pv-dimensionality-reduction) / [GitHub 仓库](https://github.com/Shivam4905/pv-dimensionality-reduction)
+- 简短摘要：用降维后的滞后发电特征做太阳能发电预测，强调在 MATLAB 中平衡 forecast accuracy 与模型 footprint，最近一次 `push` 已推进到 `2026-09-01 07:19Z`。
+- 相关性判断：中高。它不是最前沿模型，但今天有更晚更新，且明确命中 `PV + time-series forecasting + lightweight engineering`。
+
+#### [2026-08-31] [youssefaboelmaged942-del/SUNOVA-Solar-Power-Forecasting-System](https://github.com/youssefaboelmaged942-del/SUNOVA-Solar-Power-Forecasting-System)
 
 - 日期：2026-08-30（创建），2026-08-31（最近一次 push）
 - 来源：[GitHub Repo API](https://api.github.com/repos/youssefaboelmaged942-del/SUNOVA-Solar-Power-Forecasting-System) / [GitHub 仓库](https://github.com/youssefaboelmaged942-del/SUNOVA-Solar-Power-Forecasting-System)
 - 简短摘要：一个采用 Dual-Input LSTM 与 FastAPI 的太阳能发电预测系统型仓库，最近一次 `push` 为 `2026-08-31 09:02Z`。
 - 相关性判断：中高。研究新意有限，但它是窗口内最晚创建、且能直接运行的 PV forecasting 工程原型之一。
 
-#### [2026-06-29] [tateshita1908/solar-power-forecasting-system](https://github.com/tateshita1908/solar-power-forecasting-system)
+#### [2026-08-31] [ReikanYsora/Helios-Forecast](https://github.com/ReikanYsora/Helios-Forecast)
 
-- 日期：2026-06-29（创建），2026-08-22（最近一次 push）
-- 来源：[GitHub Search API](https://api.github.com/search/repositories?q=%22solar+power+forecasting%22+OR+%22photovoltaic+forecasting%22+created:%3E=2026-06-01&sort=updated&order=desc&per_page=10) / [GitHub 仓库](https://github.com/tateshita1908/solar-power-forecasting-system)
-- 简短摘要：使用 LightGBM、DuckDB 与 Streamlit 构建光伏功率预测与分析流程，项目结构完整，适合作为轻量 benchmark/演示基线。
-- 相关性判断：中高。更偏工程系统，但对 PV forecasting 的复现与对比很实用。
+- 日期：2026-06-11（创建），2026-08-31（最近一次 push）
+- 来源：[GitHub Repo API](https://api.github.com/repos/ReikanYsora/Helios-Forecast) / [GitHub 仓库](https://github.com/ReikanYsora/Helios-Forecast)
+- 简短摘要：一个面向 Home Assistant 的 self-learning solar production forecast 项目，最近一次 `push` 为 `2026-08-31 00:10Z`，且 `updated_at` 已推进到 `2026-09-01 06:39Z`。
+- 相关性判断：中高。研究深度有限，但工程完成度高、使用者多，适合作为边缘部署与家庭能源场景的持续观察项。
 
-## 6. 备注
+#### [2026-08-30] [rastislavsk/solarcast](https://github.com/rastislavsk/solarcast)
+
+- 日期：2026-08-19（创建），2026-08-30（最近一次 push）
+- 来源：[GitHub Repo API](https://api.github.com/repos/rastislavsk/solarcast) / [GitHub 仓库](https://github.com/rastislavsk/solarcast)
+- 简短摘要：一个无需后端的单文件 7 天光伏输出预测工具，强调按地理位置直接生成 PV 预测。
+- 相关性判断：中。研究深度有限，但胜在工程完成度和近期活跃度都不低。
+
+#### [2026-08-28] [FdehghanSoton/AI_Pipeline_PV_Forecasting](https://github.com/FdehghanSoton/AI_Pipeline_PV_Forecasting)
+
+- 日期：2026-06-15（创建），2026-08-28（最近一次 push）
+- 来源：[GitHub Repo API](https://api.github.com/repos/FdehghanSoton/AI_Pipeline_PV_Forecasting) / [GitHub 仓库](https://github.com/FdehghanSoton/AI_Pipeline_PV_Forecasting)
+- 简短摘要：对应 [`An AI-Based Decision-Support Pipeline for Day-Ahead Photovoltaic Forecasting`](https://arxiv.org/abs/2608.02088) 的官方代码仓库，最近一次 `push` 为 `2026-08-28 14:23Z`。
+- 相关性判断：最高。它是窗口内最贴近真实部署 PV 预测论文的直接复现实验资产。
+
+## 6. DailyArXiv 补检结论
+
+- 本轮直接核验 [`zezhishao/DailyArXiv`](https://github.com/zezhishao/DailyArXiv) 官方 README，确认默认分支仍是 `master`，README `Last update` 为 `2026-09-01`。
+- `Time Series` 区在三个月窗口内、且与本主题高相关的稳定命中包括 [`TraceBench`](https://arxiv.org/abs/2608.27182)、[`SAGE`](https://arxiv.org/abs/2608.26829)、[`Towards A Unified Information Bottleneck Framework for Time Series Explanations`](https://arxiv.org/abs/2608.25897)、[`When Does Context Routing Help?`](https://arxiv.org/abs/2608.25128)、[`NVExplain`](https://arxiv.org/abs/2608.25080)、[`EncoTESS`](https://arxiv.org/abs/2608.25019)、[`Structured Frequency-Domain Evidence`](https://arxiv.org/abs/2608.24113)、[`MetaCaster`](https://arxiv.org/abs/2608.23473)。
+- `DailyArXiv` 今天没有稳定补到 [`ConceptTS`](https://arxiv.org/abs/2608.21277)；因此它继续保留在主列表，但依据直接 arXiv 官方日期纳入，而不是依赖 `DailyArXiv`。
+- `DailyArXiv` 中有相关但超出三个月窗口的条目，需要降优先级说明：[`Multimodal Collaborative Debate for Zero-Shot Time Series Reasoning (TS-Debate)`](https://arxiv.org/abs/2601.19151) 在 README 中显示收录日期 `2026-08-28`，但 arXiv 编号表明其首发在 `2026-01`；[`Time Series Forecasting via Reasoning: A Slow-Thinking Approach with Reinforcement Fine-Tuned LLMs (Time-R1)`](https://arxiv.org/abs/2506.10630) 在 README 中显示收录日期 `2026-08-24`，但 arXiv 首发属于 `2025-06`，均不进入本轮三个月主列表。
+- 本轮未在 `2026-09-01` 的 `DailyArXiv` README 中稳定检到 `Perseus` 或 `TS-Reasoner`，因此不作为今天的补检增量。
+
+## 7. 备注
 
 - 本轮未纳入任何 `HuggingFace` 新项目，因为没有在 `2026-06-01` 至 `2026-09-01` 窗口内稳定确认到比上述 GitHub 条目更高相关、且来源信息完整的新仓库或模型页。
 - 本轮未纳入 `不确定` 日期条目。
