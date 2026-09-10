@@ -1,10 +1,13 @@
 # 2026-09-10 时间序列 Agent / Reasoning / Foundation Model 晨间简报
 
-检索时间：2026-09-10 08:32–08:43 CST（Asia/Shanghai）。三个月窗口：2026-06-10 至检索时点。论文按 arXiv 首发或出版商公开发表日期筛选，版本更新单独标明；GitHub 按创建时间筛选，最近推送仅代表活跃度。下文来源时间均为 UTC。今天周四，不生成周报。
+检索时间：2026-09-10 08:32–08:43 CST；下午增量复核 15:30–15:37（Asia/Shanghai）。三个月窗口：2026-06-10 至检索时点。论文按 arXiv 首发或出版商公开发表日期筛选，版本更新单独标明；GitHub 按创建时间筛选，最近推送仅代表活跃度。下文来源时间均为 UTC。今天周四，不生成周报。
 
 增量参照：2026-09-09 晨报，包含其下午补检。**新增发现不等于今天发布**；持续跟踪条目不重复计新。按项目规则保留光伏和 HuggingFace 补检。
 
 ## 今日重点
+
+- **下午新增：SDD 合成数据蒸馏**（9 月 9 日首发），把已知生成过程的条件预测分布用于训练目标；是今天最值得优先阅读的 TSFM 方法增量。
+- **下午新增：中文时序分析 Agent**（9 月 10 日创建），代码目录支持分析、记忆与报告质检；另一个维护 Copilot 候选实际仅有 README，已降级。
 
 - 新增发现 **NOAH**（9 月 8 日）：多模态、非规则时间的纵向患者模型，值得关注时间表示，但不是已验证的通用预测 Agent。
 - 新增 **Time-Series-Diagnostic-Agent** 与 **nse-multi-agent-trading**（均 9 月 9 日创建）：前者以确定性工具路由为基线，后者报告多 Agent 未超过买入持有的实验结果。重点在可检查的证据接口与消融设计，性能尚未复现。
@@ -12,6 +15,13 @@
 - 光伏补检确认 9 月 3 日综述，并复核 9 月 8 日修订的日前预测流水线：随机日折叠与滚动验证给出的收益差异很大。
 
 ## 1. 时间序列基础模型最新研究
+
+### [2026-09-09] Distillation of Synthetic Data for Time Series Foundation Models — 下午新增
+
+- 日期与来源：arXiv v1 2026-09-09 01:15:46；[官方论文](https://arxiv.org/abs/2609.09586)。
+- 摘要：提出 synthetic data distillation（SDD），将合成轨迹的条件预测分布用于损失目标，而非只监督一次随机实现的未来观测。作者证明其保持随机梯度期望、降低协方差；在 4M–2.5B 参数模型的高斯过程数据实验中，报告达到相当或更低验证损失所需迭代减少 10%–40%。
+- 相关性：TSFM 预训练高、Agent 数据生成中高、显式 reasoning 低。适合探索合成数据生成器能否同时提供分布监督；理论和实验依赖相应生成过程与目标条件，不能直接承诺真实光伏预测提升。只核验摘要和首发记录，未复现。
+
 
 ### [2026-09-08] NOAH: Learning the Full Patient Journey. A Longitudinal Multimodal Time-Aware Model for Representation and Forecasting — 新增发现
 
@@ -24,6 +34,12 @@
 - 日期与来源：arXiv v1 2026-09-08 07:43；[官方论文](https://arxiv.org/abs/2609.08375)。
 - 摘要：自监督 Informer 表征配合共识特征筛选、滞后回归头与校准 MC dropout，服务工业软测量及少标签适配。
 - 相关性：工业 TSFM 高，Agent 中。适合作为预测工具与不确定性输出接口的参考；证据主要来自单类工业装置，尚不能证明跨域基础能力。昨日已收录，本轮返回仍为 v1。
+
+### [2026-09-08] PV-Surgery：多变量预测的可靠性感知梯度修正 — DailyArXiv 下午补充，相邻训练研究
+
+- 日期与来源：arXiv v1 2026-09-08 10:38:13；[官方论文](https://arxiv.org/abs/2609.08554)。这里的 PV 指 Per-Variable，不是 photovoltaic。
+- 摘要：观察平均损失掩盖各变量梯度差异，利用输出侧信号构造梯度代理，按可靠性选择层并修正共同方向。作者在五类骨干、七个数据集、四个预测时距上报告平均 MSE 降低 3.61%、MAE 降低 2.93%。
+- 相关性：多变量训练/AutoML 中高，TSFM 适配中，Agent/reasoning 低。可作为 Agent 训练工具的候选，但并非新基础模型；变量冲突频率不等于负迁移危害，迁移到不同骨干需检查代理适用性。未复现作者结果。
 
 ### [2026-09-06] Assessing Covariate-Informed Grid Load Forecasting with a Time-Series Foundation Model — 持续跟踪
 
@@ -47,6 +63,12 @@
 - 摘要：连接数据、专用预测器、分析工具、用户约束与版本化轨迹，按证据保留、修订或升级预测，设置明确停止条件并形成执行报告。
 - 相关性：Agent/harness 高。今天新发现的确定性诊断路由可与该类自主闭环作设计对照；这是一项比较建议，尚未开展实验。当前官方返回仍为 v1。
 
+### [2026-08-24；v2 2026-09-03] MetaCaster — DailyArXiv 复核，持续跟踪
+
+- 日期与来源：arXiv v1 2026-08-24 16:40，v2 2026-09-03 18:53；[官方论文](https://arxiv.org/abs/2608.23473)。作者备注 Accepted by EMNLP 2026。
+- 摘要：用经过 meta-harness 优化的多 Agent 流程，从少量样本和文本上下文生成数据、训练轻量专用预测器；Agent 在训练流水线中承担工程角色。
+- 相关性：Agent/harness/少样本建模高。与 SDD 的组合是本报提出的研究方向，尚无联合实验证据；DailyArXiv 的 9 月 3 日是修订日，不能计为该日首发。
+
 ## 3. 时间序列 reasoning 模型最新研究
 
 ### [2026-09-08] It's All in the Way You Say It: The Role of Information Representation in LLM-Based Glycemic-Event Prediction — 新增相邻评测
@@ -54,6 +76,12 @@
 - 日期与来源：arXiv v1 2026-09-08 14:07；[官方论文](https://arxiv.org/abs/2609.08772)。作者标注已投稿期刊，未标注接收。
 - 摘要：在 OhioT1DM 上比较不同开源权重 LLM 的零样本/少样本事件预测，覆盖 30、60、90 分钟时距，改变数值的文字表达、派生描述及胰岛素/饮食等上下文。作者发现最佳方式随高/低血糖任务变化，增加上下文并无稳定收益。
 - 相关性：时序语言输入设计高，显式 reasoning 中低。可借鉴固定模型下的表示与信息量消融；它未提出新推理模型，也没有据此证明推理链忠实性。研究结果仅作方法讨论。
+
+### [2026-09-07] ICF-DLM：物理分解驱动的扩散语言模型波形预测 — DailyArXiv 下午补充
+
+- 日期与来源：arXiv v1 2026-09-07 17:00:02；[官方论文](https://arxiv.org/abs/2609.07756)。
+- 摘要：从激光脉冲和靶设计直接预测 512 步中子率波形，将目标分解为产额、峰时与局部波形，再使用双向去噪和物理指标驱动的 PPO 奖励。作者在 5 万模拟样本与 232 次实验发次组成的 ICFBench 上报告，相对匹配的自回归 LLaMA-3-8B，峰时误差由 11.6 降到 9.2 步。
+- 相关性：结构化数值生成、物理约束奖励高，显式时序 reasoning 中、光伏低。这是惯性约束聚变波形预测，不是光伏功率研究；目标分解不能单独证明推理链忠实性，稀疏峰值方法的跨域价值仍待验证。
 
 ### [2026-09-05] STQA / SQFRS — 持续跟踪，检索—预测—推理基准
 
@@ -65,6 +93,14 @@
 
 ### 4.1 时间序列
 
+#### [2026-09-10] wyx53508-cloud/time-series-analysis-agent — 下午新增
+
+- 日期与来源：创建 2026-09-10 04:38:34，最近推送 04:48:06；[GitHub](https://github.com/wyx53508-cloud/time-series-analysis-agent)、[官方元数据](https://api.github.com/repos/wyx53508-cloud/time-series-analysis-agent)。
+- 摘要：面向 CSV 的统计、趋势图、异常检测和报告质检流程，支持知识库引用、连续问答及按文件/列恢复记忆。默认示例列为 PREPOWER，知识库含风电与时序预测资料。
+- 相关性：时序分析 Agent/harness 高，预测建模与光伏中低。可参考报告数字核验及记忆隔离设计；目前不能认定它具有自动训练预测器或经验证的光伏预测能力。
+- 成熟度：已读取 README、官方目录及部分实现；目录存在 ReAct 引擎、计算工具、质检、记忆和示例数据；ReAct 代码检查必需工具是否已调用，异常工具采用 pandas 规则统计。未安装运行、未测数值正确率或评审有效性，归为早期工程候选。
+
+
 #### [2026-09-09] PallabBiswas3/Time-Series-Diagnostic-Agent — 新增
 
 - 日期与来源：创建 2026-09-09 19:33；最近推送 22:21；[GitHub](https://github.com/PallabBiswas3/Time-Series-Diagnostic-Agent)、[官方元数据](https://api.github.com/repos/PallabBiswas3/Time-Series-Diagnostic-Agent)。
@@ -74,7 +110,7 @@
 
 #### [2026-09-09] Vipluv01/nse-multi-agent-trading — 新增
 
-- 日期与来源：创建 2026-09-09 16:08；最近推送 21:57；[GitHub](https://github.com/Vipluv01/nse-multi-agent-trading)、[官方元数据](https://api.github.com/repos/Vipluv01/nse-multi-agent-trading)。
+- 日期与来源：创建 2026-09-09 16:08；早间最近推送 2026-09-09 21:57，下午元数据推进至 2026-09-10 07:11:35；[GitHub](https://github.com/Vipluv01/nse-multi-agent-trading)、[官方元数据](https://api.github.com/repos/Vipluv01/nse-multi-agent-trading)。
 - 摘要：深度时序预测、LLM 新闻情绪、牛熊辩论与风险组件共享回测流程。README 报告在其样本上多 Agent 未超过买入持有，并描述 purged walk-forward、交易成本、块 bootstrap 和多重比较控制。
 - 相关性：Agent/reasoning/harness 高。最值得借鉴的是逐组件消融和成本后的评测，不应将辩论过程视作有效推理的充分证据。
 - 成熟度：已读 README 并检查目录，确有 agents、LLM 后端、回测统计、数据模块和防前视测试文件；未运行，未审计数据时间可得性、历史成分选择和预注册时间。负面结论为作者报告，仅适用于其测试范围。
@@ -132,8 +168,19 @@ HuggingFace `time-series` 名称检索按创建时间取前 5，未确认比昨�
 
 日期过滤：DailyArXiv 命中的 [A City-Scale Dataset](https://arxiv.org/abs/2605.18782) 与 [Fewer yet critical](https://arxiv.org/abs/2503.06867) 编号显示更早首发，9 月为修订；未进入新研究主列表。旧会议版本与当前窗口的综述引用文献也不作为新条目。
 
-所有性能数字保留作者归属；未安装候选项目、下载模型或复现实验。创建时间不是完整代码首次公开的证明，推送时间不是新功能证据。网页搜索可能有索引延迟，API 关键词和结果上限亦可能漏检。机构博客本轮未单独完成新一轮检索，昨日 IBM 部署动态不重复算新增。
+所有性能数字保留作者归属；未安装候选项目、下载模型或复现实验。创建时间不是完整代码首次公开的证明，推送时间不是新功能证据。网页搜索可能有索引延迟，API 关键词和结果上限亦可能漏检。机构博客早间未单独补检；下午补查 Google Research 与 HuggingFace 博客，命中已报道的 TimesFM-3（8 月 31 日）及 IBM 部署动态（9 月 2 日），未重复计新。
+
+## 7. 下午补检结论与覆盖边界
+
+本节记录本次自动化的独立复核，早间表格保留为早间检索记录。
+
+- **DailyArXiv 已确认有相关论文**：[实时 master README](https://raw.githubusercontent.com/zezhishao/DailyArXiv/master/README.md) 显示 Last update 2026-09-10；实际抽取 Time Series 表格 71 行，最新行日期 9 月 8 日。确认 NOAH、IPM-FM、血糖表示研究、PV-Surgery、ICF-DLM、STQA、Memory、MetaCaster 等；本轮将此前未列入今天晨报的 PV-Surgery、ICF-DLM 补入，MetaCaster 作为持续跟踪补回。SDD 尚不在该表，是独立检索新增。
+- **DailyArXiv 日期不一致或超窗项**：[MetaCaster](https://arxiv.org/abs/2608.23473) 表内 9 月 3 日对应 v2，首发 8 月 24 日，仍在窗口；[MarsTSC](https://arxiv.org/abs/2605.09395) 表内 9 月 5 日对应 v3，首发 5 月 10 日，超窗排除；[城市交通数据集](https://arxiv.org/abs/2605.18782) 表内 9 月 8 日对应 v2，官方历史列 v1 为 5 月 6 日，超窗；[Fewer yet critical](https://arxiv.org/abs/2503.06867) 表内 9 月 8 日为 v2，首发 2025 年 3 月 10 日，超窗。降级仅作日期核查记录，不计新研究。
+- **GitHub**：官方 Search 检索 9 月 9–10 日创建的 time-series agent，返回 6 项；新增中文分析 Agent。另一个 [Maintenance Engineer Copilot](https://github.com/Arishkhan-A/Maintenance-Engineer-Copilot-for-Machine-Failures) 创建于 9 月 10 日 06:50:14，README 宣称完整模型、25 项测试及生产级性能，但官方递归文件树只有 README.md；相关性为工业时序 Agent 高，证据成熟度极低，只作占位项目记录，不采信其运行和性能宣称。同期 automl agent 查询为 0；完整三个月 harness machine-learning 查询返回 132 项，仅查看按更新时间前 6 项，未确认新的直接时序实现，不作平台全量结论。
+- **光伏与光功率**：GitHub photovoltaic forecasting 三个月查询仍返回 52 项，审看前 6；ha-pvstrings 无比早间更晚的推送。另核查 [pv-dimensionality-reduction](https://github.com/Shivam4905/pv-dimensionality-reduction)（创建 7 月 30 日，推送 9 月 10 日）：存在 MATLAB 工具文件，但方法来源与基准证据不足，暂不推荐。论文补检未确认比早间 SolarBench/日前流水线更直接的新预测条目。出版商搜索命中 9 月 8 日双面组件物理与 ML 建模[候选摘要](https://pubs.aip.org/aip/jrse/article-abstract/18/5/056101/3404027/Hybrid-physics-machine-learning-framework-for-cell)，正文访问失败，精确首发未独立复核，日期不确定、降低优先级；不可等同于日前预测。光通信方向的 [S+C+L 光功率多 Agent 优化](https://arxiv.org/abs/2606.05795) 官方首发为 6 月 4 日，超窗排除。
+- **HuggingFace、会议与机构**：定向搜索出现 [SenTSR-Bench](https://arxiv.org/abs/2602.19455)，官方首发 2 月 23 日，不能把聚合页的 Sep 9 当作新发布；IBM PatchTST-FM-r2 已在昨日按模型仓库 8 月 7 日创建记录，不把 9 月媒体转载当新模型。OpenReview、ACL、ICML/PMLR 定向补检未确认新增首发条目，未遍历全部论文集。机构来源参考 [Google TimesFM-3 公告](https://www.research.google/blog/timesfm-3-a-zero-shot-foundation-model-for-multivariate-forecasting/) 和 [HF 博客索引](https://huggingface.co/blog?p=0)。
+- **检索故障与限制**：下午四组 arXiv 官方 API 查询（foundation、agent、reasoning、photovoltaic forecasting）均被远端断开；改用网页搜索、arXiv 官方摘要与版本历史逐项核验，不能声称完成 API 全量覆盖。AI HOT 近七天 time series 精选补检为 0。所有条目仍按所属栏目日期倒序；当天无周报任务。
 
 ## 今日建议
 
-优先检查新诊断项目的证据接口，再参考交易项目如何逐项测量情绪、辩论与风险组件的贡献。光伏实验优先固定滚动验证、目标时点可得天气与 smart persistence 基线；在同一评测协议下再测 Agent 是否带来收益。NOAH 作为多模态时序表示的阅读候选，暂不提升为能源预测主基线。
+优先阅读 SDD 的训练目标及适用假设，再检查中文分析 Agent 与新诊断项目的证据接口，再参考交易项目如何逐项测量情绪、辩论与风险组件的贡献。光伏实验优先固定滚动验证、目标时点可得天气与 smart persistence 基线；在同一评测协议下再测 Agent 是否带来收益。NOAH 作为多模态时序表示的阅读候选，暂不提升为能源预测主基线。
