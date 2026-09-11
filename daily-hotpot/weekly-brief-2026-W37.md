@@ -1,6 +1,6 @@
 # 2026-W37 时间序列研究周报
 
-汇总周期：2026-09-07 至 2026-09-11（周一至周五）；整理日期：2026-09-11，Asia/Shanghai。以本周五份晨报的当前内容（含下午补检）汇总，研究范围收束到 2026-06-11 至本轮检索时点。下文日期为论文首发、官方发布或仓库创建日，并不等同于本周发现日期。结果为公开材料审阅，未复现实验。
+汇总周期：2026-09-07 至 2026-09-11（周一至周五）；整理日期：2026-09-11，含 15:39 CST 下午补检，Asia/Shanghai。以本周五份晨报的当前内容（含下午补检）汇总，研究范围收束到 2026-06-11 至本轮检索时点。下文日期为论文首发、官方发布或仓库创建日，并不等同于本周发现日期。结果为公开材料审阅，未复现实验。
 
 ## 本周结论
 
@@ -49,6 +49,7 @@
 
 | 创建日期与来源 | 摘要 | 相关性与成熟度 |
 |---|---|---|
+| 2026-09-11：[AutoMLOPS-Agent](https://github.com/hegazy20022/AutoMLOPS-Agent) | LightGBM 重训练、时间切分与 LangGraph 部署流程 | MLOps harness 高、时序中；Gemini 为附加审阅，README 部分路径缺失，销量等特征的起报可得性待审计，未运行 |
 | 2026-09-10：[time-series-analysis-agent](https://github.com/wyx53508-cloud/time-series-analysis-agent) | CSV 分析、异常提示、报告评审和持久记忆 | 分析 Agent 高；有代码目录，自动预测训练能力未证实 |
 | 2026-09-09：[Time-Series-Diagnostic-Agent](https://github.com/PallabBiswas3/Time-Series-Diagnostic-Agent) | 诊断工具、外部模型适配和证据验证 | 时序 harness 高；当前确定性路由，非已实现学习型路由 |
 | 2026-09-09：[nse-multi-agent-trading](https://github.com/Vipluv01/nse-multi-agent-trading) | 新闻与时序预测结合，提供回测消融设计 | Agent/reasoning 高；作者报告多 Agent 未胜基线，未独立复现 |
@@ -74,6 +75,7 @@
 
 | 日期与来源 | 本周重点 | 相关性与边界 |
 |---|---|---|
+| 2026-09-10：[可解释 ANN 辐照度预测](https://link.springer.com/article/10.1007/s13369-026-11533-2) | 五城市再分析 GHI、SHAP 选特征与轻量 ANN；日期为期刊正式发布 | 光伏上游高、reasoning 低；80/20 划分时间顺序及起报信息待核实，更早预印本不确定，降低新颖性优先级 |
 | 2026-09-05：[SolarBench](https://arxiv.org/abs/2609.06187) | 跨站点、多图像源和快速波动评测 | 光伏/多模态时序高，Agent 评测中高 |
 | 2026-09-03：[PPO 动态选模](https://www.nature.com/articles/s41598-026-69955-9) | 根据日前气象场景选择模型 | 光伏 AutoML 高；RL 策略不是 LLM reasoning，更早预印本日期不确定 |
 | 2026-09-03：[风光预测综述](https://link.springer.com/article/10.1007/s41060-026-01261-z) | 讨论真实天气输入与决策效用 | 光伏评测高；文献搜索截至 1 月 9 日，不是近三个月新模型目录 |
@@ -90,3 +92,5 @@
 汇总材料：[周一](https://github.com/carolzheng1996-hue/Ts_Agent_reasoning_models/blob/main/daily-hotpot/2026-09-07-morning-brief.md)、[周二](https://github.com/carolzheng1996-hue/Ts_Agent_reasoning_models/blob/main/daily-hotpot/2026-09-08-morning-brief.md)、[周三](https://github.com/carolzheng1996-hue/Ts_Agent_reasoning_models/blob/main/daily-hotpot/2026-09-09-morning-brief.md)、[周四](https://github.com/carolzheng1996-hue/Ts_Agent_reasoning_models/blob/main/daily-hotpot/2026-09-10-morning-brief.md)、[周五](https://github.com/carolzheng1996-hue/Ts_Agent_reasoning_models/blob/main/daily-hotpot/2026-09-11-morning-brief.md)。本地周二已有用户暂存修改，汇总阅读当前文件；此次提交不包含对该文件的修改。
 
 排除首发超窗的 STReasoner、Time-RA、SurF、KairosAgent、CoDaS；不以会议日期、博客日期或 arXiv 修订日期替代首发。周一 ReasonCast 的编号/日期与既往记忆存在冲突，本周未完成独立重核，未带入本周精选。日期不确定的旧代码关联研究、模型权重首次公开日和出版商候选均已降低新颖性优先级。
+
+周五下午补检：DailyArXiv 的完整 Time Series 节共 74 条，最新行仍为 9 月 9 日；确认领域留出评测与 SDD 已纳入。补充排除 Alpha-R1（2025-12-29 首发，9 月 7 日修订），不因修订重算窗口。周五新增的 AutoMLOPS-Agent 与 ANN 辐照度论文已并入相应表格；其余本周重点保持。

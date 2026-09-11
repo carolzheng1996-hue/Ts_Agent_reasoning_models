@@ -1,8 +1,10 @@
 # 2026-09-11 时间序列 Agent / Reasoning / Foundation Model 晨间简报
 
-检索时间：2026-09-11 08:05–09:03 CST（Asia/Shanghai）。三个月窗口：2026-06-11 至检索时点。来源的首发、创建与推送时间以下采用 UTC；只有已实际公开并核验的内容入选。增量基线为 9 月 10 日含下午补检的晨报。“新增发现”不等于今天发布。今天周五，另生成 2026-W37 周报。
+检索时间：2026-09-11 08:05–09:03 CST；下午增量补检至 15:39 CST（Asia/Shanghai）。三个月窗口：2026-06-11 至检索时点。来源的首发、创建与推送时间以下采用 UTC；只有已实际公开并核验的内容入选。增量基线为 9 月 10 日含下午补检的晨报。“新增发现”不等于今天发布。今天周五，另生成 2026-W37 周报。
 
 ## 今日重点
+
+- **下午新增**：9 月 10 日可解释 GHI 预测期刊论文、9 月 11 日 AutoMLOPS-Agent 工程候选；分别注明评测协议待核实和 LLM 仅附加审阅的边界。
 
 - **新增研究：时间留出不等于领域留出**。9 月 9 日论文提出更严格的 TSFM 泛化评测问题；配套 tsfm-bench 仓库可检查逐序列结果。
 - **新增发现 CompEvo**（9 月 3 日）：竞争驱动的多 Agent 新闻预测，直接关联策略多样性与预测反馈。
@@ -70,6 +72,13 @@
 
 ### 4.1 时间序列（含 ML / AutoML / harness）
 
+#### [2026-09-11] hegazy20022/AutoMLOPS-Agent — 下午新增，工程候选
+
+- 日期与来源：GitHub 创建 02:05:45、最近推送 04:06:42 UTC；[仓库](https://github.com/hegazy20022/AutoMLOPS-Agent)、[元数据](https://api.github.com/repos/hegazy20022/AutoMLOPS-Agent)。
+- 摘要：面向营养补充剂销售收入的 LightGBM 流水线，提供 LangGraph 数据检查、漂移、重训练、质量门槛、部署及审阅节点，附 FastAPI 与测试文件。
+- 相关性：ML/MLOps harness 高，时序 Agent 中，显式 reasoning 低。[编排代码](https://github.com/hegazy20022/AutoMLOPS-Agent/blob/HEAD/mlops_agents/graph.py)中 Gemini 是可选附加审阅；[训练工具](https://github.com/hegazy20022/AutoMLOPS-Agent/blob/HEAD/mlops_agents/tools.py)按日期排序后作 80/20 切分，调参验证从训练部分再切出。不是仅有 README 的占位项目。
+- 边界：README 引用的 `src/training/train_model.py`、`src/evaluation/evaluate.py` 未出现在本轮递归文件树，安装说明须复核；预处理除收入目标外保留销量等特征，起报时可得性待审计。时间切分并不自动保证未来收入预测有效，不采信其接近 1 的 R² 为已验证泛化结果。本轮只读代码，未运行。
+
 #### [2026-09-10] wyx53508-cloud/time-series-analysis-agent — 昨日下午已收录
 
 - 日期与来源：创建 04:38:34、最近推送 04:48:06；[仓库](https://github.com/wyx53508-cloud/time-series-analysis-agent)、[官方元数据](https://api.github.com/repos/wyx53508-cloud/time-series-analysis-agent)。
@@ -118,7 +127,14 @@ HuggingFace 名称检索未带来更晚高相关结果；通过官方博客补�
 
 ## 5. 光伏功率预测最新研究
 
-本轮未确认更晚高相关论文首发；工程增量见第 4.2 栏。
+上午未确认更晚高相关论文首发；下午补到下列 9 月 10 日期刊发布。工程增量见第 4.2 栏。
+
+### [2026-09-10] Optimized and Explainable ANN-Based Solar Radiation Forecasting for Arid Climates Using SHAP and LIME — 下午新增
+
+- 日期与来源：[Springer Nature 期刊正文及出版历史](https://link.springer.com/article/10.1007/s13369-026-11533-2)明确 Published / Version of record 为 2026-09-10；2025-12-30 接收不等于公开发表。更早预印本首发不确定，降低新颖性优先级。
+- 摘要：使用五个沙特城市的 2023 年 NASA POWER 小时再分析数据，结合 SHAP 选特征、浅层 ANN 与 LIME 解释，预测提前一小时的 GHI，并报告树莓派部署实验。
+- 相关性：光伏上游辐照度预测高、自动特征选择/轻量工具中高，TSFM 与显式 reasoning 低。SHAP/LIME 是特征归因，不证明模型具备推理能力。
+- 评测边界：正文 4.4 仅说明逐城市 80/20 划分，未在该处明确时间顺序；归一化、选特征是否只用训练期，以及再分析气象输入在起报时是否可得，仍须核实。GHI 不是电站功率，暂作协议审查与轻量基线候选，不以高拟合分数认定实站可部署。未复现。
 
 ### [2026-09-05] SolarBench — 持续跟踪
 
@@ -141,3 +157,12 @@ HuggingFace 名称检索未带来更晚高相关结果；通过官方博客补�
 日期排除：DailyArXiv 的 [SurF](https://arxiv.org/abs/2605.14069) 与 [KairosAgent](https://arxiv.org/abs/2605.30002) 是 5 月首发、9 月修订，不计本窗口新论文；[CoDaS](https://arxiv.org/abs/2604.14615) 亦超窗。官方机构发布单独用发布事件日期，不借博客日期重算旧论文首发。
 
 本轮未运行候选仓库、下载模型权重或复现实验；性能数字均为作者报告。优先下一步：核对 tsfm-bench 留出协议，建立同时包含时间留出、领域/站点留出和计算预算的预测 Agent 对照，再阅读 CompEvo 的策略多样性消融。
+
+## 7. 下午增量补检与 DailyArXiv 结论（15:39 CST）
+
+- **实际增量**：保留上午版本，新增上文 ANN 辐照度论文与 AutoMLOPS-Agent。arXiv foundation/agent/reasoning 和 OpenReview 定向搜索仍命中已收录或旧首发，未确认更晚的高相关新论文；这不是全站无新增的证明。
+- **DailyArXiv 必检**：[GitHub README](https://github.com/zezhishao/DailyArXiv/blob/master/README.md)确认 Last update 2026-09-11；raw 下载在其他后续章节超时，但已获得完整 Time Series 节（74 条，含下一章节边界），并与 GitHub 页面交叉确认。最新行日期 2026-09-09；直接含 [领域留出评测](https://arxiv.org/abs/2609.10357)和 [SDD](https://arxiv.org/abs/2609.09586)，均在窗口内且已在第 1 栏收录，不重复计新。
+- **DailyArXiv 日期冲突降级**：[SurF](https://arxiv.org/abs/2605.14069)首发 2026-05-13、[KairosAgent](https://arxiv.org/abs/2605.30002)首发 2026-05-28，README 日期均为 9 月 9 日修订；[Alpha-R1](https://arxiv.org/abs/2512.23515)首发 2025-12-29，README 的 9 月 7 日是 v2。三者主题相关但首发超窗，退出新研究主列表；不以 EMNLP 接收或修订日重算新颖性。
+- **GitHub 增量**：公开 API 查询今天新建的 time-series agent 返回 0，automl agent 返回 1（已补读 README、递归目录及三份实现文件）。完整三个月 photovoltaic forecasting 搜索共 54 项，按更新取前 5；未确认比上午两项 9 月 10 日工程项目更晚的新创建候选。搜索按词匹配，不代表平台全量。
+- **光功率区分**：补检 optical power prediction/agent；[S+C+L 多 Agent 光功率优化](https://arxiv.org/abs/2606.05795)官方首发 2026-06-04，超窗排除。本轮未确认新的光通信光功率预测论文，不与太阳辐照度混用。
+- **其他来源与限制**：[AI HOT](https://aihot.virxact.com)近七天时序精选查询 0 条。出版商新增证据见第 5 栏；ScienceDirect 搜索出现 9 月卷期候选，但未核实首次在线日期，未升级推荐。会议与 HuggingFace 广覆盖沿用上午检索，本次未重复全量查询。未运行项目或复现实验。
