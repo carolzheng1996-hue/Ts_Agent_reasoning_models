@@ -1,10 +1,12 @@
 # 2026-09-16 时间序列研究晨间简报
 
-检索日期：**2026-09-16，北京时间；来源复核截止 08:41 CST（Asia/Shanghai）**。三个月窗口：**2026-06-16 至检索时点**，含起始日。论文以 arXiv v1 为首发依据，仓库以创建日期为项目日期，推送时间仅表示活动；下文来源日期使用 UTC。
+检索日期：**2026-09-16，北京时间；早版复核截止 08:41 CST；下午增补复核截止 15:35 CST（Asia/Shanghai）**。三个月窗口：**2026-06-16 至检索时点**，含起始日。论文以 arXiv v1 为首发依据，仓库以创建日期为项目日期，推送时间仅表示活动；下文来源日期使用 UTC。
 
 增量基线：9 月 15 日含下午增补的简报（f759999），并全文搜索既有日报去重。今天周三，不触发周五周报。遵循本目录 PROJECT_RULES，保留光伏栏目。
 
 ## 今日重点
+
+- **下午增补**：在已提交早版 f0c31bc 上新增 LongAgent、TimeThink、Horizon-specific Expert Fusion 三篇已核验论文，并将昨日待核验的光伏冷启动预印本升级为日期与摘要已确认。早版下述“新增 5 篇”计数仅指早版；下午另补 3 篇新发现与 1 篇验证升级。
 
 - **新增发现 5 篇已核验论文**，首发集中在 9 月 12–14 日：Tabby、参数高效语言模型适配、MUSE-Bench、CodeTS、T-SMART；不把今日发现写成今日首发。
 - **优先读 CodeTS 与 T-SMART**：前者用执行结果监督时序生成，后者把语言理解、数值计算和感知拆开评测。两者都适合设计可检查中间结果的时序 Agent。
@@ -36,6 +38,13 @@
 
 ## 2. 时间序列建模 Agent 最新研究
 
+### [2026-09-14] LongAgent：利用历史搜索与数值证据选择纵向预测特征 — 下午新增
+
+- 日期与来源：arXiv v1 **2026-09-14 16:51:35 UTC**；[官方摘要及版本历史](https://arxiv.org/abs/2609.15859)。聚合页标注 9 月 15 日，本文以 v1 时间为准；与 2024 年同名长文本 Agent 不同。
+- 摘要：自动搜索变量集合、时间窗口和纵向聚合函数，利用历史搜索记录与数值证据指导下一轮探索。作者报告合成数据上较最强非 Agent 基线有小幅显著改善，真实临床数据上与最强基线相当。
+- 相关性：**时序建模 Agent / 特征搜索 / AutoML 高，reasoning 过程设计中高，通用 TSFM 低**。可借鉴搜索记忆和候选评价接口，但临床结局预测结果不能直接外推到规则采样预测或光伏功率。
+- 核验：官方摘要和首发日期已确认；MICCAI 2026 workshop 接收为作者注释，未独立核验目录、源码或实验。
+
 ### [2026-09-12] T-SMART：将问题理解与数值工具解耦 — 新增发现
 
 - 日期与来源：v1 **2026-09-12 20:45 UTC**；[官方论文与版本历史](https://arxiv.org/abs/2609.14142)。arXiv 注释写明 ICTAI 2026 接收，本轮未独立核验会议接收目录。
@@ -58,7 +67,15 @@
 - 相关性：**可验证时序生成 / reasoning 训练高，Agent 执行反馈高，预测型 TSFM 中**。可借鉴“生成—执行—验证”的训练信号；任务是合成时间序列，不应写成现实未来预测性能突破。
 - 核验：官方摘要与首发日期已确认；未核验开源实现或执行生成代码。代码能运行只验证执行性，语义符合程度仍依赖序列质量评分设计。
 
-T-SMART 的机制归因同样直接相关，详见第 2 栏，不重复计篇数。本轮 reasoning 增量以可执行中间表示和工具贡献评测为主。
+### [2026-09-11] TimeThink：合成组合问答与可验证奖励训练 — 下午新增
+
+- 日期与来源：arXiv v1 **2026-09-11 19:22:05 UTC**；[论文](https://arxiv.org/abs/2609.13457)、[作者代码与 README](https://github.com/sudarshanregmi/TimeThink)。与视频领域同名 TimeThink 不同。
+- 摘要：以趋势、季节性等时序原语构造原子与组合问答，提供真值和推理轨迹，再通过可验证奖励强化学习训练显式推理。作者报告仅使用合成训练数据，在合成及真实问答基准上优于对照。
+- 相关性：**时序 reasoning / RLVR 高，Agent 可检查推理中高，预测型 TSFM 中低**。应重点检查未见组合泛化，而非只看同分布问答准确率；不能把问答收益写成未来数值预测收益。
+- 工程核验：GitHub 页面可见 synth、reward、evaluation、verl、scripts、tests 等目录。README 说明 Qwen3-8B 加时序编码器，先 SFT 后 GRPO，并链接 base/SFT/RL 权重和数据集；评估还使用 LLM judge，不能将所有评分都视为确定性验证。未安装或运行；奖励源码抓取失败，HF 模型卡未能独立打开。
+- 日期限制：仓库创建与权重首次公开日**不确定**，降低“新项目发布”判断的优先级；论文日期已确认。GitHub / HF 与论文合并一项，不重复计数。
+
+T-SMART 的机制归因同样直接相关，详见第 2 栏，不重复计篇数。加入下午增补后，reasoning 增量覆盖可执行中间表示、工具贡献评测和合成组合问答 RLVR。
 
 ## 4. GitHub 和 HuggingFace 上值得跟踪的新项目
 
@@ -83,7 +100,7 @@ T-SMART 的机制归因同样直接相关，详见第 2 栏，不重复计篇数
 - 核验：已读 README、[实现边界](https://github.com/summerming1/finance-forecast-agent/blob/main/docs/CURRENT_IMPLEMENTATION.md)及[划分源码](https://github.com/summerming1/finance-forecast-agent/blob/main/src/finance_forecast_agent/splitters.py)。源码拒绝常见随机划分名称，提供 rolling-origin 和训练测试间隔；未全量审计自定义参数、数据流或运行测试。
 - 相关性：**时序 ML / harness 高，AutoML 评测接口高，实时 LLM Agent / TSFM 低**。ReplayLLM 明确是离线确定性 fixture。适合参考评测边界与实验记录，不能作为已验证自主研究能力或收益证据。
 
-Tabby 官方实现已在第 1 栏合并。本轮 HuggingFace 主要通过 IBM 官方文章与既有模型线索补检，没有全量扫描新权重。
+Tabby 官方实现已在第 1 栏合并，下午发现的 TimeThink 官方仓库与模型线索在第 3 栏合并；其代码首发日期未确认，不计为已验证的新建仓库。本轮 HuggingFace 主要通过 IBM 官方文章与既有模型线索补检，没有全量扫描新权重。
 
 ### 4.2 光伏功率预测
 
@@ -96,13 +113,29 @@ Tabby 官方实现已在第 1 栏合并。本轮 HuggingFace 主要通过 IBM �
 
 ## 5. 光伏功率预测最新研究
 
+### [2026-09-15] Solar Forecasting: Small-Window Performance and Cross-Site Validation — 下午完成验证升级
+
+- 日期与来源：[Preprints.org 原始页面](https://www.preprints.org/manuscript/202609.1122)明确标注 **Submitted 9 月 11 日、Posted 9 月 15 日、v1**。按公开 Posted 日排序；昨日仅有搜索线索，今日可读取官方摘要，仍是未经同行评审的预印本。是否有更早的其他平台版本不确定。
+- 摘要：比较七类预测模型，在罗马尼亚两个 50 kWp 光伏站点采用滚动起点评估。作者报告主站点 boosting 模型归一化 RMSE 为 10.4%，最佳深度模型为 12.9%；小样本优势随历史从一个月增至十二个月而缩小，第二站点模型排名基本复现。
+- 相关性：**光伏冷启动 / AutoML 模型选择高，Agent 工具候选中高，TSFM / 显式 reasoning 低**。适合用作“多少历史数据才值得采用复杂模型”的研究线索；两站点证据不能证明广泛气候迁移。
+- 核验：日期与摘要已确认；工具包和匿名数据公开为作者声明，本轮未独立核验下载、全文划分细节和实现。
+
+### [2026-09-14] Horizon-specific Expert Fusion：按预测步长融合光伏专家 — 下午新增
+
+- 日期与来源：arXiv v1 **2026-09-14 04:52 UTC**；[官方摘要及版本历史](https://arxiv.org/abs/2609.15035)。聚合页 9 月 15 日是列表日期，不用作首发时间。
+- 摘要：融合时序神经模型、历史相似样本、气候状态及梯度提升树，以太阳几何与数值天气预报描述条件，按预测步长学习凸组合权重，再独立校准偏差。在 PVDAQ 15–240 分钟预测上，作者报告相同校准下较 LightGBM 和微调 Chronos-2 降低误差；在 GEFCom2014 三个区域上则与 LightGBM 相当。
+- 相关性：**光伏 / 时序模型路由与融合高，TSFM 对照高，Agent 设计启发中，显式 reasoning 低**。这里的专家是预测模型，不是 LLM 多 Agent；建议关注模型删除消融、校准公平性和分步长收益，而非假设集成普遍获胜。
+- 核验：已读官方摘要和日期，未复现实验或确认代码；天气起报可得性和校准窗口仍需全文审计。
+
 ### [2026-09-10] SolCloudLLM — 持续跟踪
 
 - 日期与来源：v1 **2026-09-10 06:26 UTC**；[官方论文](https://arxiv.org/abs/2609.11135)。
 - 摘要：对齐天空图像与历史序列 patch，经双向融合映射到 LLM 嵌入空间，预测光伏功率与辐照度。作者在 SIRTA 与 SKIPP'D 上报告收益，多模态改善主要集中在多云条件。
-- 相关性：**光伏 / 多模态时序高，Agent 模型工具中高，显式 reasoning 低**。已重核摘要和日期；未复现实验，不计新增。本轮未确认更晚且充分核验的光伏论文首发；昨日待核验预印本线索不升级为正式推荐。
+- 相关性：**光伏 / 多模态时序高，Agent 模型工具中高，显式 reasoning 低**。已重核摘要和日期；未复现实验，不计新增。早版尚无更晚且充分核验的光伏论文；下午已补充上面两项，其中预印本完成日期与摘要验证升级。
 
 ## 6. 检索覆盖与日期过滤
+
+下表保留 **08:41 早版**的检索覆盖；下午实际刷新范围单列在表后，不将早版成功请求误写为本轮成功。
 
 | 来源 | 本轮实际检索 | 结果与限制 |
 |---|---|---|
@@ -114,11 +147,19 @@ Tabby 官方实现已在第 1 栏合并。本轮 HuggingFace 主要通过 IBM �
 | [Google Research](https://research.google/blog/timesfm-3-a-zero-shot-foundation-model-for-multivariate-forecasting/) / [IBM 官方文章](https://huggingface.co/blog/ibm-research/ibm-releases-sota-granite-time-series) | 官方发布定向搜索 | 命中已有 8 月 31 日 TimesFM-3 与 9 月 9 日 IBM r2 文章，不计新。未单独刷新所有模型卡 |
 | [AI HOT](https://aihot.virxact.com) | 最近七天精选搜索 time series | 返回 0 条；仅补充中文线索，不代表三个月研究无新增 |
 
-**去重与排除**：DailyArXiv 中 Nonlinear Probabilistic Forecast Reconciliation 为 2604.26668v2，按 4 月首发编号线索排除主列表，未重新逐版审阅；SDD 2609.09586v2 已在本仓库收录，9 月 14 日修订不重复计新；其他异常检测与变点论文因与本轮 Agent / reasoning / TSFM 主线相对较弱，未扩充主列表。日期无法确认的代码首发明确标注不确定。
+**去重与排除**：DailyArXiv 中 Nonlinear Probabilistic Forecast Reconciliation 为 2604.26668v2，下午重核官方版本历史为 **v1 2026-04-29 / v2 2026-09-14**，首发超窗，降为排除记录，不加入新研究列表；SDD 2609.09586v2 已在本仓库收录，9 月 14 日修订不重复计新；其他异常检测与变点论文因与本轮 Agent / reasoning / TSFM 主线相对较弱，未扩充主列表。日期无法确认的代码首发明确标注不确定。
+
+### 下午 DailyArXiv 补检与检索边界（15:35 CST）
+
+- 完整下载 [master README](https://raw.githubusercontent.com/zezhishao/DailyArXiv/master/README.md)，确认 **Last update 2026-09-16**；提取完整 Time Series 栏及下一标题，仍为 **73 条带日期记录**，最新行日期 **9 月 14 日**。CodeTS、参数高效适配、MUSE-Bench、Tabby、T-SMART 均在栏目内且早版已补充。
+- **LongAgent、TimeThink、Horizon-specific Expert Fusion 均不在当前 Time Series 栏**，本轮经独立 arXiv 检索补入，不能仅凭该聚合栏目判断当天无新增。Nonlinear Probabilistic Forecast Reconciliation 的列表日期是修订日，已按超窗首发排除；SDD 的 9 月 14 日也是修订，保持去重。
+- 下午补检 arXiv 时序 / Agent / reasoning / foundation 与光伏关键词，逐篇读取三篇新增论文的摘要和版本历史；重试 Preprints.org 原始页面成功。AI HOT 最近七天 time series 精选无结果，仅作补充线索。
+- GitHub 四类窗口搜索（time-series agent、automl agent、harness machine-learning、photovoltaic forecasting）及 TimeThink 元数据请求均遇到域名解析失败；通过网页读取 TimeThink 官方 README 和目录成功，但没有新的搜索总数。早版项目条目保留，不宣称下午已完成全量刷新。HF 模型卡和奖励源码补抓失败，仅记录 README 提供的发布线索。
+- OpenReview、ACL、各会议与机构博客覆盖沿用早版结果，下午未重复完整扫描。**光通信光功率预测**本轮未核验新增研究，不能用光伏条目替代该子方向的证据。
 
 ## 7. 接下来优先看什么
 
-1. **先读 T-SMART 与 CodeTS**：分别设计计算工具消融和可执行中间结果评分，区分“说得合理”与“执行正确”。
+1. **先读 TimeThink、T-SMART 与 CodeTS**：分别设计计算工具消融和可执行中间结果评分，区分“说得合理”与“执行正确”。
 2. **用 MUSE-Bench 审视上下文收益**：加入错时与错误上下文对照，再决定是否采用 LLM 修正预测。
 3. **评估 Tabby 的多任务工具价值**：先核验数据、训练配方和资源需求；工程侧可参考金融 harness 的冻结确认窗口，并检查光伏项目天气数据的起报可得性。
 
