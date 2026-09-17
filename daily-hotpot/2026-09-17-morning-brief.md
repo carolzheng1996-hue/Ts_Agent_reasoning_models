@@ -1,10 +1,10 @@
 # 2026-09-17 时间序列研究晨间简报
 
-检索截止：**2026-09-17 09:03 CST（Asia/Shanghai）**。三个月窗口：**2026-06-17 至检索时点**，含起始日。论文日期采用官方 arXiv v1 UTC 日期，并检查更早发表线索；GitHub 采用创建日期，推送日期只代表活动。增量基线为 9 月 16 日含下午增补版（aa4a19b），并搜索既有日报去重。今天周四，不更新周报；按 PROJECT_RULES 保留光伏栏目。
+检索截止：**2026-09-17 15:36 CST（Asia/Shanghai）**；保留 09:03 早版，下午增量补检。三个月窗口：**2026-06-17 至检索时点**，含起始日。论文日期采用官方 arXiv v1 UTC 日期，并检查更早发表线索；GitHub 采用创建日期，推送日期只代表活动。增量基线为 9 月 16 日含下午增补版（aa4a19b），并搜索既有日报去重。今天周四，不更新周报；按 PROJECT_RULES 保留光伏栏目。
 
 ## 今日重点
 
-- **新增发现 4 篇已核验论文**：SOTER、Distributed JEPA、人流预测 TSFM 对照研究，以及临床时序推理的 hindsight bias 基准。首发为 9 月 11–15 日，均不是今日首发。
+- **新增发现 6 篇已核验论文**：WaveTLM、TERN、SOTER、Distributed JEPA、人流预测 TSFM 对照研究，以及临床时序推理的 hindsight bias 基准。首发为 9 月 11–16 日，均不是今日首发。
 - **新增 2 个 GitHub 项目**：FLUX 金融预测系统、AutoML-Agent-Yield 材料建模展示代码。后者的产物校验机制值得研究，但公开版明确无法直接端到端运行。
 - **今日关注评测边界**：领域预训练的收益、传统基线在短历史条件下的竞争力，以及未来信息暴露如何改变推理答案。没有确认比昨日 LongAgent 更新的高相关自主建模 Agent 论文。
 
@@ -33,6 +33,13 @@
 
 ## 2. 时间序列建模 Agent 最新研究
 
+### [2026-09-16] TERN：阶段感知记忆与在线适应 — 下午新增，Agent 工具邻近研究
+
+- 日期与来源：v1 **2026-09-16 10:00:53 UTC**；[官方摘要与版本历史](https://arxiv.org/abs/2609.18407)。
+- 摘要：针对流感周序列，以 delta-rule 快速权重记忆结合通道衰减、学习到的定址擦除、显式季节参考和在线适应，在阶段变化时遗忘过时关联。作者在三个 Cola-GNN 基准上报告优于若干预测对照，并以控制实验考察记忆模块贡献。
+- 相关性：**时序记忆 / 在线适应高，Agent 预测工具与记忆设计启发中高，TSFM / 显式 reasoning 低**。这是领域预测器，不是 LLM 自主建模 Agent，也未证明可直接迁移到光伏；列于此处作为工具设计候选。
+- 核验：摘要和 v1 时间已确认；未核验代码和实验划分，未复现。对 Agent 的借鉴为本简报判断。
+
 ### [2026-09-14] LongAgent — 持续跟踪，非今日新增
 
 - 日期与来源：v1 **2026-09-14**；[LongAgent: History-Guided Agentic Search for Longitudinal Outcome Prediction](https://arxiv.org/abs/2609.15859)。今日重新打开官方页面。
@@ -40,6 +47,13 @@
 - 相关性：**纵向建模 Agent / 特征搜索高，reasoning 过程设计中高，通用 TSFM 低**。今天新增的工程候选见第 4 栏；没有充分证据宣布新的更强自主建模系统。
 
 ## 3. 时间序列 reasoning 模型最新研究
+
+### [2026-09-16] WaveTLM：将时序请求编译为可验证输出 — 下午新增，优先阅读
+
+- 日期与来源：v1 **2026-09-16 15:21:39 UTC**；[官方摘要与历史](https://arxiv.org/abs/2609.18812)、[论文方法正文](https://arxiv.org/html/2609.18812v1)。
+- 摘要：提出 ExecTS-QA，覆盖预测、插补、分类、异常检测和波形分析；任务编译器把自然语言请求、可见参数和时序证据转为带类型的状态，由专用执行器构造数值张量、合法标签或结构化记录。作者报告输出契约有效覆盖率 **99.40%**，所比较的最强字符串优先基线为 **37.83%**。
+- 相关性：**时序语言接口 / Agent 执行契约与评估 harness 高，reasoning 的可执行性高，显式思维链真实性及通用 TSFM 能力未证实**。输出合法率不等于预测准确率；应分别测量形状、通道顺序、时间对齐、尺度和实际误差。
+- 核验：已读官方摘要、日期及方法定义；正文称路由仅使用可见请求，契约参数不包含目标。代码、构造脚本和数据仍写作“发表后公开”，**不计已发布 GitHub / HF 项目**。未复现实验或独立审计训练数据隔离。
 
 ### [2026-09-11] TimeThink — 持续跟踪，非今日新增
 
@@ -98,7 +112,7 @@
 
 | 来源 | 本轮实际范围 | 结果与限制 |
 |---|---|---|
-| [arXiv](https://arxiv.org/) | time series + foundation / agent / reasoning，photovoltaic；新增四篇逐一打开官方摘要和版本历史 | 新增首发 9 月 11–15 日；未确认 9 月 16–17 日高相关首发，不代表不存在，未全量读取 arXiv 增量 |
+| [arXiv](https://arxiv.org/) | time series + foundation / agent / reasoning，photovoltaic；新增四篇逐一打开官方摘要和版本历史 | 早版新增首发 9 月 11–15 日；下午读取 cs.LG 9 月 17 日公告前 50 项，核验 WaveTLM、TERN 的 9 月 16 日 v1；未全量读取 arXiv 增量 |
 | [DailyArXiv](https://github.com/zezhishao/DailyArXiv) | timeseries 分支返回 404，回退默认 README，完整提取 Time Series | Last update 9 月 17 日，76 条带日期行，最新行 9 月 15 日；最新提交 ec46828，UTC 9 月 16 日 19:39:27。聚合日期不是首发证据 |
 | [GitHub Search](https://github.com/search?type=repositories) | created:2026-06-17..2026-09-17，按 updated 排序；time-series agent、timeseries agent、automl agent、harness machine-learning、photovoltaic forecasting 各前 6 项 | 总数依次 155 / 10 / 102 / 132 / 51；人工筛选候选，非 Trending 榜、非全量审计。通用游戏与编码 harness 未因关键词命中纳入主列表 |
 | [OpenReview](https://openreview.net/) / [ACL](https://aclanthology.org/) / [PMLR](https://proceedings.mlr.press/) / [AAAI](https://ojs.aaai.org/) | 官方域名定向检索时序与 2026 年研究 | 多为既有论文及会议版本，未核验到可提升优先级的新增；不把会议出版月重置为首发 |
@@ -110,8 +124,18 @@
 
 本轮未下载权重、安装项目、执行生成代码或复现实验；论文数值均为作者报告，仓库核验限所述 README、目录和源码抽查。原始检索存在覆盖限制，不能将“未确认新增”写成全领域空结果。
 
+### 下午补检记录与 DailyArXiv 结论（15:36 CST）
+
+- 完整下载 [DailyArXiv 默认分支 README](https://raw.githubusercontent.com/zezhishao/DailyArXiv/master/README.md)，确认 `Last update: 2026-09-17`，Time Series 共 **76 条带日期行**，最新行 **9 月 15 日**。其中 **Distributed JEPA、SOTER** 符合本窗口且已在上文收录；WaveTLM、TERN、StableEval 不在该板块，本次独立补检发现。聚合器更新日不能代替论文首发日。
+- 日期冲突降级：[量子 LSTM / Reservoir 对照](https://arxiv.org/abs/2605.02656) README 为 **9 月 15 日**，官方 v1 为 **5 月 4 日**、v2 为 9 月 15 日，排除新研究列表。[交叉公平性论文](https://arxiv.org/abs/2412.00606) README 为 **9 月 15 日 / v2**，本次官方页面仅显示 **2024 年 11 月 30 日 v1**；版本显示也不一致，首发明确超窗，维持排除。
+- 日期不确定候选：[StableEval Arena](https://arxiv.org/abs/2609.18949) 官方页面显示 **2026-08-07 v1**，但编号为 2609 且出现在 9 月 17 日公告；保留页面日期、不自行改成 9 月 16 日。该研究在隐藏七天预测期评估稳定币风险 Agent，兼顾预测、结构化输出、延迟和成本，作者发现罕见严重风险仍常漏报。**Agent 评估 harness 相关性高，TSFM 低；日期不一致，低优先级待核，不计已核验新增论文**。代码和 HF 数据仅有摘要发布声明，本次未核验具体仓库。
+- GitHub 下午重跑窗口内四类检索，按 updated 排序各查看前 3 项元数据：time-series agent **156**、automl agent **103**、harness machine-learning **132**、photovoltaic forecasting **51**。未新增经过源码核验的项目推荐；早版项目保留。推送时间变化不视为功能更新，通用游戏 / 网红评估 harness 未纳入。
+- 光伏补检命中 [全国尺度卫星 PV 预测](https://doi.org/10.1016/j.egyai.2026.100786)（期刊卷期 **2026 年 9 月**，在线首发**不确定**）和 [多站点超短期辐照预测](https://www.sciencedirect.com/science/article/pii/S036054422601594X)（卷期 **2026-09-30**，晚于检索时点，在线首发**不确定**）。前者比较六类卫星 / 物理预测方法，后者利用多站点云移动信息；均与光伏预测相关性高、Agent / reasoning 低。出版商全文访问失败，不能用卷期日期判定首发入窗，均仅作低优先级线索，未加入已核验主列表。
+- AI HOT 最近七天 time series 精选仍为 0。下午另做 OpenReview 定向查询；会议目录、机构博客和 HF 的广度覆盖沿用早版记录，未声称下午重复全量扫描。本次没有新增已验证光伏论文或已发布基础模型，不能据此推断领域无更新。
+
 ## 7. 接下来优先看什么
 
-1. **SOTER 与 Distributed JEPA**：比较领域预训练、跨资产迁移和缺失数据鲁棒性，先检查预训练与评测隔离。
-2. **Hindsight Bias 基准**：给时序 Agent 增加“决策截点前 / 完整时间线”的成对测试，避免未来信息让推理看起来更强。
-3. **AutoML-Agent-Yield 与 FLUX**：前者关注产物契约与失败修订，后者先核验调用方排序和标签时间；两者均需补充实际运行证据。
+1. **WaveTLM**：优先检查输出契约有效率与实际预测质量是否独立改善，跟踪代码与 ExecTS-QA 公开状态。
+2. **SOTER 与 Distributed JEPA**：比较领域预训练、跨资产迁移和缺失数据鲁棒性，先检查预训练与评测隔离。
+3. **Hindsight Bias 基准**：给时序 Agent 增加“决策截点前 / 完整时间线”的成对测试，避免未来信息让推理看起来更强。
+4. **AutoML-Agent-Yield 与 FLUX**：前者关注产物契约与失败修订，后者先核验调用方排序和标签时间；两者均需补充实际运行证据。
