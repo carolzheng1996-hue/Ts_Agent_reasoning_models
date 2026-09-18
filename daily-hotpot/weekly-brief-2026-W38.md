@@ -1,6 +1,6 @@
 # 2026-W38 时间序列研究周报
 
-范围：**2026-09-14 至 2026-09-18（周一至周五）**，汇总各工作日晨报及其中下午增补；整理时间：**2026-09-18 08:46 CST**。研究过滤窗口为 **2026-06-18 至本轮检索时点**。本周“新增发现”指首次进入简报，不等于本周首发；修订、活动更新、实现占位和日期不确定项目分别标注。周报以当日已核验记录为依据，未重新运行全部项目。
+范围：**2026-09-14 至 2026-09-18（周一至周五）**，汇总各工作日晨报及其中下午增补；整理时间：**2026-09-18 15:37 CST**（含周五下午增补）。研究过滤窗口为 **2026-06-18 至本轮检索时点**。本周“新增发现”指首次进入简报，不等于本周首发；修订、活动更新、实现占位和日期不确定项目分别标注。周报以当日已核验记录为依据，未重新运行全部项目。
 
 ## 本周判断
 
@@ -16,6 +16,8 @@
 
 | 首发日期 | 来源 | 简短摘要与相关性判断 |
 |---|---|---|
+| 2026-09-17 | [QUALS](https://arxiv.org/abs/2609.20156) | 按时序模式量化与可学习性调整预训练采样。**TSFM 数据效率高、Agent 预算管理中高**；摘要/首发已核，代码与节省比例未独立验证。周五下午新增。 |
+| 2026-09-17 | [SETTer](https://arxiv.org/abs/2609.20086) | 解耦注意力和混合掩码的单层长时预测模型。**Agent 候选预测器中高、TSFM 对照中**；无大规模预训练证据，不计新 TSFM。周五下午新增。 |
 | 2026-09-16 | [Peak-Aware STLF](https://arxiv.org/abs/2609.18588) | 三种配电网聚合层级分别评估总体和高负荷期误差，Chronos-2 在所测峰值指标领先。**TSFM / Agent 条件选模高，reasoning 低**；不是光伏预测或新模型。周五新增发现。 |
 | 2026-09-15 | [TabPFN-3.5](https://arxiv.org/abs/2609.17895) | 通用表格模型通过季节与日历特征做预测；[附录 C.6](https://arxiv.org/html/2609.17895v1)报告 fev-bench 第六。**基础模型迁移 / AutoML 高，显式 reasoning 低**；Thinking 不使用 LLM，不能视为语言思维链。周五新增发现。 |
 | 2026-09-15 | [Distributed JEPA](https://arxiv.org/abs/2609.17029) | 共享潜在表示支持异质能源迁移及缺失数据任务。**基础表示 / 光伏跨资产迁移高，Agent 工具中高**；通用大规模 TSFM 能力未证实。周四新增发现。 |
@@ -49,6 +51,8 @@
 
 | 创建日期 | 项目 | 摘要、相关性与核验结论 |
 |---|---|---|
+| 2026-09-18 | [DLR / EV / PV Coordination](https://github.com/itodoe4solution-ai/Forecast-Informed-Risk-Aware-Coordination-of-Dynamic-Line-Ratings-with-EV-Charging-and-PV) | 线路容量预测到充电/光伏协调；**光伏决策与时序评估中高、Agent 工具中**。实际树仅 README 与 ZIP，未解压核源码，原始数据不公开；低优先级线索。周五下午新增。 |
+| 2026-09-17 | [agent-reliability-bench](https://github.com/adityaarun2/agent-reliability-bench) | 正确性、证据覆盖、工具轨迹故障分开评价；**Agent harness 高、直接时序低**。有真实 SDK 适配代码，主要检测器验证来自模拟策略；值匹配不保证时间/单位正确。周五下午新增。 |
 | 2026-09-17 | [janavkamesh/agentic-automl](https://github.com/janavkamesh/agentic-automl) | 两阶段 LLM 生成预处理和模型代码；**AutoML / Agent 高、时序中低**。实际调用代码存在，但分类式 CV 提示缺时序约束。周五加入。 |
 | 2026-09-17 | [vishakha2121/ai-energy-optimization-agent](https://github.com/vishakha2121/ai-energy-optimization-agent) | 能源预测与控制概念；**时序 Agent 主题高、实现低**。四个抽查核心文件为 0 字节，脚手架观察，非可用系统。周五加入。 |
 | 2026-09-17 | [NirmalKumar31/aml-evaluation-harness-public](https://github.com/NirmalKumar31/aml-evaluation-harness-public) | 告警预算、时间/账户隔离、条件随机对照；**时序 ML harness / Agent 验收高**。源码有划分断言，历史数据衍生回放包未公开。周五加入。 |
@@ -65,12 +69,13 @@
 | 2026-09-11 | [Jason-TongR/CUMCM2026-Problem-C](https://github.com/Jason-TongR/CUMCM2026-Problem-C) | 光伏/负荷预测、校准与微电网调度；**预测到决策高、Agent 工具中高**。有代码目录，未核验数据边界和收益。周一加入。 |
 | 2026-07-07 | [summerming1/finance-forecast-agent](https://github.com/summerming1/finance-forecast-agent) | 实验合同、滚动验证、冻结最终窗口；**时序 ML / harness 高**。ReplayLLM 是确定性 fixture，非真实自主研究证据。周三加入。 |
 
-**避免重复**：TuiML 的论文是本周新发现，仓库创建于 3 月，不在本表；Tabby / TimeThink 的论文与代码合并，代码公开日不确定；TabPFN-3.5 的 [HF 模型](https://huggingface.co/Prior-Labs/tabpfn_3_5)首发日未核验，与论文合并。已有 ha-pvstrings、Mira、autoPilot 的推送活动不计新项目。上表为 **15 个新增发现的仓库/线索**，包含低优先级占位项，不是 15 个已验证可用系统。
+**避免重复**：TuiML 的论文是本周新发现，仓库创建于 3 月，不在本表；Tabby / TimeThink 的论文与代码合并，代码公开日不确定；TabPFN-3.5 的 [HF 模型](https://huggingface.co/Prior-Labs/tabpfn_3_5)首发日未核验，与论文合并。已有 ha-pvstrings、Mira、autoPilot 的推送活动不计新项目。上表为 **17 个新增发现的仓库/线索**，包含低优先级占位项，不是 17 个已验证可用系统。
 
 ## 4. 光伏研究与工程连接
 
 | 日期 | 来源 | 摘要与相关性 |
 |---|---|---|
+| 2026-09-15 发表 | [天空图像融合短期光伏预测](https://www.sciepublish.com/article/pii/1221) | 光流、ResNet50 与 CNN-BiGRU-Attention 串联预测下一小时功率。**光伏/多模态时序高、Agent 工具中高**；已核出版社日期和摘要，划分与代码未核，更早预印本不确定。周五下午新增。 |
 | 2026-09-15 | [Distributed JEPA](https://arxiv.org/abs/2609.17029) | 光伏未见资产迁移和缺失条件评估；**基础表示高、Agent 工具中高**，与第 1 栏合并计数。 |
 | 2026-09-15 公开 | [Solar Forecasting: Small-Window Performance and Cross-Site Validation](https://www.preprints.org/manuscript/202609.1122) | 短历史与跨站点评估；**光伏/时序评测高、显式 reasoning 低**。周二为待核线索，周三确认 Posted 日期和摘要；更早跨平台版本不确定，未同行评审。 |
 | 2026-09-14 | [Horizon-specific Expert Fusion](https://arxiv.org/abs/2609.15035) | 按预测步长融合光伏专家；**Agent 按步长选模与光伏预测高**，不是显式推理模型。周三下午新增。 |
@@ -89,3 +94,5 @@
 本周依靠 arXiv 官方日期与摘要、DailyArXiv、会议官网定向搜索、机构博客、GitHub 元数据和源码抽查。聚合器存在延迟，GitHub 搜索只检查各组前若干项；未全量扫描所有会议、HF 或 arXiv。StableEval Arena 的编号与页面日期冲突仍未解决，未纳入已核验精选；出版商 9 月卷期不等于在线首发。
 
 周报全部模型结果和仓库运行声明来自对应来源，不代表本轮复现。下周优先完成 TuiML 的最小时间隔离实验、WaveTLM 代码状态跟踪，以及在同一滚动协议下比较原生 TSFM、表格化时序和朴素基线。
+
+周五下午补检：DailyArXiv GitHub README 已更新至 9 月 18 日，Time Series 确认既有 WaveTLM、TuiML、TabPFN 等；QUALS / SETTer 未匹配，来自独立 arXiv 公告。raw 网页缓存仍为 5 月 29 日，已排除。2609.20193 的官方 v1 写 7 月 29 日，与编号和 9 月公告不一致，和 StableEval 一并降级，不计日期已核验新增。光伏 SCIFORUM 9 月 16 日线索详情读取失败，暂不提升。下周增加 QUALS 同预算采样与 Agent 证据覆盖核查的阅读优先级。
