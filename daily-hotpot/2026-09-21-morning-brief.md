@@ -1,114 +1,154 @@
 # 2026-09-21 时间序列研究晨间简报
 
-检索截止：**2026-09-21 10:55 CST（Asia/Shanghai）**。筛选窗口：**2026-06-21 至检索时点**，含起始日；论文按官方 v1 日期，GitHub 新项目按创建日期，原始时间为 UTC。增量基线为 9 月 19 日晨报（803f7d4），并检索历史简报去重。今天周一，不更新周报。
+检索截止：**2026-09-21 10:57 CST（Asia/Shanghai）**。滚动窗口：**2026-06-21 至检索时点**，含起始日。运行期间系统日期由 9 月 20 日更新为 9 月 21 日，按实际执行日期命名。论文按已核验的 arXiv v1 / 出版商在线发表日排序；尚不能排除更早公开版本的条目另行说明。项目按创建日期排序，原始时间为 UTC。增量基线：9 月 19 日晨报及历史文件，仓库 HEAD 为 803f7d4。今天周一，不更新周报。
 
 ## 今日重点
 
-- **新增收录 4 篇论文、2 个 GitHub 项目**，均在三个月窗口内；新增收录不代表今天首发。其中 2 篇属于基础模型预训练与迁移评测，另 2 篇为生成与预测工具层的相邻研究。
-- **优先看 FreqCondNorm 与 BrainWideBench**：前者尝试跨采样频率迁移，但没有改善剩余寿命预测；后者显示预训练收益取决于下游任务。避免把单项成绩解释为通用时序能力。
-- **工程重点是 KDAgent 和 VIPER**：前者有工业时序证据与知识检索的双分支实现，后者记录实验计划与产物。KDAgent 源码存在 RAG 首因回退，不能照搬 README 中“知识分支只补充后四名”的绝对表述。
-- 本轮未确认比 TuiML、WaveTLM 更晚且直接相关的建模 Agent / 显式 reasoning 新论文。两条主线保留为持续跟踪，不重复计新增。
+- **新增收录 10 项研究，另将 1 项光伏会议摘要从待核线索升级为日期已确认**；新增跟踪 3 个 GitHub 候选，其中光伏项目仅确认研究协议，尚未确认完整实现。这里的“新增”指本报首次收录，不代表今天首发。
+- **基础模型**：优先看 FreqCondNorm 的跨采样频率迁移及其剩余寿命预测负结果；BrainWideBench 同样提示预训练收益取决于下游任务，不能用一个任务的提升代表通用能力。
+- **Agent / harness**：KDAgent 有双分支根因候选融合代码，VIPER 有保存实验计划和执行证据的示例。结构校验通过、实验可追溯、推理正确和预测有效，应分别验收。
+- **光伏**：补充短期混合模型、离网光伏 10 分钟预测、日前 stacking 摘要。均需继续核查滚动验证、天气可得性和持久性基线，不直接采信论文摘要中的“优于”结论。
 
 ## 1. 时间序列基础模型最新研究
 
-### [2026-09-18] BrainWideBench — 新增，跨个体迁移评测
+### [2026-09-18] BrainWideBench — 新增，领域基础模型评测
 
-- **日期与来源**：v1 **2026-09-18 17:54:32 UTC**；[arXiv 官方论文](https://arxiv.org/abs/2609.22064)。9 月 21 日公告不等于首发日期。
-- **摘要**：基于 139 只小鼠、276 个脑区的神经与行为记录，建立行为解码、遮蔽或未来神经活动预测、解剖组织恢复三个任务组，比较微调与未见动物零样本迁移。作者发现预训练优于匹配的单会话基线，但没有一个方法在全部任务组上均领先。
-- **相关性**：**领域时序基础模型 / 迁移评测高，Agent 实验 harness 中高，显式 reasoning 低**。可借鉴主体留出与多任务验收，不能外推成通用预测模型榜单。
-- **核验边界**：已读官方摘要与版本历史；未审核分割清单或复现实验。小鼠神经信号上的结果不直接代表工业或光伏数据收益。
+- **日期 / 来源**：arXiv v1 **17:54:32 UTC**；[原文与版本历史](https://arxiv.org/abs/2609.22064)。
+- **摘要**：利用 139 只小鼠、276 个脑区的神经及行为记录，统一比较行为解码、遮蔽或未来活动预测、解剖结构恢复。预训练整体有益，但没有单一方案在所有任务上占优。
+- **相关性**：**领域时序基础模型评测高，Agent 选模 / harness 中高，光伏和显式 reasoning 低**。值得借鉴跨主体留出与多任务验收，不能据此声称通用时序预测已获突破。仅核摘要和日期，未核全部数据划分或运行评测。
 
-### [2026-09-17] FreqCondNorm — 新增，跨频率工业预训练
+### [2026-09-18] Spectrally aligned latent flow matching — 新增，合成数据方向
 
-- **日期与来源**：v1 **2026-09-17 15:07:43 UTC**；[arXiv 官方论文](https://arxiv.org/abs/2609.20535)。
-- **摘要**：用 FiLM 式频率条件归一化统一不同采样频率的工业时序，结合掩码自编码、对比学习和均衡域采样，在五个维护数据集上预训练。作者报告故障诊断与跨频率迁移收益，同时明确**没有改善剩余使用寿命（RUL）预测**。
-- **相关性**：**工业 TSFM / 跨域表征高，Agent 模型选择中高，显式 reasoning 低**。值得研究是否需要按故障分类与寿命回归分别选择预训练目标。
-- **核验边界**：摘要同时列 MFPT 为预训练数据集、报告其零样本准确率；“零样本”的具体留出单位和预训练可见范围需读完整协议核实，本轮不直接称其为未见数据集泛化。未确认可运行官方代码或权重。
+- **日期 / 来源**：arXiv v1 **16:49:46 UTC**；[原文](https://arxiv.org/abs/2609.21989)。
+- **摘要**：针对潜空间压缩导致合成序列频谱失配的问题，使用傅里叶、小波与 signature 变换相关的微调损失，使生成数据保留局部结构、平滑性和目标频谱。
+- **相关性**：**TSFM 预训练数据中高，Agent 数据增强工具中高，直接 reasoning 低**。这是生成方法，并非已验证的通用预测基础模型；生成逼真度不等于下游预测增益，尤其应单独验证光伏日周期与爬坡事件。未复现。
+
+### [2026-09-17] FreqCondNorm — DailyArXiv 新补充，优先阅读
+
+- **日期 / 来源**：arXiv v1 **15:07:43 UTC**；[原文](https://arxiv.org/abs/2609.20535)。
+- **摘要**：在 Transformer 中加入频率条件归一化，结合掩码自编码、对比学习和均衡域采样，在五个预测性维护数据集上预训练，以处理不同机器和大幅不同采样率的信号。摘要报告故障诊断迁移收益，但**未改善剩余寿命预测**。
+- **相关性**：**工业 TSFM 高，时序 Agent 工具选择中高，光伏设备诊断潜在相关、功率预测尚无直接证据**。不能把诊断精度推广为预测或寿命估计能力；未独立核验其零样本划分和模型发布状态。
+
+### [2026-09-17] CoRe — 新增，基础模型适配相关方法
+
+- **日期 / 来源**：arXiv v1 **04:15:11 UTC**；[原文](https://arxiv.org/abs/2609.19670)，作者注明 ICONIP 2026 接收，会议更早公开版本日期不确定。
+- **摘要**：通过频谱一致性和低秩关系图损失约束多变量未来轨迹；不增加可训练参数，只修改现有预测骨干的训练目标。
+- **相关性**：**时序模型训练 / Agent 自动损失选择中高，TSFM 适配中，显式 reasoning 低**。这是损失设计而非新基础模型。多电站光伏的相关结构可作为迁移假设，但需要训练集内拟合变换、跨站留出及额外计算预算审计。
 
 ## 2. 时间序列建模 Agent 最新研究
 
-### [2026-09-16] TuiML: Machine Learning for AI Agents — 持续跟踪
+### [2026-09-18] AutoRecLab — 新增，相邻 AutoML 研究
 
-- **日期与来源**：v1 **2026-09-16 01:14:25 UTC**；[论文](https://arxiv.org/abs/2609.17984)、[官方文档](https://tuiml.ai/)、[代码](https://github.com/tuiml/tuiml)。
-- **摘要**：通过机器可读元数据和参数模式，让 Agent 发现、组合和验证 ML 组件；统一 MCP、Python、CLI 等入口，并记录种子、调用轨迹和实验会话。
-- **相关性**：**时序建模 Agent / AutoML 工具层高，harness 高，TSFM 本体低**。关注组件发现、运行前验证和实验状态保存。
-- **核验边界**：本轮重核摘要与 v1，无新实验或代码发布证据；仓库创建早于窗口，不计新项目。可追踪调用仍需配合独立的时间划分与数据可得性检查。
+- **日期 / 来源**：arXiv v1 **14:54:44 UTC**；[原文](https://arxiv.org/abs/2609.21863)。作者注明 RecSys 2026 Demo 接收；会议在线首发是否更早**不确定**，按已核 arXiv 日期记录，优先级中。
+- **摘要**：从自然语言实验要求构造并验证原型，再用文档检索、静态类型校验和执行反馈驱动的树搜索扩展实验。作者在推荐系统小规模基线比较中报告 9 次运行成功 8 次。
+- **相关性**：**ML Agent / AutoML / harness 高，直接时间序列中低**。可参考需求到可执行实验的闭环，但没有据此确认时序滚动划分、防泄漏或预测收益；未将推荐实验成功率外推到时序任务。
 
-### [2026-09-18 / 2026-09-17] 可供 Agent 调用的相邻研究 — 新增两篇
+### [2026-09-17] A Lightweight Plug-in Gate for Transformer-Based Time-Series Forecasters — 新增，Agent 候选工具
 
-| 首发日期与来源 | 摘要 | 与本任务的相关性及边界 |
-|---|---|---|
-| **2026-09-18 16:49:46 UTC**：[Time series generation with spectrally aligned latent flow matching](https://arxiv.org/abs/2609.21989) | 以 Fourier、小波及 signature 变换相关损失微调潜在流生成模型，减少压缩导致的频谱失配，保留局部结构与动态性质。 | **Agent 合成数据工具中高、TSFM 数据构造中、显式 reasoning 低**。这是生成研究；摘要的真实性与效率指标不等于下游预测增益，也未证明通用基础模型能力。 |
-| **2026-09-17 20:04:01 UTC**：[A Lightweight Plug-in Gate for Transformer-Based Time-Series Forecasters](https://arxiv.org/abs/2609.21044) | 在编码器前给协变量表示施加轻量 sigmoid 门控；沿用 TimeXer、iTransformer、PatchTST 的基线配置，检验使用惩罚、位置和初始化。 | **Agent 协变量选择 / AutoML 消融中高、TSFM 适配中、reasoning 低**。作者称误差与基线相当、使用惩罚降低平均准入分数；不是已证明全面超越基线。 |
+- **日期 / 来源**：arXiv v1 **20:04:01 UTC**；[原文](https://arxiv.org/abs/2609.21044)。
+- **摘要**：在编码器前对协变量表示施加轻量 sigmoid 门控，另测试使用量正则。将模块接入 TimeXer、iTransformer、PatchTST，沿用原基线设置，测试额外调参预算为零的比较。
+- **相关性**：**时序 AutoML / 协变量选择中高，光伏天气输入筛选潜在相关，Agent 本体和显式 reasoning 低**。门控对象是表示单元，不能直接当作原始变量的因果重要性；作者只称竞争性表现，不宜写成全面超越基线。
 
-两篇均核验官方摘要和 v1 日期；未审查训练代码或运行实验。不将常规门控或数据生成归类为自主建模 Agent。
+### [2026-09-16] TuiML — 持续跟踪
+
+- **日期 / 来源**：arXiv v1 **01:14:25 UTC**；[原文](https://arxiv.org/abs/2609.17984)、[官方项目](https://tuiml.ai/)。
+- **摘要**：以机器可读元数据、参数模式、调用轨迹和实验状态支持 Agent 发现与组合 ML 工具，提供 MCP、Python、CLI 等接口。
+- **相关性**：**时序 Agent / AutoML 工具层与 harness 高，TSFM 本体低**。本轮重核摘要，没有确认新的代码或模型发布，不重复计新增。
 
 ## 3. 时间序列 reasoning 模型最新研究
 
-### [2026-09-16] WaveTLM — 持续跟踪，可执行输出契约
+本轮未确认比已跟踪 WaveTLM 更晚、直接面向通用时序显式 reasoning 的新模型；以下两项新增为可支持推理的统计或物理方法，不混称为 LLM reasoning 模型。
 
-- **日期与来源**：v1 **2026-09-16 15:21:39 UTC**；[官方论文](https://arxiv.org/abs/2609.18812)。
-- **摘要**：将用户请求和时序证据编译为带类型任务状态，由专用执行器生成数值序列、合法标签或结构化记录，覆盖预测、插补、分类、异常与波形任务。
-- **相关性**：**工具执行 / 输出验证 / Agent 高，显式 reasoning 相关性中高，TSFM 中**。适合分别考察时间对齐、形状合法性和数值质量。
-- **核验边界**：官方摘要仍写代码、构造脚本和 ExecTS-QA 将在发表后公开，本轮未确认新发布。契约通过率不能替代预测准确率或因果推理正确性。
+### [2026-09-17] Conditional Independence Testing in Time Series — DailyArXiv 新补充
+
+- **日期 / 来源**：arXiv v1 **17:46:50 UTC**；[原文](https://arxiv.org/abs/2609.20772)。
+- **摘要**：提出 Generalised Temporal Covariance Measure，对结果与暴露分别进行非线性历史回归，再由残差协方差构造检验；结合方差权重和滞后展开，处理时序条件独立性问题。
+- **相关性**：**Agent 假设检验工具 / 因果 reasoning 证据层中高，TSFM 本体低**。Granger 条件独立性检验不能脱离混杂、回归收敛率及依赖假设解释为干预因果。论文关于特定假设下不拆分数据的结论，也不意味着预测评测可以复用测试集。
+
+### [2026-09-17] Physical knowledge on historical data matters more than enforcing physical constraints on the forecast — DailyArXiv 新补充
+
+- **日期 / 来源**：arXiv v1 **08:23:08 UTC**；[原文](https://arxiv.org/abs/2609.19871)。
+- **摘要**：PIRNN 同时估计历史和未来的不可观测物理变量，并以地下水模型方程约束建模；12 个真实数据集上有 5 个优于比较模型，另有消融和专家一致性评估。
+- **相关性**：**物理辅助时序建模高，Agent 可解释证据中，显式语言 reasoning 低**。对光伏潜在状态估计具有方法启发，但该研究对象是地下水，尚无光伏迁移实验；不将物理一致性等同于推理正确性。
+
+### [2026-09-16] WaveTLM — 持续跟踪
+
+- **日期 / 来源**：arXiv v1 **15:21:39 UTC**；[原文](https://arxiv.org/abs/2609.18812)。
+- **摘要**：将自然语言任务编译为带类型的状态，再由任务执行器生成数值张量、合法标签或结构化记录；ExecTS-QA 覆盖预测、插补、分类、异常等任务。
+- **相关性**：**可执行时序 reasoning / Agent 输出验证高**。契约可靠性与预测质量需要分开评价；本次未确认新代码发布。
 
 ## 4. GitHub 和 HuggingFace 上值得跟踪的新项目
 
 ### 4.1 时间序列（Agent、harness、machine learning、AutoML）
 
-#### [2026-09-18] HFJ0624/KDAgent — 新增，工业时序根因分析
+#### [2026-09-18] HFJ0624/KDAgent — 新增，有根因候选融合代码
 
-- **日期与来源**：创建 **2026-09-18 06:29:36 UTC**，最近推送 **2026-09-20 12:07:51 UTC**；[仓库](https://github.com/HFJ0624/KDAgent)、[README](https://raw.githubusercontent.com/HFJ0624/KDAgent/HEAD/README.md)、[带日期的检索元数据](https://api.github.com/search/repositories?q=repo%3AHFJ0624%2FKDAgent)。
-- **摘要**：基于上游 Top-10 候选和窗口时序证据比较直接提示、RAG、自我修正与双分支融合；记录原始响应、候选命中和诊断指标，提供统一 LLM API 客户端。
-- **相关性**：**时序 Agent / reasoning 工程 / 评测 harness 高，预测 AutoML 中低，TSFM 本体低**。它执行根因候选重排，不是端到端训练新的预测器。论文首发日期**不确定**，只按代码项目收录。
-- **源码核验**：[融合实现](https://github.com/HFJ0624/KDAgent/blob/HEAD/src/dual_branch_fusion_agent.py)使用 `primary = evidence_primary or rag_primary`；当数据分支没有合法首因时，会采用知识分支首因，并标记 `dual_branch_rag_fallback`。因此 README 所说“知识分支只补充 2–5 名”有回退例外。
-- **限制**：[验证器](https://github.com/HFJ0624/KDAgent/blob/HEAD/src/response_validator.py)检查候选范围、置信度数值、四步结构与解释字段，不能据此断言根因正确。上游候选召回、完整数据无泄漏和报告分数未独立验证；未运行或调用外部模型。
+- **日期 / 来源**：创建 **06:29:36 UTC**，最近推送 **2026-09-20 12:07:51 UTC**；[仓库](https://github.com/HFJ0624/KDAgent)、[元数据](https://api.github.com/repos/HFJ0624/KDAgent)。论文首发日期**不确定**，仅计仓库。
+- **摘要**：以工业时序证据和 Top-10 根因候选为输入，比较普通提示、RAG、自我修订与双分支融合，保存原始回复、解析结果及指标。README 主要围绕 SWaT；仓库描述提及 WADI，本轮未核验 WADI 实验。
+- **相关性**：**时序分析 Agent / reasoning harness 高，直接预测 / TSFM 低**。适合研究候选重排序和证据审计，不能视为自由发现根因的通用系统。
+- **源码核验**：[融合器](https://github.com/HFJ0624/KDAgent/blob/main/src/dual_branch_fusion_agent.py)优先采用数据分支主因，但数据分支无合法主因时会回退 RAG；其融合 `validation_passed` 取决于是否得到主因与候选，并非完整重做验证。[验证器](https://github.com/HFJ0624/KDAgent/blob/main/src/response_validator.py)检查候选集合、置信度范围、四步结构及解释非空，没有核对数值证据是否与原始时序一致。故“无集合外变量”不等于“无幻觉 / 因果正确”。未执行外部项目，也未全面审计标签隔离。
 
-#### [2026-08-27] pvd232/viper — 新增发现，ML 实验 harness
+#### [2026-08-27] pvd232/viper — 新增发现，实验可追溯 harness
 
-- **日期与来源**：创建 **2026-08-27 01:32:24 UTC**，推送 **2026-09-19 15:47:23 UTC**；[仓库](https://github.com/pvd232/viper)、[README](https://raw.githubusercontent.com/pvd232/viper/HEAD/README.md)、[检索元数据](https://api.github.com/search/repositories?q=repo%3Apvd232%2Fviper)。
-- **摘要**：以保存的实验计划组织阶段、变体与种子，记录源码提交、输入、环境、指标和产物；支持恢复、比较以及 CLI / MCP 查询。
-- **相关性**：**ML Agent / AutoML 实验可追溯性高，时序 harness 方法迁移中高，直接 TSFM / reasoning 模型低**。适合承载固定时间划分和同预算实验，但这些协议需要研究者另行定义。
-- **核验边界**：读 README 和[工作机制文档](https://github.com/pvd232/viper/blob/HEAD/docs/explanation/how-viper-works.md)，确认文档示例显式定义 MSE 最小化、输入角色和种子；尚未审计底层校验实现或运行 quickstart。产物哈希一致不能自动证明没有时间泄漏。
-
-**已知项目活动，不计新增**：`janavkamesh/agentic-automl`（创建 **2026-09-17**，[仓库](https://github.com/janavkamesh/agentic-automl)）推送刷新至 **9 月 20 日 18:06:42 UTC**，仍为通用 AutoML 代码生成候选，**Agent 高、直接时序中低**；`tiny-model-lab`（创建 **2026-09-18**，[仓库](https://github.com/melissa-pereira-deel/tiny-model-lab)）推送至 **9 月 20 日 21:17:32 UTC**，**预算 / 基线 harness 高、时序迁移中**。本轮仅复核元数据，不将 push 时间视为功能进展，也不声称旧版问题已修复。
+- **日期 / 来源**：创建 **01:32:24 UTC**，最近推送 **2026-09-19 15:47:23 UTC**；[仓库](https://github.com/pvd232/viper)、[元数据](https://api.github.com/repos/pvd232/viper)。
+- **摘要**：先声明实验与不可变计划，再运行并保存执行证据；README 介绍文件哈希核验、恢复、运行比较和 CLI / MCP 查询。
+- **相关性**：**ML Agent / harness 高，时序实验管理中高，直接 TSFM / reasoning 模型低**。可将数据、代码版本和运行产物纳入研究记录。
+- **核验边界**：读 README 与实际 [CPU 示例](https://github.com/pvd232/viper/blob/main/examples/cpu_quickstart.py)，确认种子、训练阶段、MSE 最小化目标、计划执行和恢复状态接口；示例是简单训练任务，不证明时序泄漏自动检查。未深入核验核心哈希实现或运行结果，README 的可复现承诺保留为作者说明。
 
 ### 4.2 光伏功率预测
 
-- **[2026-09-18] MDG-Mamba，已知项目活动**：[官方代码](https://github.com/Yingcode-Lab/MDG-Mamba)，创建 **15:36:06 UTC**，推送更新至 **2026-09-20 02:43:56 UTC**。仓库描述采用梯度增强、宏微分解与多频建模；**光伏时序预测高、Agent 候选模型中、TSFM / reasoning 低**。本轮只复核元数据，9 月 19 日源码抽查不等于本轮差分验证；论文发表日期仍**不确定**。
-- **[2026-09-21] Italo-1/05-mev-P3，低优先级占位线索**：[仓库](https://github.com/Italo-1/05-mev-P3)，创建 **02:09:21 UTC**。描述称比较赤道与中纬度光伏的七个预测模型；**光伏评测主题高、Agent / TSFM 关联未证实**。搜索返回仓库大小为 0，未确认可用实现，不计入新增有实现项目。
+#### [2026-09-21] Italo-1/05-mev-P3 — 新建仓库，研究协议候选，降低优先级
 
-HuggingFace 补检命中已有 Tabby、IBM PatchTST-FM-r2；未确认应独立计数的新模型或权重发布，与论文及官方项目合并处理。
+- **日期 / 来源**：创建 **02:09:21 UTC**，推送 **02:09:30 UTC**；[仓库](https://github.com/Italo-1/05-mev-P3)、[元数据](https://api.github.com/repos/Italo-1/05-mev-P3)、[README](https://github.com/Italo-1/05-mev-P3/blob/main/README.md)。
+- **摘要**：计划比较持久性、ARIMA、Prophet、RF、XGBoost、LSTM 和 Transformer，在赤道与中纬度光伏序列上做 1/6/24 小时预测，强调滚动验证与相对持久性的 skill score。数据说明区分 PVGIS 模拟量与 OPSD 实测量。
+- **相关性**：**光伏评测高，Agent 自动选模 / harness 中高，显式 reasoning 低**。可参考协议设计；不能混合模拟与实测数据后声称跨区域真实部署验证。
+- **日期与实现边界**：README 标注 8 月 29 日开始，又含 8 月 20 日起的日志；这些内部记录早于仓库创建，不作为已发表论文证据。README 所列实验脚本在仓库根路径本次未取得，完整树查询又受限，故**代码可用性及论文发表日期不确定**，不将协议或日志中的结果写成已复现结论。
+
+去重与活动记录：[janavkamesh/agentic-automl](https://github.com/janavkamesh/agentic-automl)创建于 **9 月 17 日**、9 月 20 日推送，AutoML 相关性高，9 月 18 日已收录；[MDG-Mamba](https://github.com/Yingcode-Lab/MDG-Mamba)创建于 **9 月 18 日**、9 月 20 日推送，光伏相关性高，9 月 19 日已审查。两者本次只确认活动，不声明新增功能。HF 定向检索未确认新的独立模型发布，不将 GitHub 同项目重复计数。
 
 ## 5. 光伏功率预测最新研究
 
-### [2026-09-15] 天空图像与 CNN-BiGRU-Attention 短期光伏预测 — 持续跟踪
+### [2026-09-17] IWOA-TCN-BiGRU-MATT — 新增期刊论文
 
-- **日期与来源**：出版社明确 **Published: 15 September 2026**；[官方全文页](https://www.sciepublish.com/article/pii/1221)，DOI 10.70322/sesr.2026.10012。更早预印本未确认。
-- **摘要**：光流刻画云运动，ResNet50 估计辐照，将预测辐照、天气与历史功率输入经贝叶斯优化的 CNN-BiGRU-Attention，预测下一小时功率。
-- **相关性**：**多模态光伏预测高，Agent 可调用流水线中高，TSFM / 显式 reasoning 低**。优先检查图像、气象及标签在起报时点的可得性。
-- **核验边界**：本轮重新检出出版社日期与摘要，9 月 18 日已收录，不重复计新增。未复现实验，不据单站拟合指标推断跨站点泛化。
+- **日期 / 来源**：出版商明确 **Published online 17 September 2026**；[官方页面](https://www.techscience.com/CMES/online/detail/28334)，DOI 10.32604/cmes.2026.081823。更早预印本日期不确定，当前按在线发表日纳入。
+- **摘要**：用改进鲸鱼优化调节 TCN、双向 GRU 与多头注意力混合模型，在华中某光伏电站数据上比较不同天气条件下的短期预测。
+- **相关性**：**光伏预测高，Agent 自动调参候选中，TSFM / 显式 reasoning 低**。只核摘要与在线日期；需要检查调参预算公平性、持久性和强树模型对照，以及输入窗口是否始终早于预测起点，不能仅凭双向结构名称判定泄漏。
 
-其他搜索结果含 9 月卷期论文，未将卷期日期当在线首发。例如天气模式专家应对漂移的工作仅确认卷期，未核在线日期，未进入已确认新增清单。
+### [2026-09-16] Photovoltaic Power Forecasting and Performance Assessment for Off-Grid Systems — 新增期刊论文
 
-## 6. DailyArXiv 补检与日期过滤
+- **日期 / 来源**：官方页面标注 **16 September 2026**；[Solar 原文](https://www.mdpi.com/2673-9941/6/5/60)，DOI 10.3390/solar6050060。更早公开版本不确定。
+- **摘要**：使用离网光伏储能系统一年、5 分钟间隔的运营数据，以多变量 LSTM 做提前 10 分钟功率预测，输入包含历史功率、辐照、负荷和电池电流电压；摘要报告日间 R² 为 0.728。
+- **相关性**：**光伏功率预测高，预测到能量管理的 Agent 工具中，TSFM / reasoning 低**。电池 SOC 的运行统计不是预测改善调度收益的对照试验证据。出版商正文直读失败，已通过官方域名索引取得日期与摘要；未核完整时间划分，证据强度低于全文审查。
 
-读取 [DailyArXiv 官方仓库](https://github.com/zezhishao/DailyArXiv)和 [master 原始 README](https://raw.githubusercontent.com/zezhishao/DailyArXiv/master/README.md)：**Last update 为 2026-09-21，Time Series 共 71 条，最新行日期 9 月 17 日**。已完整提取该小节用于发现线索；正文结论回到原论文核验。
+### [2026-09-16] TCN–XGBoost–LSTM Stacking — 既有线索升级为日期已确认
 
-- 新补出 **FreqCondNorm**；QUALS、WaveTLM、TuiML 已知，不重计。今天独立 arXiv 公告还补出 9 月 18 日的生成论文、BrainWideBench，以及 9 月 17 日晚的协变量门控研究。
-- **日期过滤**：小节中的 2505.17640v3、2604.26668v3 首发编号已在窗口之前，不因 9 月修订重新计作近三个月新研究。Post-Training 的修订也不作为新论文。
-- `timeseries` 分支及最新提交 API 受到访问限流，本轮不能确认分支状态、最新提交哈希和时间；已回退公开 master README，不把失败解释为分支不存在。
+- **日期 / 来源**：官方页面 **Published date 16 Sep, 2026**；[会议摘要与海报页](https://sciforum.net/paper/33668)。9 月 21–22 日是会议举办日期，不作为论文首发日；尚未确认更早版本。
+- **摘要**：由 TCN 和 XGBoost 提取时序及非线性信息，再以 LSTM 元学习器组合输入及基础预测；使用 15 分钟数据开展日前光伏预测。
+- **相关性**：**光伏预测 / Agent 集成选择高，TSFM / 显式 reasoning 低**。9 月 18 日详情读取失败，本次已核到原页日期与摘要。仅为会议摘要级证据；需检查元学习器是否只用训练折外预测、气象输入是否在起报时可得，不直接以其摘要误差跨数据集排名。
 
-## 7. 检索覆盖、限制与下一步
+**光通信光功率补检**：本轮未确认窗口内新的直接预测成果。[多 Agent 光功率优化](https://arxiv.org/abs/2606.05795)为 **6 月 4 日**首发，已超窗；[现场网络专家知识 Agent](https://doi.org/10.1364/JOCN.588873)官方发表日为 **4 月 22 日**，同样排除。两者与光通信优化有关，不等同于光伏发电预测。
 
-| 来源 | 本轮检查 | 结论与覆盖边界 |
-|---|---|---|
-| [arXiv cs.LG recent](https://arxiv.org/list/cs.LG/recent) | 首页及后续 100 项页面，检查 9 月 21 日公告的 149 条标题；对入选论文读取官方摘要和版本历史 | 主精选 4 篇新增首发已核日期；不是跨学科、三个月所有论文的全量扫描 |
-| [GitHub Search](https://github.com/search?type=repositories) | 五组 created:2026-06-21..2026-09-21、按 updated 排序，每组前 6 | time-series agent / timeseries agent / automl agent / harness machine-learning / photovoltaic forecasting 总数为 **148 / 8 / 102 / 138 / 53**。只是搜索头部，不是 Trending 排名；两项新增分别做源码或文档抽查 |
-| [OpenReview](https://openreview.net/)、[ACL](https://aclanthology.org/)、[ICLR](https://proceedings.iclr.cc/)、[PMLR](https://proceedings.mlr.press/)、[NeurIPS](https://neurips.cc/)、[KDD](https://kdd2026.kdd.org/)、[AAAI](https://ojs.aaai.org/) | 官方域名定向关键词补检 | 命中以旧稿、已有 ACL 7 月版本、会议目录为主；未确认需加入本日精选的新首发。未逐站遍历目录；ICML 的 PMLR 结果亦混有往年论文 |
-| [Google Research](https://research.google/blog/timesfm-3-a-zero-shot-foundation-model-for-multivariate-forecasting/)、[IBM Research / HF](https://huggingface.co/blog/ibm-research/ibm-releases-sota-granite-time-series)、[HuggingFace](https://huggingface.co/) | 官方发布定向搜索 | 命中已知 8 月 31 日 TimesFM-3、9 月 9 日 IBM r2 及 Tabby，不重计；HF 未全量扫描 |
-| [AI HOT](https://aihot.virxact.com) | 最近七天 time series 精选补检 | 返回 1 条芯片贸易分析，主题不符，排除；不能用于代表三个月覆盖 |
+## 6. DailyArXiv 补检结论
 
-**下一步优先级**：先核 FreqCondNorm 的零样本留出定义；对 KDAgent 把“数据证据首因”“RAG 回退首因”和输出结构合规分开计分；再评估 VIPER 能否记录滚动切分、数据版本及每个预测起点的可见输入。BrainWideBench 可用来参考主体留出与多任务验收设计。
+已检查用户指定的 [DailyArXiv 官方仓库 README](https://github.com/zezhishao/DailyArXiv)，确认 **Last update: 2026-09-21**，**Time Series** 最新行日期为 **9 月 17 日**。小节代表检索关键词，不要求存在 timeseries 分支。原始 README 下载超时，仅取得前 38,196 字节；改以 GitHub 渲染页补查，未把部分下载的 24 行计数误作栏目总数。
 
-本轮未安装候选项目、调用其模型服务、下载权重或复现实验。性能判断均来自作者摘要；“未确认新增”仅指以上检索覆盖。
+- **相关且在三个月内，已补入主清单**：FreqCondNorm、CoRe、Conditional Independence Testing、Physical knowledge / PIRNN，均已逐一核对 arXiv v1 日期及摘要。QUALS、SETTer、WaveTLM、TuiML 为已跟踪主题，不因聚合更新重计新增。
+- **首发超窗**：[Nonlinear Probabilistic Forecast Reconciliation](https://arxiv.org/abs/2604.26668)为 **4 月 29 日 v1**，README 的 **9 月 17 日**对应 v3；虽对约束预测相关，降优先级并排除新首发主清单。
+- **超窗且版本日期不一致**：[Granular Time Series Segmentation](https://arxiv.org/abs/2505.17640)首发 **2025-05-23**；README 链接 v3 并标 **2026-09-17**，本次 arXiv 页面却只列至 **2025-12-10 v2**。可能涉及来源刷新差异，修订时间未解决；分割方法与 Agent 工具库相关，但不列近三个月新论文。
+- DailyArXiv 的聚合日期滞后于本次已读取的周一 arXiv 公告；BrainWideBench、频谱对齐生成等研究通过独立公告核验，不能仅依赖聚合页判断最新动态。
+
+## 7. 检索覆盖、局限与下一步
+
+| 来源 | 本次实际检查与边界 |
+|---|---|
+| [arXiv cs.LG recent](https://arxiv.org/list/cs.LG/recent) | 确认 9 月 21 日公告有 149 项，打开前 50 与后续 100 项分页，并对选中条目核摘要 / 版本历史；不声称对全部学科或所有条目精读。另从 DailyArXiv 补查 cs.AI、stat.ME。 |
+| [DailyArXiv](https://github.com/zezhishao/DailyArXiv) | 原始 README 部分下载与渲染页交叉确认；日期冲突单列。 |
+| [GitHub Search](https://github.com/search?type=repositories) | 创建窗口 6 月 21 日至 9 月 21 日，按 updated 降序，五组各取前 4；time-series agent、timeseries agent、automl agent、harness + machine learning、photovoltaic forecasting 返回总数 148 / 8 / 102 / 22 / 53。查询词与窗口变化会影响数量，不能据此判断生态增减，也不是 Trending 排名。 |
+| GitHub 候选内容 | 搜索元数据成功，后续 README / 文件树 API 受限；改读原始 README。对 KDAgent 两个模块和 VIPER 示例抽查源码；未执行项目、未取得完整目录或复现结果。 |
+| [OpenReview](https://openreview.net/) / ICLR、[ACL](https://aclanthology.org/) | 进行时序 reasoning / Agent 定向搜索，命中大量较早投稿；未确认更晚直接相关新首发。不以会议年份作为发布日期。 |
+| [ICML / PMLR](https://proceedings.mlr.press/)、[NeurIPS](https://neurips.cc/)、[KDD](https://kdd2026.kdd.org/)、[AAAI](https://ojs.aaai.org/) | 官方域名定向检索，不是完整目录扫描；本轮没有新增已核验首发。AAAI 多项结果为 3 月发表，排除。 |
+| [HuggingFace](https://huggingface.co/) 与机构发布 | 定向搜索时序模型 / 官方博客；未确认新的高相关独立发布，未遍历全部模型版本。 |
+| 光伏出版商 / SCIFORUM | 核验在线发表日与摘要；仅显示卷期月份的 Elsevier 线索未作为精确首发纳入。MDPI 文章读取边界见条目。 |
+| [AI HOT](https://aihot.virxact.com) | 近七天时序关键词精选只返回芯片贸易分析，与本任务不直接相关，排除；不以该结果推断三个月内无成果。 |
+
+建议优先继续：**核验 FreqCondNorm 的域划分和负迁移；为 KDAgent 增加数值与时间证据校验；将 VIPER 的实验记录接入滚动时序评测；对光伏 stacking 检查折外预测和真实天气起报条件。** 本报为文献与有限源码筛查，未运行训练或独立复现实验。
