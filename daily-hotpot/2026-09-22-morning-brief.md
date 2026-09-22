@@ -1,88 +1,56 @@
-# 2026-09-22 时间序列研究晨间简报
+# 2026-09-22 时间序列 Agent / Reasoning 晨间简报
 
-检索截止：**2026-09-22 09:19 CST**。滚动窗口：**2026-06-22 至检索时点**。今天是周二，不更新周报。以下“持续跟踪”均为此前已收录的窗口内成果，不算今日首发。
+检索时间：**2026-09-22 15:34 CST**；纳入窗口：**2026-06-22—2026-09-22**（含首日）。条目按首次可核验公开日期由近及远排列；arXiv 修订日期不代替 v1 日期。以下为相对 9 月 21 日晨报的增量，未复现实验。今天周二，不生成周报。
 
 ## 今日重点
 
-- 截至检索时点，[arXiv cs.LG recent](https://arxiv.org/list/cs.LG/recent)与[cs.AI recent](https://arxiv.org/list/cs.AI/recent)仍显示最新公告为 **9 月 21 日**；本次没有核实到比昨日晨报更新的高相关时序基础模型、Agent 或 reasoning 论文。
-- GitHub 新检到一个 **9 月 20 日创建、21 日推送**的 AutoML 邻域项目 InsightFlow，但其 README 明确当前实现以 CSV 质量检查和分析看板为主；不能把仓库描述中的 AutoML 视为已实现。另有时序 reasoning 名称的空仓库，作为低优先级线索。
-- 研究上仍应优先核验 FreqCondNorm 的跨频率留出、KDAgent 的数值证据校验、WaveTLM 的预测质量与输出契约，以及光伏预测的真实起报信息可得性。
+- **新补充**：DailyArXiv 中的 KG-Chronos-2 和零样本预测证据审计框架，均为 9 月 18 日 arXiv 首版；前者把冻结的 Chronos-2 与图检索和残差校正结合，后者要求明确预训练、检索及预测时上下文的证据边界。
+- **Agent / reasoning**：本次未核实比昨日收录的 AutoRecLab、WaveTLM 更新且直接面向时间序列的独立 Agent 或 reasoning 模型。两篇新补论文分别可为 Agent 检索和评测提供方法，但不应称为新 Agent 模型。
+- **光伏 / 光功率**：未核实比 9 月 17 日更新、且具有明确首发日期的直接预测论文；保留昨日已核实的近期光伏研究作为追踪项。
 
-## 1. 时间序列基础模型最新研究
+## 1. 时间序列基础模型研究
 
-### [2026-09-18] BrainWideBench — 持续跟踪
+### [2026-09-18] KG-Chronos-2：水动力代理预测
 
-- **日期 / 来源**：arXiv v1，2026-09-18；[论文](https://arxiv.org/abs/2609.22064)。
-- **摘要**：比较大规模神经时序预训练在行为解码、未来活动预测与跨动物迁移等任务上的表现；没有单一方案在所有任务上占优。
-- **相关性**：领域时序基础模型评测**高**，Agent 选模 harness **中高**，通用预测与显式 reasoning **低**。跨任务评测方法可借鉴，结果不直接代表通用 TSFM 能力。
+- **来源与日期**：[arXiv 2609.21381](https://arxiv.org/abs/2609.21381)，v1 为 **2026-09-18 06:50 UTC**；[DailyArXiv Time Series](https://github.com/zezhishao/DailyArXiv#time-series) 同日条目。
+- **摘要**：在冻结的 Chronos-2 上加入图条件历史检索、精确状态残差解码及输入对齐校正，用 HEC-RAS 水位模拟中的固定 24 小时窗口评估。作者报告相对冻结模型的事件均衡 RMSE 降低 14.13%；这是特定水动力基准上的作者结果。
+- **相关性**：**TSFM 高，检索增强时序 Agent 中高，显式 reasoning 中，光伏功率低**。可借鉴“预测骨干 + 领域知识 + 残差校正”结构；尚无跨域或光伏验证。
 
-### [2026-09-17] FreqCondNorm — 持续跟踪
+### [2026-09-18] 零样本时序预测的证据来源审计
 
-- **日期 / 来源**：arXiv v1，2026-09-17；[论文](https://arxiv.org/abs/2609.20535)。
-- **摘要**：用频率条件归一化处理工业信号采样率差异；摘要报告故障诊断迁移收益，同时指出剩余寿命预测没有改善。
-- **相关性**：工业 TSFM **高**，Agent 工具选择 **中高**，直接 reasoning **低**。需核查预训练与零样本评测的数据交叠和留出单位。
+- **来源与日期**：[arXiv 2609.21425](https://arxiv.org/abs/2609.21425)，v1 为 **2026-09-18 07:38 UTC**；[DailyArXiv Time Series](https://github.com/zezhishao/DailyArXiv#time-series) 同日条目。作者标注 ACM AI Summit 2026 接收，会议更早公开时间未核实。
+- **摘要**：区分冻结 LLM 先验、时序预训练参数、外部检索记忆三类零样本证据来源，并要求报告任务接口、预测对象和评分、预测时上下文及资源预算。
+- **相关性**：**TSFM 评测 / Agent harness 高，推理证据审计高，直接光伏预测中**。这是分类与审计框架，不是新预测模型；适合用来核查 Agent 是否在推理时获得额外历史或检索数据。
 
-## 2. 时间序列建模 Agent 最新研究
+## 2. 时间序列建模 Agent 研究
 
-### [2026-09-18] AutoRecLab — 持续跟踪的相邻研究
+本次定向检索未核实新的直接时序建模 Agent 论文。持续跟踪 **[2026-09-18] [AutoRecLab](https://arxiv.org/abs/2609.21863)**：自然语言实验要求经检索、静态类型检查和执行反馈形成实验搜索；**Agent / AutoML 高，时序直接证据低**。其日期、摘要与局限已在[昨日晨报](/Users/monychen/Documents/timeserie_research/Ts_Agent_reasoning_models/daily-hotpot/2026-09-21-morning-brief.md)记录，本次不重复计新增。
 
-- **日期 / 来源**：arXiv v1，2026-09-18；[论文](https://arxiv.org/abs/2609.21863)。
-- **摘要**：用文档检索、类型校验和执行反馈扩展推荐系统实验搜索。论文讨论可执行原型与运行成功率。
-- **相关性**：ML Agent / AutoML harness **高**，直接时间序列**低**。没有证据表明已实现时序滚动划分或防泄漏。
+## 3. 时间序列 reasoning 研究
 
-### [2026-09-16] TuiML — 持续跟踪
+本次未核实新首发的通用时序 reasoning 模型。持续跟踪 **[2026-09-16] [WaveTLM](https://arxiv.org/abs/2609.18812)**：把自然语言时序任务编译为带类型的状态，再生成合法数值或标签；**时序任务推理与输出验证高，光伏直接证据低**。上述 9 月 18 日的零样本证据框架可作为 reasoning 评测约束，但本身不生成推理轨迹。
 
-- **日期 / 来源**：arXiv v1，2026-09-16；[论文](https://arxiv.org/abs/2609.17984)、[官方项目](https://tuiml.ai/)。
-- **摘要**：以工具元数据、参数模式和实验状态支持 Agent 发现、组合和执行机器学习工具。
-- **相关性**：时序 Agent 工具层与 AutoML harness **高**，TSFM 模型本体**低**。时序任务仍需单独检查时间隔离。
+## 4. GitHub 项目：timeseries Agent / harness / ML / AutoML
 
-## 3. 时间序列 reasoning 模型最新研究
+本次未核实符合窗口且可判断实现成熟度的新仓库。保留两个已核实项目，按仓库创建日期排列：
 
-### [2026-09-17] Conditional Independence Testing in Time Series — 证据工具，非 reasoning 模型
+- **[2026-09-18] [HFJ0624/KDAgent](https://github.com/HFJ0624/KDAgent)**：工业时序根因候选的 RAG、数据分支及融合实现；**时序 Agent / reasoning harness 高，预测与 TSFM 低**。昨日源码审查发现其 `validation_passed` 主要表明存在合法候选，不保证数值证据或因果正确。
+- **[2026-08-27] [pvd232/viper](https://github.com/pvd232/viper)**：保存实验计划与运行证据的通用 ML harness；**Agent 实验可追溯高，时序适配中，光伏直接证据低**。已核 CPU 示例，尚未独立验证核心哈希和防泄漏能力。
 
-- **日期 / 来源**：arXiv v1，2026-09-17；[论文](https://arxiv.org/abs/2609.20772)。
-- **摘要**：对暴露和结果分别做历史回归，用残差协方差构造时序条件独立性检验。
-- **相关性**：Agent 假设检验和因果证据层**中高**，TSFM 本体**低**。条件独立检验本身不证明干预因果。
+[GitHub Trending](https://github.com/trending)、[GitHub 仓库搜索](https://github.com/search?q=time+series+agent&type=repositories)与 [Hugging Face 模型搜索](https://huggingface.co/models?search=time%20series)本次未提供足以确认“今日新项目/模型”的创建或首发证据，因此不把热度与最近推送当作新发布。
 
-### [2026-09-16] WaveTLM — 持续跟踪
+## 5. 光伏功率与光通信光功率预测
 
-- **日期 / 来源**：arXiv v1，2026-09-16；[论文](https://arxiv.org/abs/2609.18812)。
-- **摘要**：将语言任务编译为带类型状态，再执行预测、插补、分类、异常检测等时序任务，并检查输出结构。
-- **相关性**：可执行时序 reasoning / Agent 输出验证**高**。合法输出与数值预测精度是不同指标；本轮没有核实到新版本或新代码。
+本次未核实新增直接预测研究。近期可继续检查以下已收录条目的数据划分与起报时输入可得性，按首次公开日期排序：
 
-## 4. GitHub 和 HuggingFace 上值得跟踪的新项目
+- **[2026-09-17] [IWOA-TCN-BiGRU-MATT](https://www.techscience.com/CMES/online/detail/28334)**：混合模型用于不同天气的短期光伏预测；**光伏高，自动调参 Agent 中，TSFM / reasoning 低**。出版商在线发表日为 9 月 17 日，早期预印本日期未核实。
+- **[2026-09-16] [离网光伏功率预测与性能评估](https://www.mdpi.com/2673-9941/6/5/60)**：多变量 LSTM 利用运营数据预测提前 10 分钟功率；**光伏高，Agent 调度工具中，TSFM / reasoning 低**。官方页面日期为 9 月 16 日，完整时间划分仍待核验。
+- **[2026-09-16] [TCN–XGBoost–LSTM stacking](https://sciforum.net/paper/33668)**：15 分钟数据的日前预测会议摘要；**光伏 / 集成选模高，显式 reasoning 低**。需核元学习器是否使用训练折外预测；9 月 21–22 日会议日期不代替 9 月 16 日页面发表日期。
 
-### 4.1 时间序列
+光通信光功率补检未核实窗口内新增直接预测论文；[多 Agent 光功率优化](https://arxiv.org/abs/2606.05795)的 v1 为 **2026-06-04**，已超出本窗口，且优化不等同于功率预测。
 
-#### [2026-09-21] AgenthonT2—ReasoningAugmentedTimeSeries—Money-Miner — 空仓库线索
+## 6. DailyArXiv 必检结论与检索边界
 
-- **日期 / 来源**：创建于 2026-09-21 02:51 UTC；[仓库](https://github.com/WaydeWan/AgenthonT2---ReasoningAugmentedTimeSeries---Money-Miner)、[元数据](https://api.github.com/repos/WaydeWan/AgenthonT2---ReasoningAugmentedTimeSeries---Money-Miner)。
-- **摘要**：公开元数据无描述、仓库大小为 0，目录 API 返回 404；目前不能确认任何方法或实现。
-- **相关性**：名称与时序 reasoning **表面相关，证据极低**；仅保留观察线索，不列为可用项目。
-
-#### [2026-09-20] InsightFlow — 新候选，低优先级
-
-- **日期 / 来源**：GitHub 创建于 2026-09-20 18:40 UTC，最近推送为 2026-09-21 16:41 UTC；[仓库](https://github.com/harshita-bhatia-cse/InsightFlow)、[元数据](https://api.github.com/repos/harshita-bhatia-cse/InsightFlow)。按 UTC 创建日期为 **9 月 20 日**。
-- **摘要**：[README](https://github.com/harshita-bhatia-cse/InsightFlow/blob/main/README.md)列出当前 CSV 上传、字段和重复值校验、隔离不安全记录、数据剖析与 Streamlit 看板。文件树有后端代码；README 当前状态未列 AutoML 训练器。
-- **相关性**：ML 数据质量 harness **中**，时间序列 Agent / AutoML 实现**低**。可参考运行 ID 与隔离流程，但不计时序建模新成果，也未运行代码。
-
-GitHub 另检到 [Lithicsoft-Trainer-Forge](https://github.com/ahmadluthfan421-star/Lithicsoft-Trainer-Forge)（2026-09-21 创建）与 [TS-Forge](https://github.com/avri22222/TS-Forge)（2026-09-21 创建）；公开根目录均以 README、HTML、SVG 为主，未见训练代码，且未确认时序任务，故排除主列表。此前收录的 [KDAgent](https://github.com/HFJ0624/KDAgent)（2026-09-18 创建）仍是更直接的工业时序根因分析 Agent；本轮没有复核新提交，不计新增。
-
-### 4.2 光伏功率预测
-
-本轮 GitHub 创建窗口检索未发现比昨日新增且已确认有实现的光伏预测仓库。[MDG-Mamba](https://github.com/Yingcode-Lab/MDG-Mamba)（2026-09-18 创建）与 [05-mev-P3](https://github.com/Italo-1/05-mev-P3)（2026-09-21 创建）均已在此前晨报收录；后者仍只确认研究协议，代码完整性未确定。
-
-## 5. 光伏功率预测最新研究
-
-### [2026-09-17] IWOA-TCN-BiGRU-MATT — 持续跟踪
-
-- **日期 / 来源**：出版商在线发表，2026-09-17；[官方页面](https://www.techscience.com/CMES/online/detail/28334)。
-- **摘要**：以改进鲸鱼优化调整 TCN、双向 GRU 与注意力组合，在单电站数据上比较天气条件下的短期光伏功率预测。
-- **相关性**：光伏预测**高**，Agent 自动调参**中**，TSFM / 显式 reasoning**低**。需核公平调参预算、持久性基线和起报时输入可得性。
-
-## 6. 检索覆盖与结论
-
-- [arXiv cs.LG recent](https://arxiv.org/list/cs.LG/recent)及[cs.AI recent](https://arxiv.org/list/cs.AI/recent)：09:19 CST 查看近期页，最新公告仍为 9 月 21 日；未进行所有学科全量扫描。
-- [GitHub Search](https://github.com/search?type=repositories)：按 **2026-09-18 以来创建、updated 降序**查询 `time-series agent`、`timeseries agent`、`automl`、`harness machine learning`、`photovoltaic forecasting`，对应 API 总数为 **6 / 0 / 24 / 2 / 4**；对候选读取仓库元数据与根目录，抽查 InsightFlow README。查询计数取决于关键词，不表示项目总量或增长率。
-- [OpenReview](https://openreview.net/)、[ACL Anthology](https://aclanthology.org/)、[PMLR](https://proceedings.mlr.press/)、[NeurIPS](https://neurips.cc/)、[KDD](https://kdd2026.kdd.org/)、[AAAI](https://ojs.aaai.org/)及[DailyArXiv](https://github.com/zezhishao/DailyArXiv)：本轮未完成逐站点新增核验；因此只报告此前已核的窗口内条目，不以本次无发现推断这些来源无新工作。
-- 未运行外部项目或复现论文；日期依据 arXiv 既有首发记录、出版商页面和本轮 GitHub API 元数据。凡“持续跟踪”条目，摘要沿用昨日已核记录。
+- [zezhishao/DailyArXiv README](https://github.com/zezhishao/DailyArXiv) 明示 **Last update: 2026-09-22**。已检查 `Time Series` 小节；其最新可见条目日期为 **2026-09-18**。KG-Chronos-2 和零样本证据审计框架均在窗口内，已补充到正文。
+- 同一小节的 [ISOMORPH](https://arxiv.org/abs/2605.12768) 标为 9 月 18 日，但这是 **v3**；v1 为 **2026-05-12**，已超窗。 [Fidel-TS](https://arxiv.org/abs/2509.24789) 也标为 9 月 18 日修订，v1 为 **2025-09-29**。两者相关但按首发日期降优先级，不列入窗口正文。
+- 检索覆盖 arXiv、DailyArXiv、GitHub、Hugging Face 定向入口及近期出版商页面；本次未得到可核验的 OpenReview 或主要会议新首发条目。以上“未核实”是检索结果，不代表主题领域绝无更新。
