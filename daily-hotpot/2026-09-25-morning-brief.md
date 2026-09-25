@@ -1,13 +1,14 @@
 # 2026-09-25 时间序列研究晨间简报
 
-检索截止：**2026-09-25 12:30 CST**。近三个月窗口：**2026-06-25 至检索截止**。以本地 9 月 24 日含下午补充版（`6ac7ca7`）去重；“新增”表示本轮首次收录，不代表今天首发。论文日期优先采用来源版本历史（UTC），会议月份与仓库创建日期分开记录。今天周五，同步生成 2026-W39 周报。
+检索截止：**2026-09-25 15:36 CST**（保留 12:30 早版，下午补检合并）。近三个月窗口：**2026-06-25 至检索截止**。以本地 9 月 24 日含下午补充版（`6ac7ca7`）去重；“新增”表示本轮首次收录，不代表今天首发。论文日期优先采用来源版本历史（UTC），会议月份与仓库创建日期分开记录。今天周五，同步生成 2026-W39 周报。
 
 ## 1. 今日重点
 
 - **新增重点：TimeEvo（9 月 23 日）**，从失败中合成分析工具，以修复与破坏答案的成对结果决定是否接纳。它与 TimEvolve 的延迟反馈调度是不同研究。
 - **新增基础模型适配：SwitchPFN（9 月 24 日）**，面向时序分类，将共享动态表征送入冻结表格基础模型；不能当作新通用预测 TSFM。
 - **reasoning 侧新增落在 Agent 方法，而非独立预训练权重发布**；继续关注 TimeLitmus 的解释忠实性诊断。
-- **GitHub 核验受限**：TimeEvo 的官方代码链接由论文确认，但仓库页与元数据未成功读取；不声称已有可运行实现。既有 RRSI、Avaloka 重核 README，不重复计新项目。
+- **下午新增：FWBench（9 月 23 日）**，将预测工具选择、成本和容量决策一起评测；光伏侧新增 **DC-SDPNet（9 月 25 日仓库）**，源码存在默认切分边界风险。
+- **早版 GitHub 核验受限，下午已恢复检索**：TimeEvo 的官方代码链接由论文确认，但仓库页与元数据未成功读取；不声称已有可运行实现。既有 RRSI、Avaloka 重核 README，不重复计新项目。
 
 ## 2. 时间序列基础模型最新研究
 
@@ -23,7 +24,19 @@
 - **摘要**：alpha / beta 为 102M / 256M 参数，利用目标历史、历史协变量和已知未来协变量输出分位数预测，注意力交替沿时间与变量轴计算。
 - **相关性判断**：**TSFM 高，Agent 数值预测工具高，显式 reasoning 低**。适合带外生信息的工具层；未来天气必须使用当时可获得的预报，不能用事后实测冒充已知协变量。作者称开放权重，本轮未独立验证下载与运行。
 
+### [2026-09-20｜下午补录；9 月 23 日修订] Leaky-integrator reconstruction
+
+- **日期与来源**：[arXiv 2609.23378](https://arxiv.org/abs/2609.23378)，v1：9 月 20 日 05:59 UTC；v2：9 月 23 日。DailyArXiv 使用 v2 日期，本简报按 v1 排序。
+- **摘要**：对递归差分预测的重建步骤加入衰减，降低增量误差长期累积；作者报告不重新训练也能改善所测模型的长步滚动误差。
+- **相关性判断**：**TSFM 后处理 / Agent 数值工具中高，显式 reasoning 低**。这是重建方法，不是新基础模型；应比较漂移抑制与低频趋势损失，不能将摘要中的通用表述当作所有 TSFM 已验证。未复现。
+
 ## 3. 时间序列建模 Agent 最新研究
+
+### [2026-09-23｜下午新增，DailyArXiv 补检] FWBench：预算约束下的预测工作流
+
+- **日期与来源**：[arXiv 2609.27385](https://arxiv.org/abs/2609.27385)，v1：9 月 23 日 05:35 UTC；[正文](https://arxiv.org/html/2609.27385v1)。
+- **摘要**：在 1,251 个电力负荷和自行车租赁案例中，让 Agent 选择预测模型、历史长度与预测跨度，再提交容量决策，以损失和调用成本共同计分。
+- **相关性判断**：**时序 Agent / TSFM 工具评测 / harness 高，决策 reasoning 高，光伏直接证据低**。真实需求搭配模拟合同，不能外推真实交易收益；固定预测器不等于自动训练建模。论文所链[代码](https://github.com/Neurogica/forecast-workflow-bench)与[数据](https://huggingface.co/datasets/Neurogica/forecast-workflow-bench)作为后续核查入口；下午 GitHub 元数据、README、目录接口均返回未找到，代码公开状态**不确定**，工程优先级降低。未复现。
 
 ### [2026-09-23｜新增，优先阅读] TimeEvo：失败驱动的工具库演化
 
@@ -40,7 +53,7 @@
 
 ## 4. 时间序列 reasoning 模型最新研究
 
-本轮新增是上节 **TimeEvo（9 月 23 日）** 的工具辅助推理方法，未核实更晚的独立通用时序 reasoning 权重发布；不将方法、基准和模型权重混为一类。
+本日新增包括上节 **TimeEvo（9 月 23 日）** 的工具辅助推理方法和 **FWBench（9 月 23 日）** 的决策评测，未核实更晚的独立通用时序 reasoning 权重发布；不将方法、基准和模型权重混为一类。
 
 ### [2026-09-21｜持续跟踪] TimeLitmus：解释忠实性与跨模态理解
 
@@ -62,9 +75,13 @@ ACL 定向补检命中 LLaTiSA、STReasoner、Time-RA 等 2026 年 7 月会议�
 | 创建 2026-09-14；本周首次收录，今日重核 README | [guruvaidev/avaloka](https://github.com/guruvaidev/avaloka) | LangGraph 组织数据分析、代码验证、训练和推理，可本地或 Ray 执行；**ML / AutoML Agent 高，时序直接证据低**。创建日沿用昨日元数据；未核时序滚动切分与防泄漏实现。 |
 | 创建 / 代码首发日期**不确定**；论文日期 2026-09-23；新增待核候选 | [Muyiiiii/TimeEvo](https://github.com/Muyiiiii/TimeEvo) | 论文直接链接的官方项目；**时序 Agent / reasoning / harness 高**。仓库页面与 API 均未成功读取，降低工程采用优先级；无法确认是否占位、代码完整性或许可证，不计“已核实可运行新仓库”。 |
 
-本轮 GitHub Search 定向查询 timeseries agent、AutoML 与 ML harness，没有确认更多日期明确且直接相关的新建仓库。Trending 页面可访问，但未取得足以判断完整榜单的内容；不以第三方热榜转述替代官方创建证据。Hugging Face 的 SwitchPFN 名称检索访问失败，不据此断言模型不存在。
+早版 GitHub Search 定向查询 timeseries agent、AutoML 与 ML harness，没有确认更多日期明确且直接相关的新建仓库。Trending 页面可访问，但未取得足以判断完整榜单的内容；不以第三方热榜转述替代官方创建证据。Hugging Face 的 SwitchPFN 名称检索访问失败，不据此断言模型不存在。
 
 ### 光伏功率预测
+
+- **[创建 2026-09-25 04:16 UTC；首次收录] [S-M-F-X/DC-SDPNet](https://github.com/S-M-F-X/DC-SDPNet)**：动态可用站点集合下的协同光伏预测，README 给出 227 站、8 特征及 1/2/4 小时预测配置。**光伏预测高，建模 harness 中高，Agent / reasoning / 通用 TSFM 低**。已读 README、目录、[数据加载器](https://github.com/S-M-F-X/DC-SDPNet/blob/main/util/dataset.py)、[配置](https://github.com/S-M-F-X/DC-SDPNet/blob/main/util/config.py)及入口参数；有模型源码和检查点路径，未执行。
+  - **日期证据**：[仓库元数据](https://api.github.com/repos/S-M-F-X/DC-SDPNet)确认创建日；[v1.0.0](https://github.com/S-M-F-X/DC-SDPNet/releases/tag/v1.0.0)发布于 9 月 25 日 04:26 UTC。论文标题、首发日期与发表状态**不确定**，只计新仓库。
+  - **采用前核查**：配置按位置分成 80%/10%/10%，归一化只用训练段；但默认 `pi_fen=2` 将下一段起点前移 `hist_len + pred_len - 1`，首个预测目标因此从边界前 `pred_len - 1` 步开始，存在相邻集合目标重叠。数据真实时间排序及原始预处理未核。发布附件名 `pv_power_1.7_3d.npy` 与默认读取名 `pv_power_1,7_3d.npy` 不同，运行前需重命名或调整参数。降为“有实现、需检查评测边界”。
 
 - **[创建 2026-08-24；持续跟踪] [RuiCkg/ai-powered-energy-forecasting](https://github.com/RuiCkg/ai-powered-energy-forecasting)**：基线、XGBoost、小型 LSTM 的负荷与光伏原型。**光伏 ML 评测高，Agent / TSFM / reasoning 低**。日期与时间切分审查沿用昨日简报，本轮未核新提交；不计新增。已知是一步历史验证，不能当作上线多步预测能力。
 
@@ -76,6 +93,8 @@ ACL 定向补检命中 LLaTiSA、STReasoner、Time-RA 等 2026 年 7 月会议�
 - **摘要**：可学习分解提取趋势、季节、残差，并建模通道关系，用于日内光伏功率预测。本轮仅重核官方搜索摘要，不列性能数字。
 - **相关性判断**：**光伏预测高，Agent 数值专家中，通用 TSFM / 显式 reasoning 低**。未验证天气可得性或时间留出。今日补检未确认比此更晚、且日期与方法均明确的直接光伏新论文。
 
+光通信光功率方向下午未确认新的窗内直接预测研究；[光功率多 Agent 优化](https://arxiv.org/abs/2606.05795)首发 6 月 4 日，已超窗且属于优化，不列为预测新成果。
+
 ## 7. 检索记录、过滤与交付边界
 
 - **arXiv**：定向检索 9 月 23–24 日时序基础模型、Agent、reasoning；打开 [cs.LG recent](https://arxiv.org/list/cs.LG/recent) 9 月 25 日公告首页（该日 230 条中的前 50 条），逐篇核验所列新增条目。不是全部学科或全部分页扫描。
@@ -84,4 +103,12 @@ ACL 定向补检命中 LLaTiSA、STReasoner、Time-RA 等 2026 年 7 月会议�
 - **机构与聚合补检**：使用 aihot 技能获取近七天精选论文 10 条，主要为生物实验、通用模型评测等，无直接时序新增；未据二手摘要扩展本报告。机构博客未形成新的直接相关条目。
 - **GitHub / HF 限制**：早期 timeseries agent 搜索成功返回页面数据，但后续本地 DNS 失败；改用网页工具访问原仓库与定向搜索。没有形成可靠的多查询完整元数据扫描，不列星数或生态增长判断。
 - **日期过滤**：首发窗口外不列主清单；会议版本只能确认月份、首发冲突或代码发布时间未知时显式降优先级。论文效果均为作者报告，未复现。
-- **仓库同步状态**：按要求先执行 SSH key 加载，但环境拒绝访问 SSH agent；`git pull --ff-only` 的 GitHub 22 端口连接亦被拒绝。本报告基于本地版本，未声称与远端同步。保留用户原有改动，仅提交今天晨报与周报；推送结果见本次任务完成说明。
+- **仓库同步状态（下午已恢复）**：已成功加载指定 SSH key，`git pull --ff-only` 返回已是最新；保留早版提交 `e98971a`。仅提交本次晨报与周报修改，保留 9 月 8 日既有暂存及其他用户文件。
+
+### 下午 DailyArXiv 补检结论与检索覆盖
+
+- 完整读取[原始 README](https://raw.githubusercontent.com/zezhishao/DailyArXiv/master/README.md)，Last update **2026-09-25**；Time Series 共 **75 条带日期记录**，最新行 **9 月 23 日**。TimeEvo 已在早版；新增补录 FWBench 与 leaky-integrator。未将普通领域预测论文全部升级为 Agent / TSFM 成果。
+- **日期冲突 / 超窗降级**：[ChronoSteer](https://arxiv.org/abs/2505.10083)是 LLM 指令修正冻结 TSFM，但 v1 为 **2025-05-15**，列表 9 月 23 日是 v2；[iAmTime](https://arxiv.org/abs/2603.22586)与指令条件基础模型高度相关，但 v1 **2026-03-23**，列表 9 月 22 日是 v4。二者排除主榜。[GlyRAG](https://arxiv.org/abs/2601.05353)为上下文 Agent 辅助血糖预测，v1 **2026-01-08**；列表 9 月 23 日标 v3，而本轮摘要页仅显示 7 月 18 日 v2，版本日期仍冲突，排除主榜并降低优先级。
+- **GitHub Search**：五组关键词 `time-series agent`、`timeseries agent`、`automl agent`、`harness machine-learning`、`photovoltaic forecasting`，创建时间限定 6 月 25 日至 9 月 25 日，按 updated 排序各取前三；结果总数依次 **146 / 8 / 96 / 144 / 52**。仅是有限候选扫描，不代表 Trending 或生态增长。DC-SDPNet 经进一步源码核验后收录；个人资料、通用教程和不直接相关项目未计新增。Avaloka 推送刷新到 9 月 25 日，未核差分，不声明新增功能。
+- **代码可用性**：TimeEvo 官方链接元数据及 README 本轮均返回未找到；FWBench 三个接口亦如此。只表示本轮无法公开读取，不推断项目不存在或永不开放。
+- **其他来源**：下午复查光伏 / 光通信、OpenReview 与 HF 机构文章。9 月 3 日 PPO 光伏选模、9 月 9 日 IBM PatchTST-FM-r2 均已在历史晨报，不重复记新增。会议广度沿用早版记录；下午未逐站重新全量核验。AI HOT 时序定向补检无命中。研究摘要不等于复现实验。

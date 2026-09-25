@@ -1,12 +1,13 @@
 # 2026-W39 时间序列研究周报
 
-汇总范围：**2026-09-21 至 2026-09-25（周一至周五）**。生成时间：**2026-09-25 12:30 CST**。研究窗口按周五统一为 **2026-06-25 至当前**；以下重点均在窗口内。本周“新增”指首次收录，包含早间版和下午补充版，不等于本周首发。周一至周四结论来自本地各日核验记录，未把今天未重核的项目写成今日更新。
+汇总范围：**2026-09-21 至 2026-09-25（周一至周五）**。更新时间：**2026-09-25 15:36 CST**（合并同日早版与下午补检）。研究窗口按周五统一为 **2026-06-25 至当前**；以下重点均在窗口内。本周“新增”指首次收录，包含早间版和下午补充版，不等于本周首发。周一至周四结论来自本地各日核验记录，未把今天未重核的项目写成今日更新。
 
 ## 1. 本周研究重点
 
 | 首发日期 | 研究与原始来源 | 摘要、相关性与判断边界 |
 |---|---|---|
 | 2026-09-24 | [SwitchPFN](https://arxiv.org/abs/2609.29814) | 共享动态表征接入冻结表格基础模型，面向时序分类。**基础模型适配高，Agent 专家中，reasoning 低**；不是新通用预测骨干。 |
+| 2026-09-23 | [FWBench](https://arxiv.org/abs/2609.27385) | 预测工具、历史长度、跨度与容量决策联合计分。**Agent / TSFM harness / 决策 reasoning 高**；合同模拟，官方代码本轮无法读取，未复现。 |
 | 2026-09-23 | [TimeEvo](https://arxiv.org/abs/2609.27277) | 从失败中生成证据工具，并检查新工具库修复与破坏的答案。**时序 Agent / reasoning / harness 高**；代码可用性尚未核实。 |
 | 2026-09-22 | [TimeInteract](https://arxiv.org/abs/2609.26389) | 持续感知流式时序，决定沉默或响应，并在回答时继续接收数据。**交互 Agent / 时序理解高**；不等于完成自动建模闭环。 |
 | 2026-09-22 | [Interweaving Marginals](https://arxiv.org/abs/2609.25980) | 冻结 TSFM、保留预测边际，单独重建跨时间与变量依赖。**概率 TSFM / 决策场景工具高，语言 reasoning 低**；边际校准不等于联合路径可靠。 |
@@ -15,6 +16,7 @@
 | 2026-09-21 | [t₀](https://arxiv.org/abs/2609.24559) | 历史及已知未来协变量条件下的多变量分位数预测。**TSFM / Agent 数值工具高，显式 reasoning 低**；起报可得性仍是应用前提。 |
 | 2026-09-21 | [TimeLitmus](https://arxiv.org/abs/2609.24677) | 反事实与对照干预核对跨模态理解和解释忠实性。**reasoning 评测 / Agent 证据核验高**；属于基准，不是新推理模型。 |
 | 2026-09-21 | [RRSI](https://arxiv.org/abs/2609.24972) | 约束 harness 自改进预算和基准特定逻辑。**harness / AutoML 高，时序直接证据低**；迁移需要时间留出与跨数据集验证。 |
+| 2026-09-20 | [Leaky-integrator](https://arxiv.org/abs/2609.23378) | 衰减重建降低递归差分误差累积。**数值预测工具中高，reasoning 低**；9 月 23 日是修订，需检验趋势损失。 |
 | 2026-09-17 | [FreqCondNorm](https://arxiv.org/abs/2609.20535) | 频率条件归一化用于跨采样率工业信号预训练。**工业基础模型高，Agent 选模中高**；故障诊断收益未延伸到剩余寿命预测，需核预训练与评测数据重叠。 |
 
 本周应关注三种不同的更新对象：**TimEvolve 更新调度策略，TimeEvo 更新工具库，Growing Harness / RRSI 更新控制代码**。这是跨论文整理，不是已完成的统一实验。建议下一步先比较简单重新验证选模、固定工具与带门禁更新，记录修复率、破坏率、失败调用率和成本，再讨论平均准确率收益。
@@ -40,6 +42,8 @@
 
 ## 3. 光伏补充与项目去重
 
+- **创建 2026-09-25；本周首次收录**：[S-M-F-X/DC-SDPNet](https://github.com/S-M-F-X/DC-SDPNet)，动态站点协同预测，**光伏高、harness 中高、Agent / TSFM 低**。有源码、检查点路径与同日数据 Release；默认切分的首批预测目标跨越相邻集合边界，数据附件名与默认配置也不一致。按“有实现、需核评测协议”收录，论文日期不确定，未复现。
+
 - **2026-09-23**：[CIPformer](https://link.springer.com/article/10.1007/s44443-026-01285-2)，日内分解与通道关系建模；**光伏预测高，Agent 数值专家中，reasoning 低**。官方索引确认日期，更早版本不确定，低优先级。
 - **2026-09-22**：[迁移学习与 CQR](https://arxiv.org/abs/2609.26959)，少历史光伏区间预测；**概率预测高，Agent 风险工具中，通用 TSFM 低**。目标域为模拟孟加拉数据，更早会议公开日不确定，不能外推为真实场站验证。
 - **创建 2026-09-21，本周首次收录**：[Italo-1/equatorial-photovoltaic-forecasting](https://github.com/Italo-1/equatorial-photovoltaic-forecasting)，多模型光伏评测；**光伏 / harness 中高，Agent 低**。原 `05-mev-P3` 疑似改名，不计两个新项目；从占位观察升级为有脚本、未复现。
@@ -47,11 +51,12 @@
 
 ## 4. 本周来源与下周优先事项
 
-逐日明细：[周一](https://github.com/carolzheng1996-hue/Ts_Agent_reasoning_models/blob/main/daily-hotpot/2026-09-21-morning-brief.md)、[周二](https://github.com/carolzheng1996-hue/Ts_Agent_reasoning_models/blob/main/daily-hotpot/2026-09-22-morning-brief.md)、[周三](https://github.com/carolzheng1996-hue/Ts_Agent_reasoning_models/blob/main/daily-hotpot/2026-09-23-morning-brief.md)、[周四](https://github.com/carolzheng1996-hue/Ts_Agent_reasoning_models/blob/main/daily-hotpot/2026-09-24-morning-brief.md)、[周五（本轮待推送）](https://github.com/carolzheng1996-hue/Ts_Agent_reasoning_models/blob/main/daily-hotpot/2026-09-25-morning-brief.md)。周一至周四采用本地已存版本；当前环境无法同步远端，可能遗漏尚未拉取的补充。
+逐日明细：[周一](https://github.com/carolzheng1996-hue/Ts_Agent_reasoning_models/blob/main/daily-hotpot/2026-09-21-morning-brief.md)、[周二](https://github.com/carolzheng1996-hue/Ts_Agent_reasoning_models/blob/main/daily-hotpot/2026-09-22-morning-brief.md)、[周三](https://github.com/carolzheng1996-hue/Ts_Agent_reasoning_models/blob/main/daily-hotpot/2026-09-23-morning-brief.md)、[周四](https://github.com/carolzheng1996-hue/Ts_Agent_reasoning_models/blob/main/daily-hotpot/2026-09-24-morning-brief.md)、[周五](https://github.com/carolzheng1996-hue/Ts_Agent_reasoning_models/blob/main/daily-hotpot/2026-09-25-morning-brief.md)。周一至周四采用已存版本；下午已加载 SSH key 并完成快进同步检查。
 
 1. 核实 TimeEvo 官方仓库与测试隔离，检查工具执行失败是否进入门禁分母；不要只看净平均收益。
 2. 围绕 t₀ 的未来协变量可得性、TimeInteract 的实时延迟、TimeLitmus 的干预一致性，设计分开的验收条件。
 3. AutoML 工程先检查时间切分、回退策略与真实模型调用，再评估预测效果。
-4. 对 `2609.29715` 的编号月份与详情页 v1 日期差异继续核查；不把公告日替代首发日。本周已记录的撤回 `2609.22836` 不纳入推荐。
+4. 优先复查 DC-SDPNet 默认切分的目标重叠与数据文件名，避免直接把随附检查点分数作为严格时间留出结果。
+5. 对 `2609.29715` 的编号月份与详情页 v1 日期差异继续核查；不把公告日替代首发日。本周已记录的撤回 `2609.22836` 不纳入推荐。
 
-检索限制与未复现声明见各日报。本周无基于独立复现实验的性能结论。今天 SSH key 加载和远端同步受运行环境限制，先完成本地报告及提交，实际推送结果见任务完成说明。
+检索限制与未复现声明见各日报。本周无基于独立复现实验的性能结论。下午已恢复 SSH key 加载与远端同步；本次仅提交晨报及周报。DailyArXiv 已完整核查 75 条时序记录，ChronoSteer / iAmTime / GlyRAG 首发超窗，修订日期与来源冲突见周五简报。
