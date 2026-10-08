@@ -315,3 +315,33 @@ Flask 界面集成线性回归与 LSTM。代码使用位置顺序 60/20/20 切�
 ## 8. 并发编辑说明
 
 本次提交前检测到其他自动化持续更新同名晨报。以本轮已核实正文为基础，按日期合并并发版中未重复的 arXiv 条目；这些补充条目的摘要与核验记录继承自并发版，本轮未重复核验。各版本完整内容保留在 Git 历史。DailyArXiv 采用本轮完整读取的 10 月 8 日、91 行记录。
+
+
+## 8. 独立核验补充（按首次提交日期倒序）
+
+本轮与其他同日运行并行，保留当前晨报正文；下列为本轮直接读取 arXiv 摘要/提交历史或官方 API 的补充。所有日期均在 2026-07-08—2026-10-08 窗口内，结果为作者报告，未复现；与正文重合者不重复计为新项目。
+
+| 日期 | 来源与摘要 | 相关性判断 |
+|---|---|---|
+| 2026-10-06 | [反事实输入下的 TSFM 动态辨识](https://arxiv.org/abs/2610.08118)：用具有精确反事实的受迫系统诊断协变量接口；合成系统微调改善响应，但实测系统上经典辨识仍常更好。 | **高，foundation/reasoning**：预测误差不能替代控制输入干预效果验证；不可直接当作光伏控制因果模型。 |
+| 2026-10-05 | [Scale-Invariant Training](https://arxiv.org/abs/2610.07324)：逆归一化后计算损失会放大大尺度序列梯度；论文在指定条件下证明缩放目标损失的尺度不变性，并报告多架构实验。 | **高，foundation/AutoML**：多电站混合训练需核对损失量纲与隐式权重。 |
+| 2026-10-05 | [协变量不确定性下的负荷 TSFM 基准](https://arxiv.org/abs/2610.07232)：准确未来协变量有利于 Chronos-2，严重噪声下 TimesNet 更稳健。 | **高，相邻应用**：适合借鉴天气预测误差压力测试；研究对象是负荷，不是光伏发电。 |
+| 2026-10-05 | [COMMON-TSQA](https://arxiv.org/abs/2610.05686)：干预数值输入，并分别评估事实落地、推理有效性和答案一致性；总体准确率可能掩盖证据使用问题。 | **高，reasoning**：解释与答案一致不代表解释中的数值事实正确。 |
+| 2026-10-04 | [TSHarness](https://arxiv.org/abs/2610.04942)：工具选择器将数值特征写入结构化感知状态，回答 Agent 推理，证据不足时重新感知。 | **高，Agent/harness**：零样本指目标侧无需训练或答案反馈，不代表工具选择器从未训练。 |
+| 2026-10-03 | [EvoCast](https://arxiv.org/abs/2610.04517)：LLM 负责研究假设与实现，确定性程序控制源码修改边界、规范评估与模型晋升。 | **高，时序 AutoML**：[官方仓库](https://github.com/18e0-x/EvoCast)创建于 **7 月 27 日**，推送记录 **7 月 28 日**，早于论文；最早公开时间有待溯源，不称为 10 月新建项目。README 已读，未审计源码或运行。 |
+| 2026-10-03 | [TimeNet](https://arxiv.org/abs/2610.04407)：统一表示信号、元数据、标注与监督，将预测、分类、问答表达为同一记录的不同视图。 | **高，foundation 基础设施**：可用于多任务训练与 Agent 输入契约，不等于新的预测骨干。 |
+| 2026-09-30 | [OpenTSLM TeeMoE](https://arxiv.org/abs/2609.40265)：共享骨干上混合预测聚合、原生预测、时序分析三个 LoRA 专家，统一预测与问答。 | **高，foundation/reasoning**：[代码](https://github.com/OpenTSLM/OpenTSLM-TeeMoE)与 [HF 模型](https://huggingface.co/OpenTSLM/TeeMoE)合并视为一个项目。HF 创建于 9 月 30 日、修改于 10 月 7 日；README 仅写 10 月发布，精确公开日不确定，工程发布时间证据降级。未验证运行效果。 |
+| 2026-09-30 | [PILOT](https://arxiv.org/abs/2609.39789)：用预测误差变化构造离线标签，学习何时重训练；部署声明仅使用已完成预测的误差。 | **中高，Agent 控制模块**：本身不是 LLM Agent；需检查离线标签边界和在线延迟标签。 |
+| 2026-09-30 | [RR-MoA](https://arxiv.org/abs/2609.39445)：使用归一化前输入路由适配器，缓解归一化引起的专家路由坍塌。 | **高，foundation 适配**：异质电站/工况候选；NeurIPS 接收状态仅据作者备注，未独立匹配会议条目。 |
+| 2026-09-22；v2 2026-10-01 | [光伏迁移学习与 CQR](https://arxiv.org/abs/2609.26959)：澳大利亚源域迁移至模拟孟加拉国目标数据，并校准预测区间。 | **高，直接光伏**：此前已跟踪，10 月为修订；模拟目标域不能代替真实电站部署验证。 |
+
+### 本轮 DailyArXiv 与覆盖证据
+
+- 完整读取 [DailyArXiv master README](https://github.com/zezhishao/DailyArXiv/blob/master/README.md)：最终快照 **Last update: 2026-10-08**，Time Series **91 条**论文行，最新列表日期 **10 月 6 日**。反事实诊断、Scale-Invariant Training、负荷基准、COMMON-TSQA、TSHarness、EvoCast、TimeNet 均在板块内，已补充。以上首发日期另经官方 API 验证。
+- [BORF](https://arxiv.org/abs/2311.18029)列表日期 10 月 6 日，官方首发 **2023-11-29**；[Stable Multivariate Functional Time Series Prediction](https://arxiv.org/abs/2606.14417)列表日期 10 月 6 日，首发 **2026-06-12**。均相关但超窗，降为修订线索、排除主推荐。早期快照的 [NeuroAtlas](https://arxiv.org/abs/2605.14698)首发 **5 月 14 日**、[Timeflies](https://arxiv.org/abs/2606.13571)首发 **6 月 11 日**，亦不因 9 月修订重新计新论文。
+- 本轮光伏官方 API 按首发倒序检查 `photovoltaic AND forecasting` 前四项，确认正文 STR 首发 **9 月 29 日**，以及 CQR 的 10 月 1 日修订。此查询不能覆盖所有能源期刊或光通信研究。
+- GitHub 四组查询各查前三项元数据，创建日上限为 10 月 7 日，未覆盖 10 月 8 日新建仓库。复读 agentic-timeseries、AI Data Scientist Platform、Tablua、Solariance、EvoCast 的 README；没有将功能声明当作源码审计结果。正文其他代码检查属于既有运行的记录。
+- OpenReview/ACL 搜索入口和 NeurIPS 论文页可访问，但本轮未完成逐篇日期核验；ICLR/ICML/KDD/AAAI 覆盖沿用既有正文，未独立重查。IBM 检索入口不可用；aihot 本轮请求超时，网页搜索工具没有返回可用结果，新增事实依靠官方直读来源。未声称检索穷尽。
+- 建议优先用 COMMON-TSQA 的输入干预测试 TSHarness，再核对 EvoCast 的验证/测试隔离与 STR 实时观测延迟。
+
+本轮补充记录时间：2026-10-08 09:50:41 CST。今日周四，不触发周报。
