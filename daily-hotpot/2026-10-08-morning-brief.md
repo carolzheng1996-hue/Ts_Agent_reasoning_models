@@ -1,175 +1,94 @@
-# 时间序列 Agent / Reasoning 晨间简报｜2026-10-08
+# 时间序列研究晨间简报｜2026-10-08
 
-- **检索窗口**：2026-07-08—2026-10-08（含首尾）；北京时间 2026-10-08 清晨完成主要核验。本次任务从 10 月 7 日跨日，按实际完成日期命名。
-- **日期口径**：研究按可核实的首次公开日期、项目按创建日期排序；新版本和博客解读单独注明。各栏目由近到远，日期不确定的线索置于末尾。arXiv 与 GitHub 原始时间使用 UTC 日期。
-- **增量基线**：自动化记录显示上次运行 10 月 6 日，但本地 memory 和同步后的仓库最近成果均止于 9 月 25 日。因此以下为相对本地可见记录的补充，不能保证全部是最近 24 小时新增。
-- **阅读优先级**：先看 FreshCast 的部署后记忆协议、TSHarness 的数值证据接口、EvoCast 的实验裁决机制；光伏方向优先验证天气信息可用时刻与跨站点泛化。论文结果均为作者报告，本次未复现实验。
+- 检索截止：2026-10-08 09:51（Asia/Shanghai）。本轮跨日执行，按完成阶段的当天日期归档。
+- 三个月窗口：2026-07-08 至检索截止。论文日期采用 arXiv v1 的 UTC 日期，修订日期另列；博客采用页面发布日期。日期不确定者仅作低优先级线索。
+- 去重基线：本地与远端最新晨报为 9 月 25 日；自动化标示上次运行于 10 月 5 日，但记忆中没有对应产出，因此“本轮补录”不代表当天首发。
+- 所有性能判断均来自作者报告，本轮核验摘要、日期及部分项目说明，未运行模型、未复现实验。今天周四，不生成周报。
 
-## 1. 时间序列基础模型最新研究
+## 1. 今日重点
 
-### 2026-10-06｜反事实输入暴露 TSFM 的动态辨识不足
+优先阅读 **TSHarness、EvoCast、COMMON-TSQA**：分别对应“感知与推理怎样分工”“自动研究怎样约束评估权限”“答案是否真正使用序列证据”。基础模型方面，**ScaleIn** 提醒我们检查损失尺度，**FreshCast** 强调部署后记忆刷新，反事实系统辨识评测则揭示预测器不一定能正确回答控制输入变化的问题。下列各节提供原始来源。
 
-来源：[arXiv:2610.08118](https://arxiv.org/abs/2610.08118)。首次提交 10 月 6 日。
+## 2. 时间序列基础模型最新研究
 
-以精确反事实的受迫工程系统测试 Chronos-2、TimesFM-2.5 与 TabPFN-TS。论文发现默认协变量接口可能只反映即时作用，或低估动态响应；合成受迫系统微调能改善部分响应，但在四个实测系统中的三个上，经典辨识仍明显更好，并出现单变量预测能力损失。
+### 2026-10-06｜反事实输入下的上下文辨识衰减（本轮补录）
 
-**相关性：高。** 对用 TSFM 回答“改变控制输入会怎样”的 Agent 是直接约束；预测精度不能替代干预效应验证。应用到光伏调度前，应分别测试天气协变量响应和可控输入响应。
+- **来源**：[arXiv 2610.08118](https://arxiv.org/abs/2610.08118)，v1 10 月 6 日。
+- **摘要**：在有精确反事实的受迫系统中比较 Chronos-2、TimesFM-2.5、TabPFN-TS 与传统系统辨识。作者发现部分默认协变量接口不能表达动态响应，Chronos-2 也会低估响应；合成受迫系统微调有所修复，但四个实测装置中三个仍由传统方法占优，且存在单变量预测能力损失。
+- **相关性判断**：**TSFM 高、Agent 控制与反事实 reasoning 高**；属于诊断和适配研究，不能把普通预测精度外推为干预有效性。建议在 Agent 的 what-if 工具评测中保留传统 ARX 对照。
 
-### 2026-10-06｜FreshCast：冻结预测器，持续刷新检索记忆
+### 2026-10-06｜FreshCast：冻结预测器的记忆刷新（本轮补录）
 
-来源：[Retrieval Is Not Enough](https://arxiv.org/abs/2610.07834)。v1 为 10 月 6 日，v2 为 **10 月 7 日**，不是两篇新论文。
+- **来源**：[arXiv 2610.07834](https://arxiv.org/abs/2610.07834)，v1 10 月 6 日，v2 10 月 7 日；本轮未比较版本差分。
+- **摘要**：保持预测器冻结，持续将新揭示的观测加入非参数记忆，以关系核回归形成记忆预测，在验证段校准融合权重。作者在七个基准、十种架构上报告改善，冻结训练结束时的记忆会损失大部分增益。
+- **相关性判断**：**TSFM 适配高、Agent 记忆机制高、语言 reasoning 低**。它是检索插件，不是自主 Agent 或新预训练骨干；应用时需核对多步标签何时可用于记忆更新。
 
-以部署后新观测刷新非参数记忆，用关系核回归构建记忆预测，再由验证集校准其与冻结模型的组合权重。作者在七个基准、十种架构中报告收益；冻结训练末尾的记忆会移除大部分收益。
+### 2026-10-05｜Scale-Invariant Training / ScaleIn（本轮补录）
 
-**相关性：高。** 可作为预测 Agent 的持续记忆模块，尚不等于自主规划系统。重点复核：每次写入的后续片段是否已经完整观测、延迟标签如何处理，以及与在线基线是否使用同样的信息预算。
+- **来源**：[arXiv 2610.07324](https://arxiv.org/abs/2610.07324)，v1 10 月 5 日。
+- **摘要**：分析归一化后反变换再计算损失导致高尺度序列主导梯度的问题；在相应缩放器与齐次损失假设下，改为在缩放目标上计算损失可使优化轨迹对各序列独立缩放保持不变。四种架构的预训练比较支持该方法。
+- **相关性判断**：**TSFM 训练高、AutoML 实验控制高、显式 reasoning 低**。值得将损失计算域纳入训练配置记录；不能把有条件的理论结论泛化至任意归一化和任意损失。
 
-### 2026-10-05｜协变量不确定性下的负荷 TSFM 基准
+## 3. 时间序列建模 Agent 最新研究
 
-来源：[arXiv:2610.07232](https://arxiv.org/abs/2610.07232)。首次提交 10 月 5 日。
+### 2026-10-04｜TSHarness：解耦感知和推理的零样本时序问答（本轮补录）
 
-比较四种从头训练模型和四种 TSFM，覆盖三个真实负荷数据集及不同未来协变量质量。Chronos-2 在协变量可用或准确时表现突出，但噪声增大后性能退化；严重不确定性下 TimesNet 更稳健。
+- **来源**：[arXiv 2610.04942](https://arxiv.org/abs/2610.04942)，v1 10 月 4 日；[方法正文](https://arxiv.org/html/2610.04942v1)。
+- **摘要**：用结构化 Time-Series Perception State 汇总数值工具的统计与时序特征；可复用分析知识记忆与学习得到的工具选择器指导感知，回答 Agent 根据问题进行语义推理，证据不足时反馈重新感知。
+- **相关性判断**：**时序 Agent / reasoning / harness 均高，TSFM 中低**。论文的零样本指无需目标侧训练或答案反馈，不能理解为整个系统没有学习组件；主要任务是问答，尚不能推导长跨度预测收益。
 
-**相关性：高，光伏为方法迁移。** 应将实际天气预报误差纳入基础模型选型。研究对象是电力负荷，不能称为光伏功率实证。
+### 2026-10-03｜EvoCast：迭代演化预测架构的自主研究 Agent（本轮补录）
 
-### 2026-10-04｜Pythia：多模态时间序列基础世界模型
+- **来源**：[arXiv 2610.04517](https://arxiv.org/abs/2610.04517)，v1 10 月 3 日；[官方代码](https://github.com/18e0-x/EvoCast)。
+- **摘要**：先建立任务基线并运行机制消融，再用数据特征、既往结果和失败记录指导架构修改。LLM 负责假设及代码，确定性程序负责编辑边界、规范评估与晋级决策。作者在三个真实预测案例中报告效果。
+- **相关性判断**：**建模 Agent / AutoML / 实验 harness 高，研究推理高，TSFM 中**。最值得借鉴的是评估权限隔离；仍需审计反复使用验证集的选择偏差，不能将三个案例视为通用领先证据。
 
-来源：[arXiv:2610.05240](https://arxiv.org/abs/2610.05240)。首次提交 10 月 4 日。
+## 4. 时间序列 reasoning 模型最新研究
 
-通过联合嵌入预测学习上下文条件下的潜在动态；数值参考约束上下文修正，另用概率解码器读取冻结表示。作者在 MUSE 上报告相对所比较榜单最强模型的改进，并分析实体描述、事件和协变量贡献。
+### 2026-10-05｜COMMON-TSQA：系统是否真正读取时间序列？（本轮补录）
 
-**相关性：高。** 为事件、文本与功率曲线联合建模提供方向；世界模型命名本身不证明规划、因果推理或跨电站泛化能力。
+- **来源**：[arXiv 2610.05686](https://arxiv.org/abs/2610.05686)，v1 10 月 5 日。
+- **摘要**：统一已有公开问答数据的表示与答案格式，在原始输入及六类干预条件下评测 TimeOmni-1、ChatTS、TimeOmni-VL、Time-MQA，并检查解释的事实依据、中间推理和答案一致性。总体分数相似可能掩盖逐题预测变化，解释与答案一致也可能伴随错误数值描述。
+- **相关性判断**：**reasoning 可靠性评测高、Agent 证据审计高、TSFM 中**。这是评测研究，不是新 reasoning 权重发布；适合用作 TSHarness 类系统的独立评测思路，但本轮未确认两者联合实验。
 
-### 2026-08-20｜TabPFN-TS / Chronos-2 区域供热零样本评估（10 月修订）
+### 2026-10-04｜TSHarness（与上一节同一成果，不重复计数）
 
-来源：[arXiv:2608.20024](https://arxiv.org/abs/2608.20024)。v1 为 8 月 20 日，v2 为 10 月 6 日。
+- **来源与日期**：[arXiv 2610.04942](https://arxiv.org/abs/2610.04942)，10 月 4 日。
+- **摘要**：把数值证据提取与语义回答分开，并允许重新感知。
+- **相关性判断**：**工具辅助 reasoning 高**。本轮确认的是框架方法；未核实独立通用时序 reasoning 模型权重的新发布。
 
-研究两处德国供热网络，分析协变量、上下文长度、时间分辨率与概率预测。主基准假设完美天气预报，另有回溯天气预测敏感性分析。
+## 5. GitHub 和 Hugging Face 上值得跟踪的新项目
 
-**相关性：中高。** 能源预测迁移参考；必须区别完美天气上界与可部署表现。按首次日期列入窗口内修订跟踪，非 10 月新研究。
+### 时间序列及可迁移的 Agent、harness、machine learning、AutoML
 
-## 2. 时间序列建模 Agent 最新研究
+窗口内版本动态与“新建仓库”分开记录；创建日期不能核实的项目降低工程采用优先级。本轮 GitHub API 限流，未取得完整创建日、推送日或星数快照。
 
-### 2026-10-04｜TSHarness：解耦感知与推理的零样本时序问答
+| 日期与状态 | 来源 | 摘要与相关性判断 |
+|---|---|---|
+| 官方博客 2026-10-07；README 记载 v1.0 在 8 月已开源，技术报告为 8 月 19 日；属于窗口内版本解读，非当天首次开源 | [microsoft/agent-lightning](https://github.com/microsoft/agent-lightning)；[微软研究院博客](https://www.microsoft.com/en-us/research/blog/agent-lightning-v1-0-a-3500-line-lightweight-agentic-rl-framework-for-training-agents-with-real-harnesses/) | 让实际部署 harness 通过代理接入 RL 训练，保留工具、上下文与控制流；**harness / Agent 训练高，时序直接证据低**。实验集中在代码等任务，不能外推时序收益。 |
+| 关联论文 2026-10-03；仓库创建日期**不确定**，低优先级待复现 | [18e0-x/EvoCast](https://github.com/18e0-x/EvoCast) | 已核 README 与目录存在 evocast、ts_benchmark、tests、配置及依赖说明；**时序建模 Agent / AutoML 高**。需要 GPU、数据和模型服务配置；未运行代码。与上文论文合并计为一项研究。 |
+| 首次公开/创建日期**不确定**；2026-10-08 核到公开说明，仅观察，不计已确认窗口内新建项目 | [Agenthon-2026/track2-forecasting-public](https://github.com/Agenthon-2026/track2-forecasting-public) | Docker Agent 结合带截止时间的金融序列与文本，输出未来分布，以 CRPS 等评分；**时序 reasoning / 评测 harness 高**。README 明确五个命名预测适配器当前为高斯随机游走脚手架，不能称 Chronos、TimesFM 等真实实现；现有评分也不单独计算文本消融收益。 |
 
-来源：[arXiv:2610.04942](https://arxiv.org/abs/2610.04942)。首次提交 **10 月 4 日**；聚合站的 10 月 6 日展示时间不作为首发日。
-
-工具选择器调用数值工具，将统计与时序特征写入结构化 Time-Series Perception State；回答 Agent 在此基础上推理，证据不足时触发再次感知。方法强调跨数据集零样本 TSQA，不依赖目标侧训练或答案反馈。
-
-**相关性：很高。** 与可核验数值工具、记忆和反馈闭环直接对应。它是问答 harness；尚不能据此宣称自动训练或优化预测模型。本次未核实独立官方代码发布。
-
-### 2026-10-03｜EvoCast：自主迭代预测架构的研究 Agent
-
-来源：[arXiv:2610.04517](https://arxiv.org/abs/2610.04517)、[官方代码](https://github.com/18e0-x/EvoCast)。论文首次提交 10 月 3 日；仓库创建 7 月 27 日、最后推送 7 月 28 日，说明代码存在更早公开线索，**不能认定 10 月 3 日是整个项目首发**。
-
-先执行基线与机制消融，再利用数据特征、失败记录和历史实验提出修改方向。LLM 负责假设及实现，确定性程序负责修改边界、统一评估与候选晋级。作者报告三个真实预测案例。
-
-**相关性：很高。** 直接覆盖建模 Agent 和开放式架构搜索。GitHub 树中确有 diff audit、verifier、metric runner 等模块，但本次未执行或审计其全部裁决逻辑，不把模块名当作正确性证明。
-
-## 3. 时间序列 reasoning 模型最新研究
-
-### 2026-10-05｜COMMON-TSQA：答对不代表使用了数值证据
-
-来源：[Do Time-Series QA Systems Read the Time Series?](https://arxiv.org/abs/2610.05686)。首次提交 10 月 5 日。
-
-对 TimeOmni-1、ChatTS、TimeOmni-VL、Time-MQA 进行统一问答评估，在固定问题和目标下设置原始输入与六种干预，并审查解释的事实依据、推理有效性和答案一致性。总体分数可能掩盖个体预测变化，解释与最终答案一致也可能伴随错误数值描述。
-
-**相关性：很高。** 适合成为 TS Agent 的证据审计参考。建议将数值事实正确率、输入干预敏感性、推理有效性与最终答案准确率分开报告。
-
-**日期待核、降级线索**：[SimpleTimeBench / Foundations without Fundamentals](https://arxiv.org/abs/2610.02058) 的 arXiv v1 为 10 月 1 日，但 [OpenReview 同名 PDF](https://openreview.net/pdf?id=iIRdd86Xkr) 搜索索引显示更早的发布线索；论坛页触发浏览器验证，本次不能确认最早公开时间。因此不计入已确认的窗口内新研究。内容关注趋势、周期、领先协变量等基础时序能力，相关性高，首发日期置信度低。
-
-## 4. GitHub 和 HuggingFace 上值得跟踪的新项目
-
-### 时间序列
-
-#### 2026-10-07｜Agent Lightning v1.0 官方解读更新（旧项目版本跟踪）
-
-来源：[Microsoft Research 博客](https://www.microsoft.com/en-us/research/blog/agent-lightning-v1-0-a-3500-line-lightweight-agentic-rl-framework-for-training-agents-with-real-harnesses/)、[GitHub](https://github.com/microsoft/agent-lightning)。日期是博客发布时间；README 记载 v1.0 于 **8 月开源、8 月 19 日发布技术报告**，不能算作今日新开源项目。
-
-把部署时的真实 harness 接入 RL，代理保留工具和上下文流程，训练侧捕获轨迹并管理 rollout。**相关性：中高、通用基础设施。** 可借鉴实验轨迹和训练/部署一致性；公开示例结果不是时间序列建模收益。AI HOT 提供线索，已回到官方博客和仓库核对。
-
-#### 2026-10-05｜AI Data Scientist Platform
-
-来源：[GitHub](https://github.com/kulkarniDurvesh/ai-data-scientist-platform)、[滚动回测实现](https://github.com/kulkarniDurvesh/ai-data-scientist-platform/blob/main/core/forecast/evaluate.py)。创建 10 月 5 日，推送 10 月 7 日。
-
-包含数据分析、建模、预测及 Agent 工具模块。抽查代码确认按 cutoff 切分历史与未来、最多四个回测起点、用历史计算 MASE 分母；区间由回测残差标准差乘系数估计。
-
-**相关性：中高，原型观察。** 可参考预测工具封装；其区间没有由上述实现直接给出的覆盖率保证。尚未检查完整模型选择与最终独立测试流程，未运行。
-
-#### 2026-08-22｜agentic-timeseries
-
-来源：[GitHub](https://github.com/sriixz/agentic-timeseries)。创建 8 月 22 日，最新推送 10 月 5 日，按创建日期排序。
-
-README 描述金融分析、CDC FluSight 分析、自然语言配置 NeuralForecast AutoLSTM/Optuna 三条工作流，并分离配置生成与模型执行。
-
-**相关性：高。** 与建模 Agent 任务匹配；本次仅核验元数据和 README，未把其持出测试、校验和修复宣称作为已通过的实验结果。推送日期只说明活动，不证明当天新增了这些功能。
-
-EvoCast 代码已与上方论文合并展示，不重复计数。HuggingFace 定向检索未确认可以新增的独立、窗口内发布条目；没有用第三方模型榜单替代模型卡与发布历史。
+Hugging Face 本轮未独立核实新权重/数据发布日期，不新增仅凭名称匹配的条目。AutoML 方向以 EvoCast 为主要新增线索，未确认更多日期可靠的新项目。
 
 ### 光伏功率预测
 
-#### 2026-10-07｜多变量光伏发电预测系统
+本轮未确认创建日期明确且有新实现证据的光伏 GitHub / Hugging Face 项目，不重复包装既有项目推送活动。
 
-来源：[GitHub](https://github.com/kulat55/jiyu-duobianliang-de-guangfu-fadian-yuce-xitong)、[LSTM 训练](https://github.com/kulat55/jiyu-duobianliang-de-guangfu-fadian-yuce-xitong/blob/main/models/train_lstm.py)、[线性模型训练](https://github.com/kulat55/jiyu-duobianliang-de-guangfu-fadian-yuce-xitong/blob/main/models/train_model.py)。创建、推送均为 10 月 7 日；README 提及英文同内容仓库，合并为一个项目。
+## 6. 光伏功率预测最新研究
 
-Flask 界面集成线性回归与 LSTM。代码使用位置顺序 60/20/20 切分，LSTM 归一化仅拟合训练段；三步历史预测下一条功率。
+### 2026-10-01｜Physics-informed sparse deep neural networks（低优先级线索）
 
-**相关性：高，优先级中低。** README 的“0–15 分钟”不能由单步训练脚本直接证实；需确认采样周期、原始排序及数据来源。线性回归用同一行气象变量估计功率，不能默认视为提前预测。LSTM 的 MAE/MSE 在归一化尺度计算，不能直接当作 kW 误差。未运行。
+- **来源**：[Scientific Reports 官方页面](https://www.nature.com/articles/s41598-026-74064-8)。官方检索结果标注发表日期 10 月 1 日；正文因站点跳转未成功获取，最早预印本公开日**不确定**。
+- **摘要**：研究物理约束与稀疏深度网络结合的快速太阳能功率预测及快速频率响应支持。
+- **相关性判断**：**光伏预测高，TSFM / 自主 Agent / 语言 reasoning 低**。仅保留研究线索，不转述未核实的性能或部署效果。
 
-#### 2026-10-05｜Solariance Home Assistant 集成
+## 7. 检索记录、排除与下一步
 
-来源：[GitHub](https://github.com/solariance/ha-solariance)。创建、推送均为 10 月 5 日。
-
-通过服务 API 提供光伏预测传感器、Energy 仪表盘曲线与寻找富余光伏用电时间窗的动作；README 和代码树可读。
-
-**相关性：中，应用集成。** 适合作为“预测→设备用电安排”的工具接口参考，依赖外部账户与预测服务，不是可训练的新预测模型；本次未调用服务或验证预测质量。
-
-## 5. 光功率 / 光伏功率预测最新研究
-
-### 2026-09-22｜迁移学习与 CQR 的光伏概率预测
-
-来源：[arXiv:2609.26959](https://arxiv.org/abs/2609.26959)。首次提交 9 月 22 日；本地 9 月 24 日已有记录，作为窗口内延续跟踪。
-
-结合迁移学习和 conformalized quantile regression，研究停电驱动的数据稀缺场景。目标孟加拉国数据包含模拟设定。
-
-**相关性：高。** 适合评估稀缺数据下区间预测；不能把模拟目标域结果当成真实电站迁移验证。后续应检查时序校准、缺失机制和目标域独立测试。
-
-### 2026-09-15｜天空图像→辐照度→下一小时光伏功率
-
-来源：[Smart Energy System Research 原文](https://www.sciepublish.com/article/pii/1221)。页面明确 Published 15 September 2026；此前本地晨报已跟踪，非本日首次发现。
-
-用光流预测云运动，ResNet50 估计辐照度，再将天气、辐照度及历史功率输入 CNN-BiGRU-Attention，配合贝叶斯超参数优化预测下一小时功率。
-
-**相关性：高。** 多模态预测流水线可作为 Agent 编排工具；需要继续审查时间切分、图像与气象信息可用时刻以及晴天/多云分组误差，不能以单一总体拟合指标代替部署验证。
-
-### 日期不确定、降低优先级的 10 月刊期线索
-
-- **2026-10，在线首发日不确定**：[Physics-as-a-layer multi-task forecasting of photovoltaic power and module temperature with numerical weather prediction](https://doi.org/10.1016/j.epsr.2026.113181)。用可微辐照与热过程联合预测功率、组件温度。**相关性高**，值得研究物理约束，但刊期不是首发日期，不计入已确认增量。
-- **2026-10，在线首发日不确定**：[Hybrid photovoltaic power forecasting by combining physical and machine learning models](https://doi.org/10.1016/j.solener.2026.114951)。比较物理与机器学习混合方法，并使用巴西、荷兰系统数据。**相关性高**，重点是混合结构选择；尚未确认最早在线时间，不称为 10 月新论文。
-
-**光通信光功率预测**：本轮未核实窗口内可新增的直接研究。[Mobility Aware Power Control](https://arxiv.org/abs/2604.22682) 首次提交 4 月 24 日，已超窗且主要研究功率控制，排除。未将光伏材料的 photovoltaic effect 或光学硬件器件论文充作功率预测研究。
-
-## 6. DailyArXiv 必检结论
-
-已完整读取 [master README](https://github.com/zezhishao/DailyArXiv/blob/master/README.md) 的 **Time Series** 板块：`Last update: 2026-10-08`，共 **91 条带 arXiv 链接的论文行**，板块最新行日期为 **10 月 6 日**。README 全局更新日不是所有论文首发日。
-
-**存在相关且窗口内的内容，已补入上述正文**：反事实辨识诊断、FreshCast、协变量不确定性负荷基准、Pythia、TSHarness、EvoCast、COMMON-TSQA，以及区域供热 TSFM 的窗口内旧稿修订。DailyArXiv 的 FreshCast 行仍指向 v1，而 arXiv 已有 10 月 7 日 v2；最终使用官方历史区分。
-
-**降级或排除**：
-
-| 条目 | DailyArXiv 标示日期 | 首发 / 冲突证据 | 处理 |
-|---|---|---|---|
-| [BORF](https://arxiv.org/abs/2311.18029) | 2026-10-06，v2 | 官方摘要页仍返回 2023 年 v1 及旧标题；列表与摘要版本显示不一致 | 旧研究超窗，不作最新研究 |
-| [Time-o1](https://arxiv.org/abs/2505.17847) | 2026-10-06，v3 | 首发为 2025 年 5 月；名称含 o1 不等于 reasoning 模型 | 超窗排除 |
-| [PyDPF](https://arxiv.org/abs/2510.25693) | 2026-10-06，v4 | 链接对应 2025 年 10 月稿件，列表摘要为软件修订 | 不作为窗口内首发；低优先级维护线索 |
-| [区域供热评估](https://arxiv.org/abs/2608.20024) | 2026-10-06，v2 | 官方 v1 为 2026-08-20 | 窗口内，按 8 月 20 日排序 |
-
-此板块按关键词且最多保留 100 篇，不能代表全部时间序列研究；光伏研究另行检索。未把旧稿更新日期改写成首次发表日期。
-
-## 7. 检索覆盖与局限
-
-- arXiv：独立关键词检索与摘要/版本历史核验；DailyArXiv：完整 Time Series 板块读取。主要论文以官方来源作为日期和摘要依据。
-- GitHub：五组搜索 `timeseries agent`、`"time-series" agent`、`harness "machine learning"`、`automl agent`、`photovoltaic forecasting`，限制创建日为窗口内、按更新时间取前 3 条；当次总命中分别为 6 / 149 / 22 / 95 / 54。另检查论文官方仓库、微软官方项目；不是全量项目审计，也不是 Trending 排名。
-- OpenReview / ACL / NeurIPS / ICLR / ICML / KDD / AAAI：定向域名与会议关键词检索。多数结果为旧稿、教程或首发日期不完整；没有把会议年份当作新近首发证据。SimpleTimeBench 论坛页访问受限，已保留不确定性。
-- HuggingFace 与机构博客：定向检索，微软新博客回溯到旧版本，未虚报新模型发布。AI HOT 返回 4 条线索，仅 harness 条目相关且经过官方验证。
-- 光伏：arXiv、出版社、机构页面交叉检索；日期仅有刊期的论文置入低优先级候选。未找到新论文不等于该领域没有新成果。
-- 今日为**周四**，不生成周报。明日若正常运行，应汇总本周实际存在的工作日简报，并明确缺失日期，避免补造日报内容。
+- **arXiv**：[cs.LG recent](https://arxiv.org/list/cs.LG/recent) 本轮返回 10 月 7 日公告，读取首屏 50 条；另通过 DailyArXiv 定向核验上述论文的官方摘要与 v1。未全量覆盖全部学科和三个月论文，也未覆盖 10 月 8 日完整公告。
+- **DailyArXiv**：[默认 README](https://github.com/zezhishao/DailyArXiv) 本轮获取版本显示 Last update 2026-10-08，Time Series 最新行日期 10 月 6 日。timeseries 分支返回未找到，回退 master；自动更新提交接口不可用，未核提交哈希。README 按版本更新时间列条目，本报告回到 v1，排除窗口外旧稿的近期修订。
+- **会议来源**：定向搜索 OpenReview、ACL、NeurIPS、ICML/PMLR、KDD、AAAI。命中 CaTS-Bench、STReasoner 等会议版本，但未解决最早公开日与 7 月 8 日边界关系，不新增进窗口主清单；未形成这些会议的全量扫描。会议名称不代表录用已核实。
+- **GitHub**：三组创建窗口查询覆盖 time-series agent、automl agent、harness machine learning，均受 API 限流；公开 Search 入口也未返回有效结果。已通过论文和官方博客核验项目 README；[Trending](https://github.com/trending) 返回页面，但未取得完整可用榜单，不报告排名。
+- **机构博客与 AI HOT**：AI HOT 关键词补检提供 Agent Lightning 线索，已回到微软官方博客与 GitHub 交叉核验。其余无关资讯排除，不将聚合摘要当原文。
+- **日期过滤**：Time-o1、FreDF、PyDPF 等虽在 10 月 6 日更新，但最早稿件在窗口外，不计最新首发。9 月已收录的 TimeEvo 与 TimeLitmus 不再作为今日新增重点。
+- **建议关注**：先读 EvoCast 的评估权限设计与 TSHarness 的证据接口，再用 COMMON-TSQA 的干预思路设计独立验证。基础模型实验先检查 ScaleIn 所涉及的损失尺度，并为 FreshCast 保留严格的标签可得时间。这些是本简报的研究建议，尚未完成联合实验。
