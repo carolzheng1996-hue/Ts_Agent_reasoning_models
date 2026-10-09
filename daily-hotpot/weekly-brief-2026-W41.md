@@ -1,11 +1,12 @@
 # 2026-W41 时间序列 Agent / Reasoning 周报
 
-汇总时间：2026-10-09 09:00（北京时间）。工作日范围：**10 月 5—9 日**；研究筛选窗口统一为 **7 月 9 日至汇总时刻**。来源为仓库实际存在的 [10 月 8 日晨报](https://github.com/carolzheng1996-hue/Ts_Agent_reasoning_models/blob/main/daily-hotpot/2026-10-08-morning-brief.md) 与 [10 月 9 日晨报](https://github.com/carolzheng1996-hue/Ts_Agent_reasoning_models/blob/main/daily-hotpot/2026-10-09-morning-brief.md)。**10 月 5、6、7 日没有独立文件，覆盖为 2/5 个工作日，不补造日报。** “本周重点”含本周发现的较早窗内论文，不等于全部本周首发；按来源日期由近到远列出。
+汇总时间：2026-10-09 09:05（北京时间）。工作日范围：**10 月 5—9 日**；研究筛选窗口统一为 **7 月 9 日至汇总时刻**。来源为仓库实际存在的 [10 月 8 日晨报](https://github.com/carolzheng1996-hue/Ts_Agent_reasoning_models/blob/main/daily-hotpot/2026-10-08-morning-brief.md) 与 [10 月 9 日晨报](https://github.com/carolzheng1996-hue/Ts_Agent_reasoning_models/blob/main/daily-hotpot/2026-10-09-morning-brief.md)。**10 月 5、6、7 日没有独立文件，覆盖为 2/5 个工作日，不补造日报。** “本周重点”含本周发现的较早窗内论文，不等于全部本周首发；按来源日期由近到远列出。
 
 ## 研究重点
 
 | 首发日期 | 研究与来源 | 本周价值与相关性 |
 |---|---|---|
+| 2026-10-08 | [光伏决策层多模态融合](https://www.techscience.com/energy/online/detail/28550) | 云图路径与气象 CatBoost 固定权重融合，**光伏高、Agent / reasoning 低**；官方期刊上线日已重核，最早预印本未知，首发优先级降低。 |
 | 2026-10-07 | [WxFM-XL](https://arxiv.org/abs/2610.10057) | 用误差先验图和空间图适配多站点天气预测。**TSFM 高、光伏气象迁移中高**；应核查误差图构建时的数据可得性。 |
 | 2026-10-07 | [Temporal Predictive Multiplicity](https://arxiv.org/abs/2610.09994) | 同等误差模型仍可产生不同轨迹。**Agent 选模 / harness 高**；候选比较不宜只看平均误差。 |
 | 2026-10-06 | [预处理感知基准](https://arxiv.org/abs/2610.09096) | 比较模型与可逆预处理组合，提示预处理偏置影响架构排名。**AutoML / Agent 高**；搜索流程必须约束验证数据与预算。 |
@@ -30,6 +31,8 @@
 | 2026-10-08 08:14 | [Multi-Agent-Data-Analyst](https://github.com/tanyaverma20/Multi-Agent-Data-Analyst) | **通用 AutoML 高、时序低**；随机切分，且特征选择早于内层 CV，存在验证信息泄漏风险，低优先级。 |
 | 2026-10-07 22:15 | [EpochGo](https://github.com/AryanDinakaran/EpochGo) | 本地三角色 AutoML，**通用 Agent 高、时序低**；基准路径使用随机留出，迁移到时序前须替换，优先级中低。 |
 
+另有本周新增收录、10 月 4 日创建的 [Ephemeris MCP](https://github.com/TensorLink-AI/ephemeris-mcp)，概率预测、路由与集成服务入口，**时序 Agent / TSFM 工具高**；需 API key 和额度，不代表后端模型全部开源。创建日期继承同日 3ceb73f 的 API 记录，说明本轮重新核读；它不计本周新建的五个仓库。
+
 本周其他跟踪项：[EvoCast](https://github.com/18e0-x/EvoCast) 的论文在 10 月 3 日公开，仓库创建更早，不列为本周新建；[Agent Lightning](https://github.com/microsoft/agent-lightning) 的 10 月 7 日博客属于既有 v1.0 解读，不能当十月新发布；[Agenthon forecasting](https://github.com/Agenthon-2026/track2-forecasting-public) 首次公开日期不确定，10 月 8 日晨报提醒预测适配器是脚手架，降级观察。这三项均不计入上述五个新仓库。
 
 ## DailyArXiv 与日期纠偏
@@ -44,3 +47,5 @@
 2. TSHarness / TeeMoE：分别检查学习组件训练数据与专家控制器隔离，再用 COMMON-TSQA 思路审计证据使用。
 3. 评测协议：记录预处理搜索预算，增加轨迹、爬坡与天气可得性检查。
 4. 光伏工程：先处理新代码的依赖、文档路径与数据选择隔离，再评估真实预报输入；本周没有执行复现实验。
+
+同日合并：保留 3ceb73f 的独有项目与光伏论文，补充本轮源码核验；没有将较早版本的“未核代码”描述覆盖到已经抽查的项目上。
