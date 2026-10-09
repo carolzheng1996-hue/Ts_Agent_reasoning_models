@@ -1,6 +1,6 @@
 # 2026-W41 时间序列 Agent / Reasoning 周报
 
-汇总时间：2026-10-09 09:05（北京时间）。工作日范围：**10 月 5—9 日**；研究筛选窗口统一为 **7 月 9 日至汇总时刻**。来源为仓库实际存在的 [10 月 8 日晨报](https://github.com/carolzheng1996-hue/Ts_Agent_reasoning_models/blob/main/daily-hotpot/2026-10-08-morning-brief.md) 与 [10 月 9 日晨报](https://github.com/carolzheng1996-hue/Ts_Agent_reasoning_models/blob/main/daily-hotpot/2026-10-09-morning-brief.md)。**10 月 5、6、7 日没有独立文件，覆盖为 2/5 个工作日，不补造日报。** “本周重点”含本周发现的较早窗内论文，不等于全部本周首发；按来源日期由近到远列出。
+汇总时间：2026-10-09 09:03（北京时间）。工作日范围：**10 月 5—9 日**；研究筛选窗口统一为 **7 月 9 日至汇总时刻**。来源为仓库实际存在的 [10 月 8 日晨报](https://github.com/carolzheng1996-hue/Ts_Agent_reasoning_models/blob/main/daily-hotpot/2026-10-08-morning-brief.md) 与 [10 月 9 日晨报](https://github.com/carolzheng1996-hue/Ts_Agent_reasoning_models/blob/main/daily-hotpot/2026-10-09-morning-brief.md)。**10 月 5、6、7 日没有独立文件，覆盖为 2/5 个工作日，不补造日报。** “本周重点”含本周发现的较早窗内论文，不等于全部本周首发；按来源日期由近到远列出。
 
 ## 研究重点
 
