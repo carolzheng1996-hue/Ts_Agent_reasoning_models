@@ -1,6 +1,6 @@
 # 2026-W41 时间序列 Agent / Reasoning 周报
 
-汇总时间：2026-10-09 09:03（北京时间）。工作日范围：**10 月 5—9 日**；研究筛选窗口统一为 **7 月 9 日至汇总时刻**。来源为仓库实际存在的 [10 月 8 日晨报](https://github.com/carolzheng1996-hue/Ts_Agent_reasoning_models/blob/main/daily-hotpot/2026-10-08-morning-brief.md) 与 [10 月 9 日晨报](https://github.com/carolzheng1996-hue/Ts_Agent_reasoning_models/blob/main/daily-hotpot/2026-10-09-morning-brief.md)。**10 月 5、6、7 日没有独立文件，覆盖为 2/5 个工作日，不补造日报。** “本周重点”含本周发现的较早窗内论文，不等于全部本周首发；按来源日期由近到远列出。
+首版汇总：2026-10-09 09:03；增量复核：2026-10-09 15:35（北京时间）。工作日范围：**10 月 5—9 日**；研究筛选窗口统一为 **7 月 9 日至汇总时刻**。来源为仓库实际存在的 [10 月 8 日晨报](https://github.com/carolzheng1996-hue/Ts_Agent_reasoning_models/blob/main/daily-hotpot/2026-10-08-morning-brief.md) 与 [10 月 9 日晨报](https://github.com/carolzheng1996-hue/Ts_Agent_reasoning_models/blob/main/daily-hotpot/2026-10-09-morning-brief.md)。**10 月 5、6、7 日没有独立文件，覆盖为 2/5 个工作日，不补造日报。** “本周重点”含本周发现的较早窗内论文，不等于全部本周首发；按来源日期由近到远列出。
 
 ## 研究重点
 
@@ -9,6 +9,7 @@
 | 2026-10-08 | [光伏决策层多模态融合](https://www.techscience.com/energy/online/detail/28550) | 云图路径与气象 CatBoost 固定权重融合，**光伏高、Agent / reasoning 低**；官方期刊上线日已重核，最早预印本未知，首发优先级降低。 |
 | 2026-10-07 | [WxFM-XL](https://arxiv.org/abs/2610.10057) | 用误差先验图和空间图适配多站点天气预测。**TSFM 高、光伏气象迁移中高**；应核查误差图构建时的数据可得性。 |
 | 2026-10-07 | [Temporal Predictive Multiplicity](https://arxiv.org/abs/2610.09994) | 同等误差模型仍可产生不同轨迹。**Agent 选模 / harness 高**；候选比较不宜只看平均误差。 |
+| 2026-10-07 | [差分隐私合成窗口拼接](https://arxiv.org/abs/2610.10222) | **Agent 数据准备 / AutoML 评测中高**；重叠率、加权方案与预测器共同影响合成训练效用，边界平滑不能替代下游验证。本次独立核实摘要与 v1 日期，未执行实验。 |
 | 2026-10-06 | [预处理感知基准](https://arxiv.org/abs/2610.09096) | 比较模型与可逆预处理组合，提示预处理偏置影响架构排名。**AutoML / Agent 高**；搜索流程必须约束验证数据与预算。 |
 | 2026-10-06 | [FreshCast](https://arxiv.org/abs/2610.07834) | 冻结预测器配合不断更新的非参数记忆，10 月 7 日修订。**TSFM 适配 / Agent 记忆高**；沿用 10 月 8 日核验，重点查多步标签何时进入记忆。 |
 | 2026-10-05 | [COMMON-TSQA](https://arxiv.org/abs/2610.05686) | 以输入干预和解释审计区分答对与真正使用数值证据。**reasoning / Agent 验证高**；本周最值得纳入独立评测的研究。 |
@@ -49,3 +50,12 @@
 4. 光伏工程：先处理新代码的依赖、文档路径与数据选择隔离，再评估真实预报输入；本周没有执行复现实验。
 
 同日合并：保留 3ceb73f 的独有项目与光伏论文，补充本轮源码核验；没有将较早版本的“未核代码”描述覆盖到已经抽查的项目上。
+
+
+## 周五增量复核
+
+- DailyArXiv 补检新增日期纠偏：[STOIC](https://arxiv.org/abs/2606.31804) 首发 6 月 30 日，列表 10 月 7 日是 v2；能源残差校准虽相关，仍超出 7 月 9 日起的窗口，不列本周新研究。
+- [AutoLab](https://github.com/Z-Sigma/AutoLab) 新增为观察线索：通用 ML 实验与调试 Agent，README 已读，**创建日不确定、时序验证未证实**，不计已确认新项目数量。
+- [Physics-as-a-layer 光伏 / 温度联合预测](https://doi.org/10.1016/j.epsr.2026.113181) 仅确认出版社索引摘要及十月卷期，首次上线日不确定，**光伏相关性高、Agent 低**，低优先级待核。
+- 本次未确认比首版更晚的直接时序 Agent / reasoning 首发。周报仍基于实际 10 月 8、9 日两份工作日报，不补造 10 月 5—7 日文件。
+- 本次 ssh-add 与 git pull --ff-only 均受环境限制失败；首版同步成功记录不代表本次已同步。只准备本日晨报与本周周报的变更，推送结果以本次交付消息及自动化记忆为准。
