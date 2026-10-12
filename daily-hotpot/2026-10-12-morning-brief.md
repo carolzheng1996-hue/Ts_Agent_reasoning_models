@@ -1,6 +1,6 @@
 # 时间序列研究晨间简报｜2026-10-12
 
-- 检索时间：2026-10-12 上午，截止 09:15（Asia/Shanghai）。
+- 检索时间：2026-10-12 上午，截止 09:18（Asia/Shanghai）。
 - 时间窗口：2026-07-12 至本次检索时刻。论文日期采用 arXiv 官方 v1 的 UTC 日期；版本修订、期刊在线发表、GitHub release 分别注明，不用抓取时间冒充发布日期。
 - 增量基线：自动化记忆中的 10 月 9 日记录，以及本地已有 10 月 10 日晨报。远端同步失败，因此“新增”仅指相对这两份本地记录新增收录，不代表今天首发。
 - **今日重点：新增 AdaCast、Timer-M1，以及 Training on the Future 标签延迟审计。** Agent 与 reasoning 栏目保留已核验窗内重点；没有确认更晚的新首发。GitHub 新增版本动态与待核实线索分列。
@@ -19,6 +19,12 @@
 - **来源与日期**：[arXiv:2610.11734v1](https://arxiv.org/abs/2610.11734v1)，v1 为 10 月 8 日 11:28 UTC。
 - **摘要**：以时间原语合成序列，再用关系原语组合真实与合成数据；训练样本明确区分目标变量、仅历史可得协变量及已知未来协变量。模型使用门控二维 Transformer 分配跨变量注意力，面向多变量零样本预测。
 - **相关性判断**：**foundation model 高；Agent 预测工具高；语言 reasoning 低**。最值得借鉴的是协变量可得性协议，而不只是模型排名。论文报告 FEV、TIME 与 GIFT-Eval 的竞争力，本轮未核查数据重叠或复现榜单。
+
+### 2026-10-08｜MIDAPN｜并发补检新增
+
+- **来源与日期**：[arXiv 官方版本史](https://arxiv.org/abs/2610.11924)，v1 为 10 月 8 日；[作者代码](https://github.com/leijieruilq/MIDAPN)。
+- **摘要**：身份感知图连接数值变量与预对齐叙事信息，结合频谱卷积和自适应搜索处理多尺度时间关系。
+- **相关性判断**：**多模态时序 ML 高，Agent 外部信息融合中高，显式 reasoning 低**。它与基础模型比较，不因此等同于通用预训练基础模型；需核查文本对齐是否引入未来信息。仓库页面可读，创建日期接口失败，不计确认的新建仓库。
 
 ## 2. 时间序列建模 Agent 最新研究
 
@@ -42,6 +48,18 @@
 
 ## 3. 时间序列 reasoning 模型最新研究
 
+### 2026-10-08｜Lapras：时序语言模型潜在推理｜并发补检新增，高优先级
+
+- **来源与日期**：[arXiv 官方摘要与版本史](https://arxiv.org/abs/2610.11111)，v1 为 10 月 8 日。
+- **摘要**：通过显式思维链教师与学生答案阶段隐状态对齐完成自蒸馏，将中间推理转入连续潜在空间，最终输出答案；在四个骨干、五个时序问答基准上评测。
+- **相关性判断**：**时序 reasoning 高，Agent 推理组件中高，直接功率预测低**。减少生成 token 不等于同比降低总延迟；潜在状态可解码也不自动证明解释忠实，建议结合数值输入干预测试。
+
+### 2026-10-08｜Sera：电池退化语义辅助预测｜并发补检新增，中优先级
+
+- **来源与日期**：[arXiv 官方摘要与版本史](https://arxiv.org/abs/2610.11567)，v1 为 10 月 8 日。
+- **摘要**：分别编码专家规则和 LLM 解读提取的退化语义，与时序表征门控融合，并检查反事实语义变化下的预测响应。
+- **相关性判断**：**可解释时序预测中高，光储系统电池侧中高，直接光伏功率低**。未展示自主工具闭环，不归为完整建模 Agent；语义响应一致性不单独证明真实因果机制。
+
 ### 2026-10-05｜COMMON-TSQA：答案正确是否真的用了时序证据｜持续跟踪
 
 - **来源与日期**：[Do Time-Series QA Systems Read the Time Series?](https://arxiv.org/abs/2610.05686)，官方检索元数据给出 10 月 5 日。
@@ -53,6 +71,12 @@
 - **来源与日期**：[arXiv 官方版本史](https://arxiv.org/abs/2609.40265)，v1 为 9 月 30 日，v2 为 10 月 7 日；未比较版本差分。
 - **摘要**：在共享骨干上训练预测聚合、原生预测、时序分析三个低秩专家，由控制器按请求混合冻结的专家参数更新。
 - **相关性判断**：**reasoning / foundation model 高；Agent 工具层高**。适合探索外部预测专家与语言分析协作；本轮只核对摘要和版本史，不把 v2 当作新模型首发。
+
+### 2026-09-26｜READ-Bench：历史案例检索评测｜并发补充核验；10 月 8 日 v2
+
+- **来源与日期**：[arXiv 官方版本史](https://arxiv.org/abs/2609.32123)，v1 为 9 月 26 日，v2 为 10 月 8 日。
+- **摘要**：在 12 个诊断数据集上以故障或事件类型定义检索相关性，统一比较检索器与重排器。论文发现少量已解决案例标签辅助的重排，比单纯升级表征或语言模型推理更有效。
+- **相关性判断**：**诊断 Agent 检索 / 记忆 / reasoning 评测高，TSFM 表征中，直接光伏预测低**。可检查 Agent 是否找到同类故障，而非仅形状相似曲线；结论限于其评测协议。
 
 ## 4. GitHub 和 HuggingFace 上值得跟踪的新项目
 
@@ -67,6 +91,8 @@
 | **2026-10-03 release｜本轮补充版本动态** | [TradingAgents v0.6.0](https://github.com/TauricResearch/TradingAgents/releases) | 新增整页 HTML 报告、按模型层级配置提供方、对到期历史决策统一结算等工作流功能。 | **金融 Agent 中高；时序建模 / TSFM 低至中**。它是决策分析系统，不能当作通用时序预测模型；无收益判断或性能背书。 |
 | **日期不确定｜低优先级新增观察，不计窗内新项目** | [ParasKoundal/automl-research](https://github.com/ParasKoundal/automl-research) | README 描述初始化、预检查、训练、保留或丢弃实验的循环，记录指标、日志与修改，并检索论文形成研究线索。 | **通用 ML / AutoML / harness 高；时序专用能力未证实**。创建日期接口及提交历史读取失败；必须先核查时间切分与指标提取，不能仅凭说明认定有可靠实验裁决。 |
 
+**本轮额外低优先级线索（日期不确定，不计确认窗内新项目）**：[Lkhanaajav/timeseries-mcp](https://github.com/Lkhanaajav/timeseries-mcp) 的官方说明提供异常检测、变点、分解和数据质量工具，目录含源码、示例及测试。**时序 Agent 数值工具 / harness 高相关，基础模型低**；README 声称预测附有留出回测，未执行或验证代码。新增发现与实际首发时间不同，待核实创建日期。
+
 ### 光伏功率预测
 
 本轮未核实新建 GitHub / HF 光伏项目。不重复把已有项目计为新增；最新研究见下节。
@@ -79,6 +105,12 @@
 - **摘要**：结合 attention/GRU 分支、固定小波包分解与连续 actor-critic 策略，对时间尺度及特征权重动态融合，覆盖 15 分钟至 7 天预测。
 - **相关性判断**：**光伏预测高；RL 融合中高；LLM Agent / reasoning / foundation model 低**。强化学习权重策略不等于语言 Agent；复现需检查分解是否引入未来信息，以及各跨度天气输入的真实可得性。
 
+### 2026-10-08｜决策层多模态融合超短期光伏预测｜持续跟踪，补检重核
+
+- **来源与日期**：[Energy Engineering 官方页](https://www.techscience.com/energy/online/detail/28550)，在线发表为 10 月 8 日，更早预印本不确定。
+- **摘要**：云图预测后回归功率与多源气象 CatBoost 两路预测，采用固定权重融合。
+- **相关性判断**：**直接光伏功率高，Agent / reasoning / TSFM 低**。应核查天气可得时间、云图滚动评测及融合权重的验证集隔离。
+
 ### 2026-10-03｜SSA-DABNet：多尺度双注意力与超参数学习｜新增，中低优先级
 
 - **来源与日期**：[Oxford Open Energy 官方页](https://academic.oup.com/ooenergy/advance-article/doi/10.1093/ooenergy/oiag016/8860303)，Published 为 10 月 3 日，10 月 9 日是排版修订日；更早预印本不确定。
@@ -88,7 +120,8 @@
 ## 6. 检索覆盖、降级线索与排除项
 
 - **arXiv / DailyArXiv**：读取 [DailyArXiv Time Series](https://github.com/zezhishao/DailyArXiv#time-series)，页面显示 Last update 2026-10-12，最新论文行日期 10 月 8 日。回查新增三篇的官方 v1 和摘要，并核验已有 Agent / TeeMoE 版本史；聚合器日期不等于论文首发日。本轮未确认 10 月 9—12 日更晚的核心新首发，不代表这些日期没有论文。
-- **ACL**：[CTRL 官方页](https://aclanthology.org/2026.findings-acl.1104/) 的出版月份是 **2026 年 7 月，具体日不确定**；其 LLM 控制器根据分解误差修正冻结骨干，**Agent / reasoning 高相关**。DailyArXiv 新出现的 10 月 8 日记录不能抹去更早会议出版；无法确定其相对 7 月 12 日边界的位置，继续低优先级观察，不计已确认窗内首发。
+- **DailyArXiv 额外补检**：确认 Time Series 栏目还收录 MIDAPN、Lapras、Sera，官方 arXiv 均为 10 月 8 日 v1，已补入；READ-Bench 列表 10 月 8 日是 v2，实际 v1 为 9 月 26 日，仍在窗口内但按首发排序。本轮未重新统计完整栏目数量。
+- **ACL / CTRL 日期纠正、降级排除**：[arXiv](https://arxiv.org/abs/2609.23257) v1 为 9 月 20 日、v2 为 10 月 8 日，但 [ACL 正文首页](https://aclanthology.org/2026.findings-acl.1104.pdf) 明确标注 **July 2–7, 2026**，早于 7 月 12 日窗口。其 LLM 控制器根据分解误差修正冻结骨干，**Agent / reasoning 高相关**；跨源首次公开日期不一致，采用更早会议证据保守排除新首发，不能按 DailyArXiv 修订日重置窗口。
 - **NeurIPS**：[9 月 29 日官方教程公告](https://blog.neurips.cc/2026/09/29/neurips-2026-tutorial-announcement/) 列出 “Time Series Foundation Models in Practice”，涉及预测、分类与 EEG，**TSFM 高相关**，属于教程消息而非新论文。[2026 官方目录](https://neurips.cc/Downloads/2026) 出现 Nuwa、OATS、MMTA 等标题；首次公开日期不确定，摘要和实验未核实，不依据标题推断方法或加入主列表。
 - **OpenReview / ICLR / ICML / KDD / AAAI**：执行域名定向检索，未核实更晚的窗内核心新增。[Zeus 的 ICML 官方页](https://proceedings.mlr.press/v306/fu26n.html) 日期为 7 月 6—11 日，已早于本轮边界；[ExoTimer](https://ojs.aaai.org/index.php/AAAI/article/view/39908) 为 3 月 14 日，也排除。没有全量扫描会议目录。
 - **GitHub**：访问 [Trending](https://github.com/trending)、站点限定搜索、官方仓库与 release；Trending 返回内容不足以形成可核实榜单，不报告排名。AutoML Agent 的创建窗口查询和单仓库日期接口失败，未完成全量新仓库扫描。二手趋势汇总只作发现入口，正式条目以作者仓库为准。
@@ -100,6 +133,10 @@
 2. **并读 Timer-M1 与 AdaCast**：前者关注多变量预训练和协变量角色，后者关注逐输入参数适配；设计比较时同时记录泛化收益与推理成本。
 3. **继续用 COMMON-TSQA 检验解释**：把数值事实正确、推理有效、答案一致分别衡量，避免仅看答案分数或语言流畅度。
 
+本次发生同日并发写入：保留提交 cb2d7e0 的既有研究与项目条目，本轮独立重核 Timer-M1、TSHarness，并补入 MIDAPN、Lapras、Sera、READ-Bench、timeseries-mcp、10 月 8 日光伏融合论文及 CTRL 日期纠正。既有 AdaCast、标签延迟审计、release 动态等核验归属并发原稿，本轮未重复逐项审阅。未核实新增的直接光通信功率预测论文。
+
 ## 8. 交付状态
 
 已按要求执行指定 ssh-add，但访问 SSH agent 被环境拒绝；git pull --ff-only 也因 GitHub SSH 22 端口不允许而失败。本文在本地仓库生成，远端同步状态未验证。提交仅包含本日文件，保留原有暂存与未跟踪内容；提交、推送的实际结果见本次自动化完成消息。
+
+本轮实际尝试 git push origin HEAD:main，因 GitHub SSH 22 端口不允许而失败；本地提交待允许的网络恢复后推送。
