@@ -1,6 +1,7 @@
 # 时间序列研究晨间简报｜2026-10-16
 
-- 检索截止：2026-10-16T08:58:39+08:00；窗口：2026-07-16 至检索时刻。
+- 上午版截止：2026-10-16T08:58:39+08:00；下午补检截止：2026-10-16T15:36:49+08:00；窗口：2026-07-16 至检索时刻。
+- 本次保留上午版，新增 CrossTF、预测式 LLM 选模与一个仅文档的光伏仓库；遥感 Agent 的 v2 属持续跟踪。
 - 论文按官方 v1 日期（UTC）排序，软件区分创建与推送日期。新增指相对截至 10 月 15 日下午版归档首次收录，不等于今日首发。
 - 今日优先：TimeRSI 的冻结模型部署优化，其次 TEX-MEX 的传感器预训练、TTF 的递归深度与 RAMSAD 的检索选模。今天周五，另生成 2026-W42 周报。
 - 摘要与性能为作者报告；本次核对原页、版本史及精选 README，未运行项目或复现实验。
@@ -25,6 +26,12 @@
 - 摘要：从长期历史构造节点表征，动态选择功能相近的支持节点，并在训练时遮蔽关键历史片段；在六个数据集上研究空间、时间与观测可得性变化。
 - 相关性：**时空预测泛化高，TSFM 对照中，Agent/reasoning 低**。作者明确模型从头训练，不应因零样本泛化实验就称为预训练基础模型。
 
+### 2026-10-12｜CrossTF：极端事件感知的时序生成｜下午新增，相邻方法
+
+- 来源：[arXiv 摘要与版本史](https://arxiv.org/abs/2610.17407)，v1 10 月 12 日，v2 10 月 14 日；DailyArXiv 列示的是修订日。
+- 摘要：先训练并冻结时域、频域去噪器，再在扩散后期学习少量融合参数，以极值目标与整体分布约束平衡极端事件和总体质量。
+- 相关性：**时序合成数据/压力测试高，TSFM 数据配套中，Agent/reasoning 低**。可作为罕见事件测试数据方法线索；不是通用基础模型，也未据摘要确认光伏爬坡事件收益。应另验合成数据与测试集的隔离。
+
 ## 2. 时间序列建模 Agent 最新研究
 
 ### 2026-10-14｜TIMERSI / TimeRSI：让编码 Agent 优化冻结 TSFM 的部署流程｜新增，最高优先级
@@ -45,6 +52,18 @@
 - 来源：[arXiv:2610.17786](https://arxiv.org/abs/2610.17786)，v1 10 月 13 日；昨日已收录。
 - 摘要：Agent 提议测量并与带标签参考比较，确定性 host 检查请求、提前锁定工具批次并区分证据角色，再由 Judge 提出诊断。
 - 相关性：**工业时序 Agent / harness / 证据推理高，预测基础模型低**。适合作为 TimeRSI 之外的诊断工作流对照；免任务专用训练不等于无需带标签参考。
+
+### 2026-10-13｜遥感任务的 harness 与 verifier｜下午复核修订，持续跟踪
+
+- 来源：[The Last Remote Sensing Model Built by Humans?](https://arxiv.org/abs/2610.18845)，v1 10 月 13 日、v2 10 月 15 日；昨日已收录，不算今日首发。
+- 摘要：把可用资源与任务成功条件分别写入 harness 和 verifier，由编码 Agent 递归改进模型；包含多光谱时序影像在内的六类遥感基准。
+- 相关性：**ML Agent/harness 高，时空序列建模中高，直接光伏预测低**。本轮确认版本日期及摘要，未比较 v1/v2 差异，不把修订自动解释为新增能力；也不能把遥感光学影像等同光功率预测。
+
+### 2026-10-12｜LLM Evaluation is a Forecasting Problem｜下午新增，相邻评测
+
+- 来源：[arXiv:2610.17018](https://arxiv.org/abs/2610.17018)，官方 v1 10 月 12 日。
+- 摘要：研究语言模型基准表现随时间变化，用历史表现序列预测后续准确率，并按预测表现选择部署模型。
+- 相关性：**时间序列辅助选模/ML harness 高，TS Agent 评测迁移中，时序 reasoning 模型本体低**。这是把时序预测用于 LLM 选择；不代表 LLM 获得了更强时序理解。可借鉴滚动评测，但需单独检验模型候选变化、调参窗口及标签延迟。
 
 ## 3. 时间序列 reasoning 模型最新研究
 
@@ -73,6 +92,8 @@ HuggingFace 对 TEX-MEX 的论文页本次无法访问，未确认新增权重�
 
 ### 光伏功率预测
 
+- **2026-10-16 创建｜下午新增，低优先级文档展示**：[solar-pv-monitoring-system](https://github.com/Wwwa22/solar-pv-monitoring-system) · [官方元数据](https://api.github.com/repos/Wwwa22/solar-pv-monitoring-system)。创建 04:15 UTC、推送 06:24 UTC；README 描述 pvlib 与 ML 校正及监测原型。**光伏预测高，Agent/TSFM/reasoning 低**。本轮读取 README 与根目录，只有 README、assets、docs；实现、稿件和数据均未公开。文档中的 R²=0.987 是作者报告的原型汇总留出结果，不能当作独立复现、逐预测跨度或跨站性能；不计可运行开源预测系统。
+
 - **2026-10-15 创建｜持续跟踪**：[EMS-TEMP](https://github.com/totalquan/EMS-TEMP) · [元数据](https://api.github.com/repos/totalquan/EMS-TEMP)。NWP 预测、模型选择、MPC 与服务工程；**光伏时序高，AutoML 中，LLM reasoning/TSFM 低**。昨日已收录，本轮复核创建/推送元数据；昨日指出的归一化与验证切分问题尚未重审，不宣称已修复。没有另将光伏面板展示卡计入预测模型项目。
 
 ## 5. 光伏功率预测最新研究
@@ -92,3 +113,11 @@ HuggingFace 对 TEX-MEX 的论文页本次无法访问，未确认新增权重�
 - **GitHub**：窗口内创建搜索 `timeseries agent`、`"time series" agent`、`automl agent`、`"machine learning" harness`、`photovoltaic forecasting`，各最多取按更新排序前五项；总命中分别 4/128/91/28/60，组间重叠。另通过论文直接发现 TimeRSI。候选 README 与归档去重；[Trending](https://github.com/trending?since=daily) 读取失败，不报告趋势排名。
 - **机构补充**：[AI HOT](https://aihot.virxact.com) 近七天论文精选 8 项，未据此新增直接主线；MIT 天气校正仅作为待核线索。旧接口提示 10 月 31 日停用，后续维护需更新技能，本次未修改技能。
 - **下一步**：优先复核 TimeRSI 的反馈延迟与候选选择；将 RAMSAD 作为简单选模对照，把 TTF 的计算预算纳入比较。以上为研究建议，不是已验证结果。
+
+## 7. 下午独立补检结论
+
+- **DailyArXiv**：重新完整下载 [master README](https://raw.githubusercontent.com/zezhishao/DailyArXiv/master/README.md)，Last update 2026-10-16；Time Series 恰有 84 条实际论文行，最新列示 10 月 14 日。直接确认 TimeRSI、TEX-MEX、TTF、RAMSAD 以及遥感 Agent；补入窗内 CrossTF，按 v1 10 月 12 日排序。README 更新并不代表每篇论文当天首发。
+- **已核实的日期冲突与降级**：[KMB-DF](https://arxiv.org/abs/2602.00717) v1 为 **2026-01-31**（不能只看编号猜作二月）；[Bellman Conformal Inference](https://arxiv.org/abs/2402.05203) v1 为 **2024-02-07**；[TIDES](https://arxiv.org/abs/2605.09742) v1 为 **2026-05-10**。三者在聚合器都列 10 月 14 日修订，首发超窗，排除主列表；这是日期口径差异，不判为聚合器错误。
+- **GitHub 独立查询**：按窗口创建并按更新排序，五组查询 `timeseries agent`、`"time series" agent`、`automl agent`、`"machine learning" harness`、`photovoltaic forecasting` 各取前三个元数据候选，命中分别 **4/128/91/28/61**。最后一组较上午多一个，仅文档项目已单独标注；个人简介、展示卡及旧项目新 push 不计新研究。没有重新审计全部既有仓库。
+- **光功率与光伏空增量边界**：下午未确认比上午更晚的直接预测论文。[光网络 expertise-guided Agent](https://opg.optica.org/jocn/abstract.cfm?uri=jocn-18-5-481) 官方发表 4 月 22 日，[多 Agent 光功率优化](https://arxiv.org/abs/2606.05795) 首发 6 月 4 日，均超窗且主题偏控制优化，未混入预测列表。PI-SDNN 10 月 1 日期刊线索此前已收录，正文重试遭站点跳转，未重复计新增。
+- **覆盖说明**：下午补查 arXiv、OpenReview、HuggingFace 定向搜索及官方 GitHub；会议全称渠道的结果继承上午版，未声称下午逐一重跑。AI HOT 技能返回近七天论文精选 9 项，仅作线索；MIT 天气校正新闻可访问，但未完成论文首次公开日期核验，因此未提升为新研究条目。无项目运行或实验复现。

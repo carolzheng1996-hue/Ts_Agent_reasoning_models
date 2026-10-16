@@ -1,6 +1,6 @@
 # 时间序列研究周报｜2026-W42
 
-- 覆盖工作日：2026-10-12 至 2026-10-16；汇总时间：2026-10-16T08:58:39+08:00。
+- 覆盖工作日：2026-10-12 至 2026-10-16；上午汇总：2026-10-16T08:58:39+08:00；下午补充：2026-10-16T15:36:49+08:00。
 - 纳入研究窗口：2026-07-16 至本次汇总。基于本周五份晨报（含已同步的下午增量）；日期是论文首发或软件创建/版本日，非收录日。
 - 本周最值得关注的是冻结模型外围的自动改进与证据控制。新仓库数量不等于成熟系统数量；以下性能与能力均保留原晨报的作者报告和未复现边界。
 
@@ -14,6 +14,8 @@
 | 2026-10-12 | [IND-Eval](https://arxiv.org/abs/2610.16652) | 工业来源级评测与仿真配方研究。**TSFM/Agent 自动评测高，reasoning 低**；领域收益与通用性能权衡需同时报告。 |
 | 2026-10-12 | [ECHO](https://arxiv.org/abs/2610.16433) | 历史相似片段和近期误差共同校正冻结骨干。**TSFM 适配高，Agent 反馈中高，reasoning 低**；关注残差标签何时可得。 |
 
+补充 **2026-10-12**：[CrossTF](https://arxiv.org/abs/2610.17407)，时频去噪器融合用于极端事件生成；**时序合成/压力测试高、TSFM 配套中、reasoning 低**。v2 为 10 月 14 日，按首发排序；尚未验证光伏爬坡收益。
+
 ## 2. Agent 与 harness 重点
 
 | 日期 | 来源 | 摘要与相关性判断 |
@@ -21,6 +23,8 @@
 | 2026-10-14 | [TimeRSI](https://arxiv.org/abs/2610.19725) | 编码 Agent 修改部署流程，完成预测的反馈用于流程选择。**TS Agent/TSFM/harness 高**；骨干冻结与系统零样本应分开，优先复核历史适配、后续评测与反馈延迟。 |
 | 2026-10-14 | [RAMSAD](https://arxiv.org/abs/2610.20243) | 检索相似序列的检测器表现以选模。**时序 AutoML 高，Agent 工具中高，reasoning 低**；提供非 LLM 基线。 |
 | 2026-10-13 | [Agentic4PDM](https://arxiv.org/abs/2610.17786) | host 对工具批次与诊断证据设约束。**时序诊断 Agent/证据推理高，TSFM 低**；仍依赖带标签参考。 |
+| 2026-10-13 | [遥感递归改进](https://arxiv.org/abs/2610.18845) | harness 限制资源、verifier 定义成功条件；**ML Agent 高、时空序列中高、光伏预测低**。10 月 15 日是 v2 修订，不重计首发。 |
+| 2026-10-12 | [LLM Evaluation is a Forecasting Problem](https://arxiv.org/abs/2610.17018) | 预测模型未来基准表现以辅助部署选模；**时序选模/ML harness 高、reasoning 本体低**。新增收录，需检验滚动选择协议。 |
 | 2026-10-12 | [ChronoScribe](https://arxiv.org/abs/2610.16345) | LLM 提出配置、TSFM 产生数值、确定性摘要支撑回答。**时序 Agent/TSFM 接口高，多步 reasoning 中低**。 |
 | 2026-10-10 | [World2TS](https://arxiv.org/abs/2610.14861) | Agent 检索并校验事件与序列的关联。**外部证据 Agent 高，基础模型本体低**；区分事件日、报道日与预测时点。 |
 | 2026-10-08 | [Training on the Future](https://arxiv.org/abs/2610.12232) | 延迟标签下的测试时适配审计。**时序评测 harness 高**；为本周自动反馈工作提供协议检查视角。 |
@@ -57,6 +61,7 @@
 
 | 创建日期 | 来源 | 摘要与相关性判断 |
 |---|---|---|
+| 2026-10-16 | [solar-pv-monitoring-system](https://github.com/Wwwa22/solar-pv-monitoring-system) | **光伏高、Agent/TSFM 低**；仅文档、图示及作者报告的 pvlib+ML 原型结果。实现、数据与稿件私有，低优先级，不计可运行开源系统。 |
 | 2026-10-15 | [EMS-TEMP](https://github.com/totalquan/EMS-TEMP) | NWP 预测与 MPC 工程，**光伏高，AutoML 中，TSFM/reasoning 低**；昨日代码检查发现归一化和切分边界需改进。 |
 | 2026-07-28 | [RampSense](https://github.com/ArchandS/rampsense) | 超短期功率与爬坡事件研究，**光伏 ML 高，Agent/TSFM 低**；部分改进仍是路线图。 |
 
@@ -74,3 +79,5 @@
 工作日归档：[12 日](https://github.com/carolzheng1996-hue/Ts_Agent_reasoning_models/blob/main/daily-hotpot/2026-10-12-morning-brief.md)、[13 日](https://github.com/carolzheng1996-hue/Ts_Agent_reasoning_models/blob/main/daily-hotpot/2026-10-13-morning-brief.md)、[14 日](https://github.com/carolzheng1996-hue/Ts_Agent_reasoning_models/blob/main/daily-hotpot/2026-10-14-morning-brief.md)、[15 日](https://github.com/carolzheng1996-hue/Ts_Agent_reasoning_models/blob/main/daily-hotpot/2026-10-15-morning-brief.md)、[16 日](https://github.com/carolzheng1996-hue/Ts_Agent_reasoning_models/blob/main/daily-hotpot/2026-10-16-morning-brief.md)。
 
 本周使用 arXiv 原页、DailyArXiv、官方代码与元数据、会议域名定向检索、机构线索和 HuggingFace 补检。周五 DailyArXiv 更新至 10 月 16 日，最新列示论文为 10 月 14 日；timeseries 分支不可用，回退 master。GitHub Trending 无可核榜单，因此没有趋势排名。不是三个月全量调查；保留日期不确定和未复现说明。旧稿修订日不作首发日。
+
+周五下午再次确认 DailyArXiv 84 条 Time Series 论文行，最新列示日仍为 10 月 14 日。KMB-DF 首发 2026-01-31、BCI 首发 2024-02-07、TIDES 首发 2026-05-10，均不因十月修订纳入三个月首发列表。下午 GitHub 光伏查询新增的是文档展示，未确认新的直接光伏论文；其余边界见 16 日晨报第七栏。
