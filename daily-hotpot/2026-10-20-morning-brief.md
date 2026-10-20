@@ -1,7 +1,8 @@
 # 时间序列研究晨间简报｜2026-10-20
 
 - **检索窗口**：2026-07-20 至本次检索截止（北京时间，具体时间见文末）。论文日期按 arXiv v1 / 出版商公开日，GitHub 创建与推送日期均为 UTC；栏目按首发或创建日期倒序。
-- **今日增量**：新增收录四篇 10-16 首发论文：OliO、EFC、ASE、Perceive/Solve/Reason；新增发现 alfa-automl-agent 与 TFN-PV 项目。其余明确标记持续跟踪。新增收录不代表今天首发。
+- **上午版增量**：新增收录四篇 10-16 首发论文：OliO、EFC、ASE、Perceive/Solve/Reason；新增发现 alfa-automl-agent 与 TFN-PV 项目。其余明确标记持续跟踪。新增收录不代表今天首发。
+- **下午补检增量**：保留北京时间 08:32 晨间版内容，补入 RTSM、地基云图光伏研究和今日新建 M4-Loop；更新 DailyArXiv 日期核验与检索记录。原版项目条目的证据沿用上午核验，不计为本轮新增。
 - **阅读优先级**：先看时序推理的分阶段训练，再看文本因子和误差反馈能否在严格时间切分下提供增益。所有效果为作者报告，本轮未运行候选项目或复现实验。
 - 今天周二，按要求不生成周报。另遵循目录规则补充光伏与 HuggingFace。
 
@@ -56,13 +57,19 @@
 - **相关性**：时序 reasoning / TS-LLM 高，Agent 感知与推理组件高，数值预测 TSFM 中。作者报告 4B 模型在八个域外指标中的七个超过四种 7B TS-LLM；这是特定评测结果，不能推广为所有时序预测任务领先。
 - **优先检查**：数据生成模板与域外测试的重合、同计算预算的课程顺序消融、推理答案正确性与解释忠实性是否分别评估。当前核实到论文摘要与首发日期，尚未确认可下载权重，不把论文发布等同模型开源。
 
+### 2026-10-16｜RTSM：共享权重递归细化用于时序分类｜新增，相邻方法
+
+- 来源：[arXiv 2610.23353](https://arxiv.org/abs/2610.23353v1)，v1 10-16。
+- 摘要：卷积时序 tokenizer、单隐状态递归细化和池化分类头组成模型，增加计算深度而不按深度增加细化模块参数。作者在 30 个 UEA 数据集报告平均准确率 72.81%。
+- **相关性**：递归计算与时序表示高，显式语言 reasoning 中低，Agent 感知中，直接光伏功率预测低。分类结果不能替代多步预测验证，更不能直接证明忠实推理；可与 M4-Loop 对照思考共享权重的参数／算力权衡。
+
 ## 4. GitHub 和 HuggingFace 上值得跟踪的新项目
 
 ### 时间序列及相邻 machine learning / AutoML / harness
 
 #### 2026-10-19 创建｜NolReaction/alfa-automl-agent｜新增，低优先级原型
 
-- **来源**：[仓库与 README](https://github.com/NolReaction/alfa-automl-agent) · [元数据](https://api.github.com/repos/NolReaction/alfa-automl-agent)。创建 19:30 UTC、最近推送 23:58 UTC。
+- **来源**：[仓库与 README](https://github.com/NolReaction/alfa-automl-agent) · [元数据](https://api.github.com/repos/NolReaction/alfa-automl-agent)。创建 19:30 UTC；下午查询最近推送已为 10-20 02:20 UTC。
 - **摘要**：黑客松 ML Agent，目标是读取任务、生成执行 Python、比较实验并输出 submission.csv；README 描述回归/分类基线及本地模拟 API 测试。
 - **相关性**：通用 AutoML Agent 中高，时序迁移中低，TSFM/reasoning 本体低。**README 明确真实 Qwen 尚未接入、仅有本地验证指标**；当前随机 80/20 验证不能直接用于预测任务，不能认定已完成端到端自主研究验证。
 
@@ -82,6 +89,14 @@ OliO 的论文及 10-16 新建官方仓库已合并在第一栏，避免重复�
 
 ### 光伏功率预测
 
+### 2026-10-20 创建｜silverisland/M4-Loop｜新增，高优先级实验线索
+
+- 来源：[仓库](https://github.com/silverisland/M4-Loop) · [README](https://github.com/silverisland/M4-Loop/blob/main/README.md) · [元数据](https://api.github.com/repos/silverisland/M4-Loop)。创建 07:09 UTC（北京时间 15:09）；本轮已读取 README 和完整目录树，确认训练、预测、配置与测试文件存在。
+- 摘要：独立的循环 Transformer 光伏预测实现，默认两块共享模块循环两次；输入历史辐照／温度／功率、未来天气与外部 Chronos 预测，输出整段功率。提供四层非共享与单块四次共享配置，支持 checkpoint 和训练日志。
+- **相关性**：光伏预测高，TSFM 预测融合高，递归计算中高，Agent 自动实验工具中，显式 reasoning 低。Chronos 结果是输入表已有列，本项目不运行 Chronos，也未提供通用预训练模型。
+- **核查重点**：README 明确未来标签不参与归一化，但历史与未来已知输入共同计算 RevIN；天气与外部预测的发布时点必须可追溯。时间／站点切分和重叠窗口隔离由调用方负责。共享参数不等于计算量同比下降。当前未核验实测数据效果、测试结果或源代码全部逻辑，不能宣称循环结构已提升精度。
+
+
 #### 2026-10-19 创建｜Geneeex/renewable-energy（TFN-PV）｜新增，低优先级观察
 
 - **来源**：[GitHub 项目页](https://github.com/Geneeex/renewable-energy) · [元数据](https://api.github.com/repos/Geneeex/renewable-energy) · [关联 HuggingFace Space](https://huggingface.co/spaces/rocky250/Re-Energy)。创建 18:55 UTC、最近推送 18:57 UTC；GitHub/HF 合并计一项。
@@ -94,7 +109,14 @@ OliO 的论文及 10-16 新建官方仓库已合并在第一栏，避免重复�
 - **摘要**：按电站训练梯度提升分位数模型，结合历史天气预报与生产历史，记录已发布预测并更新校正层，周期训练四种模型变体并用晋级门槛选择。
 - **相关性**：光伏闭环部署与 AutoML 中高，Agent 工具中，TSFM/reasoning 低。README 声明按提前量使用历史天气预报，对防止信息错配有参考价值；须进一步审计天气版本、夜间样本筛选与校准覆盖率。未安装或验证收益。
 
-## 5. 光伏功率预测最新研究
+## 5. 光功率 / 光伏功率预测最新研究
+
+### 2026-10-18｜地基云图驱动光伏功率预测｜新增，中高优先级
+
+- 来源：[Tech Science Press 原文](https://www.techscience.com/energy/v123n12/69104) · [DOI](https://doi.org/10.32604/ee.2026.090473)。出版商明确 Issue published 10-18，收稿 08-11、接收 09-17；本轮确认的是期刊出版日期，未独立确认更早在线首发。
+- 摘要：CNN-LSTM 预测地基云图，结合太阳位置追踪、云区划分和定量指标，再接入气象信息与 CART 做功率预测。作者给出 MAE / RMSE，但本轮摘要未核对单位与预测步长，因此不直接与其他研究数值比较。
+- **相关性**：光伏多模态预测高，Agent 可调用的图像与气象特征工具中高，TSFM / 显式 reasoning 低。下一步需查云图时间对齐、太阳区域特征是否仅使用已知图像、基线与日夜样本评测方式。
+
 
 ### 2026-10-13｜已发布光伏预测轨迹的概率残差校正｜持续跟踪
 
@@ -102,17 +124,31 @@ OliO 的论文及 10-16 新建官方仓库已合并在第一栏，避免重复�
 - **摘要**：对供应商已发布轨迹，利用近期观测误差与日历信息修正预测，并做顺序区间校准；无需电站元数据或新的预测天气输入。
 - **相关性**：光伏预测与 TSFM 对照高，Agent 反馈中高，显式 reasoning 低。适合与 EFC 对照信息约束：预测轨迹发布时间、各步误差何时揭示、点预测修正与区间覆盖须分别评估。
 
-本轮未确认更晚且具备已核实正式公开日期的新增光伏论文。检得 Solar Energy 十月卷期的长周期辐照度 LLM 工作，但首次在线日期未确认，暂不提升为正式新增；来源：[出版商页面](https://doi.org/10.1016/j.solener.2026.114964)。TFN-PV 投稿状态见第四栏。
+上午未确认更晚的新增光伏论文；下午补检已加入上述 10-18 地基云图研究。检得 Solar Energy 十月卷期的长周期辐照度 LLM 工作，但首次在线日期未确认，暂不提升为正式新增；来源：[出版商页面](https://doi.org/10.1016/j.solener.2026.114964)。TFN-PV 投稿状态见第四栏。
 
-## 6. 检索记录、日期过滤与覆盖边界
+**光通信功率预测**：本轮未确认直接新增；器件静态功率回归、光谱分类和光子计算不作为光功率未来轨迹预测。
 
-- **DailyArXiv**：[master README](https://raw.githubusercontent.com/zezhishao/DailyArXiv/master/README.md) 显示 Last update 2026-10-20；Time Series 实际论文行 **82 条**（不含表头），最新列示日期 10-16。最新 master 提交 [8d8dbab](https://github.com/zezhishao/DailyArXiv/commit/8d8dbab01db5014b2acedcb74ac1cc977c83d9d0)，时间 10-19 21:12 UTC；timeseries 分支 README 返回 404，已回退 master。聚合器更新时间不当作论文首发。
-- **去重与过窗过滤**：本轮新增四篇均回原始 arXiv 核验 v1，并检索既有简报去重。STRIDE（2605.08625）、CastFlow（2604.27840）、Trajectory Distillation（2602.13802）等虽有 10-16 修订，编号对应旧首发线索，本轮不列新研究，也不宣称修订新增能力。CastClaw 的 v1 仍在窗口内，仅跟踪其 v2。
-- **论文来源覆盖**：搜索 arXiv、OpenReview，并对 ACL、NeurIPS、ICLR、ICML/PMLR、KDD/ACM、AAAI 官方域名作定向补检。没有确认比正文更晚的直接相关首发；此为检索覆盖结果，不代表这些会议没有相关研究。PMLR 搜索出现 2014–2018 年论文在 2026-10 重新发布的页面，已排除，避免把重发日期当新成果。
-- **GitHub Search**：五组查询 `timeseries agent`、`"time series" agent`、`automl agent`、`"machine learning" harness`、`photovoltaic forecasting`，限定 `created:2026-07-20..2026-10-20`、按 updated 排序各取前三项，分别命中 **4 / 124 / 90 / 27 / 63**。命中数重叠且包含弱相关项，并非有效新增数；候选再查 README，核心论文代码另查 API。个人主页、用量监控和游戏研究未升为时序主线。
-- **GitHub Trending**：[今日榜](https://github.com/trending) 成功读取。可见通用编码 Agent 与 harness，但仅凭热榜无法证明窗口内新建或时序能力，本轮未加入正式项目清单。不声称穷尽 GitHub。
-- **机构 / HuggingFace 补检**：搜索官方模型卡与机构页面，未确认需要额外纳入的最新直接 TSFM 发布；项目代码与关联 HF 页面按同项目合并。未确认日期的来源均降级，不用搜索引擎抓取日期替代首发。
-- **AI HOT 补充**：依 AI HOT 技能请求近七天 `paper` 精选，共 9 条，无需追加直接时序主线。仅作为发现渠道，未用聚合摘要证明论文结论。接口仍提示旧版服务将于 10-31 停用；本次未修改技能。
-- **操作与验证边界**：已加载指定 SSH key，`git pull --ff-only` 成功。摘要、日期、README 与项目元数据核验不等同完整论文/源码审计；未运行研究代码。仅提交本日文件，保留原有暂存、修改与其他未跟踪资料。提交推送结果见任务回执。
+## 6. DailyArXiv 必检结论与日期排除
 
-检索记录完成时间：2026-10-20 08:32:33 CST。
+已读取 [DailyArXiv master 完整原始 README](https://raw.githubusercontent.com/zezhishao/DailyArXiv/master/README.md) 并与 [Time Series 板块](https://github.com/zezhishao/DailyArXiv#time-series) 交叉核对。第一次原始文件下载超时，重试成功。**Last update 为 2026-10-20；Time Series 当前实际论文行 82 条，最新列示日 10-16。** 这是快照数量，不是三个月全量论文数量。
+
+- **明确有窗内相关论文**：Perceive, Solve, Reason、RTSM、OliO、ASE、EFC 已回 arXiv 核验 v1 并补入正文；PathFM、Twice Upon a Time、TimeRSI 等保留持续跟踪。其他一般时序方法未逐篇提升为 Agent/reasoning 重点。
+- **日期不一致但首发仍在窗内**：CastClaw README 10-16 对应 v2，v1 08-31；TimeRSI README 10-15 对应 v2，v1 10-14。均按 v1 排序，不把修订日当首发日。
+- **STRIDE 降级排除**：[版本史](https://arxiv.org/abs/2605.08625)确认 v1 2026-05-09、v2 10-16。虽然 reasoning / TSFM 高相关，首发超窗，不计新增研究，未比较版本差异。
+- **CastFlow 降级排除**：[版本史](https://arxiv.org/abs/2604.27840)确认 v1 2026-04-30、v3 10-16。与 Agent 高相关，但首发超窗。
+- **RamanBench 降级排除**：[版本史](https://arxiv.org/abs/2605.02003)确认 v1 2026-05-03、v4 10-16；属于光谱机器学习基准，既首发超窗，也不是光功率时序预测。
+- **N-IFM 降级排除**：[版本史](https://arxiv.org/abs/2603.21075)确认 v1 2026-03-22、v3 10-16；时序概率建模相关，首发超窗。
+
+聚合器更新日、修订日和论文首发日分别记录；不能用 10-20 的 README 更新日期推断有 10-20 首发论文。
+
+## 7. 检索记录、局限与后续重点
+
+- 检索了 arXiv、OpenReview、ACL Anthology、NeurIPS 官方页、ICML/PMLR、KDD/ACM、AAAI，以及 HuggingFace、GitHub 与出版商页面；会议检索属于定向搜索，不是全量论文审计。
+- [NeurIPS 下载目录](https://neurips.cc/Downloads/2026)检出 **Nuwa: Evaluation-Grounded Agentic Construction of Time Series Forecasting Systems**。与主题高度相关，但本轮只有官方标题清单，**论文首发日期不确定、摘要未取得**，作为低优先级待核验线索，不据会议年份补写新研究。
+- GitHub 五组查询为 `timeseries agent`、`"time series" agent`、`automl agent`、`"machine learning" harness`、`photovoltaic forecasting`；限定创建日 07-20 至 10-20，按更新排序各取前三，命中数分别 **4 / 124 / 90 / 27 / 63**。计数有重叠，不是有效新增数，也不是 Trending 排名；个人主页和弱相关项目已过滤。
+- 新项目元数据查询成功，README 原始文件可读；M4-Loop 完整目录树可读。仓库创建不等于代码原创日期；未执行任何外部项目，未宣称可复现实验已经通过。
+- 使用 AI HOT 技能补查近七天论文精选，返回 10 条，未有需提升至本报主线的直接新增；来源：[AI HOT](https://aihot.virxact.com)。聚合摘要仅供发现线索。
+- **下一步**：核查渐进训练数据隔离；审查 EFC 逐步标签可用性与验证时序；对 M4-Loop 用相同训练预算、信息集和时间切分比较共享／非共享配置；补查 Nuwa 原始论文和发布日期。
+- **仓库操作**：检索前已成功加载指定 SSH key，`git pull --ff-only` 返回已是最新。仅提交今日晨报，保留已有用户暂存、修改和未跟踪文件；推送状态见任务回执。
+
+检索记录完成时间：2026-10-20T15:38:06+08:00。
