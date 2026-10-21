@@ -2,6 +2,7 @@
 
 - **窗口**：2026-07-21 至本次检索截止；论文按 arXiv v1 或明确公开日，GitHub 创建及推送日期按 UTC。窗口内增量优先，旧条目明确标记持续跟踪。
 - **今日重点**：新增核实五篇 10-19 首发论文：WhatIf-Bench、CaFE、R2R、ActTime、TimesJev。重点从预测误差扩展到干预泛化、决策质量与推理成本；不是五个新开源基础模型。
+- **下午补检**：补录 CTLite（10-19）、EasyResearch（10-18）及 AF-WPT-RL 光伏研究（10-10）；新增两个 10-21 创建的工程项目。上午五篇首发发现保留，不重复计为下午新增。
 - **新增工程线索**：AFAC2026 自动实验 Agent、hilhool/alfa-automl-agent、HelioRoute-PV；WhatIf-Bench 论文、GitHub 与 HuggingFace 合并一项。
 - 对照截至昨日包含下午补检的归档去重。今天周三，不生成周报。所有性能结论均为作者报告，本轮未执行外部代码或复现实验。
 
@@ -26,6 +27,12 @@
 - **摘要**：独立查询编码器从知识库检索实例级数值模式，再融合检索表示与 TSFM 的参数化嵌入，改善分类迁移；作者在 158 个时序数据集上报告提升。
 - **相关性**：TSFM 后训练高、Agent 检索工具中、显式 reasoning 低。不是重新预训练基础模型，也不能把分类增益直接移植为多步预测增益。后续应审查知识库来源、样本隔离与检索成本。
 
+### 2026-10-19｜CTLite：复用连续时间摘要的轻量预测｜下午补录，相邻方法
+
+- **来源**：[arXiv 2610.26379](https://arxiv.org/abs/2610.26379)，v1 10-19 13:32 UTC；[作者代码入口](https://github.com/SSMa913/NICLab-CTLite)。由 DailyArXiv Time Series 发现并回原始版本史核验。
+- **摘要**：无参数编码器提取不规则序列多尺度水平与趋势，小型读出层结合阻尼外推和低秩变量修正；相同历史的摘要可跨优化步骤及预测请求复用。作者在四个基准报告仅 88–2,537 个可训练参数及较低延迟。
+- **相关性**：Agent 多次调用预测工具与算力预算中高；TSFM 对照基线中；显式 reasoning 低。属于轻量预测器，不是基础模型。复用收益限于历史不变的请求，新增观测后需重算；论文摘要核验，代码未运行。
+
 ## 2. 时间序列建模 Agent 最新研究
 
 ### 2026-10-19｜ActTime：动作条件时序世界模型｜新增，高优先级相邻组件
@@ -34,6 +41,12 @@
 - **摘要**：历史阶段按动作更新变量级隐状态并用观测校正；未来阶段在不同候选动作下滚动相同转移模型，生成轨迹。仅用实际发生的轨迹训练，在建筑能源、交通、温室与库存模拟环境中评估事实预测、干预效应、离线决策和闭环规划。
 - **相关性**：Agent 规划与行动评估高、时序干预 reasoning 高、通用 TSFM 中低。是可服务规划的世界模型，不等于完整自主建模 Agent。作者报告 16 个域任务组合中 12 个第一，并发现事实预测、干预忠实性和决策排名会发生反转。
 - **关注点**：候选动作覆盖范围、模拟器与真实部署差异、规划器预算和约束。不能把低预测误差等同低决策后悔值，也不能把观察轨迹训练等同无条件可识别反事实。
+
+### 2026-10-18｜EasyResearch：将时间切分和独立终评作为默认流程｜下午补录，评测工具
+
+- **来源**：[arXiv 2610.25263](https://arxiv.org/abs/2610.25263)，v1 10-18 13:33 UTC；DailyArXiv Time Series 已收录。
+- **摘要**：提供回归、预测与信号分类分析核心及无代码桌面应用；数据学习限制于训练部分，选模后另设最终评估，预测不使用打乱交叉验证。作者在 15 条序列上比较打乱窗口评测与未来留出误差，展示前者的乐观偏差。
+- **相关性**：AutoML / Agent harness 评测高、TSFM 公平对照中、显式 reasoning 低。它不是 LLM Agent；可作为建模 Agent 的评测约束参考。小样本实验不能证明所有部署场景无偏，本轮只核验摘要与日期。
 
 ### 2026-10-14｜TimeRSI｜持续跟踪
 
@@ -65,6 +78,18 @@
 ## 4. GitHub 和 HuggingFace 上值得跟踪的新项目
 
 ### 时间序列及相邻 AutoML / machine learning / harness
+
+#### 2026-10-21 创建｜dclabai｜下午新增，中高优先级待审计
+
+- **来源**：[Shahriyar-Moradi/dclabai](https://github.com/Shahriyar-Moradi/dclabai) · [元数据](https://api.github.com/repos/Shahriyar-Moradi/dclabai) · [预测核心](https://github.com/Shahriyar-Moradi/dclabai/blob/main/dclab_core/forecast.py)。创建 06:22 UTC，最近推送 06:58 UTC。
+- **摘要**：支持自带模型或规则回退的数据科学工作台。已读 README、目录树和预测核心：滚动起点评估、朴素及梯度提升等基线、历史滞后特征、按步长残差区间；未来协变量通过 `known_ahead` 声明传入。
+- **相关性**：AutoML Agent / harness 高，时序建模高，TSFM/reasoning 本体低。源码显示时间截断与早期起点校准，但可得性仍依赖调用方声明；`backtest` 的 `best` 使用聚合回测分数，不能直接当作独立终评。尚未审计上层最终留出协议或执行测试，README 的全面防泄漏主张未获独立验证。
+
+#### 2026-10-21 创建｜forecasting_agents｜下午新增，数据准备组件
+
+- **来源**：[shanudengre82/forecasting_agents](https://github.com/shanudengre82/forecasting_agents) · [元数据](https://api.github.com/repos/shanudengre82/forecasting_agents) · [调度代码](https://github.com/shanudengre82/forecasting_agents/blob/main/src/fcagents/orchestrator.py)。创建 05:34 UTC，最近推送 05:51 UTC。
+- **摘要**：Streamlit 演示包含时间列识别、规则性检查、重采样、频率解释四个步骤。已读 README、目录树及调度代码，确认流水线仅包含这四类；确定性工具计算、规则决定路径，小型 Qwen 负责解释。
+- **相关性**：时序 Agent 数据准备中高、完整 AutoML 中低、TSFM/reasoning 模型低。目前未实现完整训练与预测选模闭环，不能因仓库名称认定其已完成端到端预测。目录含测试与容器配置，本轮未运行；插值等操作在接入预测时须限制于每个起点的历史。
 
 #### 2026-10-21 创建｜AFAC2026 自动化实验 Agent｜新增，相邻工程高优先级
 
@@ -101,6 +126,12 @@ M4-Loop 昨日下午已收录，今天检索仍可见，未计为新增项目。
 
 ## 5. 光伏功率预测最新研究
 
+### 2026-10-10 在线公开｜AF-WPT-RL：动态融合多尺度光伏预测｜下午补录
+
+- **来源**：[Energy Engineering 官方页面](https://www.techscience.com/energy/online/detail/28584) · [DOI](https://doi.org/10.32604/ee.2026.088725)，明确 Published online 10-10；收到稿件 07-08 不作为公开日。
+- **摘要**：将注意力/GRU、小波包分解与连续 actor-critic 融合，用状态调整尺度和特征权重，覆盖 15 分钟至 7 天预测。摘要说明按通道时间切分、仅训练集归一化、多随机种子；排名随预测跨度及比较对象变化，天气预报辅助实验未带来一致提升。
+- **相关性**：光伏功率预测高、Agent 模型路由组件中高、通用 TSFM/显式 reasoning 低。作者明确动作不影响后续观测，属于自适应门控，不是光伏过程闭环控制；注意力关联也不等于因果识别。尚未核查完整训练流水线或复现实验。
+
 ### 2026-10-08 在线公开｜决策级多模态融合｜持续跟踪
 
 - **来源**：[Energy Engineering 官方页面](https://www.techscience.com/energy/online/detail/28550) · [DOI](https://doi.org/10.32604/ee.2026.090466)。搜索保留的在线页面明确 10-08 公开；当前页面改为卷期信息，显示 Issue published 10-18。记录两种日期，不把卷期日当新首发。
@@ -127,3 +158,15 @@ M4-Loop 昨日下午已收录，今天检索仍可见，未计为新增项目。
 4. 工程先审查 AFAC 的实验轨迹和预算管理；WhatIf-Bench 等代码发布后再安排复现。
 
 检索与编写截止：2026-10-21 09:14（北京时间）。已按指令加载 SSH key 并执行 `git pull --ff-only`；仅提交今日晨报，保留既有暂存、修改和未跟踪资料。
+
+## 8. 下午增量核验记录
+
+- **与上午的关系**：保留 09:14 版本内容；本轮新增三篇窗内研究/方法、两个新建仓库。正文已按各栏目日期倒序插入。上午已核验来源的描述保留为上午证据，不冒充下午全部重新审计。
+- **DailyArXiv 补检结论**：重新下载完整 [master 原始 README](https://raw.githubusercontent.com/zezhishao/DailyArXiv/master/README.md)，Last update 2026-10-21，Time Series 实际 84 行论文，最新列示 10-19；直接确认 WhatIf-Bench、CaFE、R2R、ActTime、TimesJev、CTLite、EasyResearch、REATS 等。补录后两篇此前遗漏的方法。没有发现 README 中比上午更新的日期批次。
+- **日期冲突与过滤**：[TimeART](https://arxiv.org/abs/2601.13653)原始版本史为 01-20 首发、10-17 v2，虽与 Agent/reasoning 高相关且聚合日期在窗内，首发超窗，排除主榜并降低新颖性优先级。原有 REATS 的 08-10 首发/10-19 修订区别继续保留。
+- **GitHub 增量搜索**：同样五组关键词，创建日限制 07-21 至 10-21，按更新取各前三项，命中数为 4 / 124 / 92 / 28 / 64；计数不代表有效项目数。两个新增均核查元数据、README、目录及关键代码。AFAC 最新推送已到 10-21 06:38 UTC、hilhool/alfa 到 06:26 UTC；仅记录活动，未做版本差异审计，不宣称功能新增。正文先前推送时间属于上午快照。
+- **其他来源**：重新定向搜索 arXiv、OpenReview、ACL、NeurIPS 官方论文域、HuggingFace、光伏出版商与光网络论文；未确认 10-20/21 首发且高相关的新论文。上午的 ICML/KDD/AAAI 检索结论保留，本轮不宣称重做全量会议扫描。AI HOT 近七日精选论文仍为 12 条，未提升新的直接相关条目。
+- **光功率单独核验**：[现场光网络 LLM Agent](https://opg.optica.org/jocn/abstract.cfm?uri=jocn-18-5-481)公开日 04-22，[S+C+L 多 Agent](https://arxiv.org/abs/2606.05795)首发 06-04，均超窗；它们讨论功率优化，也不能混同未来功率预测。本轮没有确认更晚的窗内直接光网络功率预测研究。
+- **检索服务维护**：AI HOT 返回旧技能接口将在 10-31 停用的通知；本次仍成功获得结果。后续可按[官方迁移说明](https://aihot.news/agent)更新，本轮未修改技能。
+
+下午检索与编写截止：2026-10-21T15:33:27+08:00（北京时间）；周三，不更新周报。
