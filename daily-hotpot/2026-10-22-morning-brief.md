@@ -3,6 +3,7 @@
 - **检索窗口**：2026-07-22 至本次检索截止。论文以首版公开日为准；论文及 GitHub 日期均按 UTC，检索截止按北京时间。修订、仓库活动和首次收录分别注明。
 - **今日新增**：五篇重点研究——TS2Vec-FM、电力负荷参数高效适配、Prompt Evolution、TxnQA、分布式光伏 foundation-style 预训练。前三条研究主线分别指向低成本表征、反馈驱动适配和证据可核验的推理。
 - **新增项目**：petroskiNB/automl_agent、Wanxiang、STR-PV-Forecasting；TimeSage-EV 与 VIPER 只记持续跟踪。已对照昨日含下午补检的归档去重。
+- **下午增量补检**：新增 DS-Cortex 工程候选和一个光伏课程仓库观察项；复核上午五篇重点论文，未确认更晚的核心研究首发。
 - 今天周四，不生成周报。性能数字为作者报告，本轮未运行候选代码或复现实验。
 
 ## 1. 时间序列基础模型最新研究
@@ -56,6 +57,13 @@
 
 ### 时间序列
 
+#### 2026-10-22 创建｜dulfazl/DS-Cortex｜下午新增，需验证的 AutoML Agent
+
+- **来源与日期**：[仓库](https://github.com/dulfazl/DS-Cortex) · [元数据](https://api.github.com/repos/dulfazl/DS-Cortex) · [评测协议](https://github.com/dulfazl/DS-Cortex/blob/main/eval/PREREGISTRATION.md)。创建 04:43 UTC，最近推送 07:14 UTC。
+- **摘要**：CSV 数据审计、候选流水线、批评与辩论、证据核验、决策账本和模型导出组成多 Agent 工作流；LLM 负责规划与解释，数值结果由 Python 工具产生。已读 README、完整目录树、评测协议及流水线代码片段，确有工作流、测试和评测入口，未执行。
+- **相关性**：ML Agent / AutoML / harness **高**，时间序列 **中**，TSFM 和新 reasoning 模型 **低**。评测协议包含航空旅客时序，但九个数据集大多是表格任务；不能视为已通过广泛时序预测评测。
+- **边界**：协议自述 10-21 预注册，仓库创建日为 10-22；前者不能作为已独立确认的公开预注册时间。目录中评测结果位置仅有占位文件，不能据“存在评测代码”认定辩论收益或置信度校准已获证实。后续应审计时序切分、预测起点特征可得性及最终测试集隔离。
+
 #### 2026-10-21 创建｜petroskiNB/automl_agent｜新增，相邻 AutoML 工程
 
 - **来源**：[仓库与 README](https://github.com/petroskiNB/automl_agent) · [元数据](https://api.github.com/repos/petroskiNB/automl_agent) · [控制入口](https://github.com/petroskiNB/automl_agent/blob/main/solution.py)。创建 16:10 UTC，最近推送 20:12 UTC。
@@ -71,6 +79,12 @@
 TimeSage-EV 已在第二栏合并论文、GitHub 与 HF 入口，不重复计数。Kaggle Grandmaster 插件已于 10-09 收录；本轮搜索再出现，未算新增。
 
 ### 光伏功率预测
+
+#### 2026-10-21 创建｜ABELNoval/Photovoltaic-generation-forecasting｜下午补录，低优先级观察
+
+- **来源与日期**：[仓库](https://github.com/ABELNoval/Photovoltaic-generation-forecasting) · [元数据](https://api.github.com/repos/ABELNoval/Photovoltaic-generation-forecasting)。创建 21:32 UTC，最近推送 21:38 UTC。
+- **摘要**：机器学习课程项目，计划从气象变量预测光伏出力；README 将逐小时日前预测标为待确认，当前阶段是调研与文献整理。
+- **相关性**：光伏功率预测主题 **高**，Agent / reasoning / TSFM **低或未说明**。完整目录树目前仅 `.gitignore` 与 README，尚无预测实现、数据或验证结果；README 所列代码和实验目录是规划，不能当作已发布能力。
 
 #### 2026-10-21 创建｜STR-PV-Forecasting｜新增，短时适配组件
 
@@ -112,3 +126,14 @@ TimeSage-EV 已在第二栏合并论文、GitHub 与 HF 入口，不重复计数
 3. 借鉴 TxnQA 把数值答案、格式和证据评分拆开；工程优先审查 Wanxiang 的 NWP 可得性及组件贯通，再考虑部署实验。
 
 检索与编写截止：2026-10-22T08:33:39+08:00（北京时间）。已按指令加载 SSH key；SSH 常规连接无响应，备用 443 端口超时，随后通过 HTTPS 完成 `pull --ff-only`，确认本地与远端同步。仅提交今日简报，保留其他已有改动。
+
+
+## 8. 下午增量核验记录
+
+- **DailyArXiv 已完成强制补检**：首次 raw 请求超时，重试成功读取完整 master README；Last update 仍为 2026-10-22，Time Series 共 86 条论文行，最新列示日期仍为 10-20。确认 TS2Vec-FM、电力负荷 LoRA、Prompt Evolution、TxnQA、光伏 foundation-style 预训练均在该栏，且上午已经纳入；本次逐一复核原始 arXiv 摘要和版本史，没有重复计为新增。
+- **日期冲突具体核实**：[Time2Decide / Covariance-Aware Transformers](https://arxiv.org/abs/2602.14506) 的 v1 为 **2026-02-16**，v2 为 **2026-10-20**；DailyArXiv 展示的是修订日。它与 TSFM 决策有关，但首发超出 07-22 至 10-22 窗口，仅作低优先级排除说明。
+- **GitHub 更新**：沿用上午五类关键词、创建窗口，每类按更新取前三项，命中总数为 **4 / 124 / 95 / 28 / 66**。DS-Cortex 是新增工程候选，光伏课程仓库仅为观察项；TimeSage-EV、VIPER 等不重复计新增，未根据推送时间推断功能变化。
+- **其他覆盖**：再次定向检索 arXiv、OpenReview、ACL、HF 与光功率预测；未确认比上午更晚的直接相关首发。未确认新增光通信光功率预测论文，不用光伏论文替代这一结论。AI HOT 近七日论文精选仍为 15 条，无新增直接时序主线条目。会议与机构来源覆盖仍包含上午记录，本轮不是全量扫描。
+- **核验范围**：保留上午已记录的研究和来源；新增工程条目核到官方 README、目录和上述明确注明的文件。未运行外部仓库代码，也未宣称实验复现。
+
+下午补检截止：2026-10-22T15:34:11+08:00。本次成功加载指定 SSH key，`git pull --ff-only` 返回已是最新；仅更新本日晨报。
