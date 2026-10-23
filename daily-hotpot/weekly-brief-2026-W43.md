@@ -25,6 +25,7 @@
 | 日期 | 研究与来源 | 摘要及相关性判断 |
 |---|---|---|
 | 10-21 | [FairAMO](https://arxiv.org/abs/2610.29504) | 固定候选预测，隔离编排贡献。Agent/TSFM/harness 高相关；最佳编排小于 6% 的 MASE 收益仅适用于论文设置。 |
+| 10-21 | [Time-Uniform Dependent Central Limit Theory](https://arxiv.org/abs/2610.29288) | 非平稳相关序列的渐近置信序列与 HAC 方差估计；Agent 顺序评估配套理论中高相关。周五下午补收，迁移到自适应搜索尚未验证。 |
 | 10-20 | [Explicit Feedback Contract](https://arxiv.org/abs/2610.28798) | 限制精确验证分数反馈并规定停止与终评。通用 ML harness 高相关；时序迁移需重估相关误差下的阈值。 |
 | 10-20 | [Prompt Evolution](https://arxiv.org/abs/2610.27468) | 冻结 LLM，以反馈演化指导块；Agent 反思与策略适配高相关。“不训练权重”不等于系统未使用目标反馈。 |
 | 10-19 | [ActTime](https://arxiv.org/abs/2610.25764) | 动作条件时序世界模型；Agent 规划工具高相关，不能直接等同已实现自主建模循环。 |
@@ -50,6 +51,7 @@
 
 | 创建日期 | 项目与来源 | 简短摘要、相关性与可用性边界 |
 |---|---|---|
+| 10-23 | [15 分钟超前 PV 随机森林预测](https://github.com/Saimimislam2024/15-Minute-Ahead-Photovoltaic-Power-Forecasting-Using-Random-Forest-) | 周五下午新增低优先级线索；PV 主题高相关，README 仅标题，目录读取受限，尚未确认实现与结果；Agent/TSFM 证据低。 |
 | 10-22 | [Awesome-Self-Evolving-RecSys](https://github.com/shangliy/Awesome-Self-Evolving-RecSys) | 自演化推荐系统与反馈审计资料库；ML Agent/harness 高、时序中；不是可运行系统。 |
 | 10-22 | [Valensaco/automl-agent](https://github.com/Valensaco/automl-agent) | 双 Agent 与 MLflow 固定预算搜索；AutoML 高、时序中；已核为随机分层切分，在线链接仍有占位。 |
 | 10-22 | [DS-Cortex](https://github.com/dulfazl/DS-Cortex) | 规划、批评、证据账本和导出；ML Agent/harness 高、时序中；周四核验评测产物仍为占位。 |
@@ -90,3 +92,7 @@
 - [2026-10-23 晨报](https://github.com/carolzheng1996-hue/Ts_Agent_reasoning_models/blob/main/daily-hotpot/2026-10-23-morning-brief.md)
 
 汇总完成：2026-10-23T09:06:42+08:00（北京时间）。
+
+周五下午复核：DailyArXiv 快照仍为 85 行；新增上述统计配套论文与低优先级光伏项目。Li-Net（2026-03-19）及 Structured Temporal Causality（2025-10-18）虽在 10-21 修订，仍因首版超窗排除。没有确认新的直接光通信功率预测论文。所有新增条目均位于 07-23 起的窗口内，细节与证据限制见今日晨报。
+
+周报补检完成：2026-10-23T15:34:27+08:00（北京时间）。

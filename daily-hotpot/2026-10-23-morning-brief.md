@@ -1,6 +1,7 @@
 # 时间序列研究晨间简报｜2026-10-23
 
 - **检索窗口**：2026-07-23 至本次检索截止。论文按首版公开日期、项目按创建日期排序，日期采用 UTC；文末截止时间为北京时间。
+- **下午补检**：保留早间版，补入 DailyArXiv 中的时间一致统计推断论文，以及 10-23 新建的光伏随机森林预测仓库（仅低优先级线索）。论文和已收录项目未重复计为新增。
 - **今日增量**：新增核验 TCEE、FairAMO、GRAIL、SCDM，以及相邻 ML-Agent 反馈协议。新增两项 GitHub 线索：Valensaco/automl-agent 与自演化推荐系统资料库。新增指本报首次收录，并非今天首发。
 - **优先阅读**：FairAMO 与反馈协议。前者隔离候选预测器质量对编排收益的影响，后者控制反复观察验证分数造成的适应性选择。这两项比单纯增加 Agent 数量更直接影响实验可信度。
 - 今天周五，同时生成 2026-W43 周报。按目录既有规则补充光伏及 HuggingFace 线索。效果均为作者报告；本轮未运行外部代码或复现实验。
@@ -21,6 +22,12 @@
 - **摘要**：冻结候选 TSFM 的预测结果，在同一候选池上比较编排方法。GIFT-Eval 实验中，最佳编排相对跨任务最佳单一 TSFM 的 MASE 改善小于 6%；候选互补性比数量重要，冗余成员可能抵消收益，历史证据收益也很快饱和。
 - **相关性**：时序 Agent、TSFM 工具选型和 harness 高，reasoning 评测中高。最值得迁移的是控制协议，而不是将“小于 6%”当作所有任务的普适上限。建议固定预测缓存、候选池与预算，并对照简单平均、近期误差选模和 LLM 编排。
 - **核验边界**：摘要与 v1 日期已核，未确认独立代码发布，也未复现候选互补性分析。
+
+### 2026-10-21｜Time-Uniform Dependent Central Limit Theory｜下午补收，harness 配套理论
+
+- **来源与日期**：[arXiv 2610.29288](https://arxiv.org/abs/2610.29288)，v1 10-21 06:41:56 UTC；DailyArXiv Time Series 栏发现，已回原始摘要与版本史核验。
+- **摘要**：在函数依赖度量框架下研究非平稳、序列相关数据的时间一致中心极限定理；修订渐近置信序列的定义，并给出 HAC 方差估计的一致性结果，示例涉及 Markov 结构算法和时序因果估计量。
+- **相关性**：时序 Agent / AutoML harness 的顺序评估与停止判据中高，foundation model 和显式 reasoning 模型本体低。这是统计理论配套研究，不是预测 Agent。可作为研究相关误差下反馈阈值的理论线索；这是本报迁移判断，论文未验证上述 Agent 组合方案。渐近、依赖结构等条件不能省略，也不能据此宣称任意自适应搜索都获得有限样本保证。本轮未审阅全部证明。
 
 ### 2026-10-20｜Explicit Feedback Contract：限制 Agent 对验证集的反复适配｜新增，相邻研究高优先级
 
@@ -79,13 +86,19 @@
 
 ### 光伏功率预测
 
+#### 2026-10-23 创建｜15-Minute-Ahead-Photovoltaic-Power-Forecasting-Using-Random-Forest-｜下午新增，低优先级线索
+
+- **来源与日期**：[仓库](https://github.com/Saimimislam2024/15-Minute-Ahead-Photovoltaic-Power-Forecasting-Using-Random-Forest-) · [README](https://raw.githubusercontent.com/Saimimislam2024/15-Minute-Ahead-Photovoltaic-Power-Forecasting-Using-Random-Forest-/main/README.md)。GitHub 搜索元数据确认创建 10-23 06:47:54 UTC，推送 06:48:20 UTC。
+- **摘要与证据**：项目标题指向随机森林的 15 分钟超前光伏功率预测；当前 README 仅有标题，没有数据、方法配置或指标说明。目录接口随后限流，本轮无法确认其他文件中是否存在实现，因此不称其为已验证代码库，也不称整个仓库只有 README。
+- **相关性**：光伏预测主题高，Agent / reasoning / TSFM 直接证据低。先观察文档及实现是否补齐；不能从名称推断时间切分、持续性对照或预测效果。未运行外部代码。
+
 #### 2026-10-16 创建｜ThomasSerna/photovoltaic-forecast-optimization｜近期活动跟踪
 
 - **来源与日期**：[仓库与 README](https://github.com/ThomasSerna/photovoltaic-forecast-optimization) · [元数据](https://api.github.com/repos/ThomasSerna/photovoltaic-forecast-optimization)。创建 16:38 UTC，推送 10-22 17:32 UTC。
 - **摘要**：在哥伦比亚乡村学校的半合成案例中，以相同能量模拟器和启发式 MPC 比较 beta 参考预测与 Chronos-2；README 描述成对评估、冻结模型版本及输入哈希记录。
 - **相关性**：TSFM 下游决策评估与光伏高，Agent 工具评测中高，显式 reasoning 低。代码采用 ERA5 可用时间理想化，不能当作真实在线天气预报部署验证；本轮读 README，未运行，也未核实全部产物。HF 模型入口为既有 Chronos-2，合并记录，不算新模型发布。
 
-## 5. 光伏功率预测最新研究
+## 5. 光功率 / 光伏功率预测最新研究
 
 ### 2026-10-20｜Foundation-Style Pretraining for Distributed PV Forecasting｜持续跟踪
 
@@ -94,6 +107,8 @@
 - **相关性**：光伏领域 TSFM 高，Agent 冷启动/适配决策高，显式 reasoning 低。优先核查空间与时间留出、NWP 发布版本；未确认专属公开权重。本轮未确认更晚且日期明确的高相关光伏首发。
 
 **日期不确定、低优先级线索**：[Physics-as-a-layer multi-task forecasting](https://doi.org/10.1016/j.epsr.2026.113181)，出版商页面列 2026 年 10 月卷期，首次在线日不确定，不计入已确认新增。以可微辐照/热过程联合预测功率与组件温度；光伏相关性高，TSFM/Agent/reasoning 直接相关性低。
+
+**光通信光功率补检**：本轮未确认窗内新的直接预测研究。[多 Agent 光功率优化](https://arxiv.org/abs/2606.05795)首发 2026-06-04，早于 07-23，且研究任务是优化，排除出新增预测主榜；不把光伏功率与通信光功率混为一类。
 
 ## 6. 检索覆盖、去重与限制
 
@@ -107,3 +122,13 @@
 - **下步建议**：固定候选预测缓存测编排增益；为 Agent 设置反馈/停止/终评协议；把数值答案、解释证据与因果断言分开评分。以上为本报研究建议，未声称组合方案已有实证收益。
 
 检索与编写截止：2026-10-23T08:56:34+08:00（北京时间）。运行前已加载指定 SSH key，SSH `pull --ff-only` 成功；当前远端已包含昨日两次提交。提交只包含今日晨报与本周周报，推送结果以任务回执为准。
+
+## 7. 下午复核记录
+
+- 再次完整读取 DailyArXiv master README：Last update 10-23、Time Series 85 条、最新列示 10-21，与上午一致；补收窗内的 2610.29288。FairAMO 与分布式 PV 预训练的摘要、首版日期本轮再次核验，其余早间条目沿用已注明的核验范围。
+- 明确的日期冲突：[Li-Net](https://arxiv.org/abs/2603.18712)首版 2026-03-19 / README 列 10-21 v3；[Structured Temporal Causality](https://arxiv.org/abs/2510.16511)首版 2025-10-18 / README 列 10-21 v2。均超窗，降为日期核对记录，不列新论文。
+- GitHub 同样五组查询按更新各取前三，命中数为 **4 / 121 / 97 / 28 / 67**。这是检索覆盖样本，非新增有效项目数。新 PV 仓库见第四节；另一个 [Energy-consumption-forecasting](https://github.com/KAGmay05/Energy-consumption-forecasting)创建于 10-22 13:52 UTC，README 仅称使用光伏容量和气象预测能源消耗及自治时长，直接 PV 功率预测与 Agent 证据不足，降优先级而不列重点项目。两个新线索的 README 已读取，但目录读取受限。
+- 补查 arXiv、OpenReview、ACL、NeurIPS、ICML/PMLR、KDD/ACM、AAAI、HuggingFace 和光功率关键词，未确认更晚的直接 TSFM/Agent/reasoning 首发。没有结果不代表全网不存在；会议范围为定向搜索。AAAI 三月文章超窗，ACL 仅有七月月份而无法确定具体首发日的候选不提升为确定新增。
+- AI HOT 最近七天论文精选仍为 13 条，没有额外直接相关新增。下午没有独立确认新的光伏论文首发，保留已核 10-20 领域预训练研究。未把搜索命中、仓库推送或聚合更新时间当成研究首发。
+
+下午补检完成：2026-10-23T15:34:27+08:00（北京时间）。本轮仅更新今日晨报与 W43 周报；未运行外部项目或复现实验。
