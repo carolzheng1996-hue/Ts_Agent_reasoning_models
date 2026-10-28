@@ -173,3 +173,9 @@
 - **HuggingFace / 官方项目页**：检查 Timestral 模型生态线索；与已知官方模型及新包装项目去重，未将权重更新时间记为新模型发布。
 - **AI HOT**：使用技能补检，返回六条线索，未新增直接相关条目；旧接口提示 10 月 31 日停用，后续需更新本地技能。未将聚合摘要当作论文原始证据。
 - **建议优先验证**：① 动态解码选择器的训练/最终测试隔离；② 风电残差 Agent 的标签成熟与门控时点；③ TimeWorld 的动作响应能否通过可识别因果测试；④ DMU-NACI 缺失数据构建依赖及跨年校准；⑤ Timestral Studio 的接口、概率覆盖率与未来协变量契约。
+
+### 15:36 自动复检（本次运行）
+
+- **结果**：针对 10 月 26 日以来 arXiv 的时间序列/Agent/reasoning/光伏关键词、GitHub 当日创建项目与 AI HOT 论文线索复检，未确认到可在本报滚动窗口内新增、且原始首发日期与源码状态均可独立核验的高相关条目，故不虚构“新增”。
+- **纠偏**：搜索可见的 [bmfmancini/timeseries_forecasting_agent](https://github.com/bmfmancini/timeseries_forecasting_agent) 经 GitHub 元数据核验创建于 2026-06-02，超出本次增量窗口，未列为新项目。
+- **限制**：arXiv Export API 与 DailyArXiv 原始 README 的复拉在本次运行中超时；本报沿用同日早版已经完整核验的 DailyArXiv（Last update 2026-10-28、Time Series 78 条）结论，不把搜索摘要作为新论文证据。
