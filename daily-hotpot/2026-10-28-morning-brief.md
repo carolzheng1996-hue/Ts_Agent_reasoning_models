@@ -1,122 +1,121 @@
-# 时间序列研究晨间简报｜2026-10-28
+# 时间序列 Agent / Reasoning 晨间简报 · 2026-10-28
 
-- **窗口**：2026-07-28 至本次检索截止（北京时间）；论文条目日期采用 arXiv 首版 UTC 日期，GitHub 采用创建日期，最近推送另列。月份不明确的首发不提升为确定新增。
-- **对照**：上次完成记录为 10-23，今天重点补查其后的增量；“新增”指本报首次收录，不表示今天首发。任务跨日恢复，采用当前实际日期 10-28，不回填 10-26。
-- **优先阅读**：TimeWorld、风电残差适配 Agent、TSFM 因果审计。三者分别回答“如何接入行动”“何时允许修正”“what-if 是否真正代表干预”。这些是可组合的研究线索，并非已经验证的统一方案。
-- **核验深度**：论文已核原始摘要与版本史；项目已读 README，部分核到目录。指标均为作者报告，本轮未运行外部研究代码或复现实验。今天周三，不生成周报。
+- **检索时间**：2026-10-28 09:00–09:07，北京时间；周三，本次不生成周报。
+- **滚动窗口**：2026-07-28 至 2026-10-28（含首尾）。论文以原始页面 v1 日期判断首发，GitHub 以仓库创建日期判断新项目；源日期采用 UTC 日历日，各栏目按日期倒序排列。
+- **增量基准**：上次自动运行时间为 10 月 25 日；本地最近已有晨报为 10 月 23 日。下文标明新近发布、首次补录与持续跟踪，避免把本次发现等同于今天发布。
+- **证据范围**：已读论文摘要及版本记录、入选项目 README；四个项目额外核对文件树。未运行外部代码、未复现作者实验。性能数字均为作者报告。
+
+今日优先看 **TimeWorld 的动作条件建模、带接受门控的风电残差 Agent、基础模型动态解码**。工程侧优先跟踪 **Timestral Studio 与 DMU-NACI**：前者便于把预测器接入 Agent，后者强调延迟反馈和残差来源，但尚不支持从原始数据完整复现。
 
 ## 1. 时间序列基础模型最新研究
 
-### 2026-10-26｜TimeWorld：行动条件化的时间序列世界模型｜新增，高优先级
+### 2026-10-26｜Self-Supervised Pretraining for PHM：迁移收益具有任务依赖性【新近发布】
 
-- **来源**：[arXiv 2610.34797](https://arxiv.org/abs/2610.34797)，v1 03:39 UTC，页面标注 under review。
-- **摘要**：提出覆盖七个真实数据集的 TSWM-Bench，将文本行动与记录中的行动—结果配对。TimeWorld 用响应原型调制 TSFM 潜在表示，并通过行动对比学习区分相同历史下的不同操作。作者发现简单文本前缀适配已能改善所测 TSFM，而常规多模态预测器不一定胜过仅历史输入的 TSFM。
-- **相关性**：TSFM 高、Agent 行动规划高、reasoning 场景推演高。它是预训练模型适配框架，不是全新从零预训练骨干；观察记录上的行动条件预测不自动建立因果识别，应与下文因果审计联合阅读。
+- **来源**：[arXiv 原文及 v1 记录](https://arxiv.org/abs/2610.35280)。
+- **摘要**：在 47 个设备健康管理数据集上研究自监督预训练，整库留出 11 个数据集。故障分类明显受益，但剩余寿命估计未稳定超过从头训练；自监督损失也不能可靠预测下游表现。
+- **相关性：高，基础模型评估**。适合用于设计 Agent 的模型晋级标准：必须依据目标任务的独立验证表现，不能仅凭预训练损失。集中式与联邦式对比存在学习率日程混杂、每种配置仅一次预训练等限制。
 
-### 2026-10-26｜PHM 自监督预训练迁移审计｜新增，高优先级负结果
+### 2026-10-25｜Dynamic Multi-Step Decoding for Time-Series Foundation Models【上次运行后发布】
 
-- **来源**：[Self-Supervised Pretraining for PHM](https://arxiv.org/abs/2610.35280)，v1 11:50 UTC。
-- **摘要**：统一 47 个公开设备健康数据集，其中 11 个整体不参与预训练。约 80 万参数的掩码预训练编码器明显改善部分故障分类，但 CMAPSS 剩余寿命预测未稳定超越从头训练；自监督重建损失不能可靠选择下游模型。
-- **相关性**：基础模型迁移评测高，Agent 选模型/学习率高，显式 reasoning 低。联邦与集中式比较存在学习率日程混杂且每种预训练只跑一次，不能据其差距断言联邦学习普遍更差。适合加入“预训练是否值得”的任务级对照。
-
-### 2026-10-25｜Dynamic Multi-Step Decoding｜新增，推理阶段策略选择
-
-- **来源**：[arXiv 2610.34409](https://arxiv.org/abs/2610.34409)，v1 16:10 UTC。
-- **摘要**：冻结 Chronos-2 或 Moirai 骨干，训练轻量选择器决定一步预测或分块滚动；动态规划压缩候选日程，五个选择器投票，不一致则回退一步预测。报告 fev-bench 点预测改善，Chronos-2 仅恢复真值 oracle 增益的约 6–8%。
-- **相关性**：TSFM 高，Agent 预算与策略路由中高，语言 reasoning 低。选择器在评测任务的历史窗口训练，不能将“骨干冻结”写成整个系统完全零样本；作者只主张点预测收益，不推断区间校准改善。
-
-### 2026-10-23｜TSFM 生命周期成本与剪枝｜新增，部署研究
-
-- **来源**：[Sustainability of TSFM Deployment and Pretraining](https://arxiv.org/abs/2610.32859)，v1 16:32 UTC。
-- **摘要**：在工业部署情景中估算预训练与持续服务的累计碳成本。频繁查询可摊薄 Chronos-2 预训练开销，小规模低频场景则可能始终是经典模型更省；移除一个编码器块，在 25 项任务中报告约 6–9% FLOPs、排放与时延降低，预测性能基本保持。
-- **相关性**：TSFM 部署高，Agent 成本路由中高，reasoning 低。摊销结论依赖调用频率与成本假设，不是任意硬件上的实测保证。
-
-### 2026-10-15｜Mistral Timestral｜持续跟踪，官方模型入口复核
-
-- **来源**：[官方发布](https://mistral.ai/news/timestral/) · [GitHub](https://github.com/mistralai/timestral) · [HuggingFace 权重合集](https://huggingface.co/collections/mistralai/timestral)。发布日 10-15，仓库创建同日 10:20 UTC，本轮未发现新的官方发布版本。
-- **摘要**：5M、28M、123M、209M 四种规模，支持多变量概率预测及历史/已知未来协变量，提供 CPU/GPU 独立推理接口。官方报告发布时的基准领先结果，今日未独立复核排行榜。
-- **相关性**：TSFM 与 Agent 预测工具高，显式 reasoning 低。官方 README 明确区分代码 Apache-2.0 与权重 Modified MIT；社区封装的许可描述不能替代权重许可。GitHub 与 HF 合并为一个项目，不重复计数。
+- **来源**：[arXiv 原文](https://arxiv.org/abs/2610.34409)，v1 为 10 月 25 日 16:10 UTC，晚于上次运行。
+- **摘要**：冻结预测主干，训练轻量选择器按输入选择预测分段方案；动态规划缩小候选空间，五个选择器一致时采用其选择，否则退回一次性预测。在 Chronos-2 和 Moirai 上报告点预测改进。
+- **相关性：高，基础模型推理策略**。适合成为 forecasting harness 的可控决策模块；选择器使用目标任务历史窗口训练，因此不能把整体方法称为完全零样本。论文只主张点预测收益，尚未证明概率校准改善。
 
 ## 2. 时间序列建模 Agent 最新研究
 
-### 2026-10-26｜Guarded Agent-in-the-Loop Residual Adaptation｜新增，最高优先级
+### 2026-10-26｜Guarded Agent-in-the-Loop Residual Adaptation for Evolving Wind Power Regimes【新近发布】
 
-- **来源**：[风电场景残差适配论文](https://arxiv.org/abs/2610.34968)，v1 07:38 UTC。
-- **摘要**：保持时序骨干不变，Agent 根据外部场景选择小型残差专家，只有近期已观测误差支持时才接受修正；新专家也需先通过验证门槛。九种骨干、五个预测跨度共 45 组中，作者报告 MAE/RMSE 均改善，按骨干汇总 MAE 降幅 11.21–20.26%。
-- **相关性**：时序 Agent 高、harness 接受/回退机制高、TSFM 适配中高、显式推理模型中。尚未评估长期无人值守部署；摘要不足以确认 Agent 是否完全依赖 LLM。迁移时应核对气象信息可用时间、反馈延迟、专家晋升与最终测试的隔离。
-
-### 2026-10-23｜MAPS：任务可预测性度量｜新增，相邻评测工具
-
-- **来源**：[Model-agnostic predictability quantification](https://arxiv.org/abs/2610.33209)，v1 19:00 UTC。
-- **摘要**：用协变量信息衡量不同回看窗口、预测跨度下的任务可预测性，试图区分任务难度与模型能力；在合成和真实数据上与六种度量比较。
-- **相关性**：Agent 搜索预算分配及 harness 分层评测中高，TSFM 评估中，reasoning 本体低。将其用于分配搜索预算是本报建议，论文摘要未证明这种 Agent 用法有效；不能把估计得分当作所有模型准确率的严格上界。
+- **来源**：[arXiv 原文](https://arxiv.org/abs/2610.34968)。
+- **摘要**：冻结时序主干，由 Agent 解读外部天气场景并路由到小型残差专家；只有近期已观测误差支持时才启用修正，新专家经验证后才能加入。作者报告九种主干、五个预测提前量上的误差下降。
+- **相关性：高，Agent + 能源预测；对光伏为迁移线索**。可借鉴“场景解释—残差修正—接受门控”闭环。研究对象是风电，不是光伏；候选场景晋级仍是受控实验，未评估长期无人值守部署。移植时需重新检查天气信息时点与标签成熟延迟。
 
 ## 3. 时间序列 reasoning 模型最新研究
 
-本轮没有确认晚于 10-19、且属于直接时序语言推理模型的新首发；新增重点是解释证据与干预语义审计，不将它们冒称新 reasoning LLM。
+### 2026-10-26｜TimeWorld：动作条件的多模态时序世界模型【新近发布】
 
-### 2026-10-23｜TempShap：定位“何时、哪个变量”影响预测｜新增，解释证据组件
+- **来源**：[arXiv 原文](https://arxiv.org/abs/2610.34797)，页面标注 under review。
+- **摘要**：提出覆盖七个真实数据集的 TSWM-Bench，用记录的动作—结果数据构造文本干预；通过原型引导潜变量调制和动作对比学习，使预训练预测器显式响应动作条件。
+- **相关性：高，foundation model + 决策推理**。适合研究计划、运维或调度动作如何改变预测轨迹。它是已有主干的适配框架；观察到的动作—结果关联不自动构成可识别的因果效应，需结合下一条审计研究阅读。
 
-- **来源**：[arXiv 2610.33330](https://arxiv.org/abs/2610.33330)，v1 22:08 UTC。
-- **摘要**：把输入单元 `(时间, 变量)` 作为 Shapley 参与者，用损失归因张量描述时间定位与预测跨度影响，比较冗余输入下的归因与删除排序。
-- **相关性**：reasoning 证据审计与 Agent 解释工具高，基础模型本体低。它是回顾性、基于损失的归因，不是新推理语言模型，也不是因果干预证明；需避免让在线 Agent 提前使用未来真值构造解释。
+### 2026-10-24｜Benchmarking System One Models for Time-Series Decision Making: A Case Study of Jev【首次补录】
 
-### 2026-10-22｜Forecasting Associations, Not Interventions｜新增，最高优先级审计
+- **来源**：[arXiv 原文](https://arxiv.org/abs/2610.33410)。
+- **摘要**：将部分连续预测任务离散化为决策，评测 Jev 1.13.0 的分类、事件类型与方向判断。显式模式和事件任务表现较好，但多种数值序列任务和股票方向预测接近随机区分水平。
+- **相关性：中高，推理评测**。提示应分别报告排序能力、离散决策质量与连续预测误差；这是特定模型案例研究，不是新时序基础模型，也不是通用 reasoning 能力证明。
 
-- **来源**：[TSFM 预注册因果审计](https://arxiv.org/abs/2610.31869)，v1 20:01 UTC。
-- **摘要**：区分条件关联与干预效应，在有反事实真值的结构模型和随机执行器物理系统上审计 Chronos-2、TiRex-2、TabPFN-TS、TimesFM-2.5。作者报告预测常沿观察关联变化，即使嵌入含有可解码的机制信息，也未充分反映到预测；小规模干预后训练可缩小差距，但伴随预测分布权衡。
-- **相关性**：时序 reasoning/what-if、Agent 决策与 TSFM 均高。对 TimeWorld 和社区 what-if API 的直接启示是分别测试“条件预测正确”与“干预效应正确”；论文未直接评测今天的社区封装，不能据此给该项目下性能结论。
+### 2026-10-22｜Forecasting Associations, Not Interventions：协变量基础模型因果审计【首次补录】
 
-### 2026-10-22｜TT-SAX：面向自然语言形状查询的双轨符号化｜新增，工具层研究
-
-- **来源**：[arXiv 2610.30593](https://arxiv.org/abs/2610.30593) · [作者代码](https://github.com/Atlamtiz/tt-sax)，v1 01:49 UTC；作者注明 ADC 2026 接收、上传稿为评审前版本。
-- **摘要**：保留 SAX 水平符号，为各片段增加跨邻段趋势符号，使方向及幅度更贴合语言查询。在 NLQTSBench 上比较六种经典符号化和六个 LLM。
-- **相关性**：时序 Agent 检索与推理表征高，TSFM 低。不是新 LLM，也不能将形状检索改善外推为预测或因果推理改善；本轮未检查代码实现。
-
-### 2026-10-19｜TimesJev｜持续跟踪，直接时序 reasoning
-
-- **来源**：[arXiv 2610.26002](https://arxiv.org/abs/2610.26002)，v1 08:26 UTC，本轮复核。
-- **摘要**：以门控压缩保留关键频率信息，再对齐快速模型的嵌入空间，降低长思维链成本。
-- **相关性**：时序 reasoning 与 Agent 延迟预算高、TSFM 中。应重点检查压缩是否丢失稀有事件，不能仅用平均性能替代证据忠实度检查。
+- **来源**：[arXiv 原文](https://arxiv.org/abs/2610.31869)。
+- **摘要**：从理论、受控结构模型与内部表征检查带未来协变量的预测器是否回答了真正的干预问题。作者发现多个 TSFM 仍受混杂影响，干预后训练可以缩小部分差距。
+- **相关性：高，what-if reasoning 的验证边界**。未来协变量输入接口不等于因果模拟器；用于光伏储能调度或检修方案比较前，应明确可识别性、干预数据和预测精度代价。
 
 ## 4. GitHub 和 HuggingFace 上值得跟踪的新项目
 
-项目日期为 UTC 创建日；“已读目录”只证明有对应文件，不代表运行通过。未列项目不等于没有更新。
+日期为 GitHub `created_at` 的 UTC 日期；推送时间只说明活动，不能证明新增功能。下列功能主要据 README，文件树检查不等于实现正确性审计。GitHub 与 HuggingFace 指向同一模型时不重复列项。
 
-### 时间序列及 machine learning / AutoML / harness
+### 4.1 时间序列
 
-| 创建日期 / 最近推送 | 项目与来源 | 摘要及核验边界 | 相关性判断 |
-| --- | --- | --- | --- |
-| 10-27 23:49 / 10-28 00:15 | [BalTac/timestral-studio](https://github.com/BalTac/timestral-studio) · [元数据](https://api.github.com/repos/BalTac/timestral-studio) | Timestral 社区工作台，README 描述留出回测、分位数预测、协变量场景和 Agent API。已读 README/目录，存在 app.py、测试及前端；未运行、未核完整 API 协议实现。README 把 what-if 描述为干预模拟，因果有效性尚无证据；权重许可见官方说明。 | TSFM 工具与时序 Agent **高**，独立 reasoning 模型低；新封装不等于新模型发布。 |
-| 10-26 18:27 / 10-27 20:54 | [aleerangel/experimental-ml-framework](https://github.com/aleerangel/experimental-ml-framework) · [元数据](https://api.github.com/repos/aleerangel/experimental-ml-framework) | 规划共享数据划分、嵌套调参、实验恢复、统计比较与可复现报告。README 的 MVP 实现 M1–M7 及实验验证均未勾选，故仅作为设计文档观察，不能称已可用框架。 | ML harness **高**，时序/AutoML 迁移中；**低优先级、待实现**。 |
-| 10-25 19:27 / 10-25 21:05 | [csalamando/harness-mllc](https://github.com/csalamando/harness-mllc) · [元数据](https://api.github.com/repos/csalamando/harness-mllc) | 表格 ML 生命周期工具，强调 champion 谱系、一次终评、哈希与阶段检查。已读 README/目录，含数据、holdout、gates 和测试；文档列随机、分层、分组切分，未列时间切分。未审计“一次终评”是否不可绕过。 | harness **高**，时序 Agent 迁移中；需补时间滚动验证，不直接拿默认协议评测时序。 |
-| 10-22 04:43 / 10-27 17:14 | [dulfazl/DS-Cortex](https://github.com/dulfazl/DS-Cortex) · [元数据](https://api.github.com/repos/dulfazl/DS-Cortex) | 多 Agent 提出、批评和裁决候选流水线，要求论断关联工具运行，以实验估计置信度。已读 README/目录，有 Agent、ledger、评测脚本及测试；无密钥时使用模板叙述。未核其校准结果及测试隔离。 | AutoML / ML Agent 与证据 harness **高**，时序中；未确认时间序列专用流程，不能直接声称时序无泄漏。 |
+#### 2026-10-27｜BalTac/timestral-studio【新项目，高相关】
 
-**官方模型与 HF 去重**：Timestral 官方 GitHub/权重合集统一记录在第 1 节；社区 Studio 是不同工程项目，单列。以上均为定向搜索发现，不声称进入 GitHub Trending。
+- **来源**：[仓库与 README](https://github.com/BalTac/timestral-studio)；创建于 23:49 UTC，即北京时间 10 月 28 日 07:49，最近推送为 10 月 28 日 00:15 UTC。
+- **摘要**：围绕 Timestral 提供概率预测、留出回测、多模型比较、协变量场景及 Agent 工具发现接口。文件树确认存在 `app.py`、前端和测试文件。
+- **判断**：适合做预测工具服务原型，不能据 README 认定它已实现自主模型研究闭环。场景接口不应直接解释为因果反事实；延迟、覆盖率和测试通过情况未经本次验证。第三方 README 的许可概述也不能替代官方许可：[官方仓库](https://github.com/mistralai/timestral)明确区分推理代码 Apache-2.0 与权重 Modified MIT。
 
-### 光伏功率预测
+#### 2026-10-27｜Kedar-V/automl-research-lab【新项目，观察级】
 
-**2026-10-27 13:11 创建，14:04 推送｜[chaos97yuan/DMU-NACI](https://github.com/chaos97yuan/DMU-NACI) · [元数据](https://api.github.com/repos/chaos97yuan/DMU-NACI)**
+- **来源**：[仓库与 README](https://github.com/Kedar-V/automl-research-lab)；创建于 01:36 UTC。
+- **摘要**：面向教学的 LangGraph 多 Agent AutoML 演示，设计了隔离留出集、微服务通信与实验流程图。
+- **判断**：README 明确当前 B2 阶段依赖 mock SSE，真实实验服务尚待 Phase C。可参考编排与界面设计，不能作为已验证 AutoML 系统或时间序列预测成果推荐。
 
-- **摘要**：15 分钟超前 PV 区间预测，分离均值与误差尺度，跟踪残差来源，并只在 15 分钟标签成熟后更新自适应共形校准。已读 README 与目录，存在检查点、配置和实验产物。
-- **边界**：作者明确标注原始 CSV 到冻结窗口的完整依赖未发布，不能称端到端可复现。论文为准备投稿 Solar Energy 的 2026 年 10 月草稿，**论文首次公开日期不确定**；本条按可确认的仓库创建日收录，不称已发表论文。
-- **相关性**：光伏与延迟反馈 harness 高，时序 Agent 迁移中高，TSFM/显式 reasoning 低。适合参考数据来源与成熟反馈约束，未独立复核“位级一致复现”声明。
+#### 2026-10-25｜csalamando/harness-mllc【新项目，中高相关】
 
-## 5. 光伏功率预测最新研究
+- **来源**：[仓库与 README](https://github.com/csalamando/harness-mllc)；创建于 19:27 UTC。
+- **摘要**：围绕表格 ML 实验记录假设、候选晋级、冠军模型沿革、一次性留出评估及交付证据。文件树确认存在 holdout、ledger、gates、evaluation 等模块与测试。
+- **判断**：可借鉴 Agent 实验治理与证据保存；尚未核实时间序列专用的滚动切分、标签延迟和协变量可用性控制。作者声明的测试数与机制效果未经本次执行验证。
 
-### 2026-10-20｜Foundation-Style Pretraining for Distributed PV Forecasting｜持续跟踪
+### 4.2 光伏功率预测
 
-- **来源**：[arXiv 2610.27763](https://arxiv.org/abs/2610.27763)，v1 07:26 UTC，本轮复核。
-- **摘要**：历史功率、气象、未来 NWP 与时间编码统一为序列补全，比较三种预训练目标；479 个站点中 139 个作为空间留出，评估 6 小时至 7 天预测。
-- **相关性**：领域 TSFM 与光伏高，Agent 冷启动适配中高，reasoning 低。本轮未确认更晚且直接相关的光伏基础模型首发；NWP 历史发布版本与时间划分仍是复现重点。新增工程线索见 DMU-NACI，不混作新论文。
+#### 2026-10-27｜chaos97yuan/DMU-NACI【新项目，高相关；复现范围受限】
 
-## 6. 检索覆盖与过滤记录
+- **来源**：[仓库与 README](https://github.com/chaos97yuan/DMU-NACI)；创建于 13:11 UTC。
+- **摘要**：TCN 均值分支、GRU 误差尺度分支、来源受控残差池与自适应共形校准，用于 15 分钟提前量的跨年光伏预测区间。README 明确将反馈延迟三个步长，仅使用成熟标签；文件树确认存在模型权重归档。
+- **判断**：适合研究光伏概率预测及在线校准。关联稿件仍处于拟投稿准备阶段，独立论文发布日期**不确定**，因此只列新代码项目。作者披露早期数据窗口生成依赖未全部公开，不能从原始 CSV 完整端到端复现；本次未核验其逐位一致性声明。
 
-- **DailyArXiv**：[master README](https://raw.githubusercontent.com/zezhishao/DailyArXiv/master/README.md)完整获取，Last update 10-28；Time Series 板块 78 条实际论文行，最新列示 10-26。[最新提交 0c4a4b0](https://github.com/zezhishao/DailyArXiv/commit/0c4a4b0a6be8ca6bf3054e72346c2b14228d95a6)为 10-27 20:53 UTC。timeseries 分支不可访问，回退 master。聚合列表日期不替代 v1。
-- **GitHub Search**：timeseries agent、带引号 time series agent、automl agent、带引号 machine learning harness、photovoltaic forecasting 五组；创建窗口 07-28 至 10-28，按更新每组取前四。总命中分别 4 / 120 / 100 / 28 / 72，存在重叠与弱相关，不能视为有效新增数。另访问 [Trending](https://github.com/trending)；未做全量仓库或所有旧项目更新审计。
-- **会议与预印本**：定向查询 arXiv、OpenReview（含 ICLR 线索）、ACL、NeurIPS、ICML/PMLR、KDD/ACM、AAAI。ACL 检到十月 EMNLP 论文页；会议版本不自动算新首发，未将仅会议月份的条目冒充新论文。AAAI 三月与 ACL 七月上旬论文均早于窗口，排除。检索有限，不能宣称会议全覆盖。
-- **首发过滤示例**：DailyArXiv 中 2605.07600、2411.00852 虽近期修订，首发编号月份在窗口前，未纳入新研究；DF-NPE 的 agent-based models 是仿真个体模型，不等同 LLM 建模 Agent，未因关键词收录主栏。
-- **官方与资讯**：补检机构博客和 HuggingFace，回到 Mistral 官方确认 10-15 发布与代码/权重边界。[AI HOT](https://aihot.virxact.com)近七天论文精选 19 条，无额外直接时序主线新增；只作线索，不把资讯摘要作为论文证据。
-- **今日研究建议**：对行动条件化模型分别测预测与因果效应；为 Agent 专家修正设延迟反馈和回退；将策略选择器训练成本、经典基线与硬件成本一起记账。均为本报推导，尚无统一方案的复现实验。
+#### 2026-10-26｜MariusTechLab/arome-solar-forecast【新项目，高相关】
 
-检索与编写截止：2026-10-28 09:08:58（北京时间）。已执行指定 ssh-add 并成功完成 SSH pull --ff-only。仅提交本日简报；提交、推送结果以任务回执为准。
+- **来源**：[仓库与 README](https://github.com/MariusTechLab/arome-solar-forecast)；创建于 14:37 UTC，10 月 27 日仍有推送。
+- **摘要**：把 Météo-France AROME / Open-Meteo 气象预报转为 Home Assistant 光伏功率和能量预测；README 描述按历史归档预报与实发电量学习逐小时修正，并可寻找电器运行窗口。文件树存在预测、修正和集成模块。
+- **判断**：是预测服务到用能决策的工程样例，未证实使用 LLM Agent。下一步应核查预报归档时间、时区、功率与电量转换，以及模型基准是否使用相同预报版本。
+
+## 5. 光功率 / 光伏功率预测最新研究
+
+### 2026-10-22｜Reducing Multi-Horizon Photovoltaic Forecast Error through Tree-Anchored Expert Combination【首次补录】
+
+- **来源**：[arXiv 原文](https://arxiv.org/abs/2610.31248)。
+- **摘要**：以 LightGBM 为锚点，对七种神经预测器进行非负、和为一的组合，允许无益专家权重为零；研究 15–240 分钟提前量。两套同地 PVDAQ 系统的历史评估中，共享 MAE 权重相对单树降低 scaled MAE 3.21%。
+- **相关性：高，光伏专家选择**。可为 Agent 的候选池设计提供强基线。作者明确复用了已查看的评估区间，新增有界神经修正也未进一步降低 MAE；不能称为独立复现或普适增益。
+
+### 2026-10-12｜SatPV-Field：区域发电场驱动分布式光伏预测【持续跟踪，非新增】
+
+- **来源**：[arXiv 原文](https://arxiv.org/abs/2610.16110)，已在 10 月 15 日晨报出现。
+- **摘要**：把站点发电序列组织为区域图像式发电场，融合卫星辐射指导和气象预报，先预测区域再指导单站。实验覆盖 496 个系统，其中 50 个为留出目标站。
+- **相关性：高，光伏时空预测**。适合与单站 foundation model 对照，但需审计未来辐射与气象输入在预测起点的实际可得性；它本身不是 Agent 系统。
+
+**光通信接收光功率**：本轮检索未核实到窗口内可新增的直接预测论文。命中的 [FSO 耦合光功率 TCN 预测](https://opg.optica.org/ao/abstract.cfm?uri=ao-65-19-H43)检索日期线索在窗口外，未纳入主条目；不以光伏、风电或光网络优化替代这一方向的空结果。
+
+## 6. DailyArXiv 必查结论
+
+已完整读取 [DailyArXiv master README](https://github.com/zezhishao/DailyArXiv/blob/master/README.md)及其 [原始内容](https://raw.githubusercontent.com/zezhishao/DailyArXiv/master/README.md)。页面标注 **Last update: 2026-10-28**；`Time Series` 板块有 **78 条论文**（不含表头），最新条目日期为 **10 月 26 日**。因此 README 更新时间不能当作论文首发日期。
+
+- **确认有相关主题并已补充**：PHM 自监督迁移、风电残差 Agent、TimeWorld、动态多步解码、Jev 时序决策与协变量因果审计，均在窗口内且已核对 arXiv v1。
+- **日期冲突，降级排除**：[EF-LLM](https://arxiv.org/abs/2411.00852)在 README 标为 2026-10-26 / v3，但本轮 arXiv 页面显示 v1 为 **2024-10-30**，可见最新记录为 2024-12-24 / v2。首发超窗，且两源版本不一致，不能据聚合表当作新论文。
+- **旧作修订，排除**：[Sliding-Window Signatures](https://arxiv.org/abs/2510.12337)是 **2025-10-14** 首发、2026-10-26 v2；[Mathematical Reasoning via Intervention-Based Time-Series Causal Discovery](https://arxiv.org/abs/2605.07600)是 **2026-05-08** 首发、10 月 25 日 v2。后者重点还是数学概念激活，不宜仅凭标题归为新时序预测 reasoning 模型。
+- **语义过滤**：板块中的 Agent-Based Models 仿真参数推断，不自动等于 LLM 时间序列建模 Agent；异常检测、压缩等邻近论文未全部展开。
+
+## 7. 检索记录与下一步
+
+- **论文检索**：arXiv 的 time series / foundation / agent / reasoning / photovoltaic / optical power 组合；OpenReview、ACL Anthology、NeurIPS、ICML/PMLR、ICLR、KDD、AAAI 官方域名定向搜索。部分结果是早期论文或会议年标签，未确认新的窗口内首发就不晋级；本轮不是全库穷尽检索。
+- **项目检索**：GitHub Search 三个月创建窗口，以及 10 月 24–28 日增量窗口；后者返回 time-series agent 3 个、automl agent 4 个、machine learning harness 2 个、photovoltaic forecasting 7 个候选，按更新时间取样并以创建日期重新排序。宽窗口首次查询的排序参数不可靠，未据其返回顺序宣称“最新排名”；timeseries agent 的一次请求受限。入选项目均读取 README；Timestral Studio、harness-mllc、DMU-NACI、AROME 项目核对了文件树。
+- **HuggingFace / 官方项目页**：检查 Timestral 模型生态线索；与已知官方模型及新包装项目去重，未将权重更新时间记为新模型发布。
+- **AI HOT**：使用技能补检，返回六条线索，未新增直接相关条目；旧接口提示 10 月 31 日停用，后续需更新本地技能。未将聚合摘要当作论文原始证据。
+- **建议优先验证**：① 动态解码选择器的训练/最终测试隔离；② 风电残差 Agent 的标签成熟与门控时点；③ TimeWorld 的动作响应能否通过可识别因果测试；④ DMU-NACI 缺失数据构建依赖及跨年校准；⑤ Timestral Studio 的接口、概率覆盖率与未来协变量契约。
