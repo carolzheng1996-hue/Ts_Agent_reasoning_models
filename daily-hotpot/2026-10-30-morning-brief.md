@@ -99,6 +99,6 @@
 
 ## 6. 来源、限制与建议
 
-- [DailyArXiv master](https://github.com/zezhishao/DailyArXiv/blob/master/README.md) 显示 2026-10-29 更新，时序条目最新可见首发为 10 月 27 日；arXiv Export API 关键词全量查询此前出现 429，本轮以官方单篇页和聚合索引交叉核验。
+- [DailyArXiv master](https://github.com/zezhishao/DailyArXiv/blob/master/README.md) 已于 2026-10-30 更新，时序条目最新可见首发仍为 10 月 27 日；arXiv Export API 关键词全量查询此前出现 429，本轮以官方单篇页和聚合索引交叉核验。
 - 按 AI HOT 技能查询近七日精选论文流；没有直接时序 foundation model、Agent、reasoning 或光伏预测新增，不以泛 AI 新闻填充主栏。
 - 优先下一步：用同一滚动起点协议比较 Timestral、简单季节基线和 Agent 编排；同时为 SEER/风电残差 Agent 固化事件日期、检索日期、标签成熟日期与模型修改日志。
