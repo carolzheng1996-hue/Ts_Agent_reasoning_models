@@ -1,159 +1,136 @@
-# 2026-09-08 时间序列 Agent / Reasoning / Foundation Model 晨间简报
+# 2026-09-08 时间序列研究晨间简报
 
-检索时间：2026-09-08 15:31–15:39 CST（Asia/Shanghai；本次为晨报补跑）。
-时间窗口：2026-06-08 至 2026-09-08，含首尾日期。
-日期口径：论文按 arXiv v1 首发日期、项目按 GitHub `created_at` 排序；修订与推送另列，均保留来源的 UTC 日期。各栏目由近及远，日期不确定项置于末尾。
-增量参照：2026-09-07 晨报；“新增”表示本报新收录，不代表今天首发。今天是周二，不生成周报。
+检索时间：2026-09-08 09:00—09:09，北京时间（Asia/Shanghai）。
+三个月窗口：2026-06-08 至检索截止时刻。论文首发日期沿用 arXiv 的 UTC 日期；GitHub 时间转换为北京时间。
+本期聚焦：时间序列基础模型、建模 Agent、reasoning，以及 GitHub 的时序 / harness / ML / AutoML 项目。
 
-## 今日重点
+## 今日重点与相对昨日的变化
 
-- DailyArXiv README 已更新至 **2026-09-08**。新增核实 9 月 4 日的 WearableQA、MMTClinic、PRICE、Chronos 量子微调研究，以及 9 月 3 日的 MEG 基础模型路线图。
-- GitHub 新增重点是 9 月 7 日创建的 **ML-Agent** 和 **InsightForge**：前者用确定性代码约束实验规划，后者提供可回放实验轨迹，但目前采用启发式决策。二者都尚非时序专用系统。
-- 光伏继续关注概率预测的物理可行性与共形校准；新检出 Simulink 项目存在 README 2024 年与仓库 2026 年创建日期冲突，降级观察。
-- 更正旧报：PV decision-support pipeline 首发为 **2026-08-03**，不是 8 月 1 日。MoME 的 9 月 4 日为 v2 修订，首发 1 月 29 日，排除主列表。
+- **新增检出 4 篇 9 月 4 日首发论文**：Chronos 量子微调、WearableQA、MMTClinic、PRICE。它们比昨日主列表中的 CoSPOT 更新，但不是 9 月 8 日首发。arXiv 官方接口与摘要页已交叉核验。
+- **reasoning 优先关注 WearableQA**：真实长期可穿戴记录上的跨信号问答，更贴近数值证据驱动的推理评测。MMTClinic 补充多模态、多语言临床任务，但数据尚待公开。
+- **工程优先关注 Predictors and Orchestrators**：9 月 6 日创建，直接把五类 Agent 与水文预测模型接入同一执行流程；论文尚未发布，作为代码项目收录。
+- **9 月 7 日新仓库不能一概视为成熟 LLM Agent**：ML-Agent 支持 LLM 提案和确定性评测；InsightForge 当前是启发式 AutoML 加轨迹回放；agentic-automl-evaluation 明确仍为占位页。
+- 本轮 arXiv 增量查询未返回 9 月 5—8 日的时序首发条目。这只描述本次查询结果，不代表整个领域没有新增。今天是周二，不更新周报。
 
 ## 1. 时间序列基础模型最新研究
 
-### [2026-09-04] Towards Scaling Quantum Fine-Tuning of Foundational Time Series Models for Classification — 新增
+### 1.1 [2026-09-04｜新增检出] Chronos 表征上的量子微调与扩展
 
-- 日期与来源：v1 2026-09-04；[arXiv](https://arxiv.org/abs/2609.05408)。
-- 摘要：将 Chronos 表征接入量子分类头，在 PSML-5 电网事件分类中研究输入带宽瓶颈；通过 wing 模块引入额外输入，作者报告平衡准确率由 83.6% 提升到 85.2%。
-- 相关性：高，直接研究 TSFM 表征迁移与电网时序；任务是事件分类，不能将结果直接外推为光伏功率预测提升。量子硬件与复现成本使其应用优先级低于通用预测 harness。
+**Towards Scaling Quantum Fine-Tuning of Foundational Time Series Models for Classification**
+来源：[arXiv:2609.05408](https://arxiv.org/abs/2609.05408)。日期：v1，2026-09-04。
 
-### [2026-09-03] A Roadmap for MEG Foundation Models — 新增
+- 摘要：在 PSML-5 电网事件分类中，给 Chronos 表征接入量子分类头，并提出通过附加小规模 wing 电路增加输入信息带宽。作者报告，同输入下量子头较较大的经典 MLP 提升 1.7—2.0 个百分点的平衡准确率。
+- 相关性：**基础模型高，Agent / reasoning 低**。这是 TSFM 下游适配研究，不是新的通用预训练模型，也不能由此推出广泛的量子优势。
+- 关注点：区分传感器分组带来的收益与量子头本身收益；证据目前局限于论文所测分类设置，尚未独立复现。
 
-- 日期与来源：v1 2026-09-03；[arXiv](https://arxiv.org/abs/2609.04461)。
-- 摘要：梳理脑磁时序基础模型的 tokenization、传感器几何、自监督预训练和跨站点评测，讨论从 EEG 与通用 TSFM 迁移以及多模态整合。
-- 相关性：中高，适合借鉴多传感器表示与跨域评测设计；属于路线图文章，并非新发布的通用预测模型或已验证 Agent。
+### 1.2 [2026-08-31｜复核保留] TSPFN
+
+**TSPFN: A Temporal Tabular Foundation Model for Physiological Time Series Classification**
+来源：[arXiv:2608.31013](https://arxiv.org/abs/2608.31013)、[官方代码](https://github.com/Jeremstym/TSPFN)。日期：v1，2026-08-31。
+
+- 摘要：改造 TabPFN 的时序与通道表示，并在 14 万条真实生理时序上预训练，以支持小中样本分类和跨域迁移。arXiv 作者备注为 STACOM 2026 接收。
+- 相关性：**基础模型高，Agent 间接**。可作为 Agent 的分类工具后端；其贡献是时序分类的 in-context learning，不能等同于通用预测能力。
+- 今日状态：核验摘要及首发日；未将旧条目写成新增论文。
 
 ## 2. 时间序列建模 Agent 最新研究
 
-本轮没有核验出比下列工作更晚的直接 forecasting Agent 首发；保留窗口内重点，并记录修订。
+### 2.1 [2026-08-31｜复核保留] CastClaw：工业预测中的人机协作 Agent
 
-### [2026-08-31] A Human-in-the-Loop Autonomous Agent for Industry Time Series Forecasting（CastClaw）— 持续跟踪
+**A Human-in-the-Loop Autonomous Agent for Industry Time Series Forecasting**
+来源：[arXiv:2608.30976](https://arxiv.org/abs/2608.30976)。日期：v1，2026-08-31。
 
-- 日期与来源：v1 2026-08-31；[arXiv](https://arxiv.org/abs/2608.30976)。
-- 摘要：将专用预测器、分析工具、用户约束与版本化执行记录接入同一 runtime；根据证据保留、修订或升级预测，并设置显式停止条件。
-- 相关性：高，直接命中 forecasting Agent 与 harness；值得关注如何将预测质量检查、执行报告和人工输入接入光伏工作流。论文报告电价与离线负荷实验，不视为已验证光伏效果。
-
-### [2026-08-24] MetaCaster: Meta-Harness-Optimized Agent for End-to-End Few-Shot Learning of Lightweight Time Series Forecasters — 修订跟踪
-
-- 日期与来源：v1 2026-08-24；v2 2026-09-03；[arXiv](https://arxiv.org/abs/2608.23473)。
-- 摘要：针对数据不足和算力受限场景，通过 Agent 与 meta-harness 优化轻量预测器的少样本学习流程。
-- 相关性：高，连接自动建模、少样本数据与轻量部署；适合研究新增光伏站点的建模自动化。已确认版本日期，未做 v1/v2 全文差分，不声称修订带来新性能提升。
-
-### [2026-07-07] TopoBrick: Agentic Topology Sampling of Exogenous Variables for Zero-Shot Building IoT Forecasting — DailyArXiv 补检
-
-- 日期与来源：v1 2026-07-07；v2 2026-09-02；[arXiv](https://arxiv.org/abs/2607.06349)。
-- 摘要：以建筑知识图谱形成结构骨架，通过 agentic topology sampler 选择目标相关外生变量，支持无需训练的零样本建筑 IoT 预测。
-- 相关性：高，Agent 负责变量与上下文选择；对多站点预测的启发属于本报推断，论文任务本身是建筑 IoT。
+- 摘要：将工业预测工作组织为人机协作流程，连接预测工具、用户约束和执行记录，支持对预测的分析与修订。
+- 相关性：**Agent 高，foundation model / reasoning 中高**。重点是预测流程的编排、可追溯性和人类反馈，而非单个预测网络的误差改进。
+- 今日状态：本次增量接口没有发现更晚且明确以建模 Agent 为核心的论文；保留已核验入口，新增工程系统见第 4 节。
 
 ## 3. 时间序列 reasoning 模型最新研究
 
-### [2026-09-04] WearableQA: A Benchmark for Health Reasoning over Real-World Wearable Data — 新增
+本栏目区分“推理评测基准”“LLM 数值预测方法”与“显式推理模型”；使用 LLM 不自动意味着具备可验证 reasoning。
 
-- 日期与来源：v1 2026-09-04；[arXiv](https://arxiv.org/abs/2609.05405)。
-- 摘要：基于 200 名真实用户的长期可穿戴记录、血液指标与人口统计信息构建 4,084 道十选一问题，区分数据计算、健康解释、单信号与跨信号推理。作者评测 14 个 LLM，准确率为 19.6%–72.9%。
-- 相关性：高，直接评测真实噪声与长期上下文中的时序 reasoning；可借鉴其任务分解和交叉信号证据设计。它是基准，不是新训练的 reasoning 模型。
+### 3.1 [2026-09-04｜新增检出] WearableQA：真实长期可穿戴数据推理
 
-### [2026-09-04] PRICE: A Systematic Study of LLM Adaptation Choices for Bitcoin Price Forecasting — 新增
+来源：[arXiv:2609.05405](https://arxiv.org/abs/2609.05405)。日期：v1，2026-09-04。
 
-- 日期与来源：v1 2026-09-04；[arXiv](https://arxiv.org/abs/2609.05235)。
-- 摘要：系统比较量化 LLaMA-3 的 LoRA、数值表示、提示、递归预测和解码策略；在该实验设置中，结构化 Context-Task-Format 提示优于 CoT 等提示方案。
-- 相关性：中高，适合作为“是否需要显式 reasoning”的消融参照；属于金融数值预测适配研究，不能推断 CoT 在所有时序任务中无效。
+- 摘要：基于 200 名真实用户、最长 500 天的可穿戴记录及生物标志物构造 4,084 道十选一问题，覆盖 16 种题型。区分数据计算与健康解释、单信号与跨信号推理；14 个模型的准确率为 19.6%—72.9%，随机基线为 10%。
+- 相关性：**reasoning 高，Agent 评测高**。可用于检验 Agent 的工具计算、证据整合与答案生成是否一致；它是 benchmark，不是新训练的 reasoning 模型。
+- 关注点：跨用户隔离、长历史截断、是否允许调用数值工具，以及医学解释的证据来源。结果仅反映论文基准表现。
 
-### [2026-09-04] MMTClinic: Multimodal, Multilingual Time Series Question Answering and Reasoning Benchmark for Clinical Domain — 新增
+### 3.2 [2026-09-04｜新增检出] MMTClinic：多模态、多语言临床时序问答
 
-- 日期与来源：v1 2026-09-04；[arXiv](https://arxiv.org/abs/2609.04842)。
-- 摘要：将文本、医学图像和多变量生理信号组合成五种语言的 30,000 个问答，覆盖死亡率预测、心率预测与 SOFA 评分；比较 13 个 LLM 的零样本、少样本与 CoT 表现。
-- 相关性：高，直接命中多模态时序推理评测；摘要称数据将在接收后公开，当前不能假定数据已可下载或完整复现。
+来源：[arXiv:2609.04842](https://arxiv.org/abs/2609.04842)。日期：v1，2026-09-04。
 
-### [2026-09-02] Compositional Spectral Prompts for LLM-based Online Time Series Forecasting（CoSPOT）— 持续跟踪
+- 摘要：结合文本、医学图像和多变量生理信号，构造五种语言的 30,000 个问答对，覆盖死亡率预测、心率预测与 SOFA 评分估计，并比较 13 个 LLM 的零样本、少样本和 CoT 设置。
+- 相关性：**reasoning 高，Agent 评测中高**。适合观察模型在语言、模态和时序任务间的能力差异；不是完整的建模 Agent 系统。
+- 可用性：作者明确表示数据将在论文成功接收后公开，不能写成已可下载复现。优先跟踪数据发布。
 
-- 日期与来源：v1 2026-09-02；[arXiv](https://arxiv.org/abs/2609.02093)。
-- 摘要：通过组合频域提示支持 LLM 在线时序适配，针对持续变化与未见模式改善泛化。
-- 相关性：高于在线预测适配、低于显式多步推理；提示组合本身不等于已验证的 reasoning 能力，本栏将其作为相邻方法跟踪。
+### 3.3 [2026-09-04｜新增检出] PRICE：LLM 预测中的适配选择
 
-## 4. GitHub 和 HuggingFace 上值得跟踪的新项目
+来源：[arXiv:2609.05235](https://arxiv.org/abs/2609.05235)。日期：v1，2026-09-04。
 
-仓库日期经 GitHub 官方 API 核验；摘要以本次 README 为依据，未执行代码或复现性能。GitHub 与 HuggingFace 的同项目不重复收录。
+- 摘要：在比特币短期价格预测中系统组合量化 LLaMA-3 8B、LoRA、整数数值表示、递归预测、Context-Task-Format 提示及零温度解码。作者报告该任务中结构化提示优于 CoT、隐式 CoT 与 few-shot 提示。
+- 相关性：**LLM 时序建模高，reasoning 中**。价值在于检验“增加推理文本是否真的有用”，而不是证明所有时序任务都不需要 CoT。
+- 关注点：时间切分、滚动评测、提示消融与基线公平性；论文预测误差结论不构成交易收益证据。
 
-### 4.1 时间序列（含可迁移的 ML / AutoML / harness）
+### 3.4 [2026-09-02｜复核保留] CoSPOT：组合频谱提示的在线预测
 
-#### [2026-09-07] AI-ML-Engineering-Lab/insightforge-agentic-automl — 新增
+来源：[arXiv:2609.02093](https://arxiv.org/abs/2609.02093)、[官方代码](https://github.com/seungyoon-Choi/CoSPOT)。日期：v1，2026-09-02；作者备注 CIKM 2026。
 
-- 日期与来源：创建 2026-09-07 11:31 UTC，推送 11:33 UTC；[GitHub](https://github.com/AI-ML-Engineering-Lab/insightforge-agentic-automl) / [API](https://api.github.com/repos/AI-ML-Engineering-Lab/insightforge-agentic-automl)。
-- 摘要：记录数据剖析、清洗、特征工程、模型比较及重试的轨迹，提供本地回放界面。README 明确当前决策核心是启发式规则，LLM tool-calling 替换属于后续扩展。
-- 相关性：中高，可借鉴实验记录与反思重试的展示协议；不能作为 LLM 自主推理效果证据，尚未展示时序滚动验证。
+- 摘要：冻结 LLM，通过按频率幅度组合频谱基提示实现低成本在线适配，评测长期在线阶段与跨数据集分布变化。
+- 相关性：**在线预测高，显式 reasoning 中低**。可作 Agent 的适配工具，但摘要没有建立可验证推理链；调整昨日将其直接视为高相关 reasoning 工作的口径。
 
-#### [2026-09-07] mowne67/ML-Agent — 新增
+### 3.5 [2026-07｜会议版本补录，具体日不确定] CaTS-Bench 与 TimeSAF
 
-- 日期与来源：创建 2026-09-07 10:08 UTC，推送 10:23 UTC；[GitHub](https://github.com/mowne67/ML-Agent) / [API](https://api.github.com/repos/mowne67/ML-Agent)。
-- 摘要：LLM 提议实验，确定性代码验证计划、运行 scikit-learn 管线并选择交叉验证胜者；输出预测器、schema、排行榜和运行报告，支持离线 planner。
-- 相关性：中高，与 Agent harness 的计划校验、评测和结果打包直接相关；迁移到时序需要另行验证按时间切分与泄漏控制。
+| 工作与来源 | 日期及摘要 | 相关性判断 |
+|---|---|---|
+| [CaTS-Bench，ACL Findings](https://aclanthology.org/2026.findings-acl.1722/) | 官方出版月份 2026-07，具体日不确定。以 11 个领域的 1,746 条人工重写描述及 910 道选择题评测时序描述、数值细节和上下文理解。 | reasoning 高；可借鉴用于 Agent 报告的数值忠实度评测。 |
+| [TimeSAF，ACL](https://aclanthology.org/2026.acl-long.1208/) | 官方出版月份 2026-07，具体日不确定。将单模态特征学习与跨模态语义交互分离，通过异步融合引导预测。 | LLM 时序预测高，显式 reasoning 中低；不是 Agent。 |
 
-#### [2026-09-07] Hiramdu/agentic-automl-evaluation — 新增，低优先级
+两条仅作为窗口内正式会议版本补录；未确认最早预印本日期，不宣称是近三个月首次提出。因具体日与首发历史未核全，优先级低于上述日期已确认的新稿。
 
-- 日期与来源：创建 2026-09-07 04:02 UTC，推送 04:34 UTC；[GitHub](https://github.com/Hiramdu/agentic-automl-evaluation) / [API](https://api.github.com/repos/Hiramdu/agentic-automl-evaluation)。
-- 摘要：提出围绕决策有效性、推理一致性、模型质量风险与反事实影响审计 AutoML；README 明确仓库仍是占位页，代码与轨迹 schema 待发布。
-- 相关性：主题高、当前可用性低。新仓库不等于新论文；所链接论文为 2602.22442，不能将其作为本窗口内论文首发。
+## 4. GitHub 上的最新项目与活跃度
 
-#### [2026-06-18] temporal-community/temporal-agent-harness — 持续跟踪
+日期来自 GitHub 官方 Search API 的创建 / 推送字段，以下转换为北京时间。创建日用于“新项目”判定，推送时间只表示仓库活动，不能单独证明新增功能。README 内容为维护者陈述，本轮未安装运行或独立复现；star 不作为质量证明。
 
-- 日期与来源：创建 2026-06-18 22:43 UTC；最近推送 2026-09-04 22:56 UTC；[GitHub](https://github.com/temporal-community/temporal-agent-harness) / [API](https://api.github.com/repos/temporal-community/temporal-agent-harness)。
-- 摘要：基于 Temporal workflow 提供耐久执行、工具审批、类型化组合和事件回放；README 标注早期实验项目。
-- 相关性：中高，可支持长时间模型训练和预测 Agent 恢复执行；这里的 Temporal 是工作流平台名称，不能据此归类为时间序列模型。
+### 4.1 时间序列、harness、machine learning / AutoML
 
-### 4.2 光伏功率预测
+| 项目与来源 | 创建；最近推送（北京时间） | 摘要与相关性判断 |
+|---|---|---|
+| [InsightForge](https://github.com/AI-ML-Engineering-Lab/insightforge-agentic-automl) · [API](https://api.github.com/repos/AI-ML-Engineering-Lab/insightforge-agentic-automl) | 2026-09-07 19:31；09-07 19:33 | CSV 清洗、特征、模型比较、重试与轨迹回放；**AutoML / harness 中高，时序低**。README 明确当前使用启发式逻辑，LLM 替换仍是后续方向。0 star，不能称为成熟 LLM research Agent。 |
+| [mowne67/ML-Agent](https://github.com/mowne67/ML-Agent) · [API](https://api.github.com/repos/mowne67/ML-Agent) | 2026-09-07 18:08；09-07 18:23 | LLM 可提议实验，确定性代码验证计划、评测 sklearn pipeline 并打包模型。**AutoML / harness 高，时序间接**；README 未证明具备滚动时间切分，迁移到预测前需补时序协议。0 star。 |
+| [agentic-automl-evaluation](https://github.com/Hiramdu/agentic-automl-evaluation) · [API](https://api.github.com/repos/Hiramdu/agentic-automl-evaluation) | 2026-09-07 12:02；09-07 12:34 | 拟审计决策有效性、推理一致性、模型风险与反事实影响。**评测 harness 中高、时序间接；低优先级**。官方 README 写明是占位页，代码、schema 和复现脚本尚未发布；关联的是窗口外旧论文，不能列为新研究。0 star。 |
+| [Predictors and Orchestrators](https://github.com/pramodlekhak/Predictors-and-Orchestrators-Machine-Learning-within-an-Agentic-AI-Harness-for-Forecasting) · [API](https://api.github.com/repos/pramodlekhak/Predictors-and-Orchestrators-Machine-Learning-within-an-Agentic-AI-Harness-for-Forecasting) | 2026-09-06 10:15；09-06 10:25 | 面向 Edwards Aquifer 的 1—12 周预测；README 描述 120 个预训练模型和五类协调 Agent，覆盖采集、模型编排、预测监测、文献与报告。**时序 Agent / ML harness 高**；Claude 负责受限决策和文字总结，数值来自预测模型。论文链接待发布，0 star，优先阅读架构。 |
+| [sriixz/agentic-timeseries](https://github.com/sriixz/agentic-timeseries) · [API](https://api.github.com/repos/sriixz/agentic-timeseries) | 2026-08-23 05:00；09-07 11:39 | 官方描述为组合 GPT、Claude 与金融数据工具的 multi-agent 时序原型。**时序 Agent 中高**；1 star。本轮确认推送较昨日记录前移，但未检查提交差异，不推断新增算法。 |
+| [faheemkhaskheli9/timeseries-data-agent](https://github.com/faheemkhaskheli9/timeseries-data-agent) · [API](https://api.github.com/repos/faheemkhaskheli9/timeseries-data-agent) | 2026-08-19 01:39；09-08 02:01 | 官方描述面向销售、指标等时序数据的自然语言分析。**时序分析 Agent 中；低优先级观察**。本轮仅核验元数据，未核验 README / 代码，不能判断是否支持 forecasting 或 TSFM。0 star。 |
 
-#### [2026-09-06] eng994alitafeek-droid/PV-Power-Forecasting-Simulink — 新增，日期冲突降级
+### 4.2 光伏功率预测 / 多能源时序（项目规则补充）
 
-- 日期与来源：仓库创建 2026-09-06 18:25 UTC，推送 20:14 UTC；[GitHub](https://github.com/eng994alitafeek-droid/PV-Power-Forecasting-Simulink) / [API](https://api.github.com/repos/eng994alitafeek-droid/PV-Power-Forecasting-Simulink)。README 自称最后更新 2024-09、引用年份也是 2024；研究首次公开日期不确定。
-- 摘要：README 描述单二极管光伏建模与 LSTM、CNN-LSTM、GRU 预测的 MATLAB/Simulink 集成。
-- 相关性：主题高、证据优先级低。只记录新建仓库，不计为新研究；README 性能数字和模型文件完整性未独立验证。
+**[Jesse-dry/AutoML-Agent](https://github.com/Jesse-dry/AutoML-Agent)** · [官方 API](https://api.github.com/repos/Jesse-dry/AutoML-Agent)
+创建：2026-07-12 23:04；最近推送：2026-09-06 18:54，北京时间。
 
-#### [2026-09-04] siwekk/PV-probabilistic-day-ahead-forecasting — 持续跟踪
+- 摘要：官方 README 已描述负荷、风电、光伏、电价任务。LLM 在受约束动作空间内提出特征修改，确定性引擎执行，结合误差画像、回滚、经验记忆与跨任务漂移检测；列有 GEFCom2014 光伏任务接入。
+- 相关性：**时间序列 Agent / AutoML 高，光伏高**。可与通用表格 ML-Agent 对照，重点检查可用历史、特征泄漏检查和滚动评测协议。
+- 限制：README 的“无泄漏”是项目主张，本轮未审计代码；概率预测部分混有路线图内容，不把规划当作已实现。最近推送日期也不能证明所有这些功能在当天引入。当前 1 star。
+- HuggingFace 补检未确认更适合纳入且日期可靠的独立新项目，本期不重复列出同源模型页面。
 
-- 日期与来源：创建 2026-09-04 08:03 UTC，推送 08:20 UTC；[GitHub](https://github.com/siwekk/PV-probabilistic-day-ahead-forecasting) / [API](https://api.github.com/repos/siwekk/PV-probabilistic-day-ahead-forecasting)。
-- 摘要：包含 LightGBM/XGBoost 分位数预测、Chronos-2 对比、物理投影、共形校准和依赖感知不确定性分析；主要比较使用模拟 NREL 系统与 PVOD 遥测，原始数据需按许可另行恢复。
-- 相关性：高，直接连接 TSFM、物理约束和概率光伏预测。配套论文正式发表日期仍未核实，不另计新论文。
+## 5. 光伏功率预测最新研究（补检）
 
-## 5. 光功率 / 光伏功率预测最新研究
+本轮未确认比现有跟踪项更新、且同时具备可靠窗口内日期与原始论文证据的光伏专门论文，因此不填充旧研究。窗口内工程进展见第 4.2 节；不将电网事件分类的量子微调论文误称为光伏功率预测。
 
-### [2026-08-26] The Impact of PV Generation Forecast and Multi-Objective Control Policy on Optimal Operation of Grid Connected PV-BESS Microgrid — 持续跟踪
+## 6. 检索来源、日期口径与覆盖限制
 
-- 日期与来源：v1 2026-08-26；[arXiv](https://arxiv.org/abs/2608.25703)。
-- 摘要：将 LSTM 光伏预测与 PV-BESS 多目标调度结合，对比完美预测、持续性预测与 LSTM，评估自用率、并网注入、成本及电池使用的权衡。
-- 相关性：高，提醒光伏 Agent 的目标应包含调度结果和电池代价，不能仅比较点预测误差；论文未提供本报可确认的 Agent 或 TSFM 方法。
+- **arXiv**：[官方接口说明](https://info.arxiv.org/help/api/index.html)。本轮增量查询为 `all:"time series"` 与首发区间 2026-09-03—2026-09-08 相交，按首发降序，返回 25 条；新稿重点回查摘要页。其余三个月窗口以历史跟踪记录与定向补检覆盖，非穷尽性系统综述。
+- **DailyArXiv**：[公开 master README](https://github.com/zezhishao/DailyArXiv/blob/master/README.md) 标记更新到 2026-09-08，Time Series 板块补出四篇新主条目。采用公开 master 回退；没有将聚合页更新日期用作论文日期，也未声称本轮已检查 timeseries 分支。
+- **会议来源**：定向检索 OpenReview、ACL Anthology、NeurIPS、ICLR 相关页面、ICML / PMLR、KDD、AAAI。ACL 返回上述两篇 7 月会议版本；AAAI 命中的 VLM4TS 等为 3 月出版，排除。其他查询未提供可核验的更晚高相关候选，不代表这些会议没有相关论文。
+- **GitHub Search**：查询 `timeseries agent`、`"time series" agent`、`automl agent`、`"machine learning" harness`，创建区间均为 2026-06-08—2026-09-08；分别返回 11、132、103、18 个匹配，每组读取最近更新的前 8 项再筛选。四组有重复，数量不相加，也不把关键词里的采集 daemon 或动词 harness 当作研究 Agent。
+- **GitHub 证据强度**：5 个重点项目额外读取官方 README，包括三项 9 月 7 日 AutoML 项目、Predictors and Orchestrators、Jesse-dry/AutoML-Agent。`timecalc-mcp` 单仓库请求遭遇限流，未取得创建日，本期不纳入。搜索结果不是 Trending 排名。
+- **AI HOT**：[AI HOT](https://aihot.virxact.com) 近 7 天论文精选返回 7 条，未见与本期三条研究主线直接匹配者；不据其二手摘要新增研究结论。
+- **日期处理**：以窗口内论文首发、明确标注的会议出版事件或仓库创建为收录依据；抓取日、索引日和 README 更新日不替代发布日期。会议只给月份时明确标“具体日不确定”并降优先级。关联旧论文的新仓库仅作为代码发布事件观察。
 
-### [2026-08-03] An AI-Based Decision-Support Pipeline for Day-Ahead Photovoltaic Forecasting — 日期更正
+## 7. 今天先看什么
 
-- 日期与来源：v1 2026-08-03；[arXiv](https://arxiv.org/abs/2608.02088)。旧报的 2026-08-01 与官方记录不符，本期纠正。
-- 摘要：针对短历史站点，校准时间戳并构建无泄漏太阳几何与晴空指数特征，通过 stacking 整合模型。相对 smart persistence，随机日分块下误差改善约 32%，更严格滚动起点评估约 9%。
-- 相关性：高，直接支持光伏预测流水线与时序评测设计；两种协议的差距是研究 AutoML 评测时应重点检查的现象。
+1. **WearableQA**：检查跨信号题型能否转化为“数值工具输出—证据引用—答案”一致性测试，再对照 MMTClinic 的语言与模态维度。
+2. **Predictors and Orchestrators + Jesse-dry/AutoML-Agent**：对照模型编排、滚动协议、停止与回滚、运行记录；验证 Agent 决策收益和预测器本身收益能否分开测量。
+3. **ML-Agent / InsightForge**：借鉴确定性计划校验和可回放轨迹；接入时序任务前先确认时间切分、标签可用时点及独立测试集。
+4. **PRICE**：将结构化提示与 CoT 作为同预算消融项，检验 reasoning 是否改善结果，而不只增加输出文本。
 
-日期不确定、低优先级候选：[Adapting to drift: Weather-pattern experts for short-term photovoltaic power forecasting](https://www.sciencedirect.com/science/article/pii/S1474034626004738)，出版商页面标示 2026 年 9 月卷期，摘要讨论天气—功率关系的内部/外部漂移。与在线适配高度相关，但本轮未核实首次在线公开日期，不能直接以卷期认定窗口内新首发，暂不进入正式列表。光通信光功率预测方向本轮未确认符合窗口的新论文，结果不代表不存在。
-
-## 6. DailyArXiv 补检结论
-
-已读取 [官方 GitHub README 的 Time Series 板块](https://github.com/zezhishao/DailyArXiv#time-series) 和 [master 原始 README](https://raw.githubusercontent.com/zezhishao/DailyArXiv/master/README.md)，二者均显示更新至 **2026-09-08**。日期列包含修订日，不能直接作为首发日。
-
-- 已补入或保留：Chronos 量子微调、WearableQA、MMTClinic、PRICE、MEG 路线图、MetaCaster、TopoBrick、CoSPOT 与 CastClaw。新收录不等于 9 月 8 日首发。
-- MetaCaster：README 2026-09-03 = v2，v1 2026-08-24；TopoBrick：README 2026-09-02 = v2，v1 2026-07-07。均仍在窗口内，按 v1 排序。
-- [MoME](https://arxiv.org/abs/2601.21547)：README 2026-09-04 = v2，v1 2026-01-29；文本调制专家与多模态预测相关，但首发超窗，降级排除。
-- [QABBA](https://arxiv.org/abs/2411.15209)：README 2026-09-01 = v4，v1 2024-11-20；符号压缩与 LLM 时序输入相关，首发超窗，降级排除。
-- README 还出现 [Universal Redundancies](https://arxiv.org/abs/2602.01605)、[Grammar of the Wave](https://arxiv.org/abs/2603.11479)、[neuronal activity foundation model](https://arxiv.org/abs/2506.20354) 的新版链接；编号指向更早月份，本轮未逐页核验完整版本史，降级待核，不算近三个月新首发。
-- 本期是新增精选而非重印整个窗口的历史目录；Time Series 板块中的普通统计建模、非核心领域生成与应用论文未全部收录。
-
-## 7. 检索记录与限制
-
-- 实际检索：arXiv 的 time series / foundation / agent / reasoning、photovoltaic forecasting；OpenReview、ACL Anthology 与 PMLR 的定向组合检索；GitHub 搜索/API/README；HuggingFace 搜索；出版商原始论文页。未逐一遍历全部会议录，不将搜索未命中写成“所有会议均无新成果”。
-- GitHub API 查询：`timeseries agent created:2026-06-08..2026-09-08`（11 个结果，按更新取前 5）；`automl agent created:2026-09-04..2026-09-08`（7 个，取前 5）；`photovoltaic forecasting created:2026-09-04..2026-09-08`（2 个）。另检索 harness 并核验已跟踪仓库。
-- 检索还确认 sriixz/agentic-timeseries 在 9 月 7 日推送、EchoML 在 9 月 7 日推送；未比较提交内容，不把推送时间变化解释为新功能。
-- GitHub 搜索命中的 microsoft/argos 创建于 2025-04-03，虽最近推送为 2026-06-30，按本报新项目口径排除；HuggingFace 返回天气/极光数据更新等候选，未确认新的直接相关模型发布。
-- 网络限制：部分 web 的版本化 arXiv/API 请求失败，已改用无版本 arXiv 页面及直接公开 GitHub API/原始 README 完成重点核验。检索具有索引与分页覆盖限制。
-- 6 月 7 日及更早首发条目已移出今天窗口；期刊卷期、搜索抓取日、仓库创建日不相互替代。
-
-## 今日建议
-
-优先看 WearableQA / MMTClinic 的时序推理任务定义，再看 ML-Agent 的实验计划校验与 InsightForge 的轨迹回放。光伏侧继续比较物理约束、概率校准与滚动验证协议；新 Simulink 仓库等日期冲突消除、复现材料确认后再投入时间。
+本简报基于官方摘要、项目文档与元数据整理；方法效果为作者报告，未进行实验复现。今天不触发周五汇总。
