@@ -1,8 +1,14 @@
 # 时间序列研究晨间简报｜2026-11-02
 
-检索时间：2026-11-02 10:15–10:28（Asia/Shanghai）。严格时间窗口：**2026-08-02 至 2026-11-02**。论文日期优先采用 arXiv v1（UTC 转北京时间）；GitHub 项目日期采用 `created_at`，`pushed_at` 只作为近期活跃度提示。下述性能均为作者报告，尚未本地复现。
+检索时间：2026-11-02 10:15–15:32（Asia/Shanghai；含本次增量核验）。严格时间窗口：**2026-08-02 至 2026-11-02**。论文日期优先采用 arXiv v1（UTC 转北京时间）；GitHub 项目日期采用 `created_at`，`pushed_at` 只作为近期活跃度提示。下述性能均为作者报告，尚未本地复现。
 
 ## 1. 时间序列基础模型最新研究
+
+### 2026-10-29｜[Understanding axial attention in TSFMs through single location regression](https://arxiv.org/abs/2610.40188)：为轴向注意力 TSFM 给出可分析的稀疏信息理论
+
+- **来源与日期**：arXiv v1，2026-10-29 14:46 UTC（北京时间 10 月 29 日）。
+- **简短摘要**：将单位置回归推广到二维结构数据，构造可解析的轴向注意力型预测器，分析稀疏有效 token 下的统计性质和训练动力学，并给出特定温度缩放下投影梯度下降收敛到 oracle 参数的条件。
+- **相关性判断：高（TSFM 基础研究）**。它解释了当前多变量/面板时序基础模型常用轴向注意力的一个理论边界，而非提出可直接替换 Chronos 的预训练模型；理论假设与实务数据分布之间仍需实证对照。
 
 ### 2026-10-29｜[Modular Bayesian Foundation Models](https://arxiv.org/abs/2610.39043)：用不确定性路由紧凑时序专家
 
@@ -18,31 +24,37 @@
 
 ## 2. 时间序列建模 Agent 最新研究
 
-### 2026-09-26｜[FASE：Self-Evolving Time-Series Forecasting Agents](https://arxiv.org/abs/2609.32689)：以已兑现结果驱动在线策略更新
-
-- **来源与日期**：arXiv v1，2026-09-26 14:51 UTC。
-- **简短摘要**：Feedback-Aware Self-Evolving agent 将过往预测实例及其随后揭示的标签转为 episodic memory，并以在线策略学习汇总排序指导；在 GIFT-Eval 的 29 个配置上评测。作者报告相对最佳单一基础模型的归一化 MAE 降低 9.1%。
-- **相关性判断：高（时序 Agent / 闭环学习）**。它明确处理“预测发出后、标签滞后到来”的生产时序；需重点复验经验检索是否穿越 forecast origin，以及在线策略的灾难性遗忘与概念漂移边界。
-
 ### 2026-10-28｜[Vendster](https://arxiv.org/abs/2610.38292)：评测预测工具质量怎样改变 LLM Agent 决策
 
 - **来源与日期**：arXiv v1，2026-10-28 05:23 UTC；[官方代码](https://github.com/amazon-science/Vendster)。
 - **简短摘要**：在 M5 需求序列生成的买卖双方谈判中，受控替换预测偏差与区间宽度，测量 LLM Agent 的下游决策变化。作者发现常见准确率指标与谈判结果不显著对应，而偏差方向和 Agent 对预测的反应性更关键。
 - **相关性判断：高（Agent harness）**。值得借鉴的是“固定 Agent、干预预测工具输出、观测决策效用”的验收法；谈判模拟不等同于能源调度，应在目标业务中重新定义收益与风险。
 
+### 2026-10-26｜[TimeWorld: Towards Action-Conditioned Multimodal World Models for Time Series Forecasting](https://arxiv.org/abs/2610.34797)：把文本行动显式映射为未来时序变化
+
+- **来源与日期**：arXiv v1，2026-10-26 03:39 UTC。
+- **简短摘要**：提出跨域 TSWM-Bench，使用已记录行动—结果对形成文本干预；并以原型引导潜变量调制和行动对比学习，把文本行动接入预训练 TSFM 的未来预测。作者报告传统多模态模型不及 history-only TSFM，而简单文本前缀适配在所测 TSFM 上均有提升。
+- **相关性判断：中高（时序 Agent 的世界模型组件）**。这是“行动会改变预测对象”而不只是“行动读取预测”的关键建模方向；仍不是可自主规划的 LLM Agent，且文本干预的因果可识别性、行动发生时点与未来协变量泄漏必须逐场景审计。
+
+### 2026-09-26｜[FASE：Self-Evolving Time-Series Forecasting Agents](https://arxiv.org/abs/2609.32689)：以已兑现结果驱动在线策略更新
+
+- **来源与日期**：arXiv v1，2026-09-26 14:51 UTC。
+- **简短摘要**：Feedback-Aware Self-Evolving agent 将过往预测实例及其随后揭示的标签转为 episodic memory，并以在线策略学习汇总排序指导；在 GIFT-Eval 的 29 个配置上评测。作者报告相对最佳单一基础模型的归一化 MAE 降低 9.1%。
+- **相关性判断：高（时序 Agent / 闭环学习）**。它明确处理“预测发出后、标签滞后到来”的生产时序；需重点复验经验检索是否穿越 forecast origin，以及在线策略的灾难性遗忘与概念漂移边界。
+
 ## 3. 时间序列 reasoning 模型最新研究
-
-### 2026-10-19｜[TimesJev: Thinking Fast on Time Series with System 1 Sufficiency](https://arxiv.org/abs/2610.26002)：以充分表征压缩换取低延迟推理
-
-- **来源与日期**：arXiv v1，2026-10-19 08:26 UTC。
-- **简短摘要**：针对长链式时序推理的 token 与延迟成本，先以门控机制学习保留关键频率模式的压缩表示，再与快速 System-1 模型表征对齐。作者在 13 个数据集上报告较其微调 reasoning 基线更高表现及更低推理时间。
-- **相关性判断：高（时序 reasoning / 线上延迟）**。为实时 Agent 提供“何时无需长推理”的模型化方向；其“优于 reasoning model”的结论依赖所选基线与任务定义，部署时须同时报告延迟、错误类型和置信度校准。
 
 ### 2026-10-28｜[Vendster](https://arxiv.org/abs/2610.38292)：把 reasoning 的价值转为可干预的下游效用
 
 - **来源与日期**：arXiv v1，2026-10-28 05:23 UTC。
 - **简短摘要**：该工作不是数值 reasoning 主干，而是以受控预测输入测量 Agent 的推理/行动轨迹对偏差与不确定性的敏感度，避免把预测误差直接等同于业务价值。
 - **相关性判断：高（reasoning 评测）**。适合做时序 Agent 的 harness：固定信息可用时点，分别干预点预测、区间、偏差方向，最终以任务效用和安全约束而非 RMSE 单独判定。
+
+### 2026-10-19｜[TimesJev: Thinking Fast on Time Series with System 1 Sufficiency](https://arxiv.org/abs/2610.26002)：以充分表征压缩换取低延迟推理
+
+- **来源与日期**：arXiv v1，2026-10-19 08:26 UTC。
+- **简短摘要**：针对长链式时序推理的 token 与延迟成本，先以门控机制学习保留关键频率模式的压缩表示，再与快速 System-1 模型表征对齐。作者在 13 个数据集上报告较其微调 reasoning 基线更高表现及更低推理时间。
+- **相关性判断：高（时序 reasoning / 线上延迟）**。为实时 Agent 提供“何时无需长推理”的模型化方向；其“优于 reasoning model”的结论依赖所选基线与任务定义，部署时须同时报告延迟、错误类型和置信度校准。
 
 ## 4. GitHub：timeseries Agent、harness、ML、AutoML 项目
 
@@ -55,33 +67,39 @@
 - **摘要**：波动率预测 harness，项目说明将 `load_panel()` 设为唯一读数路径，以截断等价性做 point-in-time 测试，并使用 model confidence set、预注册 holdout 与全量 trial 计数约束评测。
 - **相关性判断：高（harness）、领域直接性中**。虽然目标是金融波动率，其机械化防泄漏和不可见 holdout 的设计很适合迁移到通用时序 Agent；模型与数据域不能直接外推。
 
-### 2026-09-07｜[agentic-forecast-review](https://github.com/rahulyg/agentic-forecast-review)
-
-- **摘要**：项目定位为“代码负责数值、模型只作有界选择”，提供证据链接的 Agent 循环与离线评估套件；截至本次检索仍在更新（最新推送 2026-11-02）。
-- **相关性判断：高（Agent / 可审计 harness）**。这种职责分离可降低 LLM 擅自计算或改写结果的风险；仍需逐项检查其数据切分、证据绑定和离线评测是否覆盖目标业务的多步预测。
-
 ### 2026-10-02｜[timeseries-forecasting-benchmark](https://github.com/franciscogamarra10/timeseries-forecasting-benchmark)
 
 - **摘要**：声明比较基础模型、AutoML 与现代 tabular 方法的多序列预测 benchmark。
 - **相关性判断：中高（TSFM / AutoML 对照）**。可作为选型清单起点，但仓库创建后活跃度有限；在未核实 rolling-origin、调参预算和数据版本前，不应把其分数当作模型结论。
 
+### 2026-09-07｜[agentic-forecast-review](https://github.com/rahulyg/agentic-forecast-review)
+
+- **摘要**：项目定位为“代码负责数值、模型只作有界选择”，提供证据链接的 Agent 循环与离线评估套件；截至本次检索仍在更新（最新推送 2026-11-02）。
+- **相关性判断：高（Agent / 可审计 harness）**。这种职责分离可降低 LLM 擅自计算或改写结果的风险；仍需逐项检查其数据切分、证据绑定和离线评测是否覆盖目标业务的多步预测。
+
 ### 光伏功率预测
-
-### 2026-10-16｜[photovoltaic-forecast-optimization](https://github.com/ThomasSerna/photovoltaic-forecast-optimization)
-
-- **摘要**：为哥伦比亚农村学校的光伏能源调度，在共享 MPC 控制器下比较 beta-based 与 Chronos-2 预测。
-- **相关性判断：中高（光伏预测 / 下游决策）**。将 TSFM 预测与调度控制放在同一实验是有价值的；单一场景与天气、负荷、控制器假设限制了泛化，需复核预测发布时点和成本函数。
 
 ### 2026-11-01｜[pvforecast-go](https://github.com/kviatkovsky/pvforecast-go)
 
 - **摘要**：Go 实现的物理型 PV 功率预测，组合 NREL SPA、Perez 与 PVWatts，并声明以 pvlib 校验。
 - **相关性判断：中（物理基线 / 工程组件）**。它不是 Agent 或 TSFM，但适合作为可解释的物理基线或 Agent 工具；接入前应使用站点参数、天气预报延迟和实测功率进行独立验证。
 
+### 2026-10-16｜[photovoltaic-forecast-optimization](https://github.com/ThomasSerna/photovoltaic-forecast-optimization)
+
+- **摘要**：为哥伦比亚农村学校的光伏能源调度，在共享 MPC 控制器下比较 beta-based 与 Chronos-2 预测。
+- **相关性判断：中高（光伏预测 / 下游决策）**。将 TSFM 预测与调度控制放在同一实验是有价值的；单一场景与天气、负荷、控制器假设限制了泛化，需复核预测发布时点和成本函数。
+
 ## 5. 光伏功率预测最新研究
 
 **本轮论文空结果（已说明原因）**：在严格窗口内，未检索到日期与首发来源均可确认、且直接聚焦光伏功率预测的新论文条目。为避免将相邻能源或旧版论文冒充为新增研究，本栏仅保留上述两个可复查项目；下轮优先补检 arXiv、OpenReview 与能源领域会议的首发页面。
 
-## 6. 观察与行动建议
+## 6. DailyArXiv 补检结论
+
+- 已核对 [zezhishao/DailyArXiv](https://github.com/zezhishao/DailyArXiv) 的公开 README：**Last update 为 2026-11-02**，且含 Time Series 板块。
+- 本轮与主题直接相关且在窗口内的条目包括本简报新增的 *Understanding axial attention in TSFMs through single location regression*（README 日期及 arXiv v1 均为 2026-10-29）和 *TimeWorld*（arXiv v1 为 2026-10-26）；二者已纳入对应栏目。
+- README 也列出 *TimeFT*，但该行日期是其更新记录且链接为 `v2`，不能据此替代首发日期；因此未把它作为“新增首发研究”计入主清单。未发现已确认首发日期、直接聚焦光伏功率预测的新增条目。
+
+## 7. 观察与行动建议
 
 - **研究主线**：TSFM 的关键竞争已从单一零样本误差延展到协变量可用性（$t_0$）、专家路由校准（Modular Bayesian）与部署延迟（TimesJev）。
 - **Agent 评测主线**：FASE 将已兑现标签纳入闭环学习，Vendster 与新 harness 项目则强调预测误差不等于任务效用；建议在自己的系统中同时追踪 rolling-origin 误差、泄漏测试、决策效用和风险约束。
