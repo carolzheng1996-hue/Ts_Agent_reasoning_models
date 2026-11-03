@@ -50,6 +50,11 @@
 
 ### 时间序列 / Agent / harness
 
+### 2026-11-03｜[RUC-NLPIR/CoworkOS](https://github.com/RUC-NLPIR/CoworkOS)
+
+- **摘要**：新发布的开源长程、人机协同 Agent harness；README 与源码树均可见，包含主 Agent、协调运行时、可选子 Agent、工作区/记忆与任务日志，以及面向科学工作流的技能目录。
+- **相关性判断：中（通用 research harness）**。不是时序专用框架，但其任务生命周期、可恢复执行和证据留存可借鉴到 TSFLab 式时序研究 Agent；尚未运行，也未验证其在时序复现中的成本或正确性。
+
 ### 2026-10-16｜[mistralai/timestral](https://github.com/mistralai/timestral)
 
 - **摘要**：Timestral 的官方推理仓库；本轮 API 显示 2026-11-03 仍有更新，约 1,049 stars。
@@ -75,6 +80,13 @@
 - **摘要**：为 Chronos、TimesFM、Timestral、TimeGPT 等提供统一 API，并声称涵盖预测、交叉验证、异常检测和外生变量。
 - **相关性判断：高（TSFM 选型层）**。有利于把多种基础模型接到同一 Agent 工具接口；需优先检查其 cross-validation 是否为 rolling-origin，以及外生变量是否区分已知未来与观测后才可见。
 
+### 光伏功率预测
+
+### 2026-10-31｜[AniveshGuptaOfficial/ATERNET](https://github.com/AniveshGuptaOfficial/ATERNET)
+
+- **摘要**：概率太阳能预测原型；README、训练/评测代码树与已处理数据均公开。项目描述以 PV_Live 实测发电与多模式 NWP 为输入，使用 PatchTST、专家路由和 P10/P50/P90 输出，并提供按昼间点校准、留出季节测试和多随机种子报告。
+- **相关性判断：中高（PV 预测工程候选）**。时间顺序切分与夜间点会虚高覆盖率的说明值得借鉴；其作者报告的精度尚未独立复现，且自述中路由/专家对准确率的增益多数处于种子噪声内，因此不应直接视作已验证的专家路由收益。
+
 ## 5. 光伏功率预测最新研究
 
 ### 2026-10-30｜[IMPACT: Inverter-Informed Multimodal Learning for Photovoltaic Generation Forecasting](https://arxiv.org/abs/2610.40418)
@@ -91,8 +103,8 @@
 
 ## 6. DailyArXiv 补检结论
 
-- 已读取 [zezhishao/DailyArXiv](https://github.com/zezhishao/DailyArXiv) 当前公开 README；本次原始关键词检索未获得可稳定定位的主题行，故**不以聚合页日期替代论文 v1 日期**。
-- 以上论文均以 arXiv 原始条目日期为准；未发现需要据 DailyArXiv 单独补入、且日期可确认的新增条目。
+- 已读取 [zezhishao/DailyArXiv](https://github.com/zezhishao/DailyArXiv) 当前公开 README，页面标注 `Last update: 2026-11-03`；其 **Time Series** 栏可直接确认 Chronos-2、TSFLab、TimesJev、IMPACT 与分布式 PV 预训练等相关论文。
+- 聚合页的条目日期只用于发现，排序与纳入仍以 arXiv v1 为准：例如 TimeFT 在聚合页显示为 10 月 29 日的 v2，不能作为本窗口内的新首发。此次补检未发现需要单独新增、且首发日期可确认的论文。
 
 ## 7. 观察与行动建议
 
