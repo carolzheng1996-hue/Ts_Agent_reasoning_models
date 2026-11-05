@@ -1,8 +1,14 @@
 # 时间序列研究晨间简报｜2026-11-05
 
-检索时间：2026-11-05 08:06–08:21（Asia/Shanghai）。严格时间窗口：**2026-08-05 至 2026-11-05**。论文以首发/官方发布日期为准；未能由一手页面确认的日期会明确标出并降低优先级。作者报告的指标均未在本地复现。
+检索时间：2026-11-05 08:06–15:39（Asia/Shanghai）。严格时间窗口：**2026-08-05 至 2026-11-05**。论文以首发/官方发布日期为准；未能由一手页面确认的日期会明确标出并降低优先级。作者报告的指标均未在本地复现。
 
 ## 1. 时间序列基础模型最新研究
+
+### 2026-11-04｜[CATF: A Manager-Worker Framework for Context-Aware Time-Series Forecasting](https://arxiv.org/abs/2611.05325)
+
+- **来源与日期**：arXiv v1，2026-11-03 18:28 UTC（北京时间 11 月 4 日）；也被 DailyArXiv 的 `Time Series` 栏目收录。
+- **简短摘要**：以 Manager–Worker 架构处理天气、日历等上下文变量：Transformer Manager 在训练和推断时都采用硬路由，将每个输入分给一个可替换的单模型预测 Worker。作者在五个上下文丰富数据集、四种预测窗和两套归一化下报告，CATF 增强版在 200 组比较中 162 组优于对应单模型。
+- **相关性判断：中高（上下文路由 / TSFM 候选）**。其显式路由与可替换 Worker 适合 Agent 调度多个预测器；仍应检验路由是否在未来协变量缺失、罕见情境和冷启动时稳定，以及硬路由的负载与回退策略。
 
 ### 2026-09-30｜[RACE: Residual-Aware Test-Time Adaptation for Neighbor-Rich TSFM Forecasting](https://arxiv.org/abs/2610.00405)
 
@@ -10,19 +16,25 @@
 - **简短摘要**：针对单序列推断无法利用相邻、相似历史序列的问题，提出基于残差的测试时自适应；以连续血糖和云工作负载为代表场景，探讨共享模式、个体差异与非平稳突发的平衡。
 - **相关性判断：中高（TSFM 适配 / Agent 检索策略）**。适合把“邻居选择—适配—预测”封装成 Agent 工具链；尤其要防止最近邻跨切分泄漏和测试时更新污染线上状态。
 
-### 2026-08-31｜[TimesFM-3：多变量零样本预测基础模型](https://research.google/blog/timesfm-3-a-zero-shot-foundation-model-for-multivariate-forecasting/)
-
-- **来源与日期**：Google Research 官方博客，2026-08-31；模型已接入其 [GitHub 项目](https://github.com/google-research/timesfm)。
-- **简短摘要**：330M 参数、以逾 1 万亿时间点真实与合成数据预训练，原生支持多变量目标、协变量和概率预测；官方称其在 GIFT-Eval 与 FEV-Bench 的公开比较中具有领先平均排名，并提供 BigQuery ML 接口。
-- **相关性判断：高（TSFM / 可调用预测工具）**。多变量与已知未来协变量使它更适合作为规划 Agent 的候选 forecaster；部署前需按业务 forecast origin 和数据可得时间做独立回测，不能将官方 benchmark 排名直接外推。
-
 ### 2026-09-12｜[Tabby: An Open Pretraining Recipe for Time Series Foundation Models](https://arxiv.org/abs/2609.13956)
 
 - **来源与日期**：arXiv v1，2026-09-12（论文页记录 2026-09-15 更新）。
 - **简短摘要**：发布 145M 长上下文概率 TSFM 及完整开放训练配方：结合 GIFT-Eval-Pretrain+、BLAST、合成的 KernelSynth/CauKerV2，以渐进收敛日程和深层分位数监督训练。一个冻结 backbone 同时支持预测、分类与零样本异常检测，最大上下文为 8,192。
 - **相关性判断：高（TSFM 可复现性 / Agent 工具底座）**。相较只放权重的模型，开放数据与训练流程更适合 Agent 执行可审计复现；仍需确认数据许可、各下游任务的时序切分以及长上下文的成本收益。
 
+### 2026-08-31｜[TimesFM-3：多变量零样本预测基础模型](https://research.google/blog/timesfm-3-a-zero-shot-foundation-model-for-multivariate-forecasting/)
+
+- **来源与日期**：Google Research 官方博客，2026-08-31；模型已接入其 [GitHub 项目](https://github.com/google-research/timesfm)。
+- **简短摘要**：330M 参数、以逾 1 万亿时间点真实与合成数据预训练，原生支持多变量目标、协变量和概率预测；官方称其在 GIFT-Eval 与 FEV-Bench 的公开比较中具有领先平均排名，并提供 BigQuery ML 接口。
+- **相关性判断：高（TSFM / 可调用预测工具）**。多变量与已知未来协变量使它更适合作为规划 Agent 的候选 forecaster；部署前需按业务 forecast origin 和数据可得时间做独立回测，不能将官方 benchmark 排名直接外推。
+
 ## 2. 时间序列建模 Agent 最新研究
+
+### 2026-11-03｜[GlucoAgent: Personalized Glucose Forecasting from Multimodal Personal Context](https://arxiv.org/abs/2611.04126)
+
+- **来源与日期**：arXiv v1，2026-11-03 01:06 UTC；也被 DailyArXiv 的 `Time Series` 栏目收录。
+- **简短摘要**：面向连续血糖预测，LLM Agent 在每个预测点按个人的传感器、饮食和健康上下文写入并执行程序；可检索相似餐食、拟合和回测生理/统计模型，并给出理由与证据。作者在 CGMacros 上报告各预测窗均优于其对比的 TSFM。
+- **相关性判断：高（时序 Agent / 证据化工具调用）**。它把 case-by-case 工具选择置于预测过程而非固定建模管线，贴近可审计 Agent；医疗数据的隐私、代码沙箱、工具选择成本，以及每种上下文在 forecast origin 时是否已可得，均需独立审计。
 
 ### 2026-10-14｜[CastClaw：面向工业预测的人在环自治 Agent](https://github.com/ustc-time-series/CastClaw)
 
@@ -43,6 +55,12 @@
 - **相关性判断：中高（研究地图）**。它不是新系统，但可用作筛选 Agent 论文时的任务分类表；具体结论应回到原始实验和统一的滚动回测验证。
 
 ## 3. 时间序列 reasoning 模型最新研究
+
+### 2026-11-04｜[TSFM Meets LLM: Context as Covariates](https://arxiv.org/abs/2611.05515)
+
+- **来源与日期**：arXiv v1，2026-11-03 19:13 UTC（北京时间 11 月 4 日）。
+- **简短摘要**：提出 CoCo：LLM 将新闻、报告、注释等文本的推理蒸馏成数值化的预测值与置信度协变量，再交给 TSFM；先以与协变量带来预测改进挂钩的 GRPO 微调 LLM，再微调 TSFM。作者称合成多模态训练语料可迁移至金融、经济、天气、交通和安全基准。
+- **相关性判断：高（TSFM+LLM reasoning）**。它避免让 LLM 直接替代数值 forecaster，而让推理产物成为可审计协变量；必须逐条回放文本发布时间、信息可得性与置信度校准，防止文本语料和标注生成把未来信息带入训练或测试。
 
 ### 2026-09-29｜[Loss-Guided Pretraining Data Selection for TSFMs](https://arxiv.org/abs/2609.37255)
 
@@ -119,5 +137,6 @@
 ## 7. 检索与筛选说明
 
 - 优先检索 arXiv、OpenReview、Google Research 官方博客、官方 GitHub、Hugging Face、DailyArXiv 的公开 `Time Series` 更新与项目说明；关键词覆盖 `time series foundation model`、`time series agent`、`time series reasoning`、`harness` 与 AutoML。
+- 已直接复核 [DailyArXiv README](https://github.com/zezhishao/DailyArXiv/blob/master/README.md)：其 `Last update` 为 2026-11-05，`Time Series` 栏目包含本轮新增的 CATF 与 GlucoAgent（均标为 2026-11-03）；TSFM Meets LLM 未见于该栏目，仍以 arXiv v1 为准。未将该聚合页的更新日期误当论文首发日期。
 - 已排除明显早于 2026-08-05 的首发研究；对“只有更新日期、首发日期在窗口外或无法确认”的 TS-Reasoner 和通用 harness，已明确降级，不将其伪装为全新研究。
-- 访问时间：2026-11-05 08:06–08:21（Asia/Shanghai）。
+- 访问时间：2026-11-05 08:06–15:39（Asia/Shanghai）。
