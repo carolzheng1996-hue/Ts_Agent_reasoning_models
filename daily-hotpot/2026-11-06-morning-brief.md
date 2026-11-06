@@ -1,8 +1,20 @@
 # 时间序列研究晨间简报｜2026-11-06
 
-检索时间：2026-11-06 08:13（Asia/Shanghai）。严格时间窗口：**2026-08-06 至 2026-11-06**；论文按 arXiv v1/官方首发日期、工程按 GitHub `created_at` 或可核验公告日期排序。作者指标未经本地复现。
+检索时间：2026-11-06 15:32（Asia/Shanghai）。严格时间窗口：**2026-08-06 至 2026-11-06**；论文按 arXiv v1/官方首发日期、工程按 GitHub `created_at` 或可核验公告日期排序。作者指标未经本地复现。
 
 ## 1. 时间序列基础模型最新研究
+
+### 2026-11-05｜[EnergyBench: a live, gate-aligned benchmark of day-ahead forecasts for European power markets](https://arxiv.org/abs/2611.07784)
+
+- **来源与日期**：arXiv v1，2026-11-05 10:26 UTC；每日在实际日 ahead 关门前冻结信息集，覆盖价格、风电、太阳能和负荷。
+- **简短摘要**：该 live benchmark 在六个欧洲竞价区、15 分钟粒度上统一运行基线、18 个 TSFM、集成与电网运营商预测，并公开截止时点可得的数值天气预报。前 32 个 live 日中，加入同一天气协变量显著降低所比较 TSFM 的误差；运营商在风电、太阳能上仍领先。
+- **相关性判断：高（TSFM / 光伏预测评测 harness）**。它提供了比静态回测更接近上线的 as-of 评测框架；不能把 32 天排名当成长期泛化结论，尤其应继续检查季节、市场区和数据修订影响。
+
+### 2026-11-05｜[Series-wise Cross-validation for Global Time Series Forecasting](https://arxiv.org/abs/2611.08252)
+
+- **来源与日期**：arXiv v1，2026-11-05 16:28 UTC。
+- **简短摘要**：提出在全局预测模型中同时沿“序列”和时间维度留出新序列，并在 11 个数据集、10 个神经网络上比较 K 折、bootstrap 与 Monte Carlo 等方案。作者发现跨序列验证更利于选出能泛化到未见序列的配置，而纯时间留出在估计出样误差上仍略有优势。
+- **相关性判断：高（TSFM / AutoML harness）**。直接补齐 TSFM、模型路由与 Agent 在新站点/新客户冷启动时的验证缺口；应与滚动时间留出并用，而不是以随机按序列切分替代时间因果边界。
 
 ### 2026-11-04｜[Decouple to Reuse: Fine-Grained Knowledge Augmentation for Time Series Foundation Models](https://arxiv.org/abs/2611.05993)
 
@@ -37,6 +49,12 @@
 - **相关性判断：高（工具调用型时序 Agent）**。值得和 ElecLoad 对比：前者重点是病例级工具选择，后者重点是事件效应下的时域拆分；二者都必须按 forecast origin 审计上下文可得性。
 
 ## 3. 时间序列 reasoning 模型最新研究
+
+### 2026-11-05｜[FARR: Forecast-Aware Residual Refinement with Matched Endpoint Evidence for Long-Horizon Time-Series Forecasting](https://arxiv.org/abs/2611.07870)
+
+- **来源与日期**：arXiv v1，2026-11-05 11:45 UTC。
+- **简短摘要**：FARR 对同一输入构造带辅助条件和预设空条件的两次预测，以两者差异作为端点证据，再以共享残差修正器和按预测步门控决定修正幅度。作者在四个长预测基准上报告较低的平均 MSE/MAE，代码声明后续发布。
+- **相关性判断：中高（可审计条件使用 / reasoning 接口）**。它把“条件是否真的有用”显式化，适合作为 Agent 接纳文本、检索或天气工具输出前的反事实检查；目前不是自主 reasoning Agent，且空条件设计、训练/测试条件分布与代码可用性均待核验。
 
 ### 2026-11-04｜[TSFM Meets LLM: Context as Covariates](https://arxiv.org/abs/2611.05515)
 
@@ -88,7 +106,17 @@
 
 ### 光伏功率预测
 
-- **本轮结果：无日期可确认、在本窗口内的新独立 GitHub/Hugging Face PV 预测项目。** 继续以 IMPACT、分布式 PV 预训练与上述两篇论文的官方代码状态为监控对象，避免用未核验仓库凑数。
+#### 2026-11-04（11-05 有更新）｜[JoaoCarlos134/prosumer](https://github.com/JoaoCarlos134/prosumer)
+
+- **来源与日期**：GitHub `created_at` 2026-11-04 21:18 UTC，最近推送 2026-11-05，AGPL-3.0；README 说明其面向 PV 发电与住户用电的日前预测。
+- **简短摘要**：项目包含数据质量检查、对历史与天气可得性的日前回测、多个分辨率指标和基准模型中位数输出；作者称默认项来自真实电站/住户的 57 模型基准，并把 Chronos-2 设为可选依赖。
+- **相关性判断：中高（PV 预测 / 评测 harness）**。比单模型 demo 更接近可审计工作流，尤其是天气版本和时钟检查；57 模型结果是 README 作者陈述，尚未在本地重跑，且应审计每个站点的切分与天气预报的历史版本。
+
+#### 2026-11-01｜[kviatkovsky/pvforecast-go](https://github.com/kviatkovsky/pvforecast-go)
+
+- **来源与日期**：GitHub `created_at` 2026-11-01 12:19 UTC，MIT。
+- **简短摘要**：Go 实现 NREL SPA、Perez 辐照模型和 PVWatts，使用天气预报产出未来 1–7 天逐小时交流功率与逐日能量；README 声称逐模块和端到端结果与 pvlib 一致。
+- **相关性判断：中（PV 物理预测回退工具）**。适合作为 Agent 的确定性物理基线或 sanity check，不应误写为经实测功率数据训练验证的统计预测器；其天气源、站点参数和“与 pvlib 一致”的声明仍需独立复核。
 
 ## 6. 今日观察与行动建议
 
@@ -100,4 +128,9 @@
 
 - 本轮直接检索/复核 arXiv API（`submittedDate`）、论文原页、官方 GitHub API 元数据与 README；关键词覆盖 `time series foundation model`、`time series agent`、`reasoning`、`harness`、`machine learning`、`AutoML`、`photovoltaic/solar power forecasting`。
 - 仅保留 2026-08-06 后可确认的首发/创建/近期官方动态；不能可靠确证日期的项目不进入新增主清单。论文性能均是作者报告，未做本地复现。
-- 访问时间：2026-11-06 08:13（Asia/Shanghai）。
+- 访问时间：2026-11-06 15:32（Asia/Shanghai）。
+
+## 8. DailyArXiv 补检结论
+
+- 已核验 [zezhishao/DailyArXiv](https://github.com/zezhishao/DailyArXiv) 的公开 `master` README：标注 `Last update: 2026-11-06`，其 **Time Series** 板块收录了本期已列的 Gfm4Mtsad（2026-11-04）及 Chronos-2（2026-10-30）。二者以 arXiv v1 日期排序，均在三个月窗口内，未因汇总页日期而重复计入。
+- 同一板块的 AdaMamba 标注为 2026-11-04，但 arXiv 首版为 2026-04-27、当前为 v2；属于首发超窗的版本更新，故降优先级并不列入主清单。未在本次 DailyArXiv 更新中发现比上述新增条目更近、可独立核验且直接命中 TS Agent/reasoning/PV 预测的论文。
