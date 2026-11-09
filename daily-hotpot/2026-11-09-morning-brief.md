@@ -12,21 +12,28 @@
 
 ## 时间序列基础模型最新研究
 
-### 1. [TailDART: Compute-Efficient Foundation Models for Financial Time-Series Forecasting](https://arxiv.org/abs/2611.09176)
+### 1. [TimeOmni-Live: Continuous & Live Time Series Understanding with Long-Term Memory](https://arxiv.org/abs/2611.09502)
+
+- 日期：2026-11-06（arXiv v1）
+- 来源：arXiv
+- 摘要：提出连续、状态化的时序理解范式与 LiveTS-Suite（18 类任务、5K+ 数据流、2B+ 时间步），通过跨窗口持久记忆和流式同步支持长期理解；作者报告 4B 模型在该套件优于所比较的前沿 LLM 且延迟更低。
+- 相关性判断：**高（foundation model / 流式 reasoning）**。为 Agent 的长期状态层提供候选，但必须按预测原点审计记忆写入、外部上下文首见时点与跨窗口泄漏。
+
+### 2. [TailDART: Compute-Efficient Foundation Models for Financial Time-Series Forecasting](https://arxiv.org/abs/2611.09176)
 
 - 日期：2026-11-06（arXiv v1）
 - 来源：arXiv
 - 摘要：提出 268 万参数的金融 TSFM，采用 grouped-query attention 降低 KV-cache 带宽；作者报告相对现有 TSFM 最多 48.1% 推理加速，并在多资产、高波动场景保持竞争力。
 - 相关性判断：**高（foundation model / 部署）**。为 Agent 提供低时延数值专家，适合做 agentic trading 或流式预测工作流的底座；结果目前仍为预印本，需复现验证。
 
-### 2. [Decouple to Reuse: Fine-Grained Knowledge Augmentation for Time Series Foundation Models](https://arxiv.org/abs/2611.05993)
+### 3. [Decouple to Reuse: Fine-Grained Knowledge Augmentation for Time Series Foundation Models](https://arxiv.org/abs/2611.05993)
 
 - 日期：2026-11-04（arXiv v1）
 - 来源：arXiv
 - 摘要：将趋势与季节性分解为双分支残差码本，再检索、融合至冻结 TSFM 的下游表示，以缓解跨域迁移中的粗粒度检索噪声；在 8 个真实基准、4 个 TSFM 骨干上评估。
 - 相关性判断：**高（foundation model / memory）**。可视为给 TS Agent 增加可复用模式记忆的候选模块，尤其适合跨业务线或跨传感器迁移。
 
-### 3. [Chronos-2: A foundation model for multivariate time series forecasting](https://arxiv.org/abs/2610.41956)
+### 4. [Chronos-2: A foundation model for multivariate time series forecasting](https://arxiv.org/abs/2610.41956)
 
 - 日期：2026-10-30（arXiv v1）
 - 来源：arXiv
@@ -74,14 +81,21 @@
 
 ## 光伏功率预测最新研究
 
-### 1. [IMPACT: Inverter-Informed Multimodal Learning for Photovoltaic Generation Forecasting](https://arxiv.org/abs/2610.40418)
+### 1. [Two-stage residual learning for calibrated uncertainty in solar irradiance forecasts](https://arxiv.org/abs/2611.07444)
+
+- 日期：2026-11-05（arXiv v1）
+- 来源：arXiv
+- 摘要：先用 LSTM 预测全球水平辐照度（GHI）均值，再建模总预测残差分布以输出不确定性；作者以 NSRDB 与 PIT 评估，报告 LSTM+高斯过程配置将预测标准差与历史标准差的偏差减少 56.5%。
+- 相关性判断：**中高（PV 上游概率预测）**。不是电站 AC 功率 SOTA，但其残差校准层可成为 PV Agent 的风险、储能调度与弃光决策输入。
+
+### 2. [IMPACT: Inverter-Informed Multimodal Learning for Photovoltaic Generation Forecasting](https://arxiv.org/abs/2610.40418)
 
 - 日期：2026-10-29（arXiv v1）
 - 来源：arXiv
 - 摘要：利用电站历史、逆变器级云动态、未来太阳几何和气象状态的四分支架构，输出 10–110 分钟概率预测，并做在线自适应保形校准；报告相对第二强基线高 0.099 forecast skill score。
 - 相关性判断：**中高（垂直预测工具）**。不是 TS Agent，但可被 Agent 封装为短时光伏预测与不确定性评估工具，尤其适合逆变器级调度。
 
-### 2. [The Utility of Physics-Informed Machine Learning in Solar Power Production Forecasting](https://arxiv.org/abs/2610.38976)
+### 3. [The Utility of Physics-Informed Machine Learning in Solar Power Production Forecasting](https://arxiv.org/abs/2610.38976)
 
 - 日期：2026-10-28（arXiv v1）
 - 来源：arXiv
@@ -92,35 +106,42 @@
 
 ### 时间序列
 
-### 1. [D2I-Group/metacaster](https://github.com/D2I-Group/metacaster)
+### 1. [rainyZhou2/SreAgentHarness](https://github.com/rainyZhou2/SreAgentHarness)
+
+- 日期：2026-11-09（最近推送；创建于 2026-11-06）
+- 来源：GitHub 官方仓库
+- 摘要：Go 编写的 SRE Agent runtime，提供可恢复运行状态机、风险分级审批、工具调用账本、可回放评测、离线门禁、灰度与自动回滚。
+- 相关性判断：**中高（通用 Agent harness）**。非时序专用，但 as-of 运行记录、审批绑定和可回放评测可迁移到高风险时序 Agent；不能将其当作预测效果证据。
+
+### 2. [D2I-Group/metacaster](https://github.com/D2I-Group/metacaster)
 
 - 日期：2026-11-03（最近推送；创建于 2026-08-22）
 - 来源：GitHub 官方仓库
 - 摘要：EMNLP 2026 MetaCaster 的官方实现；多 Agent 不直接在推理期预测，而是由 HPAgent 优化 MGAgent 的数据生成 harness，FTAgent 训练并选择可部署的轻量 forecaster；集成 23 个轻量预测器。
 - 相关性判断：**很高（Agent / AutoML / harness）**。非常贴近“让 Agent 产出可部署小模型”的路线；应优先检查其 few-shot 数据生成质量评测和数据泄漏防护。
 
-### 2. [D2I-Group/TSFLab](https://github.com/D2I-Group/TSFLab)
+### 3. [D2I-Group/TSFLab](https://github.com/D2I-Group/TSFLab)
 
 - 日期：2026-11-03（最近推送；GitHub API 于 2026-11-09 再确认活跃）
 - 来源：GitHub 官方仓库
 - 摘要：Agent-first 时间序列预测平台，提供 190+ 复现模型、公平基准、滚动实时赛道和公开榜单；以可复现配置、固定随机种子和审计输出为重点。
 - 相关性判断：**很高（harness / benchmark）**。适合作为 Agent 的实验执行与公平比较底座，也可用于评估上文的 TSFM 与 Agent 策略。
 
-### 3. [ztxtech/aion](https://github.com/ztxtech/aion)
+### 4. [ztxtech/aion](https://github.com/ztxtech/aion)
 
 - 日期：2026-10-13（最近推送；项目新闻于 2026-08-07 宣布自适应执行）
 - 来源：GitHub 官方仓库
 - 摘要：基于 OpenCode 的时间序列 harness，显式连接任务规格、运行、工具使用、上下文推理和验证门；项目强调多 Agent 调度与分层 review gate。
 - 相关性判断：**很高（harness / Agent）**。与本仓库的研究问题最直接相邻，优先评估其任务契约、停止条件和验证门是否能阻断时序泄漏。
 
-### 4. [OnePunchMonk/AgentQuant](https://github.com/OnePunchMonk/AgentQuant)
+### 5. [OnePunchMonk/AgentQuant](https://github.com/OnePunchMonk/AgentQuant)
 
 - 日期：2026-11-03（最近推送）
 - 来源：GitHub 官方仓库
 - 摘要：面向量化策略研究的 failure-aware harness，采用类型化 Agent 工作流与可检查实验记忆；仓库也关联时间序列泄漏审计器。
 - 相关性判断：**高（ML / harness / audit）**。虽聚焦量化，关键价值是实验记忆和失败可追溯性，可迁移到通用时序 Agent 的在线评估。
 
-### 5. [summerming1/finance-forecast-agent](https://github.com/summerming1/finance-forecast-agent)
+### 6. [summerming1/finance-forecast-agent](https://github.com/summerming1/finance-forecast-agent)
 
 - 日期：2026-10-30（最近推送）
 - 来源：GitHub 官方仓库
