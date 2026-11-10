@@ -1,18 +1,25 @@
 # 2026-11-10 时间序列研究晨间简报
 
-- 检索时间：2026-11-10 09:05–09:19（Asia/Shanghai）
+- 检索时间：2026-11-10 09:05–09:19（Asia/Shanghai；11:12–11:22 补检）
 - 时间窗口：2026-08-10 至 2026-11-10；仅将可确认首发/公开日期落在窗口内的材料列为主条目。
 - 核验来源：arXiv、OpenReview、Hugging Face 官方/机构博客、GitHub 官方仓库及 GitHub API。论文性能均为作者报告，尚未独立复现。
 
 ## 今日判断
 
-1. **多变量与上下文已成为 TSFM 的实用分界线。** Chronos-2、`t_0` 与 NVIDIA Kumo Forecast 都把协变量或检索历史当作一等输入，而非事后拼接。
+1. **证据落地的上下文推理成为新近切口。** 11 月 9 日的 CastReasoner 将“从上下文提取预测证据—判断未来动态—与数值先验比对”设为显式链条；Chronos-2、`t_0` 与 Kumo Forecast 则提供可供其调用的数值底座。
 2. **Agent 研究开始把“预测后的反馈”写回策略。** FASE 的 episodic memory + online policy learning 是近期最明确的在线闭环实例；CastClaw 与 AION 则将人类/验证门置于编排层。
-3. **reasoning 的重点从展示长思维链转到可检验表示与评测。** TSCognition、TIMEOMNI-1/TSR-SUITE 和 TimesJev 分别补齐认知任务、过程奖励和快速充分表示。
+3. **reasoning 的重点从展示长思维链转到可检验的数值接口与评测。** CastReasoner 明确对接证据、未来动态与数值先验；CHORD 和 TimesJev 则分别压缩传输证据与推理输入。
 
 ## 时间序列基础模型最新研究
 
-### 1. [Chronos-2: A foundation model for multivariate time series forecasting](https://arxiv.org/abs/2610.41956)
+### 1. [Do Time-Series Foundation Models Forecast Index-Futures Returns? A Preregistered Evaluation of Models, Metrics, and Input Representations](https://arxiv.org/abs/2611.12141)
+
+- 日期：2026-11-09（arXiv v1）
+- 来源：arXiv
+- 摘要：对 Chronos-Bolt、Chronos-2、TimesFM 2.5、Moirai 2.0、TiRex 等冻结零样本 TSFM，在 NQ/ES 期货 5–120 分钟预测做预注册、盲集一次开启的检验；作者报告 160 个模型—表示—期限组合没有一个胜过 no-change，且 Hansen SPA 在两市场均为 p=1.000，同时指出价格层级相关系数与日内 RankIC 可制造表观 skill。
+- 相关性判断：**很高（foundation-model validation / harness）**。不是新 TSFM，却是 TS Agent 选择数值工具时最有价值的反证：必须以增量基线、交易/预测原点、盲集和多重比较控制验收，而不能采信层级相关等表面指标。
+
+### 2. [Chronos-2: A foundation model for multivariate time series forecasting](https://arxiv.org/abs/2610.41956)
 
 - 日期：2026-10-30（arXiv v1）
 - 来源：arXiv
@@ -72,19 +79,19 @@
 
 ## 时间序列 reasoning 模型最新研究
 
-### 1. [Time Series Reasoning via Process-Verifiable Thinking Data Synthesis and Scheduling for Tailored LLM Reasoning](https://proceedings.mlr.press/v306/zhou26x.html)
+### 1. [Learning Evidence-Grounded Reasoning for Context-Aware Time Series Forecasting](https://arxiv.org/abs/2611.12285)
 
-- 日期：2026-02-08（arXiv v1；ICML 2026 论文集于 2026-07 发布，首发在本轮窗口外）
-- 来源：ICML / PMLR
-- 摘要：VeriTime 先合成带过程可验证标注的时序—文本数据，以难度层级调度训练样本，再进行带细粒度多目标奖励的两阶段强化微调；作者称 3B–4B 模型可达到或超过更大闭源模型的时序推理表现。
-- 相关性判断：**高（reasoning / process reward）**。因首发超出三个月窗口，**仅作背景观察项**；其“按任务验证过程”的思想仍适合迁移到 Agent harness。
-
-### 2. [From Recognition to Understanding: Unlocking Cognitive Time Series Reasoning with LLMs](https://arxiv.org/abs/2606.22126)
-
-- 日期：2026-06-20（arXiv v1，超出窗口）
+- 日期：2026-11-09（arXiv v1）
 - 来源：arXiv
-- 摘要：TSCognition 将真实序列与文本信息组织为五类认知 reasoning 任务，TSAlign 以 patch 表示和门控残差注入对齐 LLM；作者称约含 41K QA。
-- 相关性判断：**中高（reasoning benchmark）**。首发超窗，降级为背景；其“数值 + 语义 + 行动”任务定义可补足纯 forecasting 基准。
+- 摘要：CastReasoner 用结构化 CoT 先从上下文特征提取预测证据、推断其暗示的未来动态，再与 forecast prior 比对并自适应决策；后训练包含多教师控制式轨迹合成、student-aware 难度筛选、SFT、带细粒度多目标奖励的 RL，以及跨域收敛引导的数据平衡。
+- 相关性判断：**很高（reasoning / context-aware forecasting）**。这是将语言推理限制为“证据与数值先验之间可检查接口”的直接候选；需要核查上下文发布日期、证据归因和 CoT 是否在预测原点均可得，避免把事后信息包装成推理。
+
+### 2. [CHORD: Multi-resolution Compression for Multimodal Time Series](https://arxiv.org/abs/2611.11913)
+
+- 日期：2026-11-09（arXiv v1）
+- 来源：arXiv
+- 摘要：提出粗到细的多模态时序压缩器，以 shapelet-inspired 原子逐层生成校正，公共/私有通路兼顾跨模态与传感器形态，有限标量量化使每个尺度码率预先确定；作者在 7 个可穿戴感知与预测基准上报告 8× 压缩时与未压缩分类准确率平均差距 0.62 点。
+- 相关性判断：**中高（reasoning input / edge tool）**。本身不是推理模型，但可成为 Agent 的“何时上传哪一层时序证据”的带宽可审计接口；压缩评测不等同于长期预测或 reasoning 保真。
 
 ### 3. [TimesJev: Thinking Fast on Time Series with System 1 Sufficiency](https://arxiv.org/abs/2610.26002)
 
@@ -113,37 +120,51 @@
 
 ### 时间序列
 
-### 1. [NVIDIA/Kumo-TS](https://github.com/NVIDIA/Kumo-TS)
+### 1. [runzhiyyds/sts-skills (Solve2Ship Skills)](https://github.com/runzhiyyds/sts-skills)
 
-- 日期：2026-10-21（官方发布；与 Kumo Forecast 同步公开）
-- 来源：GitHub 官方仓库
-- 摘要：Kumo Forecast 的实现，提供 DataFrame-first 接口、直接预测/历史检索增强两种路径与解释框架。
-- 相关性判断：**高（TSFM / retrieval harness）**。方便以统一接口对比检索记忆、原始 TSFM 和 Agent 选择策略。
+- 日期：2026-11-10（GitHub API 最近推送；创建于 2026-11-09）
+- 来源：GitHub 官方仓库 / GitHub API
+- 摘要：一组可安装的本地 Agent skills，目标是让规则、脚本、ML、提示词和工作流作为可竞争方案，经真实评估、预算约束与最终检查交付本地服务；仓库含 evidence、打包/安装脚本及 31 个标准库测试，README 明确其不是独立自治执行引擎。
+- 相关性判断：**中高（通用 Agent / evaluation harness）**。非时序专用也未主张预测性能，但“候选方案竞争、留出集不复用、证据分层”的机制适合改造成 TS Agent 的工具/模型准入门；应先替换为滚动时序验证。
 
-### 2. [ustc-time-series/CastClaw](https://github.com/ustc-time-series/CastClaw)
-
-- 日期：2026-10-14（最近推送）
-- 来源：GitHub API / 官方仓库
-- 摘要：面向工业预测的 human-in-the-loop 时间序列 Agent；仓库公告 ICDM 2026 Demo 录用。
-- 相关性判断：**高（timeseries Agent）**。应重点跟踪反馈接口、工具调用日志和可复现实验是否完善。
-
-### 3. [ztxtech/aion](https://github.com/ztxtech/aion)
-
-- 日期：2026-10-13（GitHub API 最近推送）
-- 来源：GitHub API / 官方仓库
-- 摘要：以任务契约、工具使用和 validation-driven workflow 为核心的 OpenCode 时序 harness。
-- 相关性判断：**很高（timeseries harness）**。可作为本仓库 Agent 调度与审计设计的直接比较对象。
-
-### 4. [temporal-community/temporal-agent-harness](https://github.com/temporal-community/temporal-agent-harness)
+### 2. [temporal-community/temporal-agent-harness](https://github.com/temporal-community/temporal-agent-harness)
 
 - 日期：2026-11-09（GitHub API 最近推送；创建于 2026-06-18）
 - 来源：GitHub API / 官方仓库
 - 摘要：实验性的 Temporal-native 多 Agent runtime，面向 durable execution、暂停/恢复、工具回调和多 SDK 集成。
 - 相关性判断：**中高（通用 harness）**。非时序专用，但对长时运行预测工作流的重试、状态持久化和人工回调有直接工程借鉴价值。
 
+### 3. [NVIDIA/Kumo-TS](https://github.com/NVIDIA/Kumo-TS)
+
+- 日期：2026-10-21（官方发布；与 Kumo Forecast 同步公开）
+- 来源：GitHub 官方仓库
+- 摘要：Kumo Forecast 的实现，提供 DataFrame-first 接口、直接预测/历史检索增强两种路径与解释框架。
+- 相关性判断：**高（TSFM / retrieval harness）**。方便以统一接口对比检索记忆、原始 TSFM 和 Agent 选择策略。
+
+### 4. [ustc-time-series/CastClaw](https://github.com/ustc-time-series/CastClaw)
+
+- 日期：2026-10-14（最近推送）
+- 来源：GitHub API / 官方仓库
+- 摘要：面向工业预测的 human-in-the-loop 时间序列 Agent；仓库公告 ICDM 2026 Demo 录用。
+- 相关性判断：**高（timeseries Agent）**。应重点跟踪反馈接口、工具调用日志和可复现实验是否完善。
+
+### 5. [ztxtech/aion](https://github.com/ztxtech/aion)
+
+- 日期：2026-10-13（GitHub API 最近推送）
+- 来源：GitHub API / 官方仓库
+- 摘要：以任务契约、工具使用和 validation-driven workflow 为核心的 OpenCode 时序 harness。
+- 相关性判断：**很高（timeseries harness）**。可作为本仓库 Agent 调度与审计设计的直接比较对象。
+
 ### 光伏功率预测
 
-### 1. [Zara-Toorox/Solar-Forecast-ML](https://github.com/Zara-Toorox/Solar-Forecast-ML)
+### 1. [dharmpatel28/Solar-Power-Forecasting-System-XGBoost-Regression-](https://github.com/dharmpatel28/Solar-Power-Forecasting-System-XGBoost-Regression-)
+
+- 日期：2026-11-09（GitHub API 创建与最近推送）
+- 来源：GitHub 官方仓库 / GitHub API
+- 摘要：新建仓库仅包含一个 `SolarForecasting.ipynb`；仓库描述称使用 116K+ 记录、特征工程和 time-based validation 训练 XGBoost 做小时级太阳能发电预测，尚未提供 README、数据说明、可复现实验配置或结果审计。
+- 相关性判断：**低（PV forecasting 线索）**。主题和时间验证表述相关，但资产不足，不能作为可复现基线或性能证据；只保留为待观察项目。
+
+### 2. [Zara-Toorox/Solar-Forecast-ML](https://github.com/Zara-Toorox/Solar-Forecast-ML)
 
 - 日期：2026-10-29（GitHub Topics 最近更新记录）
 - 来源：GitHub 官方仓库 / GitHub Topics
@@ -158,5 +179,10 @@
 
 ## 说明
 
-- 本轮没有检索到 2026-11-10 当日可确认发布且强相关的新论文；因此收录窗口内的近期高价值材料，并将首发超窗的 reasoning 工作明确降级为背景。
+- 本轮未检索到 2026-11-10 当日可确认发布且强相关的新论文；11 月 9 日新出现的 CastReasoner、预注册 TSFM 期货评估与 CHORD 已按 arXiv v1 补入。AI HOT 最近 7 天的精选结果未给出可独立核验的直接主题新增。
 - GitHub 条目日期优先取 GitHub API `pushed_at`；仅有 Topics 抓取时间的 Solar-Forecast-ML 已降低证据等级。
+
+## DailyArXiv 补检结论
+
+- 已读取 [DailyArXiv `master` README 的 Time Series 栏](https://raw.githubusercontent.com/zezhishao/DailyArXiv/master/README.md)：页面标注 `Last update: 2026-11-06`，可见最新相关收录日为 2026-11-04。11 月 3 日的 CoCo、GlucoAgent、TEMPO 与 Continual AutoResearch，以及 11 月 2 日的 TSFM 不确定性校准和 11 月 1 日的 PV 故障—传感器联合生成条目均在此前简报中按 arXiv v1 核验。
+- 本次新增的 **CastReasoner（2611.12285）**、**期货 TSFM 预注册评估（2611.12141）** 与 **CHORD（2611.11913）** 均为 2026-11-09 arXiv v1，未出现在该 README；因此不因 DailyArXiv 滞后而降级。其余已知近期论文也仍以 arXiv v1 首发日排序；例如 AdaMamba 虽显示 11 月 4 日更新，但 v1 为 2026-04，仍在三个月窗口外。
