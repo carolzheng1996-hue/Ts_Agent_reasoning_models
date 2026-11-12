@@ -26,7 +26,7 @@
 
 ### 本轮新鲜度核验
 
-检索 arXiv、DailyArXiv 和机构/项目检索结果后，未发现 2026-11-11 至 2026-11-12 间可核验 v1 的 TSFM 论文。该结论是“本轮未检出”，并非证明不存在；下次应继续以 arXiv v1 页面复核。
+检索 arXiv、DailyArXiv 和机构/项目检索结果后，未发现 2026-11-11 至 2026-11-12 间可核验 v1 的 TSFM 论文。DailyArXiv 的公开 `master` 分支在 2026-11-06 更新；其 `Time Series` 栏可确认窗口内的 `Decouple to Reuse`（已纳入），但未见更晚且与本报主题直接相关的新增条目。该结论是“本轮未检出”，并非证明不存在；下次应继续以 arXiv v1 页面复核。
 
 ## 2. 时间序列建模 Agent：当前窗口内高优先级证据
 
@@ -58,13 +58,6 @@
 
 ## 4. GitHub：今日新增 / 更新的 timeseries Agent、harness、ML、AutoML 项目
 
-### [2026-11-11] [barddoo/tsfm-pg](https://github.com/barddoo/tsfm-pg)
-
-- 来源与日期：GitHub 官方 API；创建 2026-11-11 23:13 UTC，最近更新 2026-11-11 23:51 UTC，Apache-2.0。
-- 摘要：在 PostgreSQL 内运行 `tsfm-zig`，支持 Chronos-2 与 Timestral checkpoint，提供量化预测、批处理、多变量和协变量 SQL 函数；README 明确历史、past-only、known-future 协变量的张量形状，并将模型权重保留在数据库主机。
-- 相关性判断：**很高（TSFM serving / Agent 工具）**。可把它视作 Agent 的受控数值工具候选：接口层应强制 known-future 只接受在预测原点已知的变量，避免从表中误取未来观测。
-- 注意：新仓库（当前 0 星）且未运行代码；应先做版本锁定、SQL 权限、资源隔离和 walk-forward 测试。
-
 ### [2026-11-12] [travmcwilliams/mira-workbench（MIRA）](https://github.com/travmcwilliams/mira-workbench)
 
 - 来源与日期：GitHub 官方 API；创建 2026-11-12 00:05 UTC，最近更新 2026-11-12 01:12 UTC，MIT。
@@ -72,13 +65,40 @@
 - 相关性判断：**高（AutoML / 实验可追溯）**。其 pipeline 和导出物可补齐 Agent 的实验谱系；但必须验证其 temporal split 是否贯穿数据清洗、特征选择与调参，而非仅用于最终评分。
 - 注意：通用 ML 项目而非时序预测 Agent，尚无独立复现实验。
 
+### [2026-11-11] [barddoo/tsfm-pg](https://github.com/barddoo/tsfm-pg)
+
+- 来源与日期：GitHub 官方 API；创建 2026-11-11 23:13 UTC，最近更新 2026-11-11 23:51 UTC，Apache-2.0。
+- 摘要：在 PostgreSQL 内运行 `tsfm-zig`，支持 Chronos-2 与 Timestral checkpoint，提供量化预测、批处理、多变量和协变量 SQL 函数；README 明确历史、past-only、known-future 协变量的张量形状，并将模型权重保留在数据库主机。
+- 相关性判断：**很高（TSFM serving / Agent 工具）**。可把它视作 Agent 的受控数值工具候选：接口层应强制 known-future 只接受在预测原点已知的变量，避免从表中误取未来观测。
+- 注意：新仓库（当前 0 星）且未运行代码；应先做版本锁定、SQL 权限、资源隔离和 walk-forward 测试。
+
 ### [2026-11-11] [parag-shendye/Time-Series-Analysis-Agent](https://github.com/parag-shendye/Time-Series-Analysis-Agent)
 
 - 来源与日期：GitHub 官方 API；创建 2026-11-11 22:16 UTC，最近更新 2026-11-11 22:26 UTC。
 - 摘要：名称与主题直接指向时序分析 Agent，但仓库缺少可读取的 README/项目描述，且无许可证元数据。
 - 相关性判断：**低（待核验的 Agent 线索）**。仅作发现记录；在代码、数据、时间切分和许可证齐备前，不应纳入候选技术栈。
 
-## 5. 建议动作
+## 5. 光伏功率预测：当前窗口内高优先级研究
+
+### [2026-10-28] [The Utility of Physics-Informed Machine Learning in Solar Power Production Forecasting](https://arxiv.org/abs/2610.38976)
+
+- 来源与日期：arXiv v1，2026-10-28。
+- 摘要：在 33 个欧洲国家、3,713 个 PV 安装点、逾 300 万样本上比较 ADR 物理模型与 TSMixer 的特征增强/残差混合方式；作者报告物理信息可加快部分训练收敛，但未带来一致的测试精度、区域泛化或低数据量优势。
+- 相关性判断：**很高（光伏功率预测 / 负结果）**。对 Agent 而言应将物理先验作为可消融的候选工具，而非默认增益；必须按站点、区域和天气退化情形做盲测。
+
+### [2026-10-20] [Foundation-Style Pretraining for Scalable and Transferable Distributed PV Forecasting](https://arxiv.org/abs/2610.27763)
+
+- 来源与日期：arXiv v1，2026-10-20。
+- 摘要：以历史 PV 功率、气象观测、未来 NWP 与时间编码组成序列补全任务，在 479 个分布式站点预训练；340 站用于开发、139 个空间留出站用于 zero-shot 评估，并比较三种预训练目标。
+- 相关性判断：**很高（PV foundation model / TSFM）**。为多站点 Agent 提供较强基座候选；已知未来 NWP 和事后实测天气须在工具 schema 中严格分栏，避免把真实未来观测当作可用协变量。
+
+### [2026-10-12] [Constructed regional photovoltaic generation fields improve ultra-short-term distributed solar forecasting](https://arxiv.org/abs/2610.16110)
+
+- 来源与日期：arXiv v1，2026-10-12。
+- 摘要：SatPV-Field 将 496 个分布式 PV 系统转换为区域发电场，以历史场、卫星短波辐射引导和气象预测来推演未来区域状态，再为单站提供空间上下文；作者报告相对单站基线的站点 MAE 降低约 10%。
+- 相关性判断：**高（PV 时空建模 / Agent 工具）**。适合作为区域级外部上下文工具；需要逐预测原点记录卫星产品的发布时间与可得性，并分开评估空间留出和时间留出。
+
+## 6. 建议动作
 
 1. 将 `tsfm-pg` 的 `history` / `past` / `known` 语义映射到统一 Agent 工具 schema，并在运行时校验每个字段的可用时间戳。
 2. 用固定 prediction origin 的回放数据，比较 no-change、单一 TSFM、CastReasoner 式上下文修正与 AutoML pipeline；输出误差、校准、成本和泄漏检查结果。
