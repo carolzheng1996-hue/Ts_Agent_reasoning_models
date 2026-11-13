@@ -8,6 +8,7 @@
 1. **上下文已成为 TSFM 与 reasoning 的共同接口。** Chronos-2、CoCo、`t₀` 和 CastReasoner 分别从多变量/协变量、语言蒸馏协变量、上下文零样本预测与证据链路推进；统一风险仍是 as-of 可得性。
 2. **验证从误差排名升级为可审计运行时。** TSFM calibration、指数期货盲测、VINTAGE-TS、TimeEvo/TimEvolve 与 CastWorld 均指向同一要求：预测原点、数据版本、工具可见性、延迟标签与失败恢复必须可回放。
 3. **Agent 更趋向“调用或训练数值专家”。** GlucoAgent、MetaCaster、FASE 与 TeeMoE 代表了按例写代码/工具调用、产出小模型、在线调度和多专家路由四条路径；不应把 LLM 自由文本输出直接等同于预测能力。
+4. **光伏侧出现面向迁移、短临校准与物理残差的三条互补路线。** 分布式 PV foundation-style 预训练强调多站点迁移，IMPACT 利用逆变器级云动态并做保形校准，PowerMamba 则以物理基线约束日前残差；三者都要求 NWP 与实时观测按预测原点留痕。
 
 ## 本周高优先级论文
 
@@ -19,6 +20,9 @@
 | 11-03 | [GlucoAgent](https://arxiv.org/abs/2611.04126) | 按例程序执行、检索与回测 | 很高：时序 Agent 闭环 |
 | 11-03 | [CoCo](https://arxiv.org/abs/2611.05515) | 语言上下文蒸馏成 TSFM 协变量 | 很高：reasoning-to-forecast interface |
 | 10-30 | [Chronos-2](https://arxiv.org/abs/2610.41956) | 多变量、协变量、概率零样本预测 | 很高：Agent 数值工具 |
+| 10-29 | [IMPACT](https://arxiv.org/abs/2610.40418) | 逆变器级云动态、多模态融合与在线保形校准 | 很高：短临 PV 预测 |
+| 10-20 | [Distributed PV foundation-style pretraining](https://arxiv.org/abs/2610.27763) | 多站点、多预测期预训练与新站迁移 | 很高：PV foundation model |
+| 09-29 | [Physics-Informed PowerMamba](https://arxiv.org/abs/2610.14014) | 物理可行基线加 NWP 残差状态空间模型 | 高：日前 PV 预测 |
 | 09-26 | [FASE](https://arxiv.org/abs/2609.32689) | episodic memory 与延迟标签在线更新 | 很高：持续预测 Agent |
 | 09-23 | [VINTAGE-TS](https://arxiv.org/abs/2609.28576) | 数据修订感知的 TSFM 评测与接口 | 很高：防事后泄漏 |
 
