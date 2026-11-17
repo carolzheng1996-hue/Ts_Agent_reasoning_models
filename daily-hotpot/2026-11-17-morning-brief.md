@@ -86,6 +86,13 @@
 
 - 本轮未发现可独立确认、近三个月内新建且直接面向光伏预测的 GitHub/HuggingFace 项目；不以旧仓库的最近提交充作“新项目”。
 
+## 6. DailyArXiv 补检结论
+
+- 已直接核验 [zezhishao/DailyArXiv README 的 Time Series 板块](https://github.com/zezhishao/DailyArXiv/blob/master/README.md)：页面标注最后更新为 **2026-11-06**，最近一次 README 自动更新提交为 **2026-11-05 22:11 UTC**。因此它不能覆盖 11 月 6 日之后的新增论文，不能据此断言“近期无新条目”。
+- [2026-11-01] [Uncertainty-Aware Joint Generative Modeling of Fault Event Sequences and Sensor Time Series in Solar PV Plants](https://arxiv.org/abs/2611.01425) 出现在该板块且处于三个月窗口内。它用 Transformer Hawkes Process、iTransformer 与条件扩散联合生成 PV 电站事件和传感器轨迹，面向故障预测、维护及能源优化。
+  - 相关性判断：**中等（PV 时序建模 / 不等同于光功率预测）**。可作为 PV 场站多模态状态建模的旁证，但其目标不是日前/超短期功率预测，故不纳入上文“光伏功率预测最新研究”的主结论。
+- 本次未在该板块发现标题或摘要直接聚焦“时间序列 Agent”“time-series reasoning”或通用预测 TSFM、且比晨报已收录论文更贴近主题的新增条目；其余命中多为通用预测、插补或异常检测，优先级较低。
+
 ## 建议动作
 
 1. 建立固定的 walk-forward harness：锁定 `as_of`、特征/协变量 `available_at`、模型版本、路由决策与输出分位数。
@@ -95,4 +102,4 @@
 ## 检索限制
 
 - 本轮 GitHub REST API 因未认证限流，未能对所有候选仓库重取 `created_at`；因此一律将未核验日期标为不确定。
-- DailyArXiv 的公开清单上次自动更新停在 2026-11-05，不能作为 11 月中旬“无新条目”的充分证据，故未据此作排他性结论。
+- DailyArXiv 的公开清单页面标注的最后更新为 2026-11-06，最近 README 自动更新提交为 2026-11-05 22:11 UTC；不能作为 11 月中旬“无新条目”的充分证据，故未据此作排他性结论。
