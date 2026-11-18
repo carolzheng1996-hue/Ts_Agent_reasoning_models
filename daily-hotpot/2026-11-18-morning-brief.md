@@ -100,8 +100,10 @@
 
 ## 6. DailyArXiv 补检
 
-- 已复核 [zezhishao/DailyArXiv 的 Time Series 板块](https://github.com/zezhishao/DailyArXiv/blob/master/README.md)。该公开清单此前可见更新滞后，不能用于排除 11 月中旬以后的论文；因此本简报的“最新”判定以 arXiv v1 和 GitHub API 为准。
-- 未在该补检中确认到比上列条目更直接、且日期可核验的新增 TSFM / 时序 Agent / 时序 reasoning 论文。
+- 已复核 [zezhishao/DailyArXiv 的 Time Series 板块](https://github.com/zezhishao/DailyArXiv/blob/master/README.md)及其 README 最近一次自动更新提交（[2026-11-05 22:11 UTC](https://github.com/zezhishao/DailyArXiv/commit/71ef1574be571e409f5be65257ddd25ba36b7868)）。清单在 11 月 5 日后未更新，因此不能用于排除 11 月中旬以后的论文；“最新”判定仍以 arXiv v1 和 GitHub API 为准。
+- [2026-11-04] [Decouple to Reuse: Fine-Grained Knowledge Augmentation for Time Series Foundation Models](https://arxiv.org/abs/2611.05993)：清单收录的 FKA 将趋势与季节残差压缩为可检索代码本，并以任务自适应融合来增强冻结 TSFM。**相关性：高（TSFM / 检索增强）**；它是领域迁移的候选适配层，但检索库和代码本必须按预测原点隔离，避免相邻测试窗口泄漏。
+- [2026-11-01] [Uncertainty-Aware Joint Generative Modeling of Fault Event Sequences and Sensor Time Series in Solar PV Plants](https://arxiv.org/abs/2611.01425)：清单收录的工作以 Transformer Hawkes Process、iTransformer 和条件扩散联合模拟 PV 电站故障事件与传感器轨迹，服务于维护、故障预测和能源优化。**相关性：中等（PV 时序建模）**；并非日前/超短期光功率预测，故仅作场站状态建模线索，未替换第 4 节的功率预测主结论。
+- 该板块未见比上列条目更直接、且日期可核验的时序 Agent 或时序 reasoning 新论文；其余命中主要为传统预测、插补或异常检测，优先级较低。
 
 ## 建议动作
 
