@@ -1,6 +1,6 @@
 # 2026-11-19 时间序列 Agent / Reasoning 晨间简报
 
-- 检索时间：2026-11-19 13:55–14:01 CST（Asia/Shanghai）。
+- 检索时间：2026-11-19 15:34 CST（Asia/Shanghai）；对远端已有初版补做 DailyArXiv 与光伏定向检索。
 - 时间窗口：2026-08-19 至 2026-11-19（含首尾）。论文按 arXiv v1/正式公开日；GitHub 项目按 API 的 `created_at` 或仓库明确更新日志。日期不完整的线索降低优先级。
 - 覆盖来源：arXiv、官方 GitHub README/API、GitHub Search；论文指标均为作者报告，项目没有在本轮执行或复现。
 - 增量参照：2026-11-13 晨报；今天是周四，因此不生成周报。
@@ -12,6 +12,18 @@
 3. **GitHub 新项目呈两条线：时序分析 Agent 原型，以及通用 ML/harness 的实验可追溯。** 新仓库普遍缺少公开基准或成熟维护信号，应先做许可、数据切分和可复现实验审计。
 
 ## 1. 时间序列基础模型最新研究
+
+### [2026-10-30] [Chronos-2: A foundation model for multivariate time series forecasting](https://arxiv.org/abs/2610.41956)
+
+- 来源与日期：arXiv v1，2026-10-30；同时出现在 DailyArXiv 的 Time Series 板块。
+- 摘要：面向零样本预测，联合建模多变量序列与异构协变量并生成概率预测；论文扩展了先前技术报告，纳入科学领域案例、校准分析及分层预测，作者报告在 80 个数据集上具有较高的平均 skill score 与 win rate。
+- 相关性判断：**很高（TSFM / 工具基座）**。为具备天气、日历和站点元数据的光伏 Agent 提供强候选；必须验证未来协变量的可得时间和不确定性校准，不能只比较点预测误差。
+
+### [2026-10-04] [A Unified Scaling Law for Time Series Foundation Models](https://arxiv.org/abs/2610.05269)
+
+- 来源与日期：arXiv v1，2026-10-04。
+- 摘要：在 23 个数据集—频率任务、21 个 checkpoint 的 18,768 个实验单元上拟合容量、上下文长度与预测期的关系；作者称五参数规律可外推 Toto 2.0 的缩放曲线。
+- 相关性判断：**高（TSFM 选择 / resource-aware Agent）**。可将“加长历史还是换更大模型”转成可量化编排决策，但系数应在目标域滚动回放中重估。
 
 ### [2026-09-21] [$t_0$: A Time-Series Foundation Model for Forecasting with Context](https://arxiv.org/abs/2609.24559)
 
@@ -25,25 +37,19 @@
 - 摘要：加入原生单/多变量预测和 past-only、past-and-future 动态协变量支持；项目方报告在 fev-bench、TIME Benchmark 和 GIFT-Eval 均居前。代码为 Apache-2.0，但 3.0 默认预训练权重采用非商业许可证。
 - 相关性判断：**很高（foundation model / serving）**。可作为 Agent 的高能力基座候选；除了时序泄漏门禁，还必须在生产评估前处理权重的非商业限制。
 
-### [2026-10-04] [A Unified Scaling Law for Time Series Foundation Models](https://arxiv.org/abs/2610.05269)
-
-- 来源与日期：arXiv v1，2026-10-04。
-- 摘要：在 23 个数据集—频率任务、21 个 checkpoint 的 18,768 个实验单元上拟合容量、上下文长度与预测期的关系；作者称五参数规律可外推 Toto 2.0 的缩放曲线。
-- 相关性判断：**高（TSFM 选择 / resource-aware Agent）**。可将“加长历史还是换更大模型”转成可量化编排决策，但系数应在目标域滚动回放中重估。
-
 ## 2. 时间序列建模 Agent 最新研究
-
-### [2026-09-21] [When Tomorrow Becomes Today: Self-Evolving Policies for Agentic Time-Series Forecasting](https://arxiv.org/abs/2609.24862)
-
-- 来源与日期：arXiv v1，2026-09-21。
-- 摘要：TimEvolve 固定预测骨干，将每次预测兑现后的真实标签转化为对专家信任、Agent 路径选择和干预强度的持续联合更新。作者在八个 Time-MMD 领域、15 种方法比较中报告平均 MSE/MAE 排名最优，并在七个领域两项误差均最低。
-- 相关性判断：**很高（forecasting Agent / online policy）**。直接解决长期部署中的机制漂移；验证必须按“预测→等待标签→更新”的时序执行，严禁使用尚未兑现的标签重排历史策略。
 
 ### [2026-09-26] [Self-Evolving Time-Series Forecasting Agents with Episodic Memory and Online Policy Learning](https://arxiv.org/abs/2609.32689)
 
 - 来源与日期：arXiv v1，2026-09-26。
 - 摘要：FASE 将历史预测过程写入 episodic memory，并用延迟到达标签学习在线策略；作者在 GIFT-Eval 的 29 个配置上报告相对最佳单一 TSFM 的 normalized MAE 降低 9.1%。
 - 相关性判断：**很高（Agent memory / online learning）**。与 TimEvolve 相互印证“真实结果反馈”的方向；实践中应独立记录 memory 写入时间、标签到达时间及每次策略版本。
+
+### [2026-09-21] [When Tomorrow Becomes Today: Self-Evolving Policies for Agentic Time-Series Forecasting](https://arxiv.org/abs/2609.24862)
+
+- 来源与日期：arXiv v1，2026-09-21。
+- 摘要：TimEvolve 固定预测骨干，将每次预测兑现后的真实标签转化为对专家信任、Agent 路径选择和干预强度的持续联合更新。作者在八个 Time-MMD 领域、15 种方法比较中报告平均 MSE/MAE 排名最优，并在七个领域两项误差均最低。
+- 相关性判断：**很高（forecasting Agent / online policy）**。直接解决长期部署中的机制漂移；验证必须按“预测→等待标签→更新”的时序执行，严禁使用尚未兑现的标签重排历史策略。
 
 ### [2026-08-07] [AION](https://github.com/ztxtech/aion)
 
@@ -71,7 +77,29 @@
 - 摘要：在共享骨干上训练 forecasting aggregation、原生预测与时序分析三类 LoRA 专家，再由 MoE controller 按请求路由，统一覆盖预测、上下文条件预测和语言化时序分析。
 - 相关性判断：**很高（reasoning + TSFM）**。是外部多 Agent 编排之外的“模型内路由”强基线，应同样记录路由选择、成本与失效案例。
 
-## 4. GitHub：timeseries Agent / harness / ML / AutoML 新项目
+## 4. 光伏功率预测最新研究
+
+### [2026-09-29] [Physics-Informed State Space Models for Day-Ahead Photovoltaic Power Forecasting](https://arxiv.org/abs/2610.14014)
+
+- 来源与日期：arXiv v1，2026-09-29。
+- 摘要：以太阳几何、辐照度、温度与逆变器限制形成可微物理基线，再由选择性状态空间模型（PowerMamba）用数值天气预报输入学习 24 小时残差。作者在一年的电站数据上报告，相对纯物理基线 RMSE/MAE 分别降低 38.5%/45.8%。
+- 相关性判断：**很高（PV forecasting / physics-guided TS）**。适合成为 Agent 的物理可行性约束工具；作者结果来自单站一年数据，迁移前应按站点与天气型做滚动回放。
+
+### [2026-08-03] [An AI-Based Decision-Support Pipeline for Day-Ahead Photovoltaic Forecasting](https://arxiv.org/abs/2608.02088)
+
+- 来源与日期：arXiv v1，2026-08-03；论文注明已被 UK-AI 2026 接收。
+- 摘要：针对英国充电站的小时级日前预测，校正时间戳、构造无泄漏太阳几何/晴空指数特征，并以验证集学习的 stacking 融合预测器。在更严格的 rolling-origin 评估中，相对晴空 persistence 的日间 nRMSE 改善约 9%，明显低于随机日块切分的 32%。
+- 相关性判断：**很高（PV / Agent evaluation）**。是“时间对齐与评估协议决定结论”的直接证据；调度 Agent 应把数据可用时间、逆变器积分区间和预测原点作为一等元数据。
+
+## 5. GitHub 和 HuggingFace 上值得跟踪的新项目
+
+### 时间序列
+
+### [2026-11-19] [aayushkrm/passk](https://github.com/aayushkrm/passk)
+
+- 来源与日期：GitHub Search API；创建与更新均为 2026-11-19 UTC。
+- 摘要：工具调用 Agent 的离线 `pass^k` 可靠性 harness，提供 MCP v2 与 CI 回归 gate。
+- 相关性判断：**中高（通用 harness）**。非时序专用，但可借鉴离线重放与回归门禁；迁移时必须新增 time split、prediction origin 与数据泄漏断言。
 
 ### [2026-11-18] [BK5102/culprit](https://github.com/BK5102/culprit)
 
@@ -85,19 +113,23 @@
 - 摘要：面向表格、时序和图数据的证据驱动数据增强 Agent copilot。
 - 相关性判断：**中高（data-centric Agent）**。时序 Agent 的训练/适配阶段可借鉴“先找证据再增强”的约束；应优先核查增强是否只使用训练期数据及其对时间泛化的影响。
 
-### [2026-11-19] [aayushkrm/passk](https://github.com/aayushkrm/passk)
-
-- 来源与日期：GitHub Search API；创建与更新均为 2026-11-19 UTC。
-- 摘要：工具调用 Agent 的离线 `pass^k` 可靠性 harness，提供 MCP v2 与 CI 回归 gate。
-- 相关性判断：**中高（通用 harness）**。非时序专用，但可借鉴离线重放与回归门禁；迁移时必须新增 time split、prediction origin 与数据泄漏断言。
-
 ### [2026-11-17] [n00rElh00da/treelab](https://github.com/n00rElh00da/treelab)
 
 - 来源与日期：GitHub Search API；创建与更新均为 2026-11-17 UTC。
 - 摘要：多数据集管理、EDA、预处理、模型训练、AutoML 与可解释性的全栈 ML 平台。
 - 相关性判断：**中（AutoML 线索）**。可观察其实验记录与多数据集管理设计；通用 tabular ML 项目，未显示时序验证承诺，不能直接用于预测建模。
 
-## 5. 建议动作
+### 光伏功率预测
+
+- 本轮 GitHub Search API 的“photovoltaic / solar power / PV forecasting”近三个月创建项目检索未返回可核验且直接对应光伏功率预测的新仓库（匿名 API 结果为空）；因此**不以泛 solar 代码凑数**。上列两篇论文当前未在其 arXiv 页面声明官方代码或 HuggingFace 模型，后续应跟踪作者补充链接。
+
+## 6. DailyArXiv 补检结论
+
+- 已检查 [zezhishao/DailyArXiv 的 README「Time Series」板块](https://github.com/zezhishao/DailyArXiv/blob/master/README.md)（项目页显示最近更新为 2026-11-06）。其中 **Chronos-2**（2026-10-30）、**TimesJev**（2026-10-31 修订）和 **fev-bench**（2026-11-04 修订）均在窗口内，且已分别在本简报的基础模型 / reasoning 条目中覆盖或作为评测背景处理。
+- 同板块还出现 *Lotus*、*TSFM Meets LLM: Context as Covariates*、*TEMPO* 等 2026-11-03 条目；它们与语言对齐时序表示或上下文协变量有关，但此次无法从条目页交叉确认比既有重点条目更直接的 Agent/reasoning 贡献，故列为低优先级待核验线索，而非据此声称性能结论。
+- DailyArXiv 的日期是其收录/更新日，可能对应 arXiv 修订而非 v1；本文以 arXiv v1 或明确官方发布日期为准。例如 TimesJev 的 v1 为 2026-10-19，README 所示 10-31 是 v2，已避免将修订日误写为首发日。
+
+## 7. 建议动作
 
 1. 为任何 TSFM 调用强制传入 `prediction_origin`、变量的 `available_at`、模型/权重版本与许可证；对 known-future 协变量做运行时拒绝式校验。
 2. 建立 TimEvolve/FASE 风格的 delayed-label 回放：预测、标签到达、memory/policy 更新必须按真实事件时间分离，并保留不可变日志。
