@@ -8,6 +8,7 @@
 1. **基础模型由“预测一个序列”转为“可控上下文与迁移”。** [T2ST（11-13）](https://arxiv.org/abs/2611.18199) 关注数据稀缺时的时空迁移；[Chronos-2（10-30）](https://arxiv.org/abs/2610.41956) 和 [`t_0`（09-21）](https://arxiv.org/abs/2609.24559) 共同强化多变量/协变量/概率预测。相关性：**很高**，但需验证协变量可得性与跨站滚动回测。
 2. **Agent 的关键能力是延迟反馈闭环。** [FASE（09-26）](https://arxiv.org/abs/2609.32689) 与 [TimEvolve（09-21）](https://arxiv.org/abs/2609.24862) 都将已兑现标签反馈到下一轮策略。相关性：**很高**；实现要隔离预测时刻和标签到达时刻，防止 hindsight leakage。
 3. **reasoning 需要证据锚定与成本路由。** [CastReasoner（11-09）](https://arxiv.org/abs/2611.12285) 将文本证据与数值先验拆为显式链路，[TimesJev（10-19）](https://arxiv.org/abs/2610.26002) 探索快速充分性路径。相关性：**很高/高**；应同时记录证据版本、工具调用和延迟。
+4. **光伏预测同时出现跨站预训练与物理约束。** [Distributed PV pretraining（10-20）](https://arxiv.org/abs/2610.27763) 将多站点、NWP 和多时距统一为预训练序列补全，[IMPACT（10-29）](https://arxiv.org/abs/2610.40418) 聚焦逆变器级短临概率预测。相关性：**很高**；必须对 NWP 发布批次、站点留出和区间校准执行严格回放。
 
 ## 新增 / 值得跟踪的 GitHub 项目
 
@@ -25,6 +26,7 @@
 1. 选 Chronos-2、`t_0` 与一个传统基线，采用冻结的 walk-forward 预测原点进行概率预测与校准比较。
 2. 将 `available_at`、`prediction_origin`、标签到达时间和策略版本写入不可变日志，再试验 FASE/TimEvolve 风格更新。
 3. 将 `culprit`、CastWorld、weaverrt 置于隔离评测环境；先审计许可证、数据切分、失败恢复和无未来信息断言。
+4. 对分布式 PV 先建立按站点留出的 NWP-as-of 回放，再比较专项预训练、物理残差与通用 TSFM。
 
 ## 限制
 

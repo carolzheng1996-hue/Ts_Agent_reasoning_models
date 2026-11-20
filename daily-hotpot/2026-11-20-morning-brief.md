@@ -65,7 +65,27 @@
 - 摘要：以充分性损失和可实现性约束学习压缩表示，并以门控保留关键频率模式；作者报告相较比较 reasoning 模型有明显推理时延下降。
 - 相关性判断：**高（reasoning efficiency）**。可启发 fast-path/slow-path 路由；速度结论不等同于校准或跨域可靠性。
 
-## 4. GitHub 上值得跟踪的新项目
+## 4. 光功率 / 光伏功率预测最新研究
+
+### [2026-10-29] [IMPACT: Inverter-Informed Multimodal Learning for Photovoltaic Generation Forecasting](https://arxiv.org/abs/2610.40418)
+
+- 来源与日期：arXiv v1，2026-10-29。
+- 摘要：将电站历史、逆变器级空间云动态、已知未来太阳几何和当前气象分别编码，用门控交叉注意力融合，并以在线自适应保序校准输出 10–110 分钟概率预测；作者报告优于 14 个对比基线。
+- 相关性判断：**很高（短临 PV / TSFM 评测任务）**。逆变器级的空间信号和校准层可成为 Agent 工具；部署时须锁定 NWP/云图/传感器的可得时刻，按天气型检查区间覆盖率。
+
+### [2026-10-20] [Foundation-Style Pretraining for Scalable and Transferable Distributed PV Forecasting](https://arxiv.org/abs/2610.27763)
+
+- 来源与日期：arXiv v1，2026-10-20。
+- 摘要：用异构多站点、多预测期光伏功率、气象观测、未来 NWP 与时间编码构造序列补全预训练任务，以支持新站点迁移与多时距预测。
+- 相关性判断：**很高（PV 专项基础模型）**。直接连接 TSFM 与分布式光伏；Agent 应将 NWP 发布批次和站点切分加入输入契约，避免把事后修订的天气数据混入回测。
+
+### [2026-09-29] [Physics-Informed State Space Models for Day-Ahead Photovoltaic Power Forecasting](https://arxiv.org/abs/2610.14014)
+
+- 来源与日期：arXiv v1，2026-09-29。
+- 摘要：以太阳几何、辐照度、温度与逆变器限制构造可微物理基线，再以选择性状态空间模型从 NWP 学习 24 小时残差；作者在一年单站数据上报告相对物理基线的误差下降。
+- 相关性判断：**很高（日前 PV / 物理约束工具）**。适合为 Agent 提供可行性先验；单站结论需在跨站、跨季节 walk-forward 回放中复验。
+
+## 5. GitHub 上值得跟踪的新项目
 
 ### [2026-11-20] [wuman1194-max/weaverrt](https://github.com/wuman1194-max/weaverrt)
 
@@ -91,8 +111,15 @@
 - 摘要：研究原型关注 TSFM 能否在同等误报预算下更早发现支付批准率下降，以及 LLM Agent 能否定位异常分群。
 - 相关性判断：**高（TSFM + diagnosis Agent）**。把检测、告警预算和归因连接起来；仓库很新且缺少公开验证，先审查数据切分和复现脚本。
 
-## 5. 本轮检索与限制
+## 6. DailyArXiv 补检结论
+
+- 已直接拉取并检查 [zezhishao/DailyArXiv README 的 Time Series 板块](https://github.com/zezhishao/DailyArXiv/blob/master/README.md)；该页最后更新标注为 2026-11-06，故它不能证明 11 月 7 日后的收录情况。
+- 板块内有窗口内、且与本主题直接相关的 **Control Foundation Models across Changing Block Diagrams**（收录日 2026-11-02，arXiv v1 `2611.02900`）：将动态连接的控制实验表为掩码预测，可从既有 TSFM 权重初始化。相关性为**高（TSFM + 控制）**，但不是 forecasting Agent/reasoning 论文，故列为补检线索而不替代上述重点条目。
+- README 的收录日期可能是抓取或修订日，不能当作论文首发日；例如同表的 *AdaMamba* 链接是 `2604.23239v2`，收录日为 2026-11-04，已超出“首发近三个月”的条件，故降优先级且不纳入正文推荐。
+
+## 7. 本轮检索与限制
 
 - 已定向检查 arXiv、官方项目页和 GitHub Search；未发现 2026-11-20 当天可核验首发、且直接聚焦 TSFM、时间序列 Agent 或 reasoning 的新增论文。因此不将网页抓取日、GitHub commit 日或 arXiv 修订日误报为论文首发日。
 - 本轮 GitHub 项目均未执行；`created_at` 仅说明仓库出现时间，并不证明项目的研究成熟度或发布日期。
+- 光伏条目优先列入可由 arXiv v1 日期核验的论文；所有作者报告的效果均未在本轮复现。
 - 建议优先建立统一的运行记录：`prediction_origin`、每个特征的 `available_at`、数据/模型版本、工具路由、标签到达时刻与评测切分；这是将本周论文与新 harness 转化为可信系统的共同前提。
