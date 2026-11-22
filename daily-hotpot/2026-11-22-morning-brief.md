@@ -1,6 +1,6 @@
 # 2026-11-22 时间序列 Agent / Reasoning 晨间简报
 
-- 检索时间：2026-11-22 10:36 CST（Asia/Shanghai）。
+- 检索时间：2026-11-22 17:13 CST（Asia/Shanghai；含 17:13 的增量复核）。
 - 时间窗口：2026-08-22 至 2026-11-22（含首尾）。论文日期使用 arXiv v1 的 `published`；项目日期使用 GitHub API 的 `created_at`，无法由项目自身独立证实的能力主张均降级为线索。
 - 增量参照：2026-11-20 晨报；11 月 21–22 日未检出新的、直接面向时间序列 Agent/reasoning 的 arXiv 首发论文，以下重点补入 11 月中旬遗漏和新出现的条目。
 
@@ -84,6 +84,12 @@
 
 ### 光伏功率预测
 
+### [2026-11-22] [gamyfreelancer-web/Solar-Radiation-Prediction-Forecastin](https://github.com/gamyfreelancer-web/Solar-Radiation-Prediction-Forecastin)
+
+- 来源与日期：GitHub Search API，创建 2026-11-22 UTC、最后更新 2026-11-22 UTC。
+- 摘要：项目自述使用 NASA POWER 数据、周期性时间特征、气候基线和 LightGBM 预测全球/散射水平辐照度（GHI/DHI），并明确将气候基线用于避免数据泄漏。
+- 相关性判断：**低（太阳辐照度预测线索，非 PV 功率模型）**。辐照度可作为光伏功率预测的外生变量；但该新建仓库尚无电站功率标签、滚动原点评测或可复现实验，不能作为 PV forecasting 基准或部署候选。
+
 ### [2026-11-20] [onurayvaz10/pvbench](https://github.com/onurayvaz10/pvbench)
 
 - 来源与日期：GitHub Search API，创建/最后更新为 2026-11-20 UTC。
@@ -98,6 +104,6 @@
 
 ## 7. 本轮检索与限制
 
-- 覆盖 arXiv 元数据、官方 GitHub 搜索/API 与 DailyArXiv README；未发现可核验的 HuggingFace 新增项目，故不以无日期的模型卡补量。
+- 覆盖 arXiv 元数据、官方 GitHub 搜索/API 与 DailyArXiv README；17:13 CST 增量 GitHub 检索仅新增一项低优先级的辐照度预测线索；未发现可核验的 HuggingFace 新增项目，故不以无日期的模型卡补量。
 - 论文效果和仓库自述均为作者/维护者报告，本轮未运行或复现。项目创建时间只证明仓库出现的时间，不证明成熟度。
 - 建议优先把四项事实纳入统一实验记录：`prediction_origin`、每项外生数据的 `available_at`、候选/路由版本，以及标签兑现时间；它们是将 TSFM、Agent、reasoning 与光伏预测安全接入同一 harness 的共同底座。
