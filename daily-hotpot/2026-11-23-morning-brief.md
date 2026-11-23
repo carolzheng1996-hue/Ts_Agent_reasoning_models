@@ -84,8 +84,25 @@
 - 摘要：CLI 优先的时间序列工具箱，提供可插拔 sandbox、可复用 skill、多 Agent 支持和评测 harness 工作流。
 - 相关性判断：**中高（TS Agent / harness）**。工程形态贴近 Codex/Claude 等外部 Agent；规模仍小，建议先用无敏感数据的小型 walk-forward 任务验证 sandbox 与评分器。
 
-## 5. 本轮检索与限制
+## 5. 光功率 / 光伏功率预测最新研究
 
+### [2026-11-19] [Explainable AI for Solar PV Power Forecasting: From Model Selection to Trustworthy, Reproducible Deployment](https://arxiv.org/abs/2611.25894)
+
+- 来源与日期：arXiv v1，2026-11-19。
+- 摘要：论文以 Porto 16.32 kWp 光伏电站的日前预测为案例，组合时间有序验证、AutoML、NWP 特征、基线比较、保形区间与 SHAP 审查。作者报告最优模型全年 nRMSE 为装机容量的 11.6%，约为 smart persistence 误差的一半；随机切分会偏乐观，而 80% 区间经校准后的实际覆盖率为 81.7%（校准前 64.5%）。
+- 相关性判断：**很高（PV 预测 / AutoML harness）**。可直接转化为光伏 Agent 的验收清单：禁止随机切分、记录预测时可得的 NWP、保留 persistence 基线，并分别检查区间校准与解释稳定性。
+
+### [2026-10-20] [Foundation-Style Pretraining for Scalable and Transferable Distributed PV Forecasting](https://arxiv.org/abs/2610.27763)
+
+- 来源与日期：arXiv v1，2026-10-20。
+- 摘要：针对多地域分布式 PV，使用历史功率、气象观测、未来 NWP 和时间编码做序列补全式预训练；在 479 个站点上以 340 个站点开发、139 个空间留出站点零样本评估。作者报告混合预训练目标在 6 小时到 7 天预测、NWP 劣化及后续适配之间更均衡，并优于列举的站点模型、共享模型和通用 TSFM 基线。
+- 相关性判断：**很高（领域 TSFM / 站点迁移）**。对 Agent 而言，适合作为“新站点冷启动—有少量本地反馈—区域适配”的路由候选；应按空间留出和天气预报发布时间重新复验，避免把未来实况气象当作可知协变量。
+
+## 6. DailyArXiv 补检结论与本轮检索限制
+
+- 已核查 [`zezhishao/DailyArXiv README`](https://github.com/zezhishao/DailyArXiv/blob/master/README.md) 的 `Time Series` 条目；公开页显示的最近更新时间为 **2026-11-06**，其保留最近文章而非完整档案。
+- 其中有与本期主题直接相关且处于三个月窗口内的 [`TSFM Meets LLM: Context as Covariates`](https://arxiv.org/abs/2611.05515)（arXiv v1 与 README 收录日期均为 2026-11-03）和 [`CATF: A Manager-Worker Framework for Context-Aware Time-Series Forecasting`](https://arxiv.org/abs/2611.05325)（arXiv v1 与 README 收录日期均为 2026-11-03）。前者将文本 reasoning 蒸馏为 TSFM 的数值协变量，后者用 Manager—Worker 做上下文路由；二者列为补检信号，未因 README 收录日期替代 arXiv v1 日期。
+- `DailyArXiv` 的公开更新时间早于本次检索日，且页面未覆盖 2026-11-19 的 PV 论文；因此它只作为交叉补检，正文排序仍以 arXiv v1 与 GitHub API 日期为准。对日期超窗或 README 收录与首发不一致的条目一律降优先级，不纳入本期主条目。
 - 优先核验 arXiv 论文元数据、论文/机构官方 GitHub 和 GitHub API；AI HOT 的公开研究接口本轮返回 404，未将其摘要作为事实来源。
 - 过滤了 2026-08-23 之前首发且无窗口内明确活动的论文/项目；MetaCaster 是唯一“首发早一天、但窗口内有推送”的例外，已明确标注。
 - GitHub 的描述、星标和维护状态来自仓库 API；均不等同于独立复现。建议本周优先为 Chronos-2、Timer-M1 与 SEER 建立统一的时序切分、外部信息可得性和预测区间校准验收表。
