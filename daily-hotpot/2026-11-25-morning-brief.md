@@ -1,6 +1,6 @@
 # 2026-11-25 时间序列 Agent / Reasoning 晨间简报
 
-- 检索时间：2026-11-25 09:41 CST（Asia/Shanghai）。
+- 检索时间：2026-11-25 16:27 CST（Asia/Shanghai）。
 - 时间窗口：2026-08-25 至 2026-11-25（含首尾）。论文日期使用 arXiv 的 v1 提交时间；GitHub 条目使用 API 的创建和最近推送时间。无法确认日期的结果不纳入正文。
 - 增量参照：2026-11-24 晨报；避免重复展开该期已覆盖的 CoCo、GlucoAgent、CastWorld 等条目。
 
@@ -9,6 +9,7 @@
 1. **近期 TSFM 研究正把部署期问题前置到模型设计与评测。** FlexCast 用可变上下文掩码预训练替代固定自回归滚动；碳强度案例则以预注册约束零样本模型比较。
 2. **本日未发现可由一手论文页确认、且未被近日报覆盖的时序建模 Agent 或专门时序 reasoning 新论文。** 这是检索结果，不应以低质量仓库凑数；下列 Agent/reasoning 观察转向可复核的代码与 harness 更新。
 3. **通用 harness 的新动向与时序 Agent 有直接工程价值。** LongHorizon-Harness 的可恢复状态/独立审计，以及 Strands SDK 的近期发布，分别可映射为 walk-forward 实验的检查点和工具调用契约；它们都不是时序模型本身。
+4. **光伏预测出现两条值得优先复核的 10 月路线：区域生成场和领域预训练。** 前者用多站点观测构造空间场，后者以 NWP 辅助的序列补全做跨站点预训练；二者都不是 Agent/reasoning 模型，但很适合作为 Agent 可调用的领域模型与评测任务。
 
 ## 1. 时间序列基础模型最新研究
 
@@ -66,8 +67,28 @@
 - 简短摘要：一个使用 Microsoft Semantic Kernel 与 Azure OpenAI 协调六个专职 Agent 的量化时序分析工作流，仓库描述包含人工审批和 matplotlib 执行自修复。
 - 相关性判断：**中高（时序 Agent 工程线索，低成熟度）**。主题贴合、日期可确认，但项目很新且尚无社区验证；宜优先审阅数据源、金融回测切分与执行权限，再决定是否作为复现对象。
 
+## 5. 光功率 / 光伏功率预测最新研究
+
+### [2026-10-20] [Foundation-Style Pretraining for Scalable and Transferable Distributed PV Forecasting](https://arxiv.org/abs/2610.27763)
+
+- 来源与日期：[arXiv 论文页](https://arxiv.org/abs/2610.27763)，v1 于 2026-10-20 提交。
+- 简短摘要：将历史 PV 功率、气象观测、未来数值天气预报（NWP）与时间编码统一为序列补全问题，在 479 个分布式站点上比较三种预训练目标；其混合目标面向从 6 小时到 7 天的跨站点零样本与适配。
+- 相关性判断：**高（PV / 领域 TSFM）**。可作为光伏预测 Agent 的候选基础模型；Agent 必须明确区分预测原点可见的 NWP 发布版本与事后再分析数据，才能复现其部署语境。
+
+### [2026-10-12] [Constructed regional photovoltaic generation fields improve ultra-short-term distributed solar forecasting](https://arxiv.org/abs/2610.16110)
+
+- 来源与日期：[arXiv 论文页](https://arxiv.org/abs/2610.16110)，v1 于 2026-10-12 提交。
+- 简短摘要：提出 SatPV-Field，把分布式电站观测转换为区域 PV 生成场，并结合卫星短波辐射引导与气象预测，再把区域预测下沉到站点级超短期预测；实验覆盖 496 个站点。
+- 相关性判断：**高（PV / 空间时序建模）**。不是 Agent/reasoning 论文，但为“空间邻站选择—未来信息可得性检查—站点预测”的 Agent 工具链提供明确的模块化目标；需重点审计卫星及天气特征的时间戳。
+
+## 6. DailyArXiv 补检结论
+
+- 已核查 [`zezhishao/DailyArXiv` 官方 README 的 `Time Series` 栏](https://github.com/zezhishao/DailyArXiv/blob/master/README.md#time-series)。README 标注最近更新为 **2026-11-06**，早于本期新增的 11 月中下旬论文与仓库动态。
+- 该栏内与本主题相近、且首发仍在三个月窗口内的 `Graph Foundation Models Can Become Effective Multivariate Time Series Anomaly Detectors`（README 2026-11-04，arXiv v1 2026-11-04）已在 11 月 6 日简报记录，非本期新增；`AdaMamba` 在 README 标作 2026-11-04，但 arXiv v1 为 2026-04-27，首发超窗，故降优先级且不纳入正文。
+- 结论：DailyArXiv 对本期没有贡献可确认的新条目；其收录/修订日期不替代 arXiv v1。正文仍按原始论文页与 GitHub API 的日期排序。
+
 ## 检索范围与限制
 
-- 主来源为 arXiv 论文页/API、OpenReview 搜索与 GitHub REST API；GitHub 搜索仅用于发现候选，日期及仓库描述以 API 交叉核验。
+- 主来源为 arXiv 论文页/API、OpenReview 搜索、GitHub REST API 与 DailyArXiv README；GitHub 搜索仅用于发现候选，日期及仓库描述以 API 交叉核验。
 - 未纳入超出三个月窗口的论文；未将匿名投稿、不可确认首发日的页面或低质量搜索片段列为“最新研究”。
 - GitHub 的描述、star 与许可证均为检索时快照，不能替代代码审计、复现实验或安全评估。对候选 harness 的下一步应是离线、无密钥环境下的最小 walk-forward 复现。
