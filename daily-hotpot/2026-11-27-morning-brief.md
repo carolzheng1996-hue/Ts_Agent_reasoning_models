@@ -66,3 +66,9 @@
 
 - 主来源为 [arXiv Atom API](https://export.arxiv.org/api/query)、arXiv 论文页和 [GitHub REST API](https://docs.github.com/en/rest/repos/repos)。此外复核了 [DailyArXiv](https://github.com/zezhishao/DailyArXiv) 与 GitHub repository search；二级汇总不替代原始论文日期。
 - 论文的 workshop 接收状态来自 arXiv 作者备注，尚不等同于主会正式论文；GitHub star、描述与推送时间皆为检索时快照，未构成安全审计或独立复现证据。
+
+## 7. DailyArXiv 补检结论
+
+- 直接拉取 [DailyArXiv `master` README 的 Time Series 栏](https://github.com/zezhishao/DailyArXiv/blob/master/README.md)：该栏标注 `Last update: 2026-11-06`，仓库最近自动更新提交为 2026-11-05 22:11 UTC；其中最新收录行日期为 2026-11-04。因此它**没有覆盖** 11 月 5 日后的论文，不能用来支持“近期无新增”的结论。
+- 栏内确有处于本期三个月窗口的相关论文。例如 [Control Foundation Models across Changing Block Diagrams](https://arxiv.org/abs/2611.02900)（栏内收录日/ arXiv v1 均为 2026-11-02）是可由既有 TSFM 初始化的动态控制时序模型；它已在 [11 月 4 日晨报](2026-11-04-morning-brief.md) 核验，故本期不重复列为新增。`Graph Foundation Models Can Become Effective Multivariate Time Series Anomaly Detectors`（arXiv 2611.06441，收录日 11 月 4 日）与本主题相关但偏异常检测适配，优先级低于预测/Agent/reasoning 主线。
+- 本次未把 DailyArXiv 的收录日冒充论文首发日；后续新稿仍以 arXiv v1 或会议官方发布日期排序，并继续将该聚合源作为补检而非主证据。
